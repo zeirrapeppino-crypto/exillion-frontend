@@ -289,7 +289,7 @@ nav{
   letter-spacing:3px;
   color:var(--gold);
   filter:drop-shadow(0 0 15px rgba(201,168,76,0.3));
-  margin-top:0.25rem;
+  margin-top:0rem;
   animation:riseUp 0.8s 0.3s ease both;
 }
 .hero-ticker span{color:var(--cyan);}
@@ -381,7 +381,7 @@ nav{
 }
 
 /* ─── VISION ─────────────────────────────── */
-#vision{padding:110px 5%;}
+#vision{padding:0px 5% 80px;}
 
 .vision-grid{
   display:grid;grid-template-columns:1fr 1fr;
@@ -682,12 +682,34 @@ centerquote{
   display:flex;align-items:center;justify-content:center;gap:8px;
   transition:all 0.2s;
 }
-.wallet-btn.phantom{border-color:rgba(155,114,255,0.2);}
-.wallet-btn.phantom:hover{border-color:rgba(155,114,255,0.5);color:#9b72ff;background:rgba(155,114,255,0.05);}
-.wallet-btn.solflare{border-color:rgba(252,154,28,0.2);}
-.wallet-btn.solflare:hover{border-color:rgba(252,154,28,0.5);color:#fc9a1c;background:rgba(252,154,28,0.05);}
-.wallet-btn.connected-phantom{border-color:rgba(155,114,255,0.5);color:#9b72ff;background:rgba(155,114,255,0.05);}
-.wallet-btn.connected-solflare{border-color:rgba(252,154,28,0.5);color:#fc9a1c;background:rgba(252,154,28,0.05);}
+.wallet-btn.phantom{
+  background:linear-gradient(135deg,rgba(153,69,255,0.15) 0%,rgba(101,31,255,0.08) 100%);
+  border-color:rgba(153,69,255,0.5);
+  color:#c4a3ff;
+  text-shadow:0 0 8px rgba(153,69,255,0.4);
+  box-shadow:0 0 12px rgba(153,69,255,0.15),inset 0 0 12px rgba(153,69,255,0.05);
+}
+.wallet-btn.phantom:hover{
+  background:linear-gradient(135deg,rgba(153,69,255,0.3) 0%,rgba(101,31,255,0.18) 100%);
+  border-color:rgba(153,69,255,0.85);
+  color:#d8bcff;
+  box-shadow:0 0 22px rgba(153,69,255,0.35),inset 0 0 16px rgba(153,69,255,0.08);
+}
+.wallet-btn.solflare{
+  background:linear-gradient(135deg,rgba(153,69,255,0.1) 0%,rgba(20,241,149,0.1) 100%);
+  border-color:rgba(20,241,149,0.4);
+  color:#7fffd4;
+  text-shadow:0 0 8px rgba(20,241,149,0.35);
+  box-shadow:0 0 12px rgba(20,241,149,0.12),inset 0 0 12px rgba(20,241,149,0.04);
+}
+.wallet-btn.solflare:hover{
+  background:linear-gradient(135deg,rgba(153,69,255,0.2) 0%,rgba(20,241,149,0.2) 100%);
+  border-color:rgba(20,241,149,0.75);
+  color:#adffd8;
+  box-shadow:0 0 22px rgba(20,241,149,0.28),inset 0 0 16px rgba(20,241,149,0.07);
+}
+.wallet-btn.connected-phantom{border-color:rgba(153,69,255,0.7);color:#c4a3ff;background:rgba(153,69,255,0.12);}
+.wallet-btn.connected-solflare{border-color:rgba(20,241,149,0.6);color:#7fffd4;background:rgba(20,241,149,0.08);}
 
 .wallet-status{
   display:none;
@@ -849,7 +871,7 @@ centerquote{
 
 /* ─── WHITEPAPER ─────────────────────────── */
 #whitepaper{
-  padding:110px 5%;
+  padding:0px 5% 80px;
   background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);
 }
 
@@ -959,7 +981,7 @@ centerquote{
 
 /* ─── ROADMAP ────────────────────────────── */
 #roadmap{
-  padding:110px 5%;
+  padding:0px 5% 80px;
   background:linear-gradient(180deg,transparent,rgba(0,66,255,0.05),transparent);
 }
 
@@ -1015,7 +1037,7 @@ centerquote{
 
 /* ─── FOOTER ─────────────────────────────── */
 footer{
-  padding:70px 5% 30px;
+  padding:40px 5% 30px;
   border-top:1px solid var(--border-dim);
   position:relative;z-index:1;
 }
@@ -1501,7 +1523,7 @@ footer{
         .splash-logo {
             text-align: center;
             z-index: 10;
-            padding: clamp(10px, 2vh, 24px) 20px clamp(4px, 1vh, 10px);
+            padding: clamp(10px, 2vh, 24px) 20px clamp(2px, 0.4vh, 5px);
             position: relative;
             width: 100%;
             max-width: 700px;
@@ -1512,9 +1534,9 @@ footer{
         }
 
         .splash-logo img {
-            width: clamp(140px, 24vh, 240px);
-            height: clamp(140px, 24vh, 240px);
-            margin-bottom: clamp(10px, 1.8vh, 20px);
+            width: clamp(170px, 28vh, 280px);
+            height: clamp(170px, 28vh, 280px);
+            margin-bottom: clamp(4px, 0.6vh, 8px);
             border-radius: 50%;
             object-fit: cover;
             object-position: center;
@@ -1584,7 +1606,7 @@ footer{
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: fadeIn 2s ease-out 0.5s both, goldSweep 4s linear infinite;
-            margin-bottom: clamp(6px, 1.2vh, 14px);
+            margin-bottom: clamp(2px, 0.5vh, 6px);
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: uppercase;
         }
@@ -1592,14 +1614,14 @@ footer{
         /* Tagline */
         .splash-tagline {
             font-family: var(--font-secondary);
-            font-size: clamp(1rem, 3vw, 1.6rem);
+            font-size: clamp(1.15rem, 3.4vw, 1.85rem);
             font-weight: 700;
-            color: var(--solana-green);
+            color: #00d4ff;
             margin-bottom: clamp(10px, 2vh, 22px);
             letter-spacing: clamp(2px, 0.8vw, 5px);
             text-transform: uppercase;
             animation: slideIn 2s ease-out 0.8s both;
-            text-shadow: 0 0 30px rgba(20, 241, 149, 0.8), 0 0 60px rgba(20, 241, 149, 0.3);
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.3);
         }
 
         /* Collateral Text - No Box */
@@ -1617,17 +1639,17 @@ footer{
         .splash-collateral span {
             display: block;
             margin: 2px 0;
-            color: var(--solana-purple);
+            color: #14F195;
             font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-family: var(--font-secondary);
-            text-shadow: 0 0 15px rgba(149, 117, 205, 0.4);
+            text-shadow: 0 0 15px rgba(20, 241, 149, 0.4);
         }
 
         .splash-collateral span:last-child {
-            color: var(--solana-purple);
-            text-shadow: 0 0 15px rgba(153,69,255,0.45);
+            color: #14F195;
+            text-shadow: 0 0 15px rgba(20, 241, 149, 0.45);
             margin-top: 4px;
             font-size: clamp(0.65rem, 1.3vw, 0.82rem);
             letter-spacing: 2px;
@@ -2230,16 +2252,22 @@ footer{
 
     <!-- Tag -->
     <div style="
-      font-family:'JetBrains Mono',monospace;
-      font-size:0.88rem;letter-spacing:4px;color:rgba(0,212,255,0.6);
+      font-family:'Orbitron',monospace;
+      font-size:clamp(1.1rem,2.5vw,1.55rem);letter-spacing:4px;
       text-transform:uppercase;margin-bottom:1.6rem;
-      animation:mainFadeIn 0.7s ease 0.5s both;
-    ">Welcome Exillioneer</div>
+      background:linear-gradient(90deg, #9945FF 0%, #14F195 50%, #9945FF 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      background-size:200% auto;
+      animation:mainFadeIn 0.7s ease 0.5s both, solanaShimmer 3s linear infinite;
+      filter:drop-shadow(0 0 10px rgba(153,69,255,0.4));
+    ">Welcome Angel Investor</div>
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
       <div style="
-        width:110px;height:110px;border-radius:50%;overflow:hidden;
+        width:160px;height:160px;border-radius:50%;overflow:hidden;
         border:2px solid rgba(0,212,255,0.3);
         box-shadow:0 0 30px rgba(0,212,255,0.2),0 0 60px rgba(0,102,255,0.12);
         margin:0 auto 1.2rem;
@@ -2249,17 +2277,18 @@ footer{
       </div>
       <h1 style="
         font-family:'Orbitron',monospace;
-        font-size:clamp(2.8rem,8vw,6rem);
-        font-weight:700;letter-spacing:14px;line-height:1;
+        font-size:clamp(2.2rem,6vw,4.5rem);
+        font-weight:700;letter-spacing:4px;line-height:1;
         color:#cc7d07;
         text-shadow:0 0 30px rgba(201,168,76,0.35),0 0 60px rgba(0,102,255,0.15);
         filter:drop-shadow(0 0 6px rgba(201,168,76,0.3));
-        margin:0 0 0.4rem;
+        margin:0 0 1.2rem;
       ">EXILLION</h1>
       <div style="
         font-family:'JetBrains Mono',monospace;
         font-size:0.8rem;letter-spacing:3px;
-        color:rgba(0,212,255,0.7);
+        color:#e8c97a;
+        text-shadow:0 0 14px rgba(232,201,122,0.45);
         margin-bottom:1.4rem;
       ">CAPITAL FINECOSYSTEM</div>
     </div>
@@ -2268,7 +2297,8 @@ footer{
     <p style="
       font-family:'Orbitron',monospace;
       font-size:clamp(0.9rem,2vw,1.15rem);
-      letter-spacing:4px;color:rgba(232,196,122,0.85);
+      letter-spacing:4px;color:rgba(0,212,255,0.95);
+      text-shadow:0 0 16px rgba(0,212,255,0.5);
       margin-bottom:2.4rem;
       animation:mainFadeIn 0.7s ease 0.85s both;
     ">Everybody Has A Second Chance</p>
@@ -2280,16 +2310,12 @@ footer{
       animation:mainFadeIn 0.7s ease 1s both;
     ">
       <div style="text-align:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">11B EXXE</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;color:#6a8fa8;margin-top:4px;text-transform:uppercase;">Total Supply</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">825M EXXE</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;color:#6a8fa8;margin-top:4px;text-transform:uppercase;">Angel Investor Funding</div>
       </div>
       <div style="text-align:center;">
         <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.01</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;color:#6a8fa8;margin-top:4px;text-transform:uppercase;">Tier I Price</div>
-      </div>
-      <div style="text-align:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00e5a0;text-shadow:0 0 12px rgba(0,229,160,0.4);">10×</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;color:#6a8fa8;margin-top:4px;text-transform:uppercase;">Listing Gain</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;color:#6a8fa8;margin-top:4px;text-transform:uppercase;">Tier I Presale Price</div>
       </div>
     </div>
 
@@ -2328,11 +2354,7 @@ footer{
     ">Connecting to Solana blockchain...</div>
   </div>
 
-  <!-- Corner decorations -->
-  <div style="position:absolute;top:18px;left:18px;width:30px;height:30px;border-top:1px solid rgba(0,212,255,0.3);border-left:1px solid rgba(0,212,255,0.3);"></div>
-  <div style="position:absolute;top:18px;right:18px;width:30px;height:30px;border-top:1px solid rgba(0,212,255,0.3);border-right:1px solid rgba(0,212,255,0.3);"></div>
-  <div style="position:absolute;bottom:18px;left:18px;width:30px;height:30px;border-bottom:1px solid rgba(0,212,255,0.3);border-left:1px solid rgba(0,212,255,0.3);"></div>
-  <div style="position:absolute;bottom:18px;right:18px;width:30px;height:30px;border-bottom:1px solid rgba(0,212,255,0.3);border-right:1px solid rgba(0,212,255,0.3);"></div>
+
 </div>
 
 <style>
@@ -2340,6 +2362,7 @@ footer{
 @keyframes mainScaleIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
 @keyframes mainScanMove{from{background-position:0 0}to{background-position:0 100vh}}
 @keyframes mainHscan{from{left:-100%}to{left:200%}}
+@keyframes solanaShimmer{0%{background-position:0% center}100%{background-position:200% center}}
 </style>
 
 <div class="scanline"></div>
@@ -2456,13 +2479,13 @@ footer{
 <!-- VISION -->
 <section id="vision">
   <div class="section-header reveal">
-    <span class="section-tag">Protocol Overview</span>
-    <h2 class="section-title">What Is Exillion?</h2>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Protocol Overview</span>
+    <h2 class="section-title" style="font-size:clamp(2rem,4vw,3.5rem);">What Is Exillion?</h2>
     <div class="section-rule"></div>
   </div>
   <div class="vision-grid">
     <div class="vision-text reveal">
-      <centerquote>"Everybody Has A Second Chance"</centerquote>
+      <centerquote style="font-size:clamp(1rem,1.8vw,1.4rem);color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,0.4);">"Everybody Has A Second Chance"</centerquote>
       <p>Exillion Capital Finecosystem was founded on a single universal belief — that access to capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the collateral for lending The Capital</p>
       <p>EXXE changes that. Through mobile mining available to anyone with a smartphone, DeFi lending without traditional banking requirements, and an Investor angel Funding round open to all starting from just $10 — we are building a bridge to financial freedom for everyone.</p>
       <p>Backed by Security On Chain liquidity, a 10-year Exillion foundation vesting schedule, and full on-chain transparency — EXXE is not a token. It is a movement.</p>
@@ -2508,9 +2531,9 @@ footer{
 </section>
 
 <!-- mEXXE MOBILE MINING -->
-<section id="mining" style="padding:110px 5%;">
+<section id="mining" style="padding:0px 5% 80px;">
   <div class="section-header reveal">
-    <span class="section-tag">The Heart of Exillion</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;color:var(--cyan);">The Heart of Exillion</span>
     <h2 class="section-title">mEXXE Mobile Mining</h2>
     <div class="section-rule"></div>
   </div>
@@ -2518,10 +2541,10 @@ footer{
   <div style="max-width:1080px;margin:0 auto;">
 
     <!-- Tagline besar -->
-    <div class="reveal" style="text-align:center;margin-bottom:5rem;">
+    <div class="reveal" style="text-align:center;margin-bottom:5rem;margin-top:-2.5rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(1rem,2vw,1.4rem);color:var(--cyan);letter-spacing:3px;line-height:1.8;opacity:0.9;">
-        "Your Time. Your Discipline. Your Responsibility. Your Effort.<br>
-        <span style="color:var(--gold);">These are your Collateral."</span>
+        Your Time. Your Discipline. Your Responsibility. Your Effort.<br>
+        <span style="color:var(--gold);">These are your Collateral.</span>
       </p>
     </div>
 
@@ -2581,7 +2604,7 @@ footer{
 
     <!-- How it works — 4 steps -->
     <div class="reveal" style="margin-bottom:5rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:3px;color:var(--cyan);text-align:center;margin-bottom:2.5rem;opacity:0.7;">HOW IT WORKS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:3px;color:var(--cyan);text-align:center;margin-bottom:2.5rem;opacity:1;">HOW IT WORKS</div>
       <div class="mining-steps" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;">
 
         <div style="text-align:center;padding:1.8rem 1.2rem;background:var(--card);border:1px solid var(--border-dim);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);position:relative;">
@@ -2641,8 +2664,8 @@ footer{
             <div style="font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">mEXXE Mining Pool</div>
           </div>
           <div style="text-align:center;">
-            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">1:1</div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">mEXXE : EXXE Value</div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">1 : 1</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">mEXXE &nbsp;:&nbsp; EXXE Value</div>
           </div>
           <div style="text-align:center;">
             <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">0</div>
@@ -2678,9 +2701,9 @@ footer{
 </section>
 
 <!-- TOKENOMICS -->
-<section id="tokenomics">
+<section id="tokenomics" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
   <div class="section-header reveal">
-    <span class="section-tag">Token Distribution</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Token Distribution</span>
     <h2 class="section-title">Tokenomics</h2>
     <div class="section-rule"></div>
   </div>
@@ -2790,7 +2813,7 @@ footer{
 <!-- ROADMAP -->
 <section id="roadmap">
   <div class="section-header reveal">
-    <span class="section-tag">Development Timeline</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Development Timeline</span>
     <h2 class="section-title">Roadmap</h2>
     <div class="section-rule"></div>
   </div>
@@ -2857,7 +2880,7 @@ footer{
 <!-- WHITEPAPER -->
 <section id="whitepaper">
   <div class="section-header reveal">
-    <span class="section-tag">Documentation</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Documentation</span>
     <h2 class="section-title">Whitepaper Overview</h2>
     <div class="section-rule"></div>
   </div>
@@ -2899,9 +2922,9 @@ footer{
 </section>
 
 <!-- DASHBOARD -->
-<section id="dashboard">
+<section id="dashboard" style="padding:0px 5% 80px;">
   <div class="section-header reveal">
-    <span class="section-tag">Live Metrics</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Live Metrics</span>
     <h2 class="section-title">Token Dashboard</h2>
     <div class="section-rule"></div>
   </div>
@@ -2951,9 +2974,9 @@ footer{
 </section>
 
 <!-- ANGEL ROUND -->
-<section id="angel" style="padding:110px 5%;">
+<section id="angel" style="padding:0px 5% 80px;">
   <div class="section-header reveal">
-    <span class="section-tag">Angel Round</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Angel Round</span>
     <h2 class="section-title">Invest in Exillion</h2>
     <div class="section-rule"></div>
   </div>
@@ -2964,7 +2987,7 @@ footer{
         <div class="tier-name">The Genesis Angel Investor</div>
         <div class="tier-price">$0.01 <sub>per EXXE</sub></div>
         <div class="tier-detail">330M EXXE available<br/>Min $10 — Max $250 USDC</div>
-        <span class="tier-badge open">● Open Now</span>
+        <span class="tier-badge open" onclick="document.getElementById('angel').scrollIntoView({behavior:'smooth'});setTimeout(()=>{document.getElementById('phantomBtn').click()},600);" style="cursor:pointer;">● BUY NOW</span>
       </div>
       <div class="tier-card">
         <div class="tier-num">Tier II</div>
@@ -2994,7 +3017,7 @@ footer{
         </div>
       </div>
     <div class="buy-form reveal">
-      <div class="buy-form-title">Angel Investor Application</div>
+      <div class="buy-form-title" style="text-align:center;">Angel Investor Wallet</div>
 
       <!-- STEPS -->
       <div class="buy-steps">
@@ -3114,14 +3137,14 @@ footer{
 </section>
 
 <!-- TREASURY TRANSPARENCY -->
-<section id="transparency" style="padding:110px 5%;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
+<section id="transparency" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
   <div class="section-header reveal">
-    <span class="section-tag">On-Chain Verification</span>
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">On-Chain Verification</span>
     <h2 class="section-title">Treasury Transparency</h2>
     <div class="section-rule"></div>
   </div>
   <div style="max-width:900px;margin:0 auto;">
-    <p style="text-align:center;font-size:0.95rem;font-style:italic;color:var(--text-1);margin-bottom:3rem;opacity:0.8;">
+    <p style="text-align:center;font-size:0.95rem;font-style:italic;color:var(--text-1);margin-top:-3rem;margin-bottom:2rem;opacity:0.8;">
       Every wallet address is public and verifiable on Solana blockchain. All fund movements are permanently recorded on-chain.
     </p>
     <div style="display:flex;flex-direction:column;gap:1rem;">
@@ -3203,7 +3226,7 @@ footer{
         <img src="data:image/png;base64,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" alt="EXILLION" class="footer-logo"/>
         <span class="footer-name">EXILLION Capital Finecosystem</span>
       </div>
-      <p>"Everybody Has A Second Chance" — An innovative financial system through mobile mining token (mEXXE) as collateral for everyone who needs capital.</p>
+      <p>Everybody Has A Second Chance — An innovative financial system through mobile mining mEXXE as collateral for everyone who needs EXXE for The Capital.</p>
     </div>
     <div class="footer-col">
       <h5>Protocol</h5>
