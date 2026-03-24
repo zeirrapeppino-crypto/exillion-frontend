@@ -309,7 +309,7 @@ nav{
   font-family:'Rajdhani',sans-serif;
   max-width:1100px;
   font-size:1.1rem;
-  font-weight:408;
+  font-weight:399;
   color:var(--text-1);
   line-height:1.7;
   margin:1.5rem auto 1.5rem;
@@ -360,7 +360,7 @@ nav{
 .section-header{text-align:center;margin-bottom:5rem;}
 .section-tag{
   font-family:'JetBrains Mono',monospace;
-  font-size:0.58rem;letter-spacing:4px;
+  font-size:0.8rem;letter-spacing:4px;
   color:var(--cyan);
   opacity:0.7;
   display:block;margin-bottom:1rem;
@@ -399,6 +399,20 @@ nav{
   border-left:2px solid rgba(0,212,255,0.5);
   padding-left:2rem;
   margin-bottom:2rem;
+}
+
+centerquote{
+  display:block;
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1.4rem,2.8vw,2.2rem);
+  font-weight:600;
+  font-style:italic;
+  color:var(--gold-light);
+  text-align:center;
+  line-height:1.4;
+  margin-bottom:2rem;
+  text-shadow:0 0 30px rgba(232,201,122,0.35), 0 0 60px rgba(201,168,76,0.15);
+  letter-spacing:2px;
 }
 
 .vision-text p{
@@ -1994,47 +2008,52 @@ footer{
         /* ========== RESPONSIVE — MOBILE ========== */
         @media (max-width: 600px) {
             #splash-page {
-                justify-content: flex-start;
-                padding-top: env(safe-area-inset-top, 0px);
-                overflow-y: auto;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                padding: 0 16px;
+                height: 100vh;
+                height: 100dvh;
             }
             .splash-logo {
-                padding: 28px 12px 6px;
+                padding: 0 12px;
             }
             .splash-logo img {
-                width: 140px;
-                height: 140px;
-                margin-bottom: 14px;
+                width: 90px;
+                height: 90px;
+                margin-bottom: 8px;
             }
             .splash-subtitle {
-                font-size: clamp(0.9rem, 4.5vw, 1.2rem);
+                font-size: 0.75rem;
                 letter-spacing: 2px;
+                margin-bottom: 4px;
             }
             .splash-tagline {
-                font-size: clamp(1rem, 4.5vw, 1.4rem);
+                font-size: 0.95rem;
                 letter-spacing: 2px;
-                margin-bottom: 16px;
+                margin-bottom: 8px;
             }
             .splash-collateral {
-                font-size: clamp(0.8rem, 3.5vw, 0.95rem);
-                padding: 0 20px;
-                line-height: 2;
+                font-size: 0.7rem;
+                padding: 0 16px;
+                line-height: 1.7;
                 max-width: 100%;
+                margin: 4px auto 4px;
             }
             .splash-collateral span {
-                letter-spacing: 2px;
-                font-size: clamp(0.72rem, 3vw, 0.88rem);
+                letter-spacing: 1.5px;
+                font-size: 0.68rem;
             }
             .loading-container {
-                width: 88vw;
-                margin-top: 22px;
+                width: 85vw;
+                margin-top: 12px;
             }
             .enter-btn {
-                padding: 14px 28px;
-                font-size: 0.82rem;
+                padding: 12px 28px;
+                font-size: 0.78rem;
                 letter-spacing: 3px;
-                margin-top: 24px;
-                margin-bottom: 28px;
+                margin-top: 14px;
+                margin-bottom: 0;
             }
             .disclaimer-content {
                 padding: 24px 18px;
@@ -2069,16 +2088,18 @@ footer{
         /* ========== LANDSCAPE MOBILE ========== */
         @media (max-height: 600px) and (orientation: landscape) {
             #splash-page {
-                justify-content: flex-start;
-                overflow-y: auto;
+                justify-content: center;
+                overflow: hidden;
+                height: 100vh;
+                height: 100dvh;
             }
             .splash-logo img {
-                width: 90px;
-                height: 90px;
-                margin-bottom: 8px;
+                width: 60px;
+                height: 60px;
+                margin-bottom: 4px;
             }
             .splash-logo {
-                padding-top: 12px;
+                padding-top: 0;
             }
             .splash-tagline {
                 margin-bottom: 8px;
@@ -2210,10 +2231,10 @@ footer{
     <!-- Tag -->
     <div style="
       font-family:'JetBrains Mono',monospace;
-      font-size:0.65rem;letter-spacing:4px;color:rgba(0,212,255,0.6);
+      font-size:0.88rem;letter-spacing:4px;color:rgba(0,212,255,0.6);
       text-transform:uppercase;margin-bottom:1.6rem;
       animation:mainFadeIn 0.7s ease 0.5s both;
-    ">Initializing Capital Finecosystem</div>
+    ">Welcome Exillioneer</div>
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
@@ -2283,7 +2304,7 @@ footer{
         letter-spacing:2px;color:rgba(0,212,255,0.5);
         text-transform:uppercase;margin-bottom:6px;
       ">
-        <span>Loading Ecosystem</span>
+        <span>Loading........</span>
         <span id="main-splash-pct">0%</span>
       </div>
       <div style="height:2px;background:rgba(0,212,255,0.1);border-radius:1px;overflow:hidden;">
@@ -2367,8 +2388,18 @@ footer{
 <a class="Contract Address"
    href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u"
    target="_blank"
-   style="text-decoration:none;">
-   <span style="color:var(--cyan);font-size:1rem;">EXXE Contract Address</span>
+   style="
+     text-decoration:none;
+     display:flex;
+     flex-direction:row;
+     align-items:center;
+     justify-content:center;
+     text-align:center;
+     gap:10px;
+     width:100%;
+     flex-wrap:wrap;
+   ">
+   <span style="color:var(--cyan);font-size:1rem;white-space:nowrap;">EXXE Contract Address</span>
    <span style="color:var(--text-1);font-size:0.9rem;">2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u</span>
 </a>
 
@@ -2431,8 +2462,8 @@ footer{
   </div>
   <div class="vision-grid">
     <div class="vision-text reveal">
-      <blockquote>"Everybody Has A Second Chance"</blockquote>
-      <p>Exillion Capital Finecosystem (EXXE) was founded on a single universal belief — that access to capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the collateral for lending The Capital</p>
+      <centerquote>"Everybody Has A Second Chance"</centerquote>
+      <p>Exillion Capital Finecosystem was founded on a single universal belief — that access to capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the collateral for lending The Capital</p>
       <p>EXXE changes that. Through mobile mining available to anyone with a smartphone, DeFi lending without traditional banking requirements, and an Investor angel Funding round open to all starting from just $10 — we are building a bridge to financial freedom for everyone.</p>
       <p>Backed by Security On Chain liquidity, a 10-year Exillion foundation vesting schedule, and full on-chain transparency — EXXE is not a token. It is a movement.</p>
     </div>
@@ -2933,7 +2964,6 @@ footer{
         <div class="tier-name">The Genesis Angel Investor</div>
         <div class="tier-price">$0.01 <sub>per EXXE</sub></div>
         <div class="tier-detail">330M EXXE available<br/>Min $10 — Max $250 USDC</div>
-        <div class="tier-gain">+900% at listing</div>
         <span class="tier-badge open">● Open Now</span>
       </div>
       <div class="tier-card">
@@ -2941,7 +2971,6 @@ footer{
         <div class="tier-name">The Prime Angel Investor</div>
         <div class="tier-price">$0.025 <sub>per EXXE</sub></div>
         <div class="tier-detail">288.75M EXXE available<br/>Min $25 — Max $500 USDC</div>
-        <div class="tier-gain">+300% at listing</div>
         <span class="tier-badge soon">Opens after Tier I</span>
       </div>
       <div class="tier-card">
@@ -2949,7 +2978,6 @@ footer{
         <div class="tier-name">The Apex Angel Investor</div>
         <div class="tier-price">$0.05 <sub>per EXXE</sub></div>
         <div class="tier-detail">206.25M EXXE available<br/>Min $50 — Max $1,000 USDC</div>
-        <div class="tier-gain">+100% at listing</div>
         <span class="tier-badge soon">Opens after Tier II</span>
       </div>
     </div>
@@ -3638,7 +3666,7 @@ function enterSite() {
         var progress = 0;
         var msgIdx = 0;
         var interval = setInterval(function() {
-            progress += (Math.random() * 3 + 1.5);
+            progress += (Math.random() * 1.2 + 0.4);
             if (progress > 100) progress = 100;
             bar.style.width = progress + '%';
             if (pct) pct.textContent = Math.floor(progress) + '%';
@@ -3658,16 +3686,16 @@ function enterSite() {
                 setTimeout(function() {
                     // Fade out main splash
                     if (mainSplash) {
-                        mainSplash.style.transition = 'opacity 0.9s ease';
+                        mainSplash.style.transition = 'opacity 1.5s ease';
                         mainSplash.style.opacity = '0';
                         setTimeout(function() {
                             mainSplash.style.display = 'none';
                             document.body.style.overflow = 'auto';
-                        }, 900);
+                        }, 1500);
                     }
-                }, 600);
+                }, 1800);
             }
-        }, 40);
+        }, 80);
     }, 800);
 }
 
