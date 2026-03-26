@@ -5,24 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exillion Capital Finecosystem</title>
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- RESET & VARIABLES --- */
         :root {
-            --primary: #9945FF; /* Solana Purple */
-            --secondary: #14F195; /* Solana Green */
+            --primary: #9945FF;
+            --secondary: #14F195;
             --bg-dark: #0f172a;
             --bg-card: #1e293b;
             --text-light: #f8fafc;
             --text-gray: #94a3b8;
             --danger: #ef4444;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: var(--font-main);
             background-color: var(--bg-dark);
@@ -32,6 +28,7 @@
         }
 
         a { text-decoration: none; color: inherit; transition: 0.3s; }
+        a:hover { color: var(--secondary); }
         ul { list-style: none; }
 
         /* --- UTILITIES --- */
@@ -39,7 +36,17 @@
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 0;
+            padding: 40px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
 
         .btn {
@@ -52,6 +59,7 @@
             border: none;
             width: 100%;
             max-width: 300px;
+            margin: 10px 0;
         }
 
         .btn-primary {
@@ -65,16 +73,20 @@
             background: transparent;
         }
 
-        .section-title {
-            font-size: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .wallet-address {
+            font-family: monospace;
+            background: #000;
+            padding: 8px 12px;
+            border-radius: 6px;
+            word-break: break-all;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            display: block;
+            margin-top: 5px;
+            border: 1px solid #334155;
         }
 
-        /* --- HEADER & NAV --- */
+        /* --- HEADER --- */
         header {
             background-color: rgba(15, 23, 42, 0.95);
             position: sticky;
@@ -82,6 +94,7 @@
             z-index: 1000;
             border-bottom: 1px solid #334155;
             padding: 15px 0;
+            backdrop-filter: blur(10px);
         }
 
         .nav-container {
@@ -94,6 +107,7 @@
             font-size: 1.5rem;
             font-weight: 800;
             color: var(--text-light);
+            letter-spacing: 1px;
         }
 
         .nav-links {
@@ -104,27 +118,31 @@
         .nav-links a {
             font-size: 0.9rem;
             color: var(--text-gray);
+            font-weight: 500;
         }
-
-        .nav-links a:hover { color: var(--secondary); }
 
         .mobile-menu-btn {
             display: none;
             font-size: 1.5rem;
             cursor: pointer;
+            color: var(--text-light);
         }
 
-        /* --- HERO SECTION --- */
+        /* --- HERO --- */
         .hero {
             text-align: center;
             padding: 80px 20px;
             background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            border-bottom: 1px solid #334155;
         }
 
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 10px;
             line-height: 1.2;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
@@ -143,20 +161,21 @@
 
         .stat-card {
             background: var(--bg-card);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 20px;
+            border-radius: 12px;
             min-width: 150px;
             border: 1px solid #334155;
+            flex: 1;
+            max-width: 200px;
         }
 
         .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--secondary); }
-        .stat-label { font-size: 0.8rem; color: var(--text-gray); }
+        .stat-label { font-size: 0.8rem; color: var(--text-gray); margin-top: 5px; }
 
-        /* --- FEATURES GRID --- */
-        .features { padding: 60px 0; }
+        /* --- CARDS & GRID --- */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
 
@@ -166,21 +185,26 @@
             border-radius: 12px;
             border: 1px solid #334155;
             transition: transform 0.3s;
+            margin-bottom: 20px;
         }
 
-        .card:hover { transform: translateY(-5px); }
-        .card h3 { color: var(--primary); margin-bottom: 10px; }
-        .card-icon { font-size: 2rem; margin-bottom: 15px; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.3rem; }
+        .card-icon { font-size: 2rem; margin-bottom: 15px; display: block; }
 
-        /* --- TOKENOMICS & ROADMAP --- */
+        /* --- TOKENOMICS LIST --- */
         .tokenomics-item {
             display: flex;
             justify-content: space-between;
             padding: 15px;
             border-bottom: 1px solid #334155;
+            flex-wrap: wrap;
         }
         .tokenomics-item:last-child { border-bottom: none; }
+        .tokenomics-item span:first-child { color: var(--text-gray); }
+        .tokenomics-item span:last-child { color: var(--secondary); font-weight: bold; }
 
+        /* --- ROADMAP --- */
         .roadmap-step {
             border-left: 3px solid var(--primary);
             padding-left: 20px;
@@ -201,9 +225,16 @@
         /* --- INVESTMENT FORM --- */
         .invest-section {
             background: var(--bg-card);
-            padding: 40px 20px;
+            padding: 30px;
             border-radius: 15px;
-            margin: 40px 0;
+            border: 1px solid var(--primary);
+        }
+
+        .tier-box {
+            background: rgba(153, 69, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
             border: 1px solid var(--primary);
         }
 
@@ -216,35 +247,7 @@
             border: 1px solid #334155;
             color: white;
             border-radius: 6px;
-        }
-
-        .tier-box {
-            background: rgba(153, 69, 255, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid var(--primary);
-        }
-
-        /* --- FOOTER & DISCLAIMER --- */
-        footer {
-            background: #020617;
-            padding: 40px 0;
-            margin-top: 60px;
-            font-size: 0.9rem;
-            color: var(--text-gray);
-        }
-
-        .wallet-address {
-            font-family: monospace;
-            background: #000;
-            padding: 5px 10px;
-            border-radius: 4px;
-            word-break: break-all;
-            font-size: 0.8rem;
-            display: block;
-            margin-top: 5px;
-            color: var(--secondary);
+            font-size: 1rem;
         }
 
         .disclaimer-box {
@@ -252,8 +255,69 @@
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
+            background: rgba(239, 68, 68, 0.1);
         }
+
+        .checkbox-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #020617;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            border-top: 1px solid #334155;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 { color: var(--text-light); margin-bottom: 20px; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-gray); }
+        .footer-col ul li a:hover { color: var(--secondary); }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border: 1px solid var(--danger);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header { font-size: 1.5rem; color: var(--danger); margin-bottom: 20px; font-weight: bold; }
+        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .modal-btn { flex: 1; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-agree { background: var(--danger); color: white; }
+        .btn-disagree { background: #334155; color: white; }
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 768px) {
@@ -268,12 +332,16 @@
                 background: var(--bg-card);
                 padding: 20px;
                 border-bottom: 1px solid #334155;
+                text-align: center;
             }
             .nav-links.active { display: flex; }
             .mobile-menu-btn { display: block; }
             .btn { width: 100%; max-width: 100%; }
             .hero-stats { flex-direction: column; align-items: center; }
-            .stat-card { width: 100%; }
+            .stat-card { width: 100%; max-width: 100%; }
+            .tokenomics-item { flex-direction: column; gap: 5px; }
+            .grid { grid-template-columns: 1fr; }
+            .modal-btn-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -289,8 +357,9 @@
                 <a href="#mining">Mining</a>
                 <a href="#tokenomics">Tokenomics</a>
                 <a href="#roadmap">Roadmap</a>
-                <a href="#angel">Invest</a>
-                <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank">Solscan</a>
+                <a href="#whitepaper">Whitepaper</a>
+                <a href="#dashboard">Dashboard</a>
+                <a href="#angel">The Angel Investor</a>
             </nav>
         </div>
     </header>
@@ -298,9 +367,11 @@
     <!-- HERO SECTION -->
     <section class="hero">
         <div class="container">
-            <h1>Capital Finecosystem</h1>
+            <h1>EXILLION<br>Capital Finecosystem</h1>
             <p>Everybody Has A Second Chance</p>
-            <p style="font-size: 0.9rem; color: var(--secondary);">Your Time. Your Discipline. Your Responsibility. Your Effort.<br>These are your Collateral.</p>
+            <p style="font-size: 0.9rem; color: var(--secondary); margin-bottom: 30px;">
+                Your Time. Your Discipline. Your Responsibility. Your Effort.<br>These are your Collateral.
+            </p>
             
             <div class="hero-stats">
                 <div class="stat-card">
@@ -309,157 +380,519 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">$0.01</div>
-                    <div class="stat-label">Tier I Presale</div>
+                    <div class="stat-label">Tier I Presale Price</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value">$0.10</div>
-                    <div class="stat-label">Orca Listing Target</div>
+                    <div class="stat-label">ORCA Listing Price</div>
                 </div>
             </div>
 
             <a href="#angel" class="btn btn-primary">ENTER THE JOURNEY</a>
+            <p style="margin-top: 15px; font-size: 0.8rem; color: var(--text-gray);">Exillioneer · Mobile Mining · mEXXE Collateral Token · Solana Blockchain · EXXE SPL Token · DeFi Capital Lending</p>
         </div>
     </section>
 
-    <!-- ABOUT / PROTOCOL -->
+    <!-- ABOUT SECTION -->
     <section id="about" class="container">
-        <h2 class="section-title">What Is Exillion?</h2>
+        <h2 class="section-title">Protocol Overview</h2>
         <div class="card">
+            <h3>What Is Exillion?</h3>
+            <p style="font-style: italic; color: var(--secondary); margin-bottom: 15px;">"Everybody Has A Second Chance"</p>
             <p>Exillion Capital Finecosystem was founded on a single universal belief that access to Capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the Collateral for lending The Capital.</p>
             <br>
-            <p>Exillion introduces a breakthrough in DeFi Capital Lending through innovative Financial Engineering by introducing <strong>"mEXXE"</strong> as a Collateral Asset Token, earned through time, discipline, responsibility and effort via mobile mining.</p>
+            <p>Exillion Capital Finecosystem introduces a breakthrough in DeFi Capital Lending through innovative Financial Engineering by introducing "mEXXE" as a Collateral Asset Token, a non-tradeble and non-transferable asset earned through time, discipline, responsibility and effort via mobile mining.</p>
+            <br>
+            <p>The Virtual Mining Token "mEXXE" is valued 1 : 1 to The SPL Token "EXXE".</p>
+            <br>
+            <p>Empowering Exillioneers to use The Virtual Mining Token "mEXXE" as Digital Collateral for lending The SPL Token "EXXE" on Solana Blockchain to receive The Capital with low interest rate — Exillioneers can use The Capital to invest and grow within a self-sustaining economic system in daily life.</p>
+            <br>
+            <p>The Angel Investor Funding round open to everyone who believe DeFi Capital lending without traditional banking requirements — we are building a bridge and on-chain transparency to financial freedom for everyone</p>
+            <br>
+            <p>Let's join this innovative financial system where your time, discipline, responsibility and effort are truly valued.</p>
         </div>
     </section>
 
     <!-- FEATURES -->
-    <section id="mining" class="features container">
-        <h2 class="section-title">Core Features</h2>
+    <section class="container">
         <div class="grid">
             <div class="card">
-                <div class="card-icon">⛏</div>
+                <span class="card-icon">⛏</span>
                 <h3>Mobile Mining</h3>
                 <p>Mine mEXXE (Virtual Mining Token) directly from your smartphone — Android & iOS. No hardware required.</p>
             </div>
             <div class="card">
-                <div class="card-icon">🏦</div>
+                <span class="card-icon">🏦</span>
                 <h3>DeFi Collateral</h3>
-                <p>Lock mEXXE as collateral to access decentralized lending — no bank, no credit score required.</p>
+                <p>Lock mEXXE (Virtual Mining Token) as collateral to access decentralized lending — no bank, no credit score required.</p>
             </div>
             <div class="card">
-                <div class="card-icon">🔒</div>
-                <h3>Liquidity Secured</h3>
-                <p>75% of all angel funds are Secured On-Chain to ensure long term market stability and trust.</p>
+                <span class="card-icon">🔒</span>
+                <h3>Liquidity Secured On-Chain</h3>
+                <p>75% of all angel funds are Secured On-Chain to ensure long term market stability and trust</p>
             </div>
             <div class="card">
-                <div class="card-icon">🌍</div>
-                <h3>Humanitarian Aid</h3>
+                <span class="card-icon">⏳</span>
+                <h3>10-Year Vesting</h3>
+                <p>Exillion Foundation tokens locked for a decade — the strongest long-term commitment in the industry.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🌍</span>
+                <h3>Global Humanitarian Aid</h3>
                 <p>1% of supply dedicated to global humanitarian aid. Transparently on-chain.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TRANSPARENCY -->
+    <section class="container">
+        <h2 class="section-title">On-Chain Verification</h2>
+        <div class="card">
+            <h3>Treasury Transparency</h3>
+            <p>EXXE SPL Token Contract Address and every wallet address is public and verifiable on Solana blockchain.</p>
+            <p>All fund movements are instantly and automatically distributed across Liquidity (75%), Operational (15%) and Development (10%) Wallets — Verified in real-time, and permanently recorded on-chain.</p>
+            
+            <div style="margin-top: 20px;">
+                <p><strong>EXXE SPL Token Contract Address</strong><br>SPL Token — Solana Mainnet<br>Official EXXE mint address — always verify before buy and trading</p>
+                <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" class="wallet-address">2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u ↗</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <p><strong>ANGEL INVESTOR DISTRIBUTION WALLET</strong><br>825,000,000 EXXE Angel Investor Reserved</p>
+                <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" class="wallet-address">4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr ↗</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <p><strong>LIQUIDITY POOL WALLET — 75%</strong><br>Orca EXXE/USDC Pool<br>75% of all angel round funds — locked for Orca DEX listing</p>
+                <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" class="wallet-address">G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D ↗</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <p><strong>OPERATIONAL WALLET — 15%</strong><br>Operations, Security & Legal<br>15% of all angel round funds — team, marketing, legal</p>
+                <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" class="wallet-address">DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF ↗</a>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <p><strong>DEVELOPMENT WALLET — 10%</strong><br>Development & Infrastructure<br>10% of all angel round funds — app, smart contract, infrastructure</p>
+                <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" class="wallet-address">GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o ↗</a>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center;">
+                <a href="#whitepaper" class="btn btn-outline">Read Exillion Whitepaper</a>
+                <a href="#angel" class="btn btn-primary">Join The Angel Investor</a>
+                <p style="margin-top: 10px; font-size: 0.8rem;">Minimum $10 USDC · Verified On-Chain · Limited Allocation</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MINING APP -->
+    <section id="mining" class="container">
+        <h2 class="section-title">The Heart of Exillion</h2>
+        <div class="card">
+            <h3>mEXXE Mobile Mining</h3>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--secondary);">Your Time. Your Discipline. Your Responsibility. Your Effort. These are your Collateral.</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <div style="background: rgba(239, 68, 68, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--danger);">
+                    <h4 style="color: var(--danger); margin-bottom: 10px;">TRADITIONAL SYSTEM ✕</h4>
+                    <ul style="font-size: 0.9rem; line-height: 1.8;">
+                        <li>Need property as collateral</li>
+                        <li>Need credit history</li>
+                        <li>Banks decide who deserves capital</li>
+                        <li>Billions excluded from financial system</li>
+                        <li>Hard work & time not valued as asset</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(20, 241, 149, 0.1); padding: 15px; border-radius: 8px; border: 1px solid var(--secondary);">
+                    <h4 style="color: var(--secondary); margin-bottom: 10px;">VS EXILLION FINECOSYSTEM ✓</h4>
+                    <ul style="font-size: 0.9rem; line-height: 1.8;">
+                        <li>Mine mEXXE with your smartphone</li>
+                        <li>Time + Discipline = Digital Collateral</li>
+                        <li>No bank, no credit score needed</li>
+                        <li>Open to everyone with a smartphone</li>
+                        <li>Effort & responsibility are real assets</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h4 style="margin-bottom: 15px;">HOW IT WORKS</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <strong>01 ⛏ Mine mEXXE</strong>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">Open the app daily. Mine mEXXE with your smartphone. No hardware needed.</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <strong>02 🔒 Lock as Collateral</strong>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">Lock your mEXXE as digital collateral. 1 mEXXE = 1 EXXE in value.</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <strong>03 🏦 Borrow EXXE</strong>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">Use mEXXE collateral to borrow EXXE — real capital, no bank required.</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <strong>04 🌍 Grow & Invest</strong>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">Use the capital to invest and grow within the Exillion self-sustaining ecosystem.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; border: 1px dashed var(--text-gray); padding: 20px; border-radius: 8px;">
+                <h3>IN DEVELOPMENT</h3>
+                <p>mEXXE Mining App<br>Android & iOS — Coming Soon</p>
+                <p style="font-size: 0.9rem; margin: 10px 0;">The mEXXE mobile application will allow anyone with a smartphone to mine Virtual Mining Tokens — building their digital collateral through daily discipline and consistent effort.</p>
+                <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                    <span>6.05B mEXXE Mining Pool</span>
+                    <span>1 : 1 mEXXE : EXXE Value</span>
+                    <span>0 Hardware Required</span>
+                    <span>∞ Open to Everyone</span>
+                </div>
+                <div style="margin-top: 15px;">
+                    <span style="margin: 0 10px;">📱 AVAILABLE SOON ON Google Play</span>
+                    <span style="margin: 0 10px;">🍎 AVAILABLE SOON ON App Store</span>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- TOKENOMICS -->
     <section id="tokenomics" class="container">
-        <h2 class="section-title">Tokenomics</h2>
+        <h2 class="section-title">Token Distribution</h2>
         <div class="card">
-            <div class="tokenomics-item">
-                <span>Exillioneer Reserved (Mining)</span>
-                <span style="color:var(--secondary)">55% (6.05B)</span>
+            <h3>Tokenomics</h3>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 1.2rem; color: var(--secondary);">11B TOTAL SUPPLY</p>
+            
+            <div class="tokenomics-item"><span>Exillioneer Reserved Capital Pool</span><span>55% (6.05B)</span></div>
+            <div class="tokenomics-item"><span>Exillion Foundation / Ecosystem / Development</span><span>12.5% (1.375B)</span></div>
+            <div class="tokenomics-item"><span>Liquidity Pool</span><span>10% (1.1B)</span></div>
+            <div class="tokenomics-item"><span>Angel Investor Funding Pool</span><span>7.5% (825M)</span></div>
+            <div class="tokenomics-item"><span>Emergency Pool</span><span>5% (550M)</span></div>
+            <div class="tokenomics-item"><span>Treasury Pool</span><span>3% (330M)</span></div>
+            <div class="tokenomics-item"><span>Community / Supporter / Education</span><span>3% (330M)</span></div>
+            <div class="tokenomics-item"><span>Burn Reserve Pool</span><span>3% (330M)</span></div>
+            <div class="tokenomics-item"><span>Global Humanitarian Reserve Pool</span><span>1% (110M)</span></div>
+            
+            <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 20px;">
+                <p><strong>Total Supply:</strong> 11,000,000,000 EXXE SPL Token</p>
+                <p style="margin-top: 10px;"><strong>Exillioneer Reserved Capital Pool:</strong> 6,050,000,000 EXXE (55% of Total supply - For Mobile Mining Only)</p>
+                <p style="margin-top: 10px;"><strong>Angel Investor Funding Pool:</strong> 825,000,000 EXXE (7.5% of Total supply — Tier I, II, III open to all)</p>
+                <p style="margin-top: 10px;"><strong>Global Humanitarian Reserve Pool:</strong> 110,000,000 EXXE (Global humanitarian aid organizations worldwide)</p>
+                <p style="margin-top: 10px;"><strong>Vesting Period:</strong> 10 Years (Exillion Foundation / Ecosystem / Development Pool)</p>
             </div>
-            <div class="tokenomics-item">
-                <span>Angel Investor Funding</span>
-                <span style="color:var(--primary)">7.5% (825M)</span>
-            </div>
-            <div class="tokenomics-item">
-                <span>Liquidity Pool</span>
-                <span>10% (1.1B)</span>
-            </div>
-            <div class="tokenomics-item">
-                <span>Foundation / Dev</span>
-                <span>12.5% (1.375B)</span>
-            </div>
-            <div class="tokenomics-item">
-                <span>Global Humanitarian</span>
-                <span>1% (110M)</span>
-            </div>
-            <div style="margin-top:20px; text-align:center;">
-                <p><strong>Total Supply:</strong> 11,000,000,000 EXXE</p>
-                <p><strong>Contract:</strong> <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" class="wallet-address">2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u</a></p>
+
+            <div style="margin-top: 30px;">
+                <h4>The Angel Investor Pricing Tiers</h4>
+                <div class="tokenomics-item"><span>Tier I — The Genesis Angel Investor</span><span>$0.01</span></div>
+                <div class="tokenomics-item"><span>Tier II — The Prime Angel Investor</span><span>$0.025</span></div>
+                <div class="tokenomics-item"><span>Tier III — The Apex Angel Investor</span><span>$0.05</span></div>
+                <div class="tokenomics-item"><span>Orca DEX Listing</span><span>$0.10</span></div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Liquidity is secured on-chain on Orca 75% of Angel Round Funds</p>
             </div>
         </div>
     </section>
 
     <!-- ROADMAP -->
     <section id="roadmap" class="container">
-        <h2 class="section-title">Roadmap</h2>
+        <h2 class="section-title">Development Timeline</h2>
         <div class="card">
             <div class="roadmap-step">
                 <h3>Phase 01 — Q1 2026</h3>
-                <p>Exillion Foundation & Token Launch. Website, whitepaper & legal documentation. Community building.</p>
+                <p><strong>Exillion Foundation & Token Launch</strong></p>
+                <ul style="margin-top: 10px; list-style: disc; padding-left: 20px; color: var(--text-gray);">
+                    <li>EXILLION SPL Token minted on Solana — 11B supply</li>
+                    <li>Website, whitepaper & legal documentation</li>
+                    <li>Community building — The Exillioneers</li>
+                    <li>exillioneer.com domain & brand launch</li>
+                </ul>
             </div>
             <div class="roadmap-step">
                 <h3>Phase 02 — Q2 2026</h3>
-                <p>The Angel Investor Funding Progress. Tier I, II, III open to all. Target raise: $20.8M USDC.</p>
+                <p><strong>The Angel Investor Funding Progress</strong></p>
+                <ul style="margin-top: 10px; list-style: disc; padding-left: 20px; color: var(--text-gray);">
+                    <li>Tier I (The Genesis Angel Investor) — 330M EXXE at $0.01</li>
+                    <li>Tier II (The Prime Angel Investor) — 288.75M EXXE at $0.025</li>
+                    <li>Tier III (The Apex Angel Investor) — 206.25M EXXE at $0.05</li>
+                    <li>Target raise: $20,831,250 USDC</li>
+                </ul>
             </div>
             <div class="roadmap-step">
                 <h3>Phase 03 — Q3 2026</h3>
-                <p>Mobile Mining & DeFi Protocol. mEXXE App Launch. Global Humanitarian Pool first aid distribution.</p>
+                <p><strong>Mobile Mining & DeFi Protocol</strong></p>
+                <ul style="margin-top: 10px; list-style: disc; padding-left: 20px; color: var(--text-gray);">
+                    <li>mEXXE — EXILLION Mining App (Android & iOS)</li>
+                    <li>DeFi lending & borrowing protocol launch</li>
+                    <li>Global Humanitarian Pool — first aid distribution</li>
+                    <li>CEX listing negotiations commence</li>
+                </ul>
             </div>
             <div class="roadmap-step">
                 <h3>Phase 04 — Q4 2026 onwards</h3>
-                <p>DEX Listing & Liquidity Pool. EXXE/USDC on Orca DEX. Public listing price target $0.10.</p>
+                <p><strong>DEX Listing & Liquidity Pool</strong></p>
+                <ul style="margin-top: 10px; list-style: disc; padding-left: 20px; color: var(--text-gray);">
+                    <li>EXXE / USDC pair deployed on Orca DEX</li>
+                    <li>Public listing price: $0.10 USDC</li>
+                    <li>Liquidity pool permanently Secured on-chain</li>
+                    <li>Exillion Foundation BVI established</li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- INVESTMENT SECTION -->
-    <section id="angel" class="container">
-        <h2 class="section-title">Angel Investor</h2>
-        <div class="invest-section">
-            <div class="tier-box">
-                <h3>Tier I — The Genesis Angel Investor</h3>
-                <p>Price: <strong>$0.01 per EXXE</strong></p>
-                <p>Available: 330M EXXE</p>
-                <p>Min: $10 — Max: $250 USDC</p>
+    <!-- WHITEPAPER -->
+    <section id="whitepaper" class="container">
+        <h2 class="section-title">Documentation</h2>
+        <div class="card">
+            <h3>Whitepaper Overview</h3>
+            <div style="margin-bottom: 20px;">
+                <h4>01 Abstract & Vision</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">EXILLION Capital Finecosystem is built on one universal belief — access to capital is a right, not a privilege. Millions are denied financial opportunity not due to lack of ability, but lack of collateral. EXILLION solves this through a self-sustaining DeFi lending ecosystem on Solana, where collateral is earned, not owned.</p>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">Connect Wallet</label>
-                <button class="btn btn-outline" style="width:100%">🟣 Connect Phantom Wallet</button>
+            <div style="margin-bottom: 20px;">
+                <h4>02 mEXXE Collateral Protocol</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">mEXXE is a non-tradeable, non-transferable Virtual Mining Token earned through daily discipline via the mEXXE mobile app. It serves as on-chain collateral — 1 mEXXE = 1 EXXE in borrowing value. Users lock mEXXE to access real capital with no bank, no credit score, and no traditional requirements.</p>
             </div>
-
-            <div class="form-group">
-                <label class="form-label">Investment Amount (USDC)</label>
-                <input type="number" class="form-input" placeholder="Min $10" id="investAmount">
+            <div style="margin-bottom: 20px;">
+                <h4>03 Tokenomics & Supply</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">Fixed total supply of 11 Billion EXXE on Solana. Distributed across strategic pools: 55% (6.05B) Exillioneer Mining Pool, 10% (1.1B) Liquidity Pool, 7.5% (825M) Angel Investor Pool, 3% Treasury, 3% Community & Education, 3% Burn Reserve, and 1% (110M) Global Humanitarian Reserve — all governed on-chain.</p>
             </div>
+            <div style="margin-bottom: 20px;">
+                <h4>04 Angel Investor Funding Round</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">825M EXXE is reserved exclusively for The Angel Investor Funding Round, open to everyone. Tier I (Genesis) at $0.01 — Tier II (Prime) at $0.025 — Tier III (Apex) at $0.05 — with Orca DEX listing target at $0.10. All funds are automatically distributed on-chain: 75% Liquidity, 15% Operational, 10% Development.</p>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <h4>05 Solana Infrastructure & Transparency</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">EXILLION is a standard SPL token built on Solana — delivering 65,000 TPS throughput and sub-$0.001 transaction fees. Every fund movement is instantly distributed across three on-chain wallets and permanently verifiable on-chain. Full composability across the Solana DeFi and DEX ecosystem via Orca.</p>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <h4>06 Legal & Compliance</h4>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">EXXE and mEXXE operate as utility tokens within the EXILLION ecosystem. This document is for informational purposes only and does not constitute a securities offering, investment advice, or financial product. Participation in the Angel Investor round is voluntary and subject to individual jurisdiction compliance.</p>
+            </div>
+            <div style="text-align: center;">
+                <a href="#" class="btn btn-outline">Download Full Whitepaper (PDF)</a>
+            </div>
+        </div>
+    </section>
 
-            <div class="disclaimer-box">
-                <p>⚠ <strong>Risk Disclaimer:</strong> You may lose all capital. EXXE is a utility token, not a security. Not financial advice. Maximum $250 USDC per investor.</p>
-                <div style="margin-top:10px;">
-                    <input type="checkbox" id="agree"> I understand the risks and agree to terms.
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="container">
+        <h2 class="section-title">Live Metrics</h2>
+        <div class="card">
+            <h3>Token Dashboard</h3>
+            <div class="grid" style="margin-top: 20px;">
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Angel Investor Reserved</p>
+                    <p style="font-size: 1.2rem; font-weight: bold;">825M EXXE</p>
+                    <p style="font-size: 0.8rem;">7.5% of Total Supply</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Current Presale Price</p>
+                    <p style="font-size: 1.2rem; font-weight: bold; color: var(--secondary);">$0.01</p>
+                    <p style="font-size: 0.8rem;">Tier I — Genesis Active</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Orca Listing Price</p>
+                    <p style="font-size: 1.2rem; font-weight: bold;">$0.10</p>
+                    <p style="font-size: 0.8rem;">10× Entry Potential</p>
+                </div>
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px;">
+                    <p style="color: var(--text-gray); font-size: 0.9rem;">Circulating</p>
+                    <p style="font-size: 1.2rem; font-weight: bold;">0 EXXE</p>
+                    <p style="font-size: 0.8rem;">Pre-Listing</p>
                 </div>
             </div>
+            <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 20px;">
+                <h4>The Genesis Angel Investor Progress — Tier I   LIVE</h4>
+                <div class="tokenomics-item"><span>Sold:</span><span>0 EXXE</span></div>
+                <div class="tokenomics-item"><span>Target:</span><span>330,000,000 EXXE</span></div>
+                <div class="tokenomics-item"><span>Raised:</span><span>$ 0 USDC</span></div>
+                <div class="tokenomics-item"><span>Total Target:</span><span>$20,831,250 USDC</span></div>
+            </div>
+        </div>
+    </section>
 
-            <button class="btn btn-primary" style="margin-top:20px;" onclick="alert('This is a demo interface. Integrate your Solana Web3.js logic here.')">CONFIRM INVESTMENT</button>
+    <!-- INVESTMENT -->
+    <section id="angel" class="container">
+        <h2 class="section-title">Angel Round</h2>
+        <div class="invest-section">
+            <h3 style="text-align: center; margin-bottom: 20px;">Invest in Exillion</h3>
             
-            <div style="margin-top: 20px; font-size: 0.8rem; text-align: center;">
-                <p>Angel Wallet: <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" class="wallet-address">4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr</a></p>
+            <div class="tier-box">
+                <h4>Tier I The Genesis Angel Investor</h4>
+                <p>$0.01 per EXXE</p>
+                <p>330M EXXE available</p>
+                <p>Min $10 — Max $250 USDC</p>
+                <button class="btn btn-primary" style="margin-top: 10px;">● BUY NOW</button>
+            </div>
+
+            <div class="tier-box" style="border-color: var(--text-gray); background: rgba(255,255,255,0.05);">
+                <h4>Tier II The Prime Angel Investor</h4>
+                <p>$0.025 per EXXE</p>
+                <p>288.75M EXXE available</p>
+                <p>Min $25 — Max $500 USDC</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">Opens after Tier I</p>
+            </div>
+
+            <div class="tier-box" style="border-color: var(--text-gray); background: rgba(255,255,255,0.05);">
+                <h4>Tier III The Apex Angel Investor</h4>
+                <p>$0.05 per EXXE</p>
+                <p>206.25M EXXE available</p>
+                <p>Min $50 — Max $1,000 USDC</p>
+                <p style="font-size: 0.8rem; color: var(--text-gray);">Opens after Tier II</p>
+            </div>
+
+            <p style="text-align: center; margin: 20px 0; color: var(--secondary);">🎫 EXCLUSIVE NFT INCLUDED<br>Every purchase receives an Exillion Logo NFT on Solana</p>
+
+            <div style="margin-top: 30px;">
+                <h4>Angel Investor Wallet</h4>
+                <div style="display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap;">
+                    <span style="background: #334155; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">1 Connect</span>
+                    <span style="background: #334155; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">2 Amount</span>
+                    <span style="background: #334155; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">3 Confirm</span>
+                    <span style="background: #334155; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem;">4 Done</span>
+                </div>
+                
+                <button class="btn btn-outline" style="width: 100%; margin-bottom: 10px;">🟣 Connect Phantom Solana Wallet — Recommended</button>
+                <button class="btn btn-outline" style="width: 100%;">🟠 Connect Solflare Solana Wallet — Supported</button>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    <label class="form-label">Investment Amount (USDC)</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-outline" style="flex: 1; max-width: none; padding: 8px;">$10</button>
+                        <button class="btn btn-outline" style="flex: 1; max-width: none; padding: 8px;">$50</button>
+                        <button class="btn btn-outline" style="flex: 1; max-width: none; padding: 8px;">$100</button>
+                        <button class="btn btn-outline" style="flex: 1; max-width: none; padding: 8px;">MAX $250</button>
+                    </div>
+                    <input type="number" class="form-input" style="margin-top: 10px;" placeholder="USDC">
+                </div>
+
+                <div style="background: var(--bg-dark); padding: 15px; border-radius: 8px; margin: 20px 0;">
+                    <div class="tokenomics-item"><span>You Pay</span><span>—</span></div>
+                    <div class="tokenomics-item"><span>You Receive</span><span>—</span></div>
+                    <div class="tokenomics-item"><span>Value at Listing ($0.10)</span><span>—</span></div>
+                    <div class="tokenomics-item"><span>Potential Gain</span><span>—</span></div>
+                </div>
+
+                <h4>Confirm Before Proceeding</h4>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="confirm1">
+                    <label for="confirm1">I confirm my investment does not exceed $250 USDC (Tier I — The Founding Member maximum per investor).</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="confirm2">
+                    <label for="confirm2">I understand this is a high-risk investment and I may lose all invested capital.</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="confirm3">
+                    <label for="confirm3">I have read and agree to the Risk Disclaimer, Terms of Service & Investment Agreement.</label>
+                </div>
+
+                <button class="btn btn-primary" style="margin-top: 20px;" onclick="openModal()">Pay with USDC — Receive EXXE</button>
+                
+                <p style="font-size: 0.8rem; color: var(--text-gray); margin-top: 15px; text-align: center;">
+                    USDC sent on-chain. EXXE delivered automatically to your connected wallet.<br>
+                    All transactions are irreversible. Minimum $10 — Maximum $250 USDC per investor.
+                </p>
             </div>
         </div>
     </section>
 
     <!-- FOOTER -->
     <footer>
-        <div class="container" style="text-align: center;">
-            <h3>EXILLION Capital Finecosystem</h3>
-            <p>Everybody Has A Second Chance</p>
-            <div style="margin: 20px 0;">
-                <a href="#">Telegram</a> | <a href="#">Twitter</a> | <a href="#">Discord</a> | <a href="#">Medium</a>
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h3 style="color: var(--text-light); margin-bottom: 10px;">EXILLION Capital Finecosystem</h3>
+                <p>Everybody Has A Second Chance — An innovative financial system through mobile mining mEXXE as collateral for everyone who needs EXXE for The Capital.</p>
             </div>
-            <p>&copy; 2026 Exillion Capital Finecosystem. All rights reserved.</p>
-            <p style="font-size: 0.7rem; margin-top: 10px; color: #555;">Solana Mainnet · SPL Token · EXILLION</p>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Protocol</h4>
+                    <ul>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#mining">Mining App</a></li>
+                        <li><a href="#tokenomics">Tokenomics</a></li>
+                        <li><a href="#roadmap">Roadmap</a></li>
+                        <li><a href="#whitepaper">Whitepaper</a></li>
+                        <li><a href="#transparency">Treasury</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Invest</h4>
+                    <ul>
+                        <li><a href="#angel">The Angel Investor</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#">Orca DEX (Soon)</a></li>
+                        <li><a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank">Solscan Explorer</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Community</h4>
+                    <ul>
+                        <li><a href="#">Telegram — The Exillioneers</a></li>
+                        <li><a href="#">Twitter / X</a></li>
+                        <li><a href="#">Discord</a></li>
+                        <li><a href="#">Medium</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; border-top: 1px solid #334155; padding-top: 20px;">
+                <p>© 2026 Exillion Capital Finecosystem — www.exillioneer.com, All rights reserved.</p>
+                <p style="margin-top: 10px;">Solana Mainnet · SPL Token · EXILLION</p>
+            </div>
         </div>
     </footer>
+
+    <!-- DISCLAIMER MODAL -->
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">⚠ Risk Disclaimer</div>
+            <p style="margin-bottom: 15px;">Please read carefully before completing your investment</p>
+            
+            <div style="margin-bottom: 15px;">
+                <p><strong>📉 Capital Loss Risk</strong> — You may lose all or part of your investment. EXXE token value is not guaranteed and may decrease to zero.</p>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <p><strong>🚫 Not a Security</strong> — EXXE is a utility token, not a regulated financial instrument. This is not financial advice.</p>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <p><strong>📊 No Guaranteed Returns</strong> — The target listing price of $0.10 on Orca DEX is a goal, not a guarantee.</p>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <p><strong>⚖️ Regulatory Risk</strong> — Cryptocurrency regulations vary by jurisdiction. It is your responsibility to comply with local law.</p>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <p><strong>🔒 Non-Refundable</strong> — All investments are final once EXXE tokens are delivered. Blockchain transactions are irreversible.</p>
+            </div>
+
+            <p style="margin-bottom: 15px; font-weight: bold;">Confirm all items to continue — <span id="confirmCount">0</span> / 4</p>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" class="modal-check" onchange="updateConfirmCount()">
+                <label>I understand that investing in EXXE carries significant financial risk including potential total loss of capital.</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" class="modal-check" onchange="updateConfirmCount()">
+                <label>I confirm I am not a resident of the United States, China, or any jurisdiction where token sales are prohibited.</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" class="modal-check" onchange="updateConfirmCount()">
+                <label>I acknowledge the listing price of $0.10 USDC is a target only — not a guaranteed return.</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" class="modal-check" onchange="updateConfirmCount()">
+                <label>I am participating voluntarily and have read all risk factors described above.</label>
+            </div>
+
+            <div class="modal-btn-group">
+                <button class="modal-btn btn-agree" id="agreeBtn" disabled onclick="closeModal()">I Understand — Proceed</button>
+                <button class="modal-btn btn-disagree" onclick="closeModal()">I Do Not Agree — Leave</button>
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--danger); text-align: center;">
+                Risk Warning: EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Maximum $250 USDC per investor — Tier I: The Founding Member.
+            </p>
+            <div style="text-align: center; margin-top: 10px; cursor: pointer; font-size: 1.5rem;" onclick="closeModal()">✕</div>
+        </div>
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -468,20 +901,43 @@
             nav.classList.toggle('active');
         }
 
-        // Simple Interaction for Demo
-        document.querySelector('.btn-primary').addEventListener('click', function(e) {
-            if(this.innerText === "CONFIRM INVESTMENT") {
-                const amount = document.getElementById('investAmount').value;
-                const agree = document.getElementById('agree').checked;
-                if(!agree) {
-                    alert("Please agree to the risk disclaimer.");
-                    e.preventDefault();
-                } else if (amount < 10) {
-                    alert("Minimum investment is $10 USDC");
-                    e.preventDefault();
-                }
+        // Modal Logic
+        const modal = document.getElementById('disclaimerModal');
+        const agreeBtn = document.getElementById('agreeBtn');
+        const confirmCountSpan = document.getElementById('confirmCount');
+
+        function openModal() {
+            modal.style.display = 'flex';
+            updateConfirmCount();
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function updateConfirmCount() {
+            const checks = document.querySelectorAll('.modal-check');
+            let count = 0;
+            checks.forEach(check => {
+                if(check.checked) count++;
+            });
+            confirmCountSpan.innerText = count;
+            
+            if(count === 4) {
+                agreeBtn.disabled = false;
+                agreeBtn.style.opacity = '1';
+            } else {
+                agreeBtn.disabled = true;
+                agreeBtn.style.opacity = '0.5';
             }
-        });
+        }
+
+        // Close modal if clicked outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
     </script>
 </body>
 </html>
