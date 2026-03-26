@@ -41,8 +41,10 @@ body{
   color:var(--text-1);
   font-family:'Rajdhani',sans-serif;
   overflow-x:hidden;
-  font-size:16px;
+  font-size:22px;
   line-height:1.7;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-text-size-adjust:100%;
 }
 
 /* SCAN LINE EFFECT */
@@ -52,7 +54,7 @@ body{
   pointer-events:none;z-index:0;opacity:0.4;
   animation:scanMove 8s linear infinite;
 }
-@keyframes scanMove{from{background-position:0 0;}to{background-position:0 100dvh;}}
+@keyframes scanMove{from{background-position:0 0;}to{background-position:0 100vh;}}
 
 /* GRAIN OVERLAY */
 body::before{
@@ -109,12 +111,7 @@ nav{
   will-change:transform;
   filter:drop-shadow(0 0 12.5px rgba(0,212,255,0.2));
 }
-@media(max-width:768px){
-  .nav-logo-img{
-    width:42px;
-    height:42px;
-  }
-}
+
 .nav-brand-text{
   display:flex;flex-direction:column;
   gap:0;
@@ -268,7 +265,7 @@ nav{
 }
 
 .hero-logo{
-  width:188px;height:188px;
+  width:199px;height:199px;
   border-radius:50%;
   object-fit:cover;
   object-position:center;
@@ -393,12 +390,7 @@ nav{
   gap:5rem;align-items:center;
   max-width:1080px;margin:0 auto;
 }
-@media(max-width:768px){
-  .vision-grid{
-    grid-template-columns:1fr;
-    gap:2rem;
-  }
-}
+
 .vision-text blockquote{
   font-family:'Rajdhani',sans-serif;
   font-size:clamp(1.4rem,2.5vw,2rem);
@@ -453,7 +445,7 @@ centerquote{
 
 /* ─── TOKENOMICS ─────────────────────────── */
 #tokenomics{
-  padding:80px 5%;
+  padding:110px 5%;
   background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);
 }
 
@@ -917,11 +909,7 @@ centerquote{
   display:grid;grid-template-columns:1fr 1fr 1fr;
   gap:1.2rem;max-width:1080px;margin:0 auto;
 }
-@media(max-width:768px){
-  .wp-grid{
-    grid-template-columns:1fr;
-  }
-}
+
 .wp-card{
   padding:2rem 1.8rem;
   background:var(--card);
@@ -1275,6 +1263,43 @@ footer{
 }
 .banner-close:hover{color:var(--text-1);}
 
+/* ─── HAMBURGER BUTTON ───────────────────── */
+.hamburger{
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  width:40px;height:40px;
+  background:transparent;
+  border:1px solid rgba(0,212,255,0.2);
+  border-radius:4px;
+  cursor:pointer;
+  padding:8px;
+  transition:all 0.3s ease;
+  flex-shrink:0;
+}
+.hamburger:hover{
+  border-color:rgba(0,212,255,0.5);
+  background:rgba(0,212,255,0.05);
+}
+.hamburger span{
+  display:block;
+  width:20px;height:1.5px;
+  background:var(--cyan);
+  transition:all 0.3s ease;
+  transform-origin:center;
+}
+.hamburger.open span:nth-child(1){
+  transform:translateY(6.5px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2){
+  opacity:0;transform:scaleX(0);
+}
+.hamburger.open span:nth-child(3){
+  transform:translateY(-6.5px) rotate(-45deg);
+}
+
 /* ─── ANIMATIONS ─────────────────────────── */
 @keyframes riseUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
@@ -1283,11 +1308,74 @@ footer{
 .reveal.visible{opacity:1;transform:translateY(0);}
 
 /* ─── RESPONSIVE ─────────────────────────── */
-/* ═══════════════════════════════════════════
-   MOBILE RESPONSIVE — FULL
-   ═══════════════════════════════════════════ */
 
+/* ─── TABLET 768px ───────────────────────── */
+@media(max-width:768px){
 
+  /* Nav — show hamburger, hide links */
+  .hamburger{ display:flex!important; }
+  .nav-cta{ display:none!important; }
+  .nav-links{
+    display:none;
+    position:fixed;
+    top:74px;left:0;right:0;
+    background:rgba(1,11,24,0.98);
+    backdrop-filter:blur(24px);
+    border-bottom:1px solid rgba(0,212,255,0.2);
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    padding:0.5rem 0;
+    z-index:99;
+    box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  }
+  .nav-links.open{ display:flex; }
+  .nav-links a{
+    padding:14px 6%;
+    font-size:0.8rem;
+    letter-spacing:2px;
+    border-bottom:1px solid rgba(0,212,255,0.06);
+    transition:background 0.2s,color 0.2s;
+  }
+  .nav-links a:last-child{ border-bottom:none; }
+  .nav-links a:hover{
+    background:rgba(0,212,255,0.05);
+    color:var(--cyan);
+  }
+
+  /* Hero stats block */
+  .hero-stats{ flex-wrap:wrap; }
+
+  /* Vision grid */
+  .vision-grid{ grid-template-columns:1fr!important;gap:2.5rem; }
+
+  /* Token layout */
+  .token-layout{ grid-template-columns:1fr!important;gap:2rem; }
+
+  /* Tier grid */
+  .tier-grid{ grid-template-columns:1fr!important; }
+
+  /* Roadmap */
+  .roadmap-line::before{ left:13px;top:6px; }
+  .rm-item,.rm-item:nth-child(even){
+    flex-direction:row!important;
+    gap:0.8rem;align-items:flex-start;
+  }
+  .rm-node{ margin-left:0;margin-top:3px;flex-shrink:0; }
+  .rm-item:nth-child(even) .rm-content{ text-align:left!important; }
+  .rm-item:nth-child(even) .rm-tasks li{ flex-direction:row!important; }
+  .rm-content{ flex:1; }
+
+  /* Whitepaper */
+  .wp-grid{ grid-template-columns:1fr!important; }
+
+  /* Dashboard */
+  .dash-cards{ grid-template-columns:1fr 1fr!important; }
+
+  /* Footer */
+  .footer-top{ grid-template-columns:1fr 1fr!important;gap:2rem!important; }
+  .footer-brand{ grid-column:1/-1; }
+}
 
 /* ─── MOBILE 480px ───────────────────────── */
 @media(max-width:480px){
@@ -1300,8 +1388,7 @@ footer{
   .nav-logo-img{ width:44px;height:44px; }
   .nav-name{ font-size:0.85rem!important; }
   .nav-sub{ font-size:0.55rem!important; }
-  .nav-links.open{ top:72px; }
-  .nav-cta{ display:none!important; }
+  .nav-links{ top:66px!important; }
 
   /* Hero */
   #hero{ padding:80px 4% 40px!important; }
@@ -1326,40 +1413,24 @@ footer{
   #vision,#mining,#tokenomics,#roadmap,#whitepaper,
   #dashboard,#angel,#transparency{ padding:50px 4%!important; }
 
-  /* Vision */
-  .vision-grid{ grid-template-columns:1fr!important;gap:2.5rem; }
-
   /* Mining */
   #mining .vs-grid{ grid-template-columns:1fr!important; }
   #mining .vs-divider{ display:none!important; }
   #mining .mining-steps{ grid-template-columns:1fr!important; }
 
   /* Tokenomics */
-  .token-layout{ grid-template-columns:1fr!important;gap:2rem; }
   .donut-ring{ width:200px;height:200px; }
   .donut-wrap{ max-width:360px;margin:0 auto; }
 
   /* Roadmap */
-  .roadmap-line::before{ left:13px;top:6px; }
-  .rm-item,.rm-item:nth-child(even){
-    flex-direction:row!important;
-    gap:0.8rem;align-items:flex-start;
-  }
-  .rm-node{ margin-left:0;margin-top:3px;flex-shrink:0; }
-  .rm-item:nth-child(even) .rm-content{ text-align:left!important; }
-  .rm-item:nth-child(even) .rm-tasks li{ flex-direction:row!important; }
-  .rm-content{ flex:1; }
   .rm-title{ font-size:0.85rem; }
   .rm-tasks li{ font-size:0.78rem; }
 
-  /* Whitepaper & Dashboard */
-  .wp-grid{ grid-template-columns:1fr!important; }
-  .dash-cards{ grid-template-columns:1fr 1fr!important; }
+  /* Dashboard */
   .dash-val{ font-size:1rem; }
   .dash-metric{ font-size:0.48rem;letter-spacing:2px; }
 
   /* Angel Round */
-  .tier-grid{ grid-template-columns:1fr!important; }
   .buy-form{ padding:1.2rem 1rem!important; }
   .buy-form-title{ font-size:0.75rem;letter-spacing:2px; }
   .tier-card{ padding:1.2rem 0.9rem!important; }
@@ -1403,7 +1474,6 @@ footer{
 
   /* Footer */
   .footer-top{ grid-template-columns:1fr!important;gap:1.5rem!important; }
-  .footer-brand{ grid-column:1/-1; }
   .footer-name{ font-size:0.85rem; }
   .footer-copy{ font-size:0.7rem!important; }
   .footer-chain{ font-size:0.52rem!important; }
@@ -1433,6 +1503,80 @@ footer{
   #main-splash-content h1{ font-size:clamp(1.4rem,7vw,2.2rem)!important;letter-spacing:3px!important; }
   #main-splash-content > div:nth-child(4) > div:first-child{ width:90px!important;height:90px!important; }
 
+  /* Inline stat blocks (hero bottom) */
+  #hero-stat-inner{
+    flex-direction:column!important;
+  }
+  #hero-stat-block{
+    overflow-x:visible!important;
+  }
+  #hero-stat-inner > div{
+    border-right:none!important;
+    border-bottom:1px solid var(--border-dim)!important;
+    border-top:none!important;
+    width:100%!important;
+    padding:16px 20px!important;
+  }
+  #hero-stat-inner > div:last-child{
+    border-bottom:none!important;
+  }
+
+  /* Let's Start */
+  #journey-block{
+    padding:0 4%!important;
+  }
+  #journey-line{
+    width:75vw!important;
+  }
+
+  /* Buttons action row */
+  div[style*="padding:0 5% 4rem"]{
+    padding:0 4% 3rem!important;
+  }
+  div[style*="padding:0 5% 4rem"] > div{
+    flex-direction:column!important;
+    align-items:center!important;
+    width:100%!important;
+  }
+  div[style*="padding:0 5% 4rem"] .btn-outline,
+  div[style*="padding:0 5% 4rem"] .btn-gold{
+    width:100%!important;
+    max-width:320px;
+    text-align:center;
+    justify-content:center;
+  }
+
+  /* Touch targets — minimum 44px */
+  .btn-gold, .btn-outline{ min-height:48px!important; }
+  .nav-links a{ min-height:44px;display:flex;align-items:center; }
+  .wallet-btn{ min-height:64px!important; }
+
+  /* Overflow fix */
+  section, #hero{ overflow-x:hidden; }
+  .hero-stats{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  /* Live calc row wraps on mobile */
+  .calc-row{ flex-wrap:wrap;gap:4px; }
+  .calc-lbl{ font-size:0.55rem; }
+  .calc-amt{ font-size:0.85rem; }
+  .calc-amt.gold{ font-size:0.95rem; }
+
+  /* Check labels more readable */
+  .check-item label{ font-size:0.78rem; }
+
+  /* Transparency wallet addresses */
+  #transparency a[href*="solscan"]{
+    font-size:0.45rem!important;
+    word-break:break-all;
+    line-height:1.6;
+  }
+
+  /* Progress section */
+  .progress-wrap{ padding:1rem!important; }
+  .rt-stats{ flex-wrap:wrap!important; }
+
+  /* Footer bottom */
+  .footer-bottom{ flex-direction:column!important;text-align:center; }
 }
 
 /* ─── SMALL MOBILE 360px ─────────────────── */
@@ -1516,7 +1660,7 @@ footer{
             position: absolute;
             width: 100%;
             height: 100%;
-            overflow: visible;
+            overflow: hidden;
         }
 
         .network-line {
@@ -1568,11 +1712,7 @@ footer{
             transform: translate(-50%, -50%);
             animation: orbPulse 6s ease-in-out infinite;
         }
-        @media(max-width:768px){
-          .glow-orb{
-            display:none;
-          }
-        }
+
         @keyframes orbFloat {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(30px, 30px); }
@@ -2440,15 +2580,36 @@ footer{
 @keyframes mainHscan{from{left:-100%}to{left:200%}}
 @keyframes solanaShimmer{0%{background-position:0% center}100%{background-position:200% center}}
 
-/* ─── MAIN SPLASH RESPONSIVE ──── */
-/* ─── FIRST SPLASH RESPONSIVE ──── */
-/* ─── HERO SECTION RESPONSIVE ──── */
-/* ─── NAV RESPONSIVE ──── */
-/* ─── SECTION HEADERS RESPONSIVE ──── */
-/* ─── BUY FORM / ANGEL SECTION RESPONSIVE ──── */
-/* ─── MODAL RESPONSIVE ──── */
-/* ─── FOOTER RESPONSIVE ──── */
-/* ─── STICKY BANNER RESPONSIVE ──── */
+/* ─── MAIN SPLASH MOBILE ──── */
+@media(max-width:480px){
+  #main-splash-content{
+    padding:0 16px!important;
+    width:100%;
+  }
+  /* Logo smaller */
+  #main-splash-content > div:nth-child(3) > div:first-child{
+    width:100px!important;height:100px!important;
+    margin-bottom:0.8rem!important;
+  }
+  /* Let's Start text */
+  #main-splash-content > div[style*="Cinzel"]{
+    font-size:clamp(0.8rem,4.5vw,1.1rem)!important;
+    letter-spacing:3px!important;
+  }
+  /* Shimmer bar under Let's Start */
+  #main-splash-content > div > div[style*="320px"]{
+    width:75vw!important;
+  }
+  /* Early Access text */
+  #main-splash-content > div > p[style*="Cinzel"]{
+    font-size:0.5rem!important;
+    letter-spacing:2px!important;
+  }
+  /* Stats row — stack vertically on very small */
+  #main-splash-content > div[style*="flex-wrap"]{
+    gap:1rem!important;
+  }
+}
 </style>
 
 <div class="scanline"></div>
@@ -2498,7 +2659,7 @@ footer{
     align-items:center;
     gap:0.5rem;
     animation:riseUp 0.8s 0.55s ease both;
-  ">
+  " id="journey-block">
     <p style="
       font-family:'Cinzel',serif;
       font-size:clamp(1rem,2.2vw,1.45rem);
@@ -2514,7 +2675,7 @@ footer{
       filter:drop-shadow(0 0 18px rgba(232,201,122,0.55));
       margin:0;
     ">✦ Let's Start Your Investment Journey ✦</p>
-    <div style="
+    <div id="journey-line" style="
       width:320px;height:1.5px;
       background:linear-gradient(90deg,transparent,#e8c97a,#00d4ff,#e8c97a,transparent);
       opacity:0.7;
@@ -2530,7 +2691,7 @@ footer{
       opacity:0.85;
     ">Early Access · Limited Allocation · Verified On-Chain</p>
 
-  <div style="
+  <div id="hero-stat-block" style="
     margin-top:1.2rem;
     width:100%;
     border-top:1px solid var(--border-dim);
@@ -2538,7 +2699,7 @@ footer{
     animation:riseUp 0.8s 0.7s ease both;
     overflow-x:auto;
   ">
-    <div style="
+    <div id="hero-stat-inner" style="
       display:flex;
       justify-content:center;
       align-items:stretch;
@@ -3843,7 +4004,6 @@ function createParticles() {
     }
 }
 function enterSite() {
-    document.body.style.overflow = 'auto';
     var splash = document.getElementById('splash-page');
     var mc = document.getElementById('main-content');
     var mainSplash = document.getElementById('main-splash');
