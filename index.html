@@ -1312,13 +1312,11 @@ footer{
   .hero-actions{ flex-direction:column;align-items:center; }
   .hero-actions a{ width:100%;max-width:320px;text-align:center; }
 
-  /* Hero Stats — scroll horizontal on mobile */
+  /* Hero Stats */
   .hero-stats{
-    flex-wrap:nowrap;
-    overflow-x:auto;
+    flex-wrap:nowrap;overflow-x:auto;
     -webkit-overflow-scrolling:touch;
-    justify-content:flex-start;
-    scrollbar-width:none;
+    justify-content:flex-start;scrollbar-width:none;
   }
   .hero-stats::-webkit-scrollbar{ display:none; }
   .stat{ padding:16px 20px;min-width:110px;flex:0 0 auto; }
@@ -1346,13 +1344,14 @@ footer{
   .rm-item,.rm-item:nth-child(even){ flex-direction:column;gap:1rem; }
   .rm-item:nth-child(even) .rm-content{ text-align:left; }
   .rm-item:nth-child(even) .rm-tasks li{ flex-direction:row; }
-  .rm-node{ margin-left:7px; }
+  .rm-node{ margin-left:0; }
 
   /* Whitepaper */
   .wp-grid{ grid-template-columns:1fr 1fr!important; }
 
   /* Dashboard */
   .dash-cards{ grid-template-columns:1fr 1fr!important; }
+  .progress-wrap{ padding:1.5rem 1.2rem; }
 
   /* Angel Round — Tiers */
   .tier-grid{ grid-template-columns:1fr!important; }
@@ -1360,6 +1359,8 @@ footer{
   .buy-steps{ gap:0; }
   .bstep-lbl{ font-size:0.42rem; }
   .wallet-btns{ grid-template-columns:1fr; }
+  .wallet-btn{ padding:16px 18px; }
+  .wallet-btn .wallet-name{ font-size:0.7rem; }
 
   /* Transparency */
   #transparency .reveal > div{
@@ -1408,12 +1409,30 @@ footer{
 
   /* Sections */
   .section-title{ font-size:1.4rem;letter-spacing:2px; }
+  #vision,#mining,#tokenomics,#roadmap,#whitepaper,
+  #dashboard,#angel,#transparency{ padding:55px 4%; }
 
   /* Mining */
   #mining .mining-steps{ grid-template-columns:1fr!important; }
 
+  /* Roadmap — single column, node left-aligned */
+  .roadmap-line::before{ left:13px;top:6px; }
+  .rm-item,.rm-item:nth-child(even){
+    flex-direction:row!important;
+    gap:0.8rem;align-items:flex-start;
+  }
+  .rm-node{ margin-left:0;margin-top:3px;flex-shrink:0; }
+  .rm-item:nth-child(even) .rm-content{ text-align:left!important; }
+  .rm-item:nth-child(even) .rm-tasks li{ flex-direction:row!important; }
+  .rm-content{ flex:1; }
+  .rm-title{ font-size:0.85rem; }
+  .rm-tasks li{ font-size:0.78rem; }
+
   /* Whitepaper & Dashboard */
-  .wp-grid,.dash-cards{ grid-template-columns:1fr!important; }
+  .wp-grid{ grid-template-columns:1fr!important; }
+  .dash-cards{ grid-template-columns:1fr 1fr!important; }
+  .dash-val{ font-size:1rem; }
+  .dash-metric{ font-size:0.48rem;letter-spacing:2px; }
 
   /* Angel */
   .buy-form{ padding:1.4rem 1.2rem; }
@@ -1422,6 +1441,30 @@ footer{
   .tier-price{ font-size:1.5rem; }
   .field-input{ font-size:0.85rem; }
   .buy-btn{ font-size:0.65rem;letter-spacing:1.5px; }
+
+  /* Wallet buttons — full width stacked */
+  .wallet-btns{ grid-template-columns:1fr;gap:0.9rem; }
+  .wallet-btn{
+    padding:15px 16px;
+    clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+  }
+  .wallet-btn .wallet-name{ font-size:0.68rem;letter-spacing:1.5px; }
+  .wallet-btn .wallet-sub{ font-size:0.44rem;letter-spacing:1.5px; }
+  .wallet-btn .wallet-icon{ font-size:1.2rem; }
+
+  /* Buy steps compact */
+  .buy-steps{ gap:0;margin-bottom:1.5rem; }
+  .bstep-num{ width:22px;height:22px;font-size:0.58rem; }
+  .bstep-lbl{ font-size:0.38rem;letter-spacing:1px; }
+  .step-line{ max-width:28px; }
+
+  /* Amount hints */
+  .amount-hints{ gap:0.4rem; }
+  .hint{ font-size:0.6rem;padding:5px 10px; }
+
+  /* Progress bars */
+  .progress-wrap{ padding:1.2rem 1rem; }
+  .progress-label{ font-size:0.6rem;letter-spacing:1.5px; }
 
   /* Footer */
   .footer-top{ grid-template-columns:1fr!important; }
@@ -1433,9 +1476,6 @@ footer{
   .risk-item{ padding:0.6rem 0.8rem; }
   .modal-check label{ font-size:0.78rem; }
   .modal-agree,.modal-decline{ font-size:0.72rem;padding:12px; }
-
-  /* Progress bars */
-  .progress-wrap{ padding:1.5rem 1.4rem; }
 
   /* Transparency */
   #transparency .reveal > div > a{
@@ -1450,6 +1490,15 @@ footer{
   .stat{ min-width:88px;padding:12px 10px; }
   .stat-val{ font-size:0.9rem; }
   .nav-cta{ padding:8px 14px;font-size:0.65rem; }
+  .dash-cards{ grid-template-columns:1fr!important; }
+  .dash-card{ padding:1.2rem; }
+  .wallet-btn .wallet-name{ font-size:0.62rem; }
+  .rm-title{ font-size:0.78rem;letter-spacing:0.5px; }
+  .rm-tasks li{ font-size:0.72rem; }
+  .wp-card{ padding:1.4rem 1.2rem; }
+  .wp-num{ font-size:1.8rem; }
+  .wp-title{ font-size:0.7rem; }
+  .wp-text{ font-size:0.8rem; }
 }
 
 
@@ -2393,16 +2442,16 @@ footer{
 
     <!-- Stats row -->
     <div style="
-      display:flex;gap:3.5rem;flex-wrap:wrap;justify-content:center;align-items:center;
+      display:flex;gap:clamp(1.5rem,5vw,3.5rem);flex-wrap:wrap;justify-content:center;align-items:center;
       margin-bottom:2.4rem;
       animation:mainFadeIn 0.7s ease 1s both;
     ">
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825M EXXE</div>
+        <div style="font-family:'Orbitron',monospace;font-size:clamp(1.1rem,4vw,1.5rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825M EXXE</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
       </div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:2.3rem;font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
+        <div style="font-family:'Orbitron',monospace;font-size:clamp(1.4rem,5vw,2.3rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Presale Price</div>
       </div>
     </div>
@@ -2451,6 +2500,15 @@ footer{
 @keyframes mainScanMove{from{background-position:0 0}to{background-position:0 100vh}}
 @keyframes mainHscan{from{left:-100%}to{left:200%}}
 @keyframes solanaShimmer{0%{background-position:0% center}100%{background-position:200% center}}
+
+@media(max-width:768px){
+  #main-splash-content{padding:0 20px!important;}
+}
+@media(max-width:480px){
+  #main-splash-content{padding:0 16px!important;}
+  #main-splash-content h1{font-size:clamp(1.6rem,8vw,2.8rem)!important;letter-spacing:3px!important;}
+  #main-splash-content > div:nth-child(4) > div:first-child{width:110px!important;height:110px!important;}
+}
 </style>
 
 <div class="scanline"></div>
@@ -3965,162 +4023,252 @@ var audioCtx = null;
 var musicPlaying = false;
 var musicNodes = [];
 var masterGain = null;
+var beatInterval = null;
 
 function initAudio() {
     if (audioCtx) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
     masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-    masterGain.gain.linearRampToValueAtTime(0.72, audioCtx.currentTime + 3.5);
+    masterGain.gain.linearRampToValueAtTime(0.62, audioCtx.currentTime + 2.0);
     masterGain.connect(audioCtx.destination);
 }
 
-function createAmbientLayer() {
-    // — Layer 1: Deep space drone (sub-bass rumble) —
-    var drone = audioCtx.createOscillator();
-    var droneGain = audioCtx.createGain();
-    var droneFilter = audioCtx.createBiquadFilter();
-    drone.type = 'sine';
-    drone.frequency.setValueAtTime(38, audioCtx.currentTime);
-    drone.frequency.linearRampToValueAtTime(41, audioCtx.currentTime + 12);
-    drone.frequency.linearRampToValueAtTime(38, audioCtx.currentTime + 24);
-    droneFilter.type = 'lowpass';
-    droneFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
-    droneGain.gain.setValueAtTime(0.55, audioCtx.currentTime);
-    drone.connect(droneFilter);
-    droneFilter.connect(droneGain);
-    droneGain.connect(masterGain);
-    drone.start();
-    musicNodes.push(drone, droneGain, droneFilter);
+// ═══════════════════════════════════════════════
+//  HAPPY UPBEAT MUSIC — Ceria, Hidup & Bahagia
+//  Key: C Major | Tempo: ~116 BPM
+// ═══════════════════════════════════════════════
+function createHappyMusic() {
+    var t = audioCtx.currentTime;
+    var BPM = 116;
+    var BEAT = 60 / BPM;           // ~0.517s per beat
+    var BAR  = BEAT * 4;           // ~2.07s per bar
 
-    // — Layer 2: Cyber synth pad (mid-range ethereal) —
-    var pad = audioCtx.createOscillator();
-    var pad2 = audioCtx.createOscillator();
-    var padGain = audioCtx.createGain();
-    var padFilter = audioCtx.createBiquadFilter();
-    var padReverb = audioCtx.createConvolver();
-    pad.type = 'triangle';
-    pad2.type = 'sine';
-    pad.frequency.setValueAtTime(174.6, audioCtx.currentTime);   // F3
-    pad2.frequency.setValueAtTime(261.6, audioCtx.currentTime);  // C4
-    pad.frequency.linearRampToValueAtTime(196, audioCtx.currentTime + 16);
-    pad2.frequency.linearRampToValueAtTime(293.7, audioCtx.currentTime + 16);
-    pad.frequency.linearRampToValueAtTime(174.6, audioCtx.currentTime + 32);
-    pad2.frequency.linearRampToValueAtTime(261.6, audioCtx.currentTime + 32);
-    padFilter.type = 'bandpass';
-    padFilter.frequency.setValueAtTime(300, audioCtx.currentTime);
-    padFilter.Q.setValueAtTime(0.8, audioCtx.currentTime);
-    padGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-    pad.connect(padFilter);
-    pad2.connect(padFilter);
-    padFilter.connect(padGain);
-    padGain.connect(masterGain);
-    pad.start();
-    pad2.start();
-    musicNodes.push(pad, pad2, padGain, padFilter);
+    // ── Utility: make a soft reverb ──────────────
+    function makeReverb(duration, decay) {
+        var len = audioCtx.sampleRate * duration;
+        var buf = audioCtx.createBuffer(2, len, audioCtx.sampleRate);
+        for (var c = 0; c < 2; c++) {
+            var d = buf.getChannelData(c);
+            for (var i = 0; i < len; i++)
+                d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+        }
+        var rv = audioCtx.createConvolver();
+        rv.buffer = buf;
+        return rv;
+    }
 
-    // — Layer 3: High shimmer / airy synth —
-    var shimmer = audioCtx.createOscillator();
-    var shimmerGain = audioCtx.createGain();
-    var shimmerFilter = audioCtx.createBiquadFilter();
-    shimmer.type = 'sine';
-    shimmer.frequency.setValueAtTime(523.3, audioCtx.currentTime);  // C5
-    shimmerFilter.type = 'highpass';
-    shimmerFilter.frequency.setValueAtTime(400, audioCtx.currentTime);
-    shimmerGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
-    // Slow pulsing shimmer
-    (function pulseShimmer() {
+    var reverb = makeReverb(1.4, 3.5);
+    var reverbGain = audioCtx.createGain();
+    reverbGain.gain.setValueAtTime(0.22, t);
+    reverb.connect(reverbGain);
+    reverbGain.connect(masterGain);
+
+    // ── Layer 1: BASS LINE — bouncy & warm ──────
+    // C major: C2=65.4, G2=98, F2=87.3, Am=110(A2)
+    var bassNotes = [65.4, 65.4, 98, 87.3, 65.4, 65.4, 110, 98];
+    var bassRhythm = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5]; // beat offsets
+    (function playBassLoop(loopStart) {
         if (!musicPlaying) return;
-        var t = audioCtx.currentTime;
-        shimmerGain.gain.linearRampToValueAtTime(0.07, t + 3);
-        shimmerGain.gain.linearRampToValueAtTime(0.01, t + 6);
-        setTimeout(pulseShimmer, 6000);
-    })();
-    shimmer.connect(shimmerFilter);
-    shimmerFilter.connect(shimmerGain);
-    shimmerGain.connect(masterGain);
-    shimmer.start();
-    musicNodes.push(shimmer, shimmerGain, shimmerFilter);
+        bassNotes.forEach(function(freq, i) {
+            var start = loopStart + bassRhythm[i] * BEAT;
+            var osc = audioCtx.createOscillator();
+            var env = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, start);
+            env.gain.setValueAtTime(0, start);
+            env.gain.linearRampToValueAtTime(0.45, start + 0.02);
+            env.gain.exponentialRampToValueAtTime(0.001, start + BEAT * 0.8);
+            osc.connect(env); env.connect(masterGain);
+            osc.start(start); osc.stop(start + BEAT);
+        });
+        var nextLoop = loopStart + BAR * 2;
+        var delay = (nextLoop - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playBassLoop(nextLoop); }, Math.max(0, delay - 50));
+    })(t + 0.1);
 
-    // — Layer 4: Slow pulse beat (soft kick-like thud) —
-    (function pulseBeat() {
+    // ── Layer 2: MELODY — bright & singalong ────
+    // C major scale melody: do-mi-sol-la-sol-mi-re-do pattern
+    var melodyNotes = [
+        523.3, 659.3, 784.0, 880.0,   // C5 E5 G5 A5
+        784.0, 659.3, 587.3, 523.3,   // G5 E5 D5 C5
+        659.3, 784.0, 880.0, 1046.5,  // E5 G5 A5 C6
+        880.0, 784.0, 659.3, 523.3    // A5 G5 E5 C5
+    ];
+    var melodyTimes = [0,0.5,1,1.5, 2,2.5,3,3.5, 4,4.5,5,5.5, 6,6.5,7,7.5];
+    (function playMelodyLoop(loopStart) {
+        if (!musicPlaying) return;
+        melodyNotes.forEach(function(freq, i) {
+            var start = loopStart + melodyTimes[i] * BEAT;
+            var osc = audioCtx.createOscillator();
+            var env = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, start);
+            // Tiny vibrato for warmth
+            var lfo = audioCtx.createOscillator();
+            var lfoGain = audioCtx.createGain();
+            lfo.frequency.setValueAtTime(5.5, start);
+            lfoGain.gain.setValueAtTime(3, start);
+            lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
+            env.gain.setValueAtTime(0, start);
+            env.gain.linearRampToValueAtTime(0.13, start + 0.03);
+            env.gain.exponentialRampToValueAtTime(0.001, start + BEAT * 0.85);
+            osc.connect(env); env.connect(reverb); env.connect(masterGain);
+            lfo.start(start); osc.start(start);
+            lfo.stop(start + BEAT); osc.stop(start + BEAT);
+        });
+        var nextLoop = loopStart + BAR * 4;
+        var delay = (nextLoop - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playMelodyLoop(nextLoop); }, Math.max(0, delay - 50));
+    })(t + 0.2);
+
+    // ── Layer 3: CHORDS — uplifting & warm ──────
+    // C-G-Am-F progression (classic happy pop)
+    var chordSets = [
+        [523.3, 659.3, 784.0],   // C maj
+        [392.0, 493.9, 587.3],   // G maj (G4 B4 D5)
+        [440.0, 523.3, 659.3],   // A min (A4 C5 E5)
+        [349.2, 440.0, 523.3],   // F maj (F4 A4 C5)
+    ];
+    (function playChordsLoop(loopStart) {
+        if (!musicPlaying) return;
+        chordSets.forEach(function(chord, ci) {
+            var start = loopStart + ci * BAR;
+            chord.forEach(function(freq) {
+                var osc = audioCtx.createOscillator();
+                var env = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, start);
+                env.gain.setValueAtTime(0, start);
+                env.gain.linearRampToValueAtTime(0.055, start + 0.08);
+                env.gain.setValueAtTime(0.045, start + BAR - 0.15);
+                env.gain.linearRampToValueAtTime(0, start + BAR);
+                osc.connect(env); env.connect(reverb); env.connect(masterGain);
+                osc.start(start); osc.stop(start + BAR);
+            });
+        });
+        var nextLoop = loopStart + BAR * 4;
+        var delay = (nextLoop - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playChordsLoop(nextLoop); }, Math.max(0, delay - 50));
+    })(t + 0.15);
+
+    // ── Layer 4: KICK DRUM — punchy & energetic ─
+    (function playKick(when) {
         if (!musicPlaying) return;
         var kick = audioCtx.createOscillator();
-        var kickGain = audioCtx.createGain();
+        var kickEnv = audioCtx.createGain();
         kick.type = 'sine';
-        kick.frequency.setValueAtTime(90, audioCtx.currentTime);
-        kick.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.35);
-        kickGain.gain.setValueAtTime(0.38, audioCtx.currentTime);
-        kickGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
-        kick.connect(kickGain);
-        kickGain.connect(masterGain);
-        kick.start();
-        kick.stop(audioCtx.currentTime + 0.5);
-        setTimeout(pulseBeat, 2200);
-    })();
+        kick.frequency.setValueAtTime(160, when);
+        kick.frequency.exponentialRampToValueAtTime(45, when + 0.08);
+        kickEnv.gain.setValueAtTime(0.7, when);
+        kickEnv.gain.exponentialRampToValueAtTime(0.001, when + 0.22);
+        kick.connect(kickEnv); kickEnv.connect(masterGain);
+        kick.start(when); kick.stop(when + 0.25);
+        // Kick on beats 1 and 3
+        var next1 = when + BAR;
+        var next2 = when + BEAT * 2;
+        var d1 = (next1 - audioCtx.currentTime) * 1000;
+        var d2 = (next2 - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playKick(next1); }, Math.max(0, d1 - 30));
+        if (d2 < d1 - 50) setTimeout(function() { if (musicPlaying) playKick(next2); }, Math.max(0, d2 - 30));
+    })(t + BEAT * 0);
 
-    // — Layer 5: Glitchy digital noise bursts —
-    (function glitchBurst() {
+    // ── Layer 5: HI-HAT — crispy & rhythmic ─────
+    (function playHat(when, open) {
         if (!musicPlaying) return;
-        var bufferSize = audioCtx.sampleRate * 0.06;
-        var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        var data = buffer.getChannelData(0);
-        for (var i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
-        var noise = audioCtx.createBufferSource();
-        var noiseGain = audioCtx.createGain();
-        var noiseFilter = audioCtx.createBiquadFilter();
-        noise.buffer = buffer;
-        noiseFilter.type = 'bandpass';
-        noiseFilter.frequency.setValueAtTime(2200 + Math.random() * 800, audioCtx.currentTime);
-        noiseFilter.Q.setValueAtTime(4, audioCtx.currentTime);
-        noiseGain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
-        noise.connect(noiseFilter);
-        noiseFilter.connect(noiseGain);
-        noiseGain.connect(masterGain);
-        noise.start();
-        var nextBurst = 3000 + Math.random() * 5000;
-        setTimeout(glitchBurst, nextBurst);
-    })();
+        var bufLen = audioCtx.sampleRate * 0.04;
+        var buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+        var data = buf.getChannelData(0);
+        for (var i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1);
+        var src = audioCtx.createBufferSource();
+        var filt = audioCtx.createBiquadFilter();
+        var env = audioCtx.createGain();
+        src.buffer = buf;
+        filt.type = 'highpass';
+        filt.frequency.setValueAtTime(8000, when);
+        env.gain.setValueAtTime(open ? 0.09 : 0.05, when);
+        env.gain.exponentialRampToValueAtTime(0.001, when + (open ? 0.12 : 0.05));
+        src.connect(filt); filt.connect(env); env.connect(masterGain);
+        src.start(when);
+        // 8th note hi-hats
+        var next = when + BEAT * 0.5;
+        var delay = (next - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playHat(next, !open); }, Math.max(0, delay - 30));
+    })(t + BEAT * 0.25, false);
 
-    // — Layer 6: Evolving space chord (slow harmonic drift) —
-    var chords = [130.8, 164.8, 196, 246.9]; // C3, E3, G3, B3
-    chords.forEach(function(freq, i) {
-        var osc = audioCtx.createOscillator();
-        var oscGain = audioCtx.createGain();
-        var oscFilter = audioCtx.createBiquadFilter();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        oscFilter.type = 'lowpass';
-        oscFilter.frequency.setValueAtTime(600, audioCtx.currentTime);
-        oscGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
-        oscGain.gain.linearRampToValueAtTime(0.055, audioCtx.currentTime + 4 + i * 1.2);
-        osc.connect(oscFilter);
-        oscFilter.connect(oscGain);
-        oscGain.connect(masterGain);
-        osc.start();
-        musicNodes.push(osc, oscGain, oscFilter);
-    });
+    // ── Layer 6: SNARE — snappy on beats 2 & 4 ──
+    (function playSnare(when) {
+        if (!musicPlaying) return;
+        var bufLen = audioCtx.sampleRate * 0.1;
+        var buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+        var data = buf.getChannelData(0);
+        for (var i = 0; i < bufLen; i++) data[i] = (Math.random() * 2 - 1);
+        var src = audioCtx.createBufferSource();
+        var tone = audioCtx.createOscillator();
+        var toneMix = audioCtx.createGain();
+        var filt = audioCtx.createBiquadFilter();
+        var env = audioCtx.createGain();
+        src.buffer = buf;
+        filt.type = 'bandpass';
+        filt.frequency.setValueAtTime(1800, when);
+        filt.Q.setValueAtTime(0.8, when);
+        tone.type = 'triangle';
+        tone.frequency.setValueAtTime(220, when);
+        toneMix.gain.setValueAtTime(0.3, when);
+        env.gain.setValueAtTime(0.18, when);
+        env.gain.exponentialRampToValueAtTime(0.001, when + 0.13);
+        src.connect(filt); filt.connect(env);
+        tone.connect(toneMix); toneMix.connect(env);
+        env.connect(masterGain);
+        src.start(when); tone.start(when);
+        src.stop(when + 0.15); tone.stop(when + 0.15);
+        // Snare every 2 beats starting beat 2
+        var next = when + BEAT * 2;
+        var delay = (next - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playSnare(next); }, Math.max(0, delay - 30));
+    })(t + BEAT * 1);
+
+    // ── Layer 7: SPARKLE — happy bells ──────────
+    var sparkleNotes = [1046.5, 1318.5, 1568.0, 1760.0, 1318.5, 1046.5]; // C6 E6 G6 A6
+    var sparkleBeats = [0, 1, 2, 3, 5, 7];
+    (function playSparkleLoop(loopStart) {
+        if (!musicPlaying) return;
+        sparkleNotes.forEach(function(freq, i) {
+            var start = loopStart + sparkleBeats[i] * BEAT;
+            var osc = audioCtx.createOscillator();
+            var env = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, start);
+            env.gain.setValueAtTime(0, start);
+            env.gain.linearRampToValueAtTime(0.06, start + 0.01);
+            env.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+            osc.connect(env); env.connect(reverb); env.connect(masterGain);
+            osc.start(start); osc.stop(start + 0.4);
+        });
+        var nextLoop = loopStart + BAR * 2;
+        var delay = (nextLoop - audioCtx.currentTime) * 1000;
+        setTimeout(function() { if (musicPlaying) playSparkleLoop(nextLoop); }, Math.max(0, delay - 50));
+    })(t + BAR + 0.1);
 }
 
 function startMusic() {
     initAudio();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     musicPlaying = true;
-    createAmbientLayer();
+    createHappyMusic();
     document.getElementById('music-toggle').textContent = '🔊';
 }
 
 function stopMusic() {
     musicPlaying = false;
     if (masterGain) {
-        masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+        masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.2);
         setTimeout(function() {
             musicNodes.forEach(function(n) { try { n.disconnect(); } catch(e){} });
             musicNodes = [];
             masterGain = null;
             audioCtx = null;
-        }, 1600);
+        }, 1400);
     }
     document.getElementById('music-toggle').textContent = '🔇';
 }
