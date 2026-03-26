@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Exillion Website — Capital Finecosystem</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Cinzel:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
 
   
@@ -670,46 +670,74 @@ centerquote{
 .step-line{flex:1;height:1px;background:var(--border-dim);max-width:50px;margin:0 4px 14px;}
 
 /* WALLET BUTTONS */
-.wallet-btns{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.wallet-btns{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.8rem;}
 .wallet-btn{
   background:var(--card-hover);
   border:1px solid var(--border-dim);
   color:var(--text-1);
-  padding:12px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:0.6rem;letter-spacing:2px;
+  padding:18px 20px;
+  font-family:'Orbitron',monospace;
+  font-size:0.72rem;letter-spacing:2px;
   cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all 0.2s;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:all 0.3s ease;
+  position:relative;
+  overflow:hidden;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
 }
+.wallet-btn::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,transparent 60%);
+  pointer-events:none;
+}
+.wallet-btn .wallet-icon{font-size:1.4rem;flex-shrink:0;}
+.wallet-btn .wallet-label{display:flex;flex-direction:column;align-items:flex-start;gap:2px;}
+.wallet-btn .wallet-name{font-size:0.75rem;font-weight:700;letter-spacing:2px;}
+.wallet-btn .wallet-sub{font-family:'JetBrains Mono',monospace;font-size:0.48rem;letter-spacing:2px;opacity:0.6;font-weight:400;}
+
 .wallet-btn.phantom{
-  background:linear-gradient(135deg,rgba(153,69,255,0.15) 0%,rgba(101,31,255,0.08) 100%);
-  border-color:rgba(153,69,255,0.5);
-  color:#c4a3ff;
-  text-shadow:0 0 8px rgba(153,69,255,0.4);
-  box-shadow:0 0 12px rgba(153,69,255,0.15),inset 0 0 12px rgba(153,69,255,0.05);
+  background:linear-gradient(135deg,rgba(153,69,255,0.22) 0%,rgba(101,31,255,0.12) 60%,rgba(80,20,200,0.08) 100%);
+  border:1.5px solid rgba(153,69,255,0.55);
+  color:#d8bcff;
+  text-shadow:0 0 10px rgba(153,69,255,0.5);
+  box-shadow:
+    0 0 20px rgba(153,69,255,0.18),
+    0 4px 24px rgba(101,31,255,0.15),
+    inset 0 1px 0 rgba(200,160,255,0.12);
 }
 .wallet-btn.phantom:hover{
-  background:linear-gradient(135deg,rgba(153,69,255,0.3) 0%,rgba(101,31,255,0.18) 100%);
-  border-color:rgba(153,69,255,0.85);
-  color:#d8bcff;
-  box-shadow:0 0 22px rgba(153,69,255,0.35),inset 0 0 16px rgba(153,69,255,0.08);
+  background:linear-gradient(135deg,rgba(153,69,255,0.38) 0%,rgba(101,31,255,0.22) 60%,rgba(80,20,200,0.15) 100%);
+  border-color:rgba(180,120,255,0.9);
+  color:#ecdcff;
+  transform:translateY(-2px);
+  box-shadow:
+    0 0 30px rgba(153,69,255,0.35),
+    0 8px 32px rgba(101,31,255,0.25),
+    inset 0 1px 0 rgba(220,180,255,0.18);
 }
 .wallet-btn.solflare{
-  background:linear-gradient(135deg,rgba(153,69,255,0.1) 0%,rgba(20,241,149,0.1) 100%);
-  border-color:rgba(20,241,149,0.4);
-  color:#7fffd4;
-  text-shadow:0 0 8px rgba(20,241,149,0.35);
-  box-shadow:0 0 12px rgba(20,241,149,0.12),inset 0 0 12px rgba(20,241,149,0.04);
+  background:linear-gradient(135deg,rgba(255,140,0,0.18) 0%,rgba(255,80,0,0.1) 60%,rgba(200,60,0,0.07) 100%);
+  border:1.5px solid rgba(255,140,0,0.5);
+  color:#ffd580;
+  text-shadow:0 0 10px rgba(255,140,0,0.45);
+  box-shadow:
+    0 0 20px rgba(255,140,0,0.15),
+    0 4px 24px rgba(255,80,0,0.12),
+    inset 0 1px 0 rgba(255,200,100,0.1);
 }
 .wallet-btn.solflare:hover{
-  background:linear-gradient(135deg,rgba(153,69,255,0.2) 0%,rgba(20,241,149,0.2) 100%);
-  border-color:rgba(20,241,149,0.75);
-  color:#adffd8;
-  box-shadow:0 0 22px rgba(20,241,149,0.28),inset 0 0 16px rgba(20,241,149,0.07);
+  background:linear-gradient(135deg,rgba(255,140,0,0.32) 0%,rgba(255,80,0,0.2) 60%,rgba(200,60,0,0.14) 100%);
+  border-color:rgba(255,180,60,0.9);
+  color:#ffe9aa;
+  transform:translateY(-2px);
+  box-shadow:
+    0 0 30px rgba(255,140,0,0.3),
+    0 8px 32px rgba(255,80,0,0.22),
+    inset 0 1px 0 rgba(255,220,140,0.16);
 }
-.wallet-btn.connected-phantom{border-color:rgba(153,69,255,0.7);color:#c4a3ff;background:rgba(153,69,255,0.12);}
-.wallet-btn.connected-solflare{border-color:rgba(20,241,149,0.6);color:#7fffd4;background:rgba(20,241,149,0.08);}
+.wallet-btn.connected-phantom{border-color:rgba(153,69,255,0.7);color:#c4a3ff;background:rgba(153,69,255,0.15);}
+.wallet-btn.connected-solflare{border-color:rgba(255,140,0,0.6);color:#ffd580;background:rgba(255,140,0,0.1);}
 
 .wallet-status{
   display:none;
@@ -939,6 +967,7 @@ centerquote{
 }
 .note-gold{color:var(--cyan);opacity:0.7;}
 .note-muted{color:var(--text-3);}
+.note-cyan{color:var(--green);opacity:0.85;}
 
 .progress-wrap{
   max-width:1080px;margin:0 auto;
@@ -1027,13 +1056,44 @@ centerquote{
 .rm-item:nth-child(even) .rm-tasks li{flex-direction:row-reverse;}
 
 .rm-node{
-  width:14px;height:14px;border-radius:50%;
-  background:var(--cyan);
-  border:3px solid var(--void);
-  box-shadow:0 0 16px rgba(0,212,255,0.7), 0 0 30px rgba(0,212,255,0.3);
-  flex-shrink:0;position:relative;z-index:1;margin-top:4px;
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,#0066ff 0%,#00d4ff 100%);
+  border:2px solid rgba(0,212,255,0.6);
+  box-shadow:
+    0 0 0 5px rgba(0,102,255,0.12),
+    0 0 14px rgba(0,212,255,0.55),
+    0 0 30px rgba(0,102,255,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+  flex-shrink:0;position:relative;z-index:1;margin-top:2px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:default;
+  transition:all 0.3s ease;
 }
-.rm-node.dim{background:var(--text-3);box-shadow:none;}
+.rm-node::after{
+  content:'';
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  box-shadow:0 0 6px rgba(255,255,255,0.8);
+}
+.rm-node:hover{
+  transform:scale(1.18);
+  box-shadow:
+    0 0 0 7px rgba(0,102,255,0.18),
+    0 0 22px rgba(0,212,255,0.75),
+    0 0 45px rgba(0,102,255,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.rm-node.dim{
+  background:linear-gradient(135deg,#1a2a3a 0%,#0d1f2e 100%);
+  border-color:rgba(0,212,255,0.2);
+  box-shadow:
+    0 0 0 5px rgba(0,212,255,0.05),
+    0 0 10px rgba(0,212,255,0.15);
+}
+.rm-node.dim::after{
+  background:rgba(100,150,180,0.4);
+  box-shadow:none;
+}
 
 /* ─── FOOTER ─────────────────────────────── */
 footer{
@@ -1555,9 +1615,8 @@ footer{
             font-family: 'Orbitron', monospace;
             font-size: clamp(2.2rem, 6vw, 4.2rem);
             font-weight: 900;
-            margin-bottom: clamp(2px, 0.5vh, 6px);
             text-transform: uppercase;
-            letter-spacing: clamp(6px, 1.8vw, 16px);
+            letter-spacing: clamp(2px, 0.8vw, 6px);
             background: linear-gradient(
                 90deg,
                 #7a5e2a 0%,
@@ -1574,6 +1633,7 @@ footer{
             -webkit-text-fill-color: transparent;
             animation: goldSweep 3.5s linear infinite, titleGoldGlow 3s ease-in-out infinite alternate;
             position: relative;
+            margin-top: -10px;
             margin-bottom: 0;
         }
 
@@ -1607,6 +1667,7 @@ footer{
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: fadeIn 2s ease-out 0.5s both, goldSweep 4s linear infinite;
+            margin-top: -12px;
             margin-bottom: 0;
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: uppercase;
@@ -2198,6 +2259,28 @@ footer{
             </div>
             
             <button class="enter-btn" id="enter-btn" onclick="enterSite()"><span class="enter-btn-text">ENTER THE JOURNEY</span></button>
+
+            <!-- Music toggle button -->
+            <button id="music-toggle" onclick="toggleMusic()" title="Toggle Music" style="
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(0,0,0,0.5);
+                border: 1px solid rgba(0,212,255,0.35);
+                color: #00d4ff;
+                font-size: 1.2rem;
+                cursor: pointer;
+                z-index: 99999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(8px);
+                transition: all 0.3s ease;
+                box-shadow: 0 0 12px rgba(0,212,255,0.2);
+            ">🔊</button>
         </div>
     </div>
 
@@ -2222,10 +2305,11 @@ footer{
     pointer-events:none;
   "></div>
 
-  <!-- Glow orbs -->
-  <div style="position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(0,102,255,0.18) 0%,transparent 70%);pointer-events:none;"></div>
-  <div style="position:absolute;bottom:-10%;right:-10%;width:500px;height:400px;background:radial-gradient(ellipse,rgba(0,212,255,0.08) 0%,transparent 60%);pointer-events:none;"></div>
-  <div style="position:absolute;top:30%;left:-8%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(0,66,200,0.09) 0%,transparent 60%);pointer-events:none;"></div>
+  <!-- Glow orbs - diperkuat -->
+  <div style="position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(0,102,255,0.32) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-10%;right:-10%;width:600px;height:500px;background:radial-gradient(ellipse,rgba(0,212,255,0.16) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;top:30%;left:-8%;width:500px;height:500px;background:radial-gradient(ellipse,rgba(0,66,200,0.18) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(153,69,255,0.08) 0%,transparent 65%);pointer-events:none;"></div>
 
   <!-- Scanline -->
   <div style="
@@ -2257,22 +2341,22 @@ footer{
       font-family:'Orbitron',monospace;
       font-size:clamp(1.1rem,2.5vw,1.55rem);letter-spacing:4px;
       font-weight:900;
-      text-transform:uppercase;margin-bottom:1.6rem;
+      text-transform:uppercase;margin-bottom:1.28rem;
       background:linear-gradient(90deg, #9945FF 0%, #00d4ff 35%, #14F195 50%, #00d4ff 65%, #9945FF 100%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
       background-size:200% auto;
       animation:mainFadeIn 0.7s ease 0.5s both, solanaShimmer 3s linear infinite;
-      filter:drop-shadow(0 0 10px rgba(153,69,255,0.4));
+      filter:drop-shadow(0 0 14px rgba(153,69,255,0.6));
     ">Welcome Angel Investor</div>
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
       <div style="
         width:160px;height:160px;border-radius:50%;overflow:hidden;
-        border:2px solid rgba(0,212,255,0.3);
-        box-shadow:0 0 30px rgba(0,212,255,0.2),0 0 60px rgba(0,102,255,0.12);
+        border:2px solid rgba(0,212,255,0.5);
+        box-shadow:0 0 40px rgba(0,212,255,0.35),0 0 80px rgba(0,102,255,0.2);
         margin:0 auto 1.2rem;
       ">
         <img src="" id="main-splash-logo" alt="EXILLION"
@@ -2309,17 +2393,17 @@ footer{
 
     <!-- Stats row -->
     <div style="
-      display:flex;gap:2.5rem;flex-wrap:wrap;justify-content:center;
+      display:flex;gap:3.5rem;flex-wrap:wrap;justify-content:center;align-items:center;
       margin-bottom:2.4rem;
       animation:mainFadeIn 0.7s ease 1s both;
     ">
-      <div style="text-align:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">825M EXXE</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:700;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Funding</div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825M EXXE</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
       </div>
-      <div style="text-align:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:600;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.01</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:700;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Presale Price</div>
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
+        <div style="font-family:'Orbitron',monospace;font-size:2.3rem;font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:4px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Presale Price</div>
       </div>
     </div>
 
@@ -2407,77 +2491,113 @@ footer{
 
   <p class="hero-tagline">Everybody Has A Second Chance</p>
 
-  <p class="hero-desc">
-    Exillion Capital Finecosystem introduces a breakthrough in DeFi Capital Lending through innovative Financial Engineering by introducing "mEXXE" as a collateral asset token, a non-transferable asset earned through time, discipline, responsibility and effort via mobile mining. “mEXXE is valued 1 : 1 to EXXE". Empowering Exillioneers to use "mEXXE" (Virtual Mining Token) as digital collateral for lending  "EXXE" (SPL Token on Solana) to receive The Real Capital. They can use The Real Capital to invest and grow within a self-sustaining economic system in daily life. Let’s join this innovative financial system where your time, discipline, responsibility and effort are truly valued.
-  </p>
- 
-  <!-- CONTRACT ADDRESS — standalone, centered -->
-<a class="Contract Address"
-   href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u"
-   target="_blank"
-   style="
-     text-decoration:none;
-     display:flex;
-     flex-direction:row;
-     align-items:center;
-     justify-content:center;
-     text-align:center;
-     gap:10px;
-     width:100%;
-     flex-wrap:wrap;
-   ">
-   <span style="color:var(--cyan);font-size:1rem;white-space:nowrap;">EXXE Contract Address</span>
-   <span style="color:var(--text-1);font-size:0.9rem;">2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u</span>
-</a>
-
-
-<!-- TOMBOL BAWAH -->
-<div class="hero-actions" style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;">
-
-  <!-- READ WHITEPAPER -->
-  <a href="#whitepaper" class="btn-outline" style="
-    display:inline-flex;
+  <!-- LET'S START YOUR INVESTMENT JOURNEY -->
+  <div style="
+    margin-top:1.6rem;
+    margin-bottom:0.5rem;
+    display:flex;
+    flex-direction:column;
     align-items:center;
-    justify-content:center;
-    height:52px;
-    padding:0 40px;
-    box-sizing:border-box;
-  ">Read Exillion Whitepaper</a>
+    gap:0.5rem;
+    animation:riseUp 0.8s 0.55s ease both;
+  ">
+    <p style="
+      font-family:'Cinzel',serif;
+      font-size:clamp(1rem,2.2vw,1.45rem);
+      font-weight:700;
+      letter-spacing:6px;
+      text-transform:uppercase;
+      background:linear-gradient(90deg, #e8c97a 0%, #ffffff 40%, #00d4ff 70%, #e8c97a 100%);
+      background-size:200% auto;
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      animation:riseUp 0.8s 0.55s ease both, solanaShimmer 4s linear infinite;
+      filter:drop-shadow(0 0 18px rgba(232,201,122,0.55));
+      margin:0;
+    ">✦ Let's Start Your Investment Journey ✦</p>
+    <div style="
+      width:320px;height:1.5px;
+      background:linear-gradient(90deg,transparent,#e8c97a,#00d4ff,#e8c97a,transparent);
+      opacity:0.7;
+      animation:solanaShimmer 4s linear infinite;
+    "></div>
+    <p style="
+      font-family:'Cinzel',serif;
+      font-size:clamp(0.65rem,1.1vw,0.78rem);
+      letter-spacing:3px;
+      color:var(--text-2);
+      margin:0;
+      text-transform:uppercase;
+      opacity:0.85;
+    ">Early Access · Limited Allocation · Verified On-Chain</p>
 
-  <!-- JOIN ANGEL INVESTOR -->
-  <a href="#angel" class="btn-gold" style="
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    height:52px;
-    padding:0 40px;
-    box-sizing:border-box;
-  ">Join The Angel Investor</a>
+  <div style="
+    margin-top:1.2rem;
+    width:100%;
+    border-top:1px solid var(--border-dim);
+    border-bottom:1px solid var(--border-dim);
+    animation:riseUp 0.8s 0.7s ease both;
+    overflow-x:auto;
+  ">
+    <div style="
+      display:flex;
+      justify-content:center;
+      align-items:stretch;
+      max-width:780px;
+      margin:0 auto;
+    ">
 
-</div>
+      <!-- 825M EXXE -->
+      <div style="
+        flex:1;
+        padding:28px 32px;
+        text-align:center;
+        border-right:1px solid var(--border-dim);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+      ">
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">825M EXXE</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Angel Investor Reserved</div>
+      </div>
 
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-val">11B EXXE</div>
-      <div class="stat-lbl">Total Supply</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val">6.05B EXXE</div>
-      <div class="stat-lbl">Exillioneer Reserved Capital</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val">825M EXXE</div>
-      <div class="stat-lbl">Angel Investor Funding</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val">$0.01 </div>
-      <div class="stat-lbl">Tier I Presale Price</div>
-    </div>
-    <div class="stat">
-      <div class="stat-val">$0.10 </div>
-      <div class="stat-lbl">ORCA Listing Price</div>
+      <!-- $0.01 -->
+      <div style="
+        flex:1;
+        padding:28px 32px;
+        text-align:center;
+        background:rgba(201,168,76,0.05);
+        border-right:1px solid var(--border-dim);
+        border-top:1px solid rgba(201,168,76,0.25);
+        border-bottom:1px solid rgba(201,168,76,0.25);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+      ">
+        <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
+          <div style="font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 60px rgba(201,168,76,0.3);">$0.01</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;">Tier I Presale Price</div>
+      </div>
+
+      <!-- $0.10 -->
+      <div style="
+        flex:1;
+        padding:28px 32px;
+        text-align:center;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+      ">
+        <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
+          <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:600;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">$0.10</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--cyan);opacity:0.75;line-height:1;margin-bottom:1px;">per EXXE</div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">ORCA Listing Price</div>
+      </div>
+
     </div>
   </div>
+  </div>
+
+<!-- TOMBOL BAWAH -->
+
 </section>
 
 <!-- VISION -->
@@ -2490,9 +2610,12 @@ footer{
   <div class="vision-grid">
     <div class="vision-text reveal">
       <centerquote style="font-size:clamp(1rem,1.8vw,1.4rem);color:var(--cyan);text-shadow:0 0 20px rgba(0,212,255,0.4);">"Everybody Has A Second Chance"</centerquote>
-      <p>Exillion Capital Finecosystem was founded on a single universal belief — that access to capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the collateral for lending The Capital</p>
-      <p>EXXE changes that. Through mobile mining available to anyone with a smartphone, DeFi lending without traditional banking requirements, and an Investor angel Funding round open to all starting from just $10 — we are building a bridge to financial freedom for everyone.</p>
-      <p>Backed by Security On Chain liquidity, a 10-year Exillion foundation vesting schedule, and full on-chain transparency — EXXE is not a token. It is a movement.</p>
+      <p>Exillion Capital Finecosystem was founded on a single universal belief that access to Capital is a right, not a privilege. Millions of people worldwide are denied loans, investment opportunities, and financial tools not because they lack ability, but because they don't have the Collateral for lending The Capital.</p>
+      <p>Exillion Capital Finecosystem introduces a breakthrough in DeFi Capital Lending through innovative Financial Engineering by introducing "mEXXE" as a Collateral Asset Token, a non-tradeble and non-transferable asset earned through time, discipline, responsibility and effort via mobile mining.</p> 
+      <p>The Virtual Mining Token"mEXXE" is valued 1 : 1 to The SPL Token "EXXE".</p>
+      <p>Empowering Exillioneers to use The Virtual Mining Token "mEXXE" as Digital Collateral for lending The SPL Token "EXXE" on Solana Blockchain to receive The Capital with low interest rate — Exillioneers can use The Capital to invest and grow within a self-sustaining economic system in daily life.</p> 
+      <p>The Angel Investor Funding round open to everyone who believe DeFi Capital lending without traditional banking requirements — we are building a bridge and on-chain transparency to financial freedom for everyone</p>
+      <p>Let's join this innovative financial system where your time, discipline, responsibility and effort are truly valued.</p>
     </div>
     <div class="features reveal">
       <div class="feature">
@@ -2534,6 +2657,127 @@ footer{
   </div>
 </section>
 
+<!-- TREASURY TRANSPARENCY -->
+<section id="transparency" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
+  <div class="section-header reveal">
+    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">On-Chain Verification</span>
+    <h2 class="section-title">Treasury Transparency</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div style="max-width:900px;margin:0 auto;">
+    <p style="text-align:center;font-family:'Rajdhani',sans-serif;font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:600;font-style:normal;color:var(--text-1);margin-top:-4.8rem;margin-bottom:2rem;opacity:1;line-height:1.8;letter-spacing:1px;">
+      EXXE SPL Token Contract Address and every wallet address is <span style="color:var(--cyan);font-weight:700;">public and verifiable</span> on Solana blockchain.<br>
+      All fund movements are instantly and automatically distributed across Liquidity <span style="color:var(--cyan);font-weight:700;">(75%)</span>, Operational <span style="color:var(--cyan);font-weight:700;">(15%)</span> and Development <span style="color:var(--cyan);font-weight:700;">(10%)</span> Wallets — <span style="color:var(--green);font-weight:700;">Verified in real-time, and permanently recorded on-chain.</span>
+    </p>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+
+      <div class="reveal" style="background:rgba(0,212,255,0.03);border:1px solid var(--border);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">EXXE SPL Token Contract Address</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--cyan);">SPL Token — Solana Mainnet</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Official EXXE mint address — always verify before buy and trading</div>
+          </div>
+          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+            2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--green);margin-bottom:0.4rem;">ANGEL INVESTOR DISTRIBUTION WALLET</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">825,000,000 EXXE</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Angel Investor Reserved</div>
+          </div>
+          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+            4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">LIQUIDITY POOL WALLET — 75%</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Orca EXXE/USDC Pool</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of all angel round funds — locked for Orca DEX listing</div>
+          </div>
+          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+            G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">OPERATIONAL WALLET — 15%</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Operations, Security & Legal</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of all angel round funds — team, marketing, legal</div>
+          </div>
+          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+            DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">DEVELOPMENT WALLET — 10%</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Development & Infrastructure</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of all angel round funds — app, smart contract, infrastructure</div>
+          </div>
+          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+            GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o ↗
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TOMBOL READ WHITEPAPER & JOIN ANGEL INVESTOR -->
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;padding:0 5% 4rem;text-align:center;">
+
+  <div style="display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;">
+    <!-- READ WHITEPAPER -->
+    <a href="#whitepaper" class="btn-outline" style="
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:52px;
+      padding:0 40px;
+      box-sizing:border-box;
+    ">Read Exillion Whitepaper</a>
+
+    <!-- JOIN ANGEL INVESTOR -->
+    <a href="#angel" class="btn-gold" style="
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:52px;
+      padding:0 40px;
+      box-sizing:border-box;
+    ">Join The Angel Investor</a>
+  </div>
+
+  <!-- Trigger psikologi: aksesibilitas + kepercayaan + kelangkaan -->
+  <p style="
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.6rem;
+    letter-spacing:2px;
+    color:var(--text-2);
+    text-transform:uppercase;
+    opacity:0.8;
+    margin:0;
+  ">Minimum $10 USDC &nbsp;·&nbsp; <span style="color:var(--green);">Verified On-Chain</span> &nbsp;·&nbsp; <span style="color:var(--gold);">Limited Allocation</span></p>
+
+</div>
+
 <!-- mEXXE MOBILE MINING -->
 <section id="mining" style="padding:0px 5% 80px;">
   <div class="section-header reveal">
@@ -2545,10 +2789,10 @@ footer{
   <div style="max-width:1080px;margin:0 auto;">
 
     <!-- Tagline besar -->
-    <div class="reveal" style="text-align:center;margin-bottom:5rem;margin-top:-2.5rem;">
+    <div class="reveal" style="text-align:center;margin-bottom:5rem;margin-top:-4.5rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(1rem,2vw,1.4rem);color:var(--cyan);letter-spacing:3px;line-height:1.8;opacity:0.9;">
         Your Time. Your Discipline. Your Responsibility. Your Effort.<br>
-        <span style="color:#9945FF;font-size:clamp(2.2rem,4.5vw,3.8rem);font-weight:700;letter-spacing:2px;text-shadow:0 0 20px rgba(153,69,255,0.5);">These are your Collateral.</span>
+        <span style="color:#9945FF;font-size:clamp(1.8rem,3.8vw,3.2rem);font-weight:700;letter-spacing:2px;text-shadow:0 0 20px rgba(153,69,255,0.5);">These are your Collateral.</span>
       </p>
     </div>
 
@@ -2853,12 +3097,12 @@ footer{
     <div class="rm-item">
       <div class="rm-content reveal">
         <div class="rm-phase">Phase 03 — Q3 2026</div>
-        <div class="rm-title">DEX Listing &amp; Liquidity Pool</div>
+        <div class="rm-title">Mobile Mining &amp; DeFi Protocol</div>
         <ul class="rm-tasks">
-          <li>EXXE / USDC pair deployed on Orca DEX</li>
-          <li>Public listing price: $0.10 USDC</li>
-          <li>Liquidity pool permanently Secured on-chain</li>
-          <li>Exillion Foundation BVI established</li>
+          <li>mEXXE — EXILLION Mining App (Android &amp; iOS)</li>
+          <li>DeFi lending &amp; borrowing protocol launch</li>
+          <li>Global Humanitarian Pool — first aid distribution</li>
+          <li>CEX listing negotiations commence</li>
         </ul>
       </div>
       <div class="rm-node"></div>
@@ -2869,12 +3113,12 @@ footer{
       <div class="rm-node dim"></div>
       <div class="rm-content reveal">
         <div class="rm-phase">Phase 04 — Q4 2026 onwards</div>
-        <div class="rm-title">Mobile Mining &amp; DeFi Protocol</div>
+        <div class="rm-title">DEX Listing &amp; Liquidity Pool</div>
         <ul class="rm-tasks">
-          <li>mEXXE — EXILLION Mining App (Android &amp; iOS)</li>
-          <li>DeFi lending &amp; borrowing protocol launch</li>
-          <li>Global Humanitarian Pool — first aid distribution</li>
-          <li>CEX listing negotiations commence</li>
+          <li>EXXE / USDC pair deployed on Orca DEX</li>
+          <li>Public listing price: $0.10 USDC</li>
+          <li>Liquidity pool permanently Secured on-chain</li>
+          <li>Exillion Foundation BVI established</li>
         </ul>
       </div>
     </div>
@@ -2892,32 +3136,32 @@ footer{
     <div class="wp-card reveal">
       <div class="wp-num">01</div>
       <div class="wp-title">Abstract &amp; Vision</div>
-      <div class="wp-text">EXILLION introduces a scalable collateral token architecture on Solana, enabling trustless DeFi lending with maximum capital efficiency and universal access.</div>
+      <div class="wp-text">EXILLION Capital Finecosystem is built on one universal belief — access to capital is a right, not a privilege. Millions are denied financial opportunity not due to lack of ability, but lack of collateral. EXILLION solves this through a self-sustaining DeFi lending ecosystem on Solana, where collateral is earned, not owned.</div>
     </div>
     <div class="wp-card reveal">
       <div class="wp-num">02</div>
-      <div class="wp-title">Collateral Mechanism</div>
-      <div class="wp-text">EXXE holders lock tokens to access credit lines and synthetic assets. Collateralization ratios governed on-chain with liquidation protection mechanisms.</div>
+      <div class="wp-title">mEXXE Collateral Protocol</div>
+      <div class="wp-text">mEXXE is a non-tradeable, non-transferable Virtual Mining Token earned through daily discipline via the mEXXE mobile app. It serves as on-chain collateral — 1 mEXXE = 1 EXXE in borrowing value. Users lock mEXXE to access real capital with no bank, no credit score, and no traditional requirements.</div>
     </div>
     <div class="wp-card reveal">
       <div class="wp-num">03</div>
       <div class="wp-title">Tokenomics &amp; Supply</div>
-      <div class="wp-text">Fixed supply of 11 billion EXXE distributed across nine strategic pools — designed for long-term sustainability, community ownership, and humanitarian impact.</div>
+      <div class="wp-text">Fixed total supply of 11 Billion EXXE on Solana. Distributed across strategic pools: 55% (6.05B) Exillioneer Mining Pool, 10% (1.1B) Liquidity Pool, 7.5% (825M) Angel Investor Pool, 3% Treasury, 3% Community &amp; Education, 3% Burn Reserve, and 1% (110M) Global Humanitarian Reserve — all governed on-chain.</div>
     </div>
     <div class="wp-card reveal">
       <div class="wp-num">04</div>
-      <div class="wp-title">Solana Architecture</div>
-      <div class="wp-text">65,000 TPS throughput, sub-$0.001 fees. EXILLION operates as a standard SPL token with full composability across the Solana DeFi ecosystem.</div>
+      <div class="wp-title">Angel Investor Funding Round</div>
+      <div class="wp-text">825M EXXE is reserved exclusively for The Angel Investor Funding Round, open to everyone. Tier I (Genesis) at $0.01 — Tier II (Prime) at $0.025 — Tier III (Apex) at $0.05 — with Orca DEX listing target at $0.10. All funds are automatically distributed on-chain: 75% Liquidity, 15% Operational, 10% Development.</div>
     </div>
     <div class="wp-card reveal">
       <div class="wp-num">05</div>
-      <div class="wp-title">Mobile Mining Protocol</div>
-      <div class="wp-text">The mEXXE mobile mining application distributes the 6.05B Miner Pool through a proof-of-engagement model accessible to anyone with a smartphone.</div>
+      <div class="wp-title">Solana Infrastructure &amp; Transparency</div>
+      <div class="wp-text">EXILLION is a standard SPL token built on Solana — delivering 65,000 TPS throughput and sub-$0.001 transaction fees. Every fund movement is instantly distributed across three on-chain wallets and permanently verifiable on-chain. Full composability across the Solana DeFi and DEX ecosystem via Orca.</div>
     </div>
     <div class="wp-card reveal">
       <div class="wp-num">06</div>
       <div class="wp-title">Legal &amp; Compliance</div>
-      <div class="wp-text">EXXE operates as a utility token. This document is informational only and does not constitute a securities offering or financial advice.</div>
+      <div class="wp-text">EXXE and mEXXE operate as utility tokens within the EXILLION ecosystem. This document is for informational purposes only and does not constitute a securities offering, investment advice, or financial product. Participation in the Angel Investor round is voluntary and subject to individual jurisdiction compliance.</div>
     </div>
   </div>
   <div style="text-align:center;margin-top:3rem;" class="reveal">
@@ -2934,44 +3178,44 @@ footer{
   </div>
   <div class="dash-cards reveal">
     <div class="dash-card">
-      <div class="dash-metric">Current Price</div>
-      <div class="dash-val">$0.01</div>
-      <div class="dash-note note-gold">Tier I Active</div>
+      <div class="dash-metric">Angel Investor Reserved</div>
+      <div class="dash-val">825M EXXE</div>
+      <div class="dash-note note-gold">7.5% of Total Supply</div>
     </div>
     <div class="dash-card">
-      <div class="dash-metric">Total Supply</div>
-      <div class="dash-val">11B EXXE</div>
-      <div class="dash-note note-muted">Fixed Supply</div>
+      <div class="dash-metric">Current Presale Price</div>
+      <div class="dash-val">$0.01</div>
+      <div class="dash-note note-gold">Tier I — Genesis Active</div>
+    </div>
+    <div class="dash-card">
+      <div class="dash-metric">Orca Listing Price</div>
+      <div class="dash-val">$0.10</div>
+      <div class="dash-note note-cyan">10× Entry Potential</div>
     </div>
     <div class="dash-card">
       <div class="dash-metric">Circulating</div>
       <div class="dash-val">0 EXXE</div>
       <div class="dash-note note-muted">Pre-Listing</div>
     </div>
-    <div class="dash-card">
-      <div class="dash-metric">FDV at Listing</div>
-      <div class="dash-val">$1.1B</div>
-      <div class="dash-note note-gold">At $0.10</div>
-    </div>
   </div>
   <div class="progress-wrap reveal">
-    <div class="progress-label">The Genesis Angel Investor Progress — Tier I</div>
+    <div class="progress-label">The Genesis Angel Investor Progress — Tier I &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span> <span style="font-family:'JetBrains Mono',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE</span></div>
     <div class="prog-item">
       <div class="prog-meta">
-        <span>Sold: 0 EXXE</span>
+        <span>Sold: <span id="rt-exxe-sold">0</span> EXXE</span>
         <span>Target: 330,000,000 EXXE</span>
       </div>
       <div class="prog-track">
-        <div class="prog-fill" style="width:1%"></div>
+        <div class="prog-fill" id="rt-exxe-bar" style="width:1%"></div>
       </div>
     </div>
     <div class="prog-item" style="margin-top:1.5rem;">
       <div class="prog-meta">
-        <span>Raised: $0 USDC</span>
+        <span>Raised: $<span id="rt-usdc-raised">0</span> USDC</span>
         <span>Total Target: $20,831,250 USDC</span>
       </div>
       <div class="prog-track">
-        <div class="prog-fill" style="width:1%;background:linear-gradient(90deg,#0066ff,var(--cyan));"></div>
+        <div class="prog-fill" id="rt-usdc-bar" style="width:1%;background:linear-gradient(90deg,#0066ff,var(--cyan));"></div>
       </div>
     </div>
   </div>
@@ -2989,21 +3233,30 @@ footer{
       <div class="tier-card active">
         <div class="tier-num">Tier I</div>
         <div class="tier-name">The Genesis Angel Investor</div>
-        <div class="tier-price">$0.01 <sub>per EXXE</sub></div>
+        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+          <span>$0.01</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+        </div>
         <div class="tier-detail">330M EXXE available<br/>Min $10 — Max $250 USDC</div>
         <span class="tier-badge open" onclick="document.getElementById('angel').scrollIntoView({behavior:'smooth'});setTimeout(()=>{document.getElementById('phantomBtn').click()},600);" style="cursor:pointer;">● BUY NOW</span>
       </div>
       <div class="tier-card">
         <div class="tier-num">Tier II</div>
         <div class="tier-name">The Prime Angel Investor</div>
-        <div class="tier-price">$0.025 <sub>per EXXE</sub></div>
+        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+          <span>$0.025</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+        </div>
         <div class="tier-detail">288.75M EXXE available<br/>Min $25 — Max $500 USDC</div>
         <span class="tier-badge soon">Opens after Tier I</span>
       </div>
       <div class="tier-card">
         <div class="tier-num">Tier III</div>
         <div class="tier-name">The Apex Angel Investor</div>
-        <div class="tier-price">$0.05 <sub>per EXXE</sub></div>
+        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+          <span>$0.05</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+        </div>
         <div class="tier-detail">206.25M EXXE available<br/>Min $50 — Max $1,000 USDC</div>
         <span class="tier-badge soon">Opens after Tier II</span>
       </div>
@@ -3037,10 +3290,18 @@ footer{
       <!-- WALLET CONNECT -->
       <div class="wallet-btns">
         <button class="wallet-btn phantom" id="phantomBtn" onclick="connectPhantom()">
-          🟣 &nbsp; Connect Phantom
+          <span class="wallet-icon">🟣</span>
+          <span class="wallet-label">
+            <span class="wallet-name">Connect Phantom</span>
+            <span class="wallet-sub">Solana Wallet — Recommended</span>
+          </span>
         </button>
         <button class="wallet-btn solflare" id="solflareBtn" onclick="connectSolflare()">
-          🟠 &nbsp; Connect Solflare
+          <span class="wallet-icon">🟠</span>
+          <span class="wallet-label">
+            <span class="wallet-name">Connect Solflare</span>
+            <span class="wallet-sub">Solana Wallet — Supported</span>
+          </span>
         </button>
       </div>
 
@@ -3136,88 +3397,6 @@ footer{
           View on Solscan ↗
         </a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- TREASURY TRANSPARENCY -->
-<section id="transparency" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
-  <div class="section-header reveal">
-    <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">On-Chain Verification</span>
-    <h2 class="section-title">Treasury Transparency</h2>
-    <div class="section-rule"></div>
-  </div>
-  <div style="max-width:900px;margin:0 auto;">
-    <p style="text-align:center;font-size:0.95rem;font-style:italic;color:var(--text-1);margin-top:-3rem;margin-bottom:2rem;opacity:0.8;">
-      Every wallet address is public and verifiable on Solana blockchain. All fund movements are permanently recorded on-chain.
-    </p>
-    <div style="display:flex;flex-direction:column;gap:1rem;">
-
-      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--green);margin-bottom:0.4rem;">ANGEL DISTRIBUTION WALLET</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">825,000,000 EXXE</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Sends EXXE to angel investors</div>
-          </div>
-          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr ↗
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">LIQUIDITY POOL WALLET — 75%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Orca EXXE/USDC Pool</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of all angel round funds — locked for Orca DEX listing</div>
-          </div>
-          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D ↗
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">OPERATIONAL WALLET — 15%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Operations, Security & Legal</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of all angel round funds — team, marketing, legal</div>
-          </div>
-          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF ↗
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">DEVELOPMENT WALLET — 10%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--gold);">Development & Infrastructure</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of all angel round funds — app, smart contract, infrastructure</div>
-          </div>
-          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o ↗
-          </a>
-        </div>
-      </div>
-
-      <div class="reveal" style="background:rgba(0,212,255,0.03);border:1px solid var(--border);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--cyan);margin-bottom:0.4rem;">EXXE TOKEN CONTRACT</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.9rem;color:var(--cyan);">SPL Token — Solana Mainnet</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Official EXXE mint address — always verify before trading</div>
-          </div>
-          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u ↗
-          </a>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
@@ -3780,6 +3959,300 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ─── AMBIENT MUSIC ENGINE ────────────────────────────────
+var audioCtx = null;
+var musicPlaying = false;
+var musicNodes = [];
+var masterGain = null;
+
+function initAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(0.72, audioCtx.currentTime + 3.5);
+    masterGain.connect(audioCtx.destination);
+}
+
+function createAmbientLayer() {
+    // — Layer 1: Deep space drone (sub-bass rumble) —
+    var drone = audioCtx.createOscillator();
+    var droneGain = audioCtx.createGain();
+    var droneFilter = audioCtx.createBiquadFilter();
+    drone.type = 'sine';
+    drone.frequency.setValueAtTime(38, audioCtx.currentTime);
+    drone.frequency.linearRampToValueAtTime(41, audioCtx.currentTime + 12);
+    drone.frequency.linearRampToValueAtTime(38, audioCtx.currentTime + 24);
+    droneFilter.type = 'lowpass';
+    droneFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
+    droneGain.gain.setValueAtTime(0.55, audioCtx.currentTime);
+    drone.connect(droneFilter);
+    droneFilter.connect(droneGain);
+    droneGain.connect(masterGain);
+    drone.start();
+    musicNodes.push(drone, droneGain, droneFilter);
+
+    // — Layer 2: Cyber synth pad (mid-range ethereal) —
+    var pad = audioCtx.createOscillator();
+    var pad2 = audioCtx.createOscillator();
+    var padGain = audioCtx.createGain();
+    var padFilter = audioCtx.createBiquadFilter();
+    var padReverb = audioCtx.createConvolver();
+    pad.type = 'triangle';
+    pad2.type = 'sine';
+    pad.frequency.setValueAtTime(174.6, audioCtx.currentTime);   // F3
+    pad2.frequency.setValueAtTime(261.6, audioCtx.currentTime);  // C4
+    pad.frequency.linearRampToValueAtTime(196, audioCtx.currentTime + 16);
+    pad2.frequency.linearRampToValueAtTime(293.7, audioCtx.currentTime + 16);
+    pad.frequency.linearRampToValueAtTime(174.6, audioCtx.currentTime + 32);
+    pad2.frequency.linearRampToValueAtTime(261.6, audioCtx.currentTime + 32);
+    padFilter.type = 'bandpass';
+    padFilter.frequency.setValueAtTime(300, audioCtx.currentTime);
+    padFilter.Q.setValueAtTime(0.8, audioCtx.currentTime);
+    padGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+    pad.connect(padFilter);
+    pad2.connect(padFilter);
+    padFilter.connect(padGain);
+    padGain.connect(masterGain);
+    pad.start();
+    pad2.start();
+    musicNodes.push(pad, pad2, padGain, padFilter);
+
+    // — Layer 3: High shimmer / airy synth —
+    var shimmer = audioCtx.createOscillator();
+    var shimmerGain = audioCtx.createGain();
+    var shimmerFilter = audioCtx.createBiquadFilter();
+    shimmer.type = 'sine';
+    shimmer.frequency.setValueAtTime(523.3, audioCtx.currentTime);  // C5
+    shimmerFilter.type = 'highpass';
+    shimmerFilter.frequency.setValueAtTime(400, audioCtx.currentTime);
+    shimmerGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+    // Slow pulsing shimmer
+    (function pulseShimmer() {
+        if (!musicPlaying) return;
+        var t = audioCtx.currentTime;
+        shimmerGain.gain.linearRampToValueAtTime(0.07, t + 3);
+        shimmerGain.gain.linearRampToValueAtTime(0.01, t + 6);
+        setTimeout(pulseShimmer, 6000);
+    })();
+    shimmer.connect(shimmerFilter);
+    shimmerFilter.connect(shimmerGain);
+    shimmerGain.connect(masterGain);
+    shimmer.start();
+    musicNodes.push(shimmer, shimmerGain, shimmerFilter);
+
+    // — Layer 4: Slow pulse beat (soft kick-like thud) —
+    (function pulseBeat() {
+        if (!musicPlaying) return;
+        var kick = audioCtx.createOscillator();
+        var kickGain = audioCtx.createGain();
+        kick.type = 'sine';
+        kick.frequency.setValueAtTime(90, audioCtx.currentTime);
+        kick.frequency.exponentialRampToValueAtTime(35, audioCtx.currentTime + 0.35);
+        kickGain.gain.setValueAtTime(0.38, audioCtx.currentTime);
+        kickGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        kick.connect(kickGain);
+        kickGain.connect(masterGain);
+        kick.start();
+        kick.stop(audioCtx.currentTime + 0.5);
+        setTimeout(pulseBeat, 2200);
+    })();
+
+    // — Layer 5: Glitchy digital noise bursts —
+    (function glitchBurst() {
+        if (!musicPlaying) return;
+        var bufferSize = audioCtx.sampleRate * 0.06;
+        var buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        var data = buffer.getChannelData(0);
+        for (var i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.3;
+        var noise = audioCtx.createBufferSource();
+        var noiseGain = audioCtx.createGain();
+        var noiseFilter = audioCtx.createBiquadFilter();
+        noise.buffer = buffer;
+        noiseFilter.type = 'bandpass';
+        noiseFilter.frequency.setValueAtTime(2200 + Math.random() * 800, audioCtx.currentTime);
+        noiseFilter.Q.setValueAtTime(4, audioCtx.currentTime);
+        noiseGain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(masterGain);
+        noise.start();
+        var nextBurst = 3000 + Math.random() * 5000;
+        setTimeout(glitchBurst, nextBurst);
+    })();
+
+    // — Layer 6: Evolving space chord (slow harmonic drift) —
+    var chords = [130.8, 164.8, 196, 246.9]; // C3, E3, G3, B3
+    chords.forEach(function(freq, i) {
+        var osc = audioCtx.createOscillator();
+        var oscGain = audioCtx.createGain();
+        var oscFilter = audioCtx.createBiquadFilter();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        oscFilter.type = 'lowpass';
+        oscFilter.frequency.setValueAtTime(600, audioCtx.currentTime);
+        oscGain.gain.setValueAtTime(0.0, audioCtx.currentTime);
+        oscGain.gain.linearRampToValueAtTime(0.055, audioCtx.currentTime + 4 + i * 1.2);
+        osc.connect(oscFilter);
+        oscFilter.connect(oscGain);
+        oscGain.connect(masterGain);
+        osc.start();
+        musicNodes.push(osc, oscGain, oscFilter);
+    });
+}
+
+function startMusic() {
+    initAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    musicPlaying = true;
+    createAmbientLayer();
+    document.getElementById('music-toggle').textContent = '🔊';
+}
+
+function stopMusic() {
+    musicPlaying = false;
+    if (masterGain) {
+        masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+        setTimeout(function() {
+            musicNodes.forEach(function(n) { try { n.disconnect(); } catch(e){} });
+            musicNodes = [];
+            masterGain = null;
+            audioCtx = null;
+        }, 1600);
+    }
+    document.getElementById('music-toggle').textContent = '🔇';
+}
+
+function toggleMusic() {
+    if (musicPlaying) {
+        stopMusic();
+    } else {
+        startMusic();
+    }
+}
+
+// Auto-start music on first user interaction with splash
+document.addEventListener('click', function onFirstClick() {
+    var splash = document.getElementById('splash-page');
+    if (splash && splash.style.display !== 'none' && !musicPlaying) {
+        startMusic();
+    }
+    document.removeEventListener('click', onFirstClick);
+}, { once: true });
+
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     REAL-TIME FUNDING TRACKER — Solana RPC
+     Reads USDC balance directly from blockchain
+     ═══════════════════════════════════════════════════ -->
+<script>
+(function() {
+  // ── Config ──────────────────────────────────────────
+  const USDC_MINT     = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  const WALLETS       = [
+    'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
+    'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
+    'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
+  ];
+  const RPC_ENDPOINTS = [
+    'https://api.mainnet-beta.solana.com',
+    'https://solana-mainnet.g.alchemy.com/v2/demo',
+    'https://rpc.ankr.com/solana',
+  ];
+  const TIER1_PRICE    = 0.01;   // USDC per EXXE
+  const EXXE_TARGET    = 330000000;
+  const USDC_TARGET    = 20831250;
+  const REFRESH_MS     = 30000;  // refresh every 30 seconds
+  let   rpcIndex       = 0;
+
+  // ── Fetch USDC balance for one wallet ───────────────
+  async function getUsdcBalance(wallet) {
+    const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
+    const body = {
+      jsonrpc: '2.0', id: 1,
+      method: 'getTokenAccountsByOwner',
+      params: [
+        wallet,
+        { mint: USDC_MINT },
+        { encoding: 'jsonParsed' }
+      ]
+    };
+    const res  = await fetch(rpc, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    const accounts = data?.result?.value || [];
+    if (accounts.length === 0) return 0;
+    const amount = accounts[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+    return parseFloat(amount);
+  }
+
+  // ── Format numbers nicely ───────────────────────────
+  function fmt(n, decimals = 2) {
+    return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  }
+
+  // ── Update all UI elements ──────────────────────────
+  function updateUI(totalUsdc) {
+    const exxeSold   = totalUsdc / TIER1_PRICE;
+    const pctUsdc    = Math.min((totalUsdc  / USDC_TARGET)  * 100, 100);
+    const pctExxe    = Math.min((exxeSold   / EXXE_TARGET)  * 100, 100);
+    const barMin     = 1; // minimum visual width
+
+    // Progress bar — EXXE sold
+    const elExxeSold = document.getElementById('rt-exxe-sold');
+    const elExxeBar  = document.getElementById('rt-exxe-bar');
+    if (elExxeSold) elExxeSold.textContent = fmt(exxeSold, 0);
+    if (elExxeBar)  elExxeBar.style.width  = Math.max(pctExxe, barMin) + '%';
+
+    // Progress bar — USDC raised
+    const elUsdcRaised = document.getElementById('rt-usdc-raised');
+    const elUsdcBar    = document.getElementById('rt-usdc-bar');
+    if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
+    if (elUsdcBar)    elUsdcBar.style.width     = Math.max(pctUsdc, barMin) + '%';
+
+    // Second splash "Total Raised"
+    const elSplash2 = document.getElementById('splash2-raised');
+    if (elSplash2) elSplash2.textContent = '$' + fmt(totalUsdc) + ' USDC';
+
+    // Live indicator pulse when data is fresh
+    const dots = document.querySelectorAll('.rt-live-dot');
+    dots.forEach(function(d) {
+      d.style.background = '#14F195';
+      setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
+    });
+  }
+
+  // ── Main fetch ──────────────────────────────────────
+  async function fetchFunding() {
+    try {
+      let total = 0;
+      for (let i = 0; i < WALLETS.length; i++) {
+        const bal = await getUsdcBalance(WALLETS[i]);
+        total += bal;
+      }
+      updateUI(total);
+    } catch (e) {
+      // Try next RPC endpoint on failure
+      rpcIndex++;
+      if (rpcIndex < RPC_ENDPOINTS.length * 2) {
+        setTimeout(fetchFunding, 3000);
+      }
+    }
+  }
+
+  // ── Init ────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    fetchFunding();
+    setInterval(fetchFunding, REFRESH_MS);
+  });
+
+})();
 </script>
 
 </body>
