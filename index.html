@@ -41,7 +41,7 @@ body{
   color:var(--text-1);
   font-family:'Rajdhani',sans-serif;
   overflow-x:hidden;
-  font-size:22px;
+  font-size:16px;
   line-height:1.7;
 }
 
@@ -52,7 +52,7 @@ body{
   pointer-events:none;z-index:0;opacity:0.4;
   animation:scanMove 8s linear infinite;
 }
-@keyframes scanMove{from{background-position:0 0;}to{background-position:0 100vh;}}
+@keyframes scanMove{from{background-position:0 0;}to{background-position:0 100dvh;}}
 
 /* GRAIN OVERLAY */
 body::before{
@@ -109,7 +109,12 @@ nav{
   will-change:transform;
   filter:drop-shadow(0 0 12.5px rgba(0,212,255,0.2));
 }
-
+@media(max-width:768px){
+  .nav-logo-img{
+    width:42px;
+    height:42px;
+  }
+}
 .nav-brand-text{
   display:flex;flex-direction:column;
   gap:0;
@@ -388,7 +393,12 @@ nav{
   gap:5rem;align-items:center;
   max-width:1080px;margin:0 auto;
 }
-
+@media(max-width:768px){
+  .vision-grid{
+    grid-template-columns:1fr;
+    gap:2rem;
+  }
+}
 .vision-text blockquote{
   font-family:'Rajdhani',sans-serif;
   font-size:clamp(1.4rem,2.5vw,2rem);
@@ -443,7 +453,7 @@ centerquote{
 
 /* ─── TOKENOMICS ─────────────────────────── */
 #tokenomics{
-  padding:110px 5%;
+  padding:80px 5%;
   background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);
 }
 
@@ -907,7 +917,11 @@ centerquote{
   display:grid;grid-template-columns:1fr 1fr 1fr;
   gap:1.2rem;max-width:1080px;margin:0 auto;
 }
-
+@media(max-width:768px){
+  .wp-grid{
+    grid-template-columns:1fr;
+  }
+}
 .wp-card{
   padding:2rem 1.8rem;
   background:var(--card);
@@ -1502,7 +1516,7 @@ footer{
             position: absolute;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .network-line {
@@ -1554,7 +1568,11 @@ footer{
             transform: translate(-50%, -50%);
             animation: orbPulse 6s ease-in-out infinite;
         }
-
+        @media(max-width:768px){
+          .glow-orb{
+            display:none;
+          }
+        }
         @keyframes orbFloat {
             0%, 100% { transform: translate(0, 0); }
             50% { transform: translate(30px, 30px); }
@@ -3825,6 +3843,7 @@ function createParticles() {
     }
 }
 function enterSite() {
+    document.body.style.overflow = 'auto';
     var splash = document.getElementById('splash-page');
     var mc = document.getElementById('main-content');
     var mainSplash = document.getElementById('main-splash');
