@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
 
+  
 /* ═══════════════════════════════════════════
    DESIGN SYSTEM — EXILLION NAVY BLUE FUTURISTIC
    ═══════════════════════════════════════════ */
@@ -1667,6 +1668,7 @@ footer{
             border-radius: 50%;
             filter: blur(100px);
             animation: orbFloat 10s ease-in-out infinite;
+            pointer-events: none;  /* ← tambahkan ini */
         }
 
         .glow-orb-1 {
@@ -1704,7 +1706,7 @@ footer{
         @keyframes orbPulse {
             0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
             50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.8; }
-        }
+        }.glow-orb 
 
         /* Logo Container */
         .splash-logo {
@@ -1712,6 +1714,7 @@ footer{
             z-index: 10;
             padding: clamp(10px, 2vh, 24px) 20px clamp(2px, 0.4vh, 5px);
             position: relative;
+            z-index: 10;
             width: 100%;
             max-width: 700px;
             margin: 0 auto;
@@ -1933,6 +1936,7 @@ footer{
             letter-spacing: 5px;
             opacity: 0;
             position: relative;
+            z-index: 20;
             overflow: hidden;
             transition: all 0.5s ease;
             animation: fadeInUp 1.5s ease-out 4s forwards;
