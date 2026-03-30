@@ -2149,6 +2149,15 @@ footer{
         /* Main Content Hidden Initially */
         #main-content {
             display: none;
+            will-change: opacity, transform, filter;
+        }
+
+        /* Main content inner wrapper — halaman utama (semua kecuali main-splash) */
+        #main-content-inner {
+            opacity: 0;
+            transform: translateY(28px);
+            filter: blur(4px);
+            will-change: opacity, transform, filter;
         }
 
         /* ========== DISCLAIMER MODAL ========== */
@@ -2540,8 +2549,9 @@ footer{
   position:fixed;top:0;left:0;width:100%;height:100vh;
   background:#010b18;
   z-index:9999;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  display:none;flex-direction:column;align-items:center;justify-content:center;
   overflow:hidden;
+  will-change:opacity,transform,filter;
 ">
   <!-- Ambient grid -->
   <div style="
@@ -2599,7 +2609,7 @@ footer{
       background-size:200% auto;
       animation:mainFadeIn 0.7s ease 0.5s both, solanaShimmer 3s linear infinite;
       filter:drop-shadow(0 0 14px rgba(153,69,255,0.6));
-    ">Welcome Angel Investor</div>
+    ">Welcome Mr. Charles Tan</div>
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
@@ -2703,6 +2713,7 @@ footer{
       color:rgba(0,212,255,0.45);
       text-transform:uppercase;
       min-height:14px;
+      transition:opacity 0.25s ease;
       animation:mainFadeIn 0.7s ease 1.15s both;
     ">Connecting to Solana blockchain...</div>
   </div>
@@ -2782,6 +2793,7 @@ footer{
 
 <div class="scanline"></div>
 
+<div id="main-content-inner">
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-brand">
@@ -2807,7 +2819,7 @@ footer{
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-eyebrow">Life is a Journey-Not a Destination</div>
+  <div class="hero-eyebrow">Berkat TUHANlah yang menjadikan kaya, susah payah tidak akan menambahinya ( Amsal 10:22)</div>
 
   <div style="display:block;margin-bottom:0.5rem;animation:riseUp 0.8s 0.1s ease both, neonRingGlow 3s ease-in-out infinite;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
 
@@ -4182,7 +4194,8 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-</div>
+</div><!-- /#main-content-inner -->
+</div><!-- /#main-content -->
 
 <script>
 function createNetworkLines() {
@@ -4212,33 +4225,65 @@ function createParticles() {
         c.appendChild(p);
     }
 }
+// ── Guard: pastikan enterSite() hanya dipanggil sekali ─────────
+var isEntering = false;
+
 function enterSite() {
-    var splash = document.getElementById('splash-page');
-    var mc = document.getElementById('main-content');
+    if (isEntering) return;
+    isEntering = true;
+
+    var splash     = document.getElementById('splash-page');
+    var mc         = document.getElementById('main-content');
+    var mcInner    = document.getElementById('main-content-inner');
     var mainSplash = document.getElementById('main-splash');
-    if (!splash || !mc) return;
+    if (!splash || !mc || !mainSplash) return;
 
-    // Step 1: fade out first splash
-    splash.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-    splash.style.opacity = '0';
-    splash.style.transform = 'scale(1.05)';
+    // ── STEP 1: Soft fade-out splash pertama ─────────────────────
+    splash.style.willChange = 'opacity, transform, filter';
+    splash.style.transition = 'opacity 2.0s cubic-bezier(0.25,0,0.1,1), transform 2.0s cubic-bezier(0.25,0,0.1,1), filter 2.0s cubic-bezier(0.25,0,0.1,1)';
+    splash.style.opacity   = '0';
+    splash.style.transform = 'scale(1.02)';
+    splash.style.filter    = 'blur(7px) brightness(1.08)';
 
-    setTimeout(function() {
+    setTimeout(function () {
         splash.style.display = 'none';
+
+        // Tampilkan #main-content (wrapper) — main-splash ada di dalamnya
         mc.style.display = 'block';
         document.body.style.overflow = 'hidden';
 
-        // Start main splash canvas particles
-        startMainSplashParticles();
+        // Sembunyikan #main-content-inner (halaman utama) dulu
+        if (mcInner) {
+            mcInner.style.opacity   = '0';
+            mcInner.style.transform = 'translateY(10px)';
+            mcInner.style.filter    = 'blur(2px)';
+        }
 
-        // Start gold network on main splash
+        // ── STEP 2: Fade-in main splash ──────────────────────────
+        mainSplash.style.display   = 'flex';
+        mainSplash.style.opacity   = '0';
+        mainSplash.style.transform = 'scale(0.99)';
+        mainSplash.style.filter    = 'blur(4px)';
+        mainSplash.style.willChange = 'opacity, transform, filter';
+
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                mainSplash.style.transition = 'opacity 1.8s cubic-bezier(0.22,1,0.36,1), transform 1.8s cubic-bezier(0.22,1,0.36,1), filter 1.8s cubic-bezier(0.22,1,0.36,1)';
+                mainSplash.style.opacity   = '1';
+                mainSplash.style.transform = 'scale(1)';
+                mainSplash.style.filter    = 'blur(0px)';
+            });
+        });
+
+        // Start animasi canvas & gold network
+        startMainSplashParticles();
         startGoldNetwork('gold-network-main', false);
 
-        // Animate progress bar
-        var bar = document.getElementById('main-splash-bar');
-        var pct = document.getElementById('main-splash-pct');
+        // ── Progress bar ─────────────────────────────────────────
+        var bar    = document.getElementById('main-splash-bar');
+        var pct    = document.getElementById('main-splash-pct');
         var status = document.getElementById('main-splash-status');
-        var msgs = [
+        var msgs   = [
             'Connecting to Solana blockchain...',
             'Verifying EXXE smart contract...',
             'Loading mEXXE Collateral Mining protocol...',
@@ -4247,39 +4292,57 @@ function enterSite() {
             'Capital Finecosystem ready.'
         ];
         var progress = 0;
-        var msgIdx = 0;
-        var interval = setInterval(function() {
-            progress += (Math.random() * 1.2 + 0.4);
+        var msgIdx   = 0;
+
+        function setStatus(text) {
+            if (!status) return;
+            status.style.transition = 'opacity 0.25s ease';
+            status.style.opacity = '0';
+            setTimeout(function () {
+                status.textContent = text;
+                status.style.opacity = '1';
+            }, 260);
+        }
+
+        var interval = setInterval(function () {
+            progress += (Math.random() * 1.1 + 0.35);
             if (progress > 100) progress = 100;
-            bar.style.width = progress + '%';
+
+            if (bar) bar.style.width = progress + '%';
             if (pct) pct.textContent = Math.floor(progress) + '%';
+
             var newIdx = Math.min(Math.floor(progress / 18), msgs.length - 1);
-            if (newIdx !== msgIdx) {
-                msgIdx = newIdx;
-                if (status) {
-                    status.style.opacity = '0';
-                    setTimeout(function() {
-                        if (status) { status.textContent = msgs[msgIdx]; status.style.opacity = '1'; }
-                    }, 150);
-                }
-            }
+            if (newIdx !== msgIdx) { msgIdx = newIdx; setStatus(msgs[msgIdx]); }
+
             if (progress >= 100) {
                 clearInterval(interval);
-                if (status) status.textContent = 'Capital Finecosystem ready.';
-                setTimeout(function() {
-                    // Fade out main splash
-                    if (mainSplash) {
-                        mainSplash.style.transition = 'opacity 1.5s ease';
-                        mainSplash.style.opacity = '0';
-                        setTimeout(function() {
-                            mainSplash.style.display = 'none';
-                            document.body.style.overflow = 'auto';
-                        }, 1500);
-                    }
-                }, 1800);
+                setStatus('Capital Finecosystem ready.');
+
+                // ── STEP 3: Fade-out main splash ──────────────────
+                setTimeout(function () {
+                    mainSplash.style.transition = 'opacity 2.2s cubic-bezier(0.25,0,0.1,1), transform 2.2s cubic-bezier(0.25,0,0.1,1), filter 2.2s cubic-bezier(0.25,0,0.1,1)';
+                    mainSplash.style.opacity   = '0';
+                    mainSplash.style.transform = 'scale(1.02)';
+                    mainSplash.style.filter    = 'blur(8px) brightness(1.06)';
+
+                    // ── STEP 4: Fade-in halaman utama ─────────────
+                    setTimeout(function () {
+                        mainSplash.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+
+                        if (mcInner) {
+                            mcInner.style.transition = 'opacity 1.9s cubic-bezier(0.22,1,0.36,1), transform 1.9s cubic-bezier(0.22,1,0.36,1), filter 1.9s cubic-bezier(0.22,1,0.36,1)';
+                            mcInner.style.opacity   = '1';
+                            mcInner.style.transform = 'translateY(0)';
+                            mcInner.style.filter    = 'blur(0px)';
+                        }
+                    }, 2200);
+
+                }, 2500); // jeda setelah bar 100%
             }
         }, 80);
-    }, 800);
+
+    }, 2000); // durasi splash pertama fade-out
 }
 
 function startMainSplashParticles() {
@@ -4330,7 +4393,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createParticles();
     document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !isEntering) {
             var splash = document.getElementById('splash-page');
             if (splash && splash.style.display !== 'none') enterSite();
         }
