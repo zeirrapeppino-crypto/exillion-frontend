@@ -134,6 +134,7 @@ nav{
 .nav-sub{
   font-family:'Orbitron',monospace;
   font-size:0.55rem;
+  font-weight:600;
   letter-spacing:1.5px;
   color:var(--gold);
   margin-top:1px;
@@ -445,12 +446,21 @@ centerquote{
   letter-spacing:2px;
 }
 
+/* v6 — Vision text: optimal untuk keterbacaan & kepercayaan investor */
 .vision-text p{
-  font-size:1.1rem;
+  font-size:clamp(0.95rem,1.3vw,1.08rem);
   font-weight:300;
   color:var(--text-1);
-  line-height:1.9;
-  margin-bottom:1rem;
+  line-height:2.05;
+  margin-bottom:1.35rem;
+  letter-spacing:0.3px;
+}
+/* Kalimat pembuka di tiap blok — sedikit lebih besar & medium weight */
+.vision-text p:first-of-type{
+  font-size:clamp(1rem,1.45vw,1.18rem);
+  font-weight:400;
+  line-height:2.0;
+  color:#d8eeff;
 }
 
 .features{display:flex;flex-direction:column;gap:1.2rem;}
@@ -934,16 +944,17 @@ centerquote{
 }
 
 .wp-grid{
-  display:grid;grid-template-columns:1fr 1fr 1fr;
-  gap:1.2rem;max-width:1080px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1.4rem;max-width:1080px;margin:0 auto;
 }
 
 .wp-card{
-  padding:2rem 1.8rem;
+  padding:2rem 2rem;
   background:var(--card);
   border:1px solid var(--border-dim);
   clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
   transition:all 0.3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;gap:0.6rem;
 }
 .wp-card::before{
   content:'';
@@ -954,17 +965,37 @@ centerquote{
 }
 .wp-card:hover::before{transform:scaleX(1);}
 .wp-card:hover{border-color:var(--border);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,212,255,0.07);}
+
+.wp-card-header{display:flex;align-items:center;gap:1rem;margin-bottom:0.3rem;}
 .wp-num{
   font-family:'Orbitron',monospace;
-  font-size:2.5rem;font-weight:700;
-  color:var(--cyan);line-height:1;margin-bottom:0.8rem;
+  font-size:1.6rem;font-weight:700;
+  color:rgba(0,212,255,0.25);line-height:1;
+  flex-shrink:0;
 }
+.wp-icon{font-size:1.5rem;flex-shrink:0;}
 .wp-title{
   font-family:'Orbitron',monospace;
-  font-size:0.78rem;letter-spacing:1.5px;
-  color:var(--cyan);margin-bottom:0.8rem;
+  font-size:0.75rem;letter-spacing:1.5px;font-weight:600;
+  color:var(--cyan);
 }
-.wp-text{font-size:0.88rem;font-style:italic;color:var(--text-1);line-height:1.7;}
+/* Kalimat utama — satu baris tebal, langsung ke poin */
+.wp-hook{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(0.82rem,1.1vw,0.96rem);
+  font-weight:500;
+  color:var(--text-1);
+  line-height:1.75;
+  letter-spacing:0.2px;
+}
+/* Detail pendukung — lebih tipis, sebagai konteks singkat */
+.wp-text{
+  font-size:0.78rem;
+  font-style:italic;
+  font-weight:300;
+  color:var(--text-2);
+  line-height:1.75;
+}
 
 /* --- DASHBOARD ---------------------------- */
 #dashboard{padding:110px 5%;}
@@ -1713,10 +1744,12 @@ footer{
   .wallet-btn .wallet-name{ font-size:0.62rem; }
   .rm-title{ font-size:0.78rem;letter-spacing:0.5px; }
   .rm-tasks li{ font-size:0.72rem; }
+  .wp-grid{grid-template-columns:1fr!important;}
   .wp-card{ padding:1.4rem 1.2rem; }
-  .wp-num{ font-size:1.8rem; }
+  .wp-num{ font-size:1.2rem; }
   .wp-title{ font-size:0.7rem; }
-  .wp-text{ font-size:0.8rem; }
+  .wp-hook{ font-size:0.82rem; }
+  .wp-text{ font-size:0.75rem; }
 }
 
 
@@ -2651,9 +2684,9 @@ footer{
     <!-- Tag -->
     <div style="
       font-family:'Orbitron',monospace;
-      font-size:clamp(1.1rem,2.8vw,1.6rem);letter-spacing:4px;
-      font-weight:900;
-      text-transform:uppercase;margin-top:0.4rem;margin-bottom:0.5rem;
+      font-size:clamp(0.75rem,2vw,1.05rem);letter-spacing:4px;
+      font-weight:600;
+      text-transform:uppercase;margin-top:0.4rem;margin-bottom:0.3rem;
       background:linear-gradient(90deg, #9945FF 0%, #00d4ff 35%, #14F195 50%, #00d4ff 65%, #9945FF 100%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
@@ -2711,26 +2744,39 @@ footer{
     <!-- Tagline -->
     <p style="
       font-family:'Orbitron',monospace;
-      font-size:clamp(0.85rem,1.8vw,1.05rem);
-      letter-spacing:3px;color:rgba(0,212,255,0.95);
+      font-size:clamp(0.75rem,1.6vw,0.95rem);
+      letter-spacing:2.5px;color:rgba(0,212,255,0.9);
       text-shadow:0 0 16px rgba(0,212,255,0.5);
-      margin-bottom:1rem;
+      margin-bottom:0.2rem;
+      margin-top:-0.4rem;
       animation:mainFadeIn 0.7s ease 0.85s both;
     ">Everybody Has A Second Chance</p>
+
+    <p style="
+      font-family:'Orbitron',monospace;
+      font-size:clamp(0.55rem,1vw,0.68rem);
+      letter-spacing:2px;
+      color:rgba(232,201,122,0.7);
+      margin-bottom:0.9rem;
+      animation:mainFadeIn 0.7s ease 0.95s both;
+      font-style:italic;
+    ">Your trust means everything to us.</p>
+
 
     <!-- Stats row -->
     <div style="
       display:flex;gap:clamp(1.5rem,5vw,3.5rem);flex-wrap:wrap;justify-content:center;align-items:center;
       margin-bottom:1rem;
-      animation:mainFadeIn 0.7s ease 1s both;
+      animation:mainFadeIn 0.7s ease 1.1s both;
     ">
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825M EXXE</div>
         <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
       </div>
+      <div style="width:1px;height:32px;background:rgba(0,212,255,0.2);"></div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Presale Price</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Founding Price</div>
       </div>
     </div>
 
@@ -2745,7 +2791,7 @@ footer{
         letter-spacing:1.5px;color:rgba(0,212,255,0.5);
         text-transform:uppercase;margin-bottom:4px;
       ">
-        <span>Loading........</span>
+        <span>Preparing your access...</span>
         <span id="main-splash-pct">0%</span>
       </div>
       <div style="height:2px;background:rgba(0,212,255,0.1);border-radius:1px;overflow:hidden;position:relative;">
@@ -2770,7 +2816,7 @@ footer{
       min-height:14px;
       transition:opacity 0.25s ease;
       animation:mainFadeIn 0.7s ease 1.15s both, statusGlitch 4.5s ease-in-out infinite;
-    ">Connecting to Solana blockchain...</div>
+    ">Authenticating secure channel...</div>
   </div>
 
 
@@ -3107,9 +3153,9 @@ footer{
     <div class="section-rule"></div>
   </div>
   <div style="max-width:900px;margin:0 auto;">
-    <p style="text-align:center;font-family:'Orbitron',monospace;font-size:clamp(1.1rem,1.8vw,1.4rem);font-weight:568;font-style:normal;color:var(--text-1);margin-top:-4.8rem;margin-bottom:2rem;opacity:1;line-height:1.8;letter-spacing:1px;">
-      EXXE SPL Token Contract Address and every wallet address is <span style="color:var(--cyan);font-weight:700;">public and verifiable</span> on Solana blockchain.<br>
-      All funds movement are instantly and automatically distributed across Liquidity Wallet <span style="color:var(--cyan);font-weight:700;">(75%)</span>, Operational Wallet <span style="color:var(--cyan);font-weight:700;">(15%)</span> and Development Wallet <span style="color:var(--cyan);font-weight:700;">(10%)</span> — <span style="color:var(--green);font-weight:700;">Verified in real-time, and permanently recorded on-chain.</span>
+    <p style="text-align:center;font-family:'Orbitron',monospace;font-size:clamp(0.85rem,1.3vw,1.05rem);font-weight:300;font-style:normal;color:var(--text-1);margin-top:-4.8rem;margin-bottom:2rem;opacity:0.92;line-height:2;letter-spacing:0.8px;">
+      EXXE SPL Token Contract Address and every wallet address is <span style="color:var(--cyan);font-weight:600;">public and verifiable</span> on Solana blockchain.<br>
+      All funds movement are instantly and automatically distributed across Liquidity Wallet <span style="color:var(--cyan);font-weight:600;">(75%)</span>, Operational Wallet <span style="color:var(--cyan);font-weight:600;">(15%)</span> and Development Wallet <span style="color:var(--cyan);font-weight:600;">(10%)</span> — <span style="color:var(--green);font-weight:600;">Verified in real-time, and permanently recorded on-chain.</span>
     </p>
     <div style="display:flex;flex-direction:column;gap:1rem;">
 
@@ -3577,34 +3623,63 @@ footer{
   </div>
   <div class="wp-grid">
     <div class="wp-card reveal">
-      <div class="wp-num">01</div>
-      <div class="wp-title">Abstract &amp; Vision</div>
-      <div class="wp-text">Exillion Capital Finecosystem was founded on one unshakeable conviction: access to capital is a fundamental right, not a privilege reserved for the few. Billions of people worldwide are excluded from working capital not due to lack of ability, drive, or integrity — but simply because they lack collateral. Exillion engineers a new path: a self-sustaining DeFi Capital Lending ecosystem on Solana where collateral is not owned, inherited, or bought — it is <em>earned</em>, through time, discipline, and consistent effort. This is not just financial innovation. This is financial justice.</div>
+      <div class="wp-card-header">
+        <span class="wp-num">01</span>
+        <span class="wp-icon">🌐</span>
+        <div class="wp-title">Abstract &amp; Vision</div>
+      </div>
+      <div class="wp-hook">Capital access is a right — not a privilege. Exillion breaks that barrier, permanently.</div>
+      <div class="wp-text">Billions are excluded from working capital — not from lack of ability, but lack of collateral. Exillion engineers a DeFi lending system on Solana where collateral is <em>earned through effort</em>, not inherited. This is financial justice, written in code.</div>
     </div>
+
     <div class="wp-card reveal">
-      <div class="wp-num">02</div>
-      <div class="wp-title">mEXXE — Virtual Collateral Mining Token (VCMT) Protocol</div>
-      <div class="wp-text">mEXXE is a non-tradeable, non-transferable Virtual Collateral Mining Token (VCMT) — purposefully engineered so that it cannot be speculated on, cannot be manipulated, and cannot be transferred. It exists for one function only: to represent real human effort as verified on-chain collateral. Earned through daily discipline via the mEXXE Mobile Mining App, every mEXXE is backed 1:1 by EXXE held in the EGRP — and redeemable exclusively within the app. This architecture guarantees that every unit of collateral in the Exillion system was genuinely earned by a real person who deserves the capital it unlocks.</div>
+      <div class="wp-card-header">
+        <span class="wp-num">02</span>
+        <span class="wp-icon">⛏️</span>
+        <div class="wp-title">mEXXE — Virtual Collateral Mining</div>
+      </div>
+      <div class="wp-hook">Mine collateral with your phone. No hardware. No capital. Just daily effort.</div>
+      <div class="wp-text">mEXXE (VCMT) is non-tradeable by design — it cannot be speculated on or manipulated. Every mEXXE is backed 1:1 by EXXE in the EGRP reserve. Real effort, verified on-chain, redeemable as real capital.</div>
     </div>
+
     <div class="wp-card reveal">
-      <div class="wp-num">03</div>
-      <div class="wp-title">Tokenomics &amp; Supply</div>
-      <div class="wp-text">Fixed total supply of 11 Billion EXXE on Solana — no inflation, no surprise minting. Strategically distributed: 55% (6.05B) Exillioneer Mining Pool secured in EGRP as the underlying backing for all mEXXE, 10% (1.1B) Liquidity Pool, 7.5% (825M) Angel Investor Pool, 3% Treasury, 3% Community &amp; Education, 3% Burn Reserve, and 1% (110M) Global Humanitarian Reserve. Every allocation is governed on-chain. Every number is verifiable. There are no hidden pools and no undisclosed allocations — because trust is built through transparency, not promises.</div>
+      <div class="wp-card-header">
+        <span class="wp-num">03</span>
+        <span class="wp-icon">📊</span>
+        <div class="wp-title">Tokenomics &amp; Supply</div>
+      </div>
+      <div class="wp-hook">Fixed supply. No inflation. Every allocation verified on-chain — no hidden pools.</div>
+      <div class="wp-text">11 Billion EXXE, fixed forever. 55% locked in EGRP as collateral backing, 7.5% Angel Investor Round, 10% Liquidity Pool, 1% Humanitarian Reserve. Every number is public. Every wallet is verifiable.</div>
     </div>
-    <div class="wp-card reveal">
-      <div class="wp-num">04</div>
-      <div class="wp-title">Angel Investor Funding Round</div>
-      <div class="wp-text">825 Million EXXE is reserved exclusively for the Angel Investor Funding Round — open to everyone who believes that financial freedom should be accessible to all. Three entry tiers: Genesis (Tier I) at $0.01, Prime (Tier II) at $0.025, Apex (Tier III) at $0.05 — with Orca DEX listing target at $0.10. Every dollar invested is automatically and instantly distributed on-chain: 75% to liquidity, 15% to operations, 10% to development. Your capital is not managed by humans after the fact — it is governed by code, from the moment it arrives.</div>
+
+    <div class="wp-card reveal" style="border-color:rgba(232,201,122,0.25);background:linear-gradient(135deg,var(--card),rgba(204,125,7,0.04));">
+      <div class="wp-card-header">
+        <span class="wp-num">04</span>
+        <span class="wp-icon">👼</span>
+        <div class="wp-title" style="color:var(--gold-light);">Angel Investor Round</div>
+      </div>
+      <div class="wp-hook" style="color:var(--gold-light);">825M EXXE — exclusively yours. From $0.01 to a $0.10 Orca DEX listing target.</div>
+      <div class="wp-text">Three entry tiers for early believers. Every dollar you invest is split instantly on-chain: 75% liquidity, 15% operations, 10% development. Governed by code — not by people.</div>
     </div>
+
     <div class="wp-card reveal">
-      <div class="wp-num">05</div>
-      <div class="wp-title">Solana Infrastructure &amp; Transparency</div>
-      <div class="wp-text">EXILLION is built as a standard SPL token on Solana — the fastest, most cost-efficient blockchain in production today. 65,000 TPS throughput. Sub-$0.001 transaction fees. Every fund movement is instantly split across three on-chain wallets and permanently recorded — visible to anyone, anywhere, at any time. There is no back room, no private ledger, no "trust us." Full composability across the Solana DeFi ecosystem ensures EXXE can grow alongside the most dynamic blockchain network in the world.</div>
+      <div class="wp-card-header">
+        <span class="wp-num">05</span>
+        <span class="wp-icon">⚡</span>
+        <div class="wp-title">Solana Infrastructure</div>
+      </div>
+      <div class="wp-hook">65,000 TPS. Sub-$0.001 fees. Every transaction public, permanent, and instant.</div>
+      <div class="wp-text">No back room. No private ledger. No "trust us." Every fund movement splits across three wallets automatically and is recorded on-chain — visible to anyone, anywhere, forever.</div>
     </div>
+
     <div class="wp-card reveal">
-      <div class="wp-num">06</div>
-      <div class="wp-title">Legal &amp; Compliance</div>
-      <div class="wp-text">EXXE and mEXXE (VCMT) operate strictly as utility tokens within the Exillion Capital Finecosystem. Neither constitutes a security, investment product, or financial instrument. This document is provided for informational purposes only. Participation in the Angel Investor Round is entirely voluntary and subject to each participant's individual jurisdiction and compliance obligations. Exillion is committed to operating with full integrity, transparency, and respect for the legal frameworks of every community it serves.</div>
+      <div class="wp-card-header">
+        <span class="wp-num">06</span>
+        <span class="wp-icon">⚖️</span>
+        <div class="wp-title">Legal &amp; Compliance</div>
+      </div>
+      <div class="wp-hook">Utility token. Full transparency. Built for integrity — not for loopholes.</div>
+      <div class="wp-text">EXXE and mEXXE operate strictly as utility tokens. Not a security. Not a financial instrument. Participation is voluntary. Exillion respects every jurisdiction and is committed to operating with full legal and ethical integrity.</div>
     </div>
   </div>
   <div style="text-align:center;margin-top:3rem;" class="reveal">
@@ -4329,149 +4404,125 @@ function enterSite() {
     var mainSplash = document.getElementById('main-splash');
     if (!splash || !mc || !mainSplash) return;
 
-    // ── STEP 1: Cinematic flash exit — chromatic aberration → black ──
-    splash.style.willChange = 'opacity, transform, filter';
+    // ── STEP 1: Clean, elegant fade-out splash 1 ──────────────────
+    // Tidak ada blur, tidak ada chromatic. Cukup opacity fade yang tenang.
+    splash.style.transition = 'opacity 0.9s cubic-bezier(0.4,0,0.2,1)';
+    splash.style.opacity    = '0';
 
-    // fase 1: brightness surge + scale + blur
-    chromaticFlash(splash, 380, function() {
-        // fase 2: hard cut ke hitam lalu fade out
-        splash.style.transition = 'opacity 1.4s cubic-bezier(0.55,0,0.1,1), transform 1.4s cubic-bezier(0.55,0,0.1,1), filter 1.4s ease';
-        splash.style.opacity   = '0';
-        splash.style.transform = 'scale(1.04)';
-        splash.style.filter    = 'blur(12px) brightness(0.4)';
+    setTimeout(function () {
+        splash.style.display = 'none';
 
-        setTimeout(function () {
-            splash.style.display = 'none';
+        mc.style.display = 'block';
+        document.body.style.overflow = 'hidden';
 
-            mc.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+        if (mcInner) {
+            mcInner.style.opacity   = '0';
+            mcInner.style.transform = 'translateY(0)';
+            mcInner.style.filter    = 'none';
+        }
 
-            if (mcInner) {
-                mcInner.style.opacity   = '0';
-                mcInner.style.transform = 'translateY(14px)';
-                mcInner.style.filter    = 'blur(3px)';
-            }
+        // ── STEP 2: Main splash (progress bar) muncul langsung — no blur ──
+        mainSplash.style.display    = 'flex';
+        mainSplash.style.opacity    = '0';
+        mainSplash.style.transform  = 'none';
+        mainSplash.style.filter     = 'none';
 
-            // ── STEP 2: Fade-in main splash — dari bawah, scale up ──
-            mainSplash.style.display   = 'flex';
-            mainSplash.style.opacity   = '0';
-            mainSplash.style.transform = 'scale(0.97) translateY(18px)';
-            mainSplash.style.filter    = 'blur(6px)';
-            mainSplash.style.willChange = 'opacity, transform, filter';
-
+        requestAnimationFrame(function () {
             requestAnimationFrame(function () {
-                requestAnimationFrame(function () {
-                    mainSplash.style.transition = 'opacity 1.6s cubic-bezier(0.22,1,0.36,1), transform 1.6s cubic-bezier(0.22,1,0.36,1), filter 1.4s ease';
-                    mainSplash.style.opacity   = '1';
-                    mainSplash.style.transform = 'scale(1) translateY(0)';
-                    mainSplash.style.filter    = 'blur(0px)';
-                });
+                mainSplash.style.transition = 'opacity 0.7s ease';
+                mainSplash.style.opacity    = '1';
             });
+        });
 
-            // Start animasi canvas & gold network
-            startMainSplashParticles();
-            startGoldNetwork('gold-network-main', false);
+        // Start animasi canvas & gold network
+        startMainSplashParticles();
+        startGoldNetwork('gold-network-main', false);
 
-            // ── Progress bar — v5: rhythm lebih sinematik ────────────
-            var bar    = document.getElementById('main-splash-bar');
-            var pct    = document.getElementById('main-splash-pct');
-            var status = document.getElementById('main-splash-status');
+        // ── Progress bar ─────────────────────────────────────────────
+        var bar    = document.getElementById('main-splash-bar');
+        var pct    = document.getElementById('main-splash-pct');
+        var status = document.getElementById('main-splash-status');
 
-            // v5: messages lebih dramatis dengan typewriter feel
-            var msgs = [
-                'Initializing Solana RPC connection...',
-                'Verifying EXXE smart contract integrity...',
-                'Loading mEXXE Collateral Mining protocol...',
-                'Syncing DeFi collateral engine...',
-                'Fetching angel investor dashboard...',
-                'Calibrating tokenomics engine...',
-                'Capital Finecosystem — online.'
-            ];
+        // Messages yang menyambut angel investor dengan hormat
+        var msgs = [
+            'Authenticating secure channel...',
+            'Verifying EXXE smart contract integrity...',
+            'Calibrating Capital Finecosystem engine...',
+            'Syncing mEXXE Collateral Mining protocol...',
+            'Preparing your exclusive investor dashboard...',
+            'Welcome, Founding Member — we are ready for you.',
+            'Thank You For Trusting Exillion Capital Finecosystem.'
+        ];
 
-            var progress = 0;
-            var msgIdx   = 0;
-            var lastPct  = 0;
+        var progress = 0;
+        var msgIdx   = 0;
 
-            function setStatus(text) {
-                if (!status) return;
-                status.style.opacity = '0';
+        function setStatus(text) {
+            if (!status) return;
+            status.style.opacity = '0';
+            setTimeout(function () {
+                status.textContent = text;
+                status.style.transition = 'opacity 0.35s ease';
+                status.style.opacity = '1';
+            }, 180);
+        }
+
+        // rAF-based — smooth, sync dengan refresh rate monitor
+        var speeds = [
+            {until: 15,  speed: 0.042},
+            {until: 40,  speed: 0.168},
+            {until: 70,  speed: 0.120},
+            {until: 88,  speed: 0.078},
+            {until: 100, speed: 0.042},
+        ];
+
+        var rafId;
+        var lastTime = null;
+
+        function tickProgress(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            var elapsed = timestamp - lastTime;
+            lastTime = timestamp;
+
+            var frameFactor = elapsed / 16.67;
+            var spd = 0.3;
+            for (var i = 0; i < speeds.length; i++) {
+                if (progress < speeds[i].until) { spd = speeds[i].speed; break; }
+            }
+            progress += (spd + (Math.random() * 0.005)) * frameFactor;
+            if (progress > 100) progress = 100;
+
+            if (bar) bar.style.width = progress + '%';
+            if (pct) pct.textContent = Math.floor(progress) + '%';
+
+            var newIdx = Math.min(Math.floor(progress / (100 / msgs.length)), msgs.length - 1);
+            if (newIdx !== msgIdx) { msgIdx = newIdx; setStatus(msgs[msgIdx]); }
+
+            if (progress < 100) {
+                rafId = requestAnimationFrame(tickProgress);
+            } else {
+                setStatus(msgs[msgs.length - 1]);
+
+                // ── STEP 3: Elegant exit main splash → halaman utama ──
                 setTimeout(function () {
-                    status.textContent = text;
-                    status.style.transition = 'opacity 0.3s ease';
-                    status.style.opacity = '1';
-                }, 200);
-            }
+                    mainSplash.style.transition = 'opacity 1.2s cubic-bezier(0.4,0,0.2,1)';
+                    mainSplash.style.opacity    = '0';
 
-            // v6: rAF-based progress — synced with display refresh rate, smoother than setInterval
-            var speeds = [
-                {until: 15,  speed: 0.042},
-                {until: 40,  speed: 0.168},
-                {until: 70,  speed: 0.120},
-                {until: 88,  speed: 0.078},
-                {until: 100, speed: 0.042},
-            ];
-
-            var rafId;
-            var lastTime = null;
-
-            function tickProgress(timestamp) {
-                if (!lastTime) lastTime = timestamp;
-                var elapsed = timestamp - lastTime;
-                lastTime = timestamp;
-
-                // ~65ms equivalent speed per frame at 60fps (16.67ms/frame)
-                var frameFactor = elapsed / 16.67;
-                var spd = 0.3;
-                for (var i=0;i<speeds.length;i++) {
-                    if (progress < speeds[i].until) { spd = speeds[i].speed; break; }
-                }
-                progress += (spd + (Math.random() * 0.005)) * frameFactor;
-                if (progress > 100) progress = 100;
-
-                if (bar) bar.style.width = progress + '%';
-                if (pct) pct.textContent = Math.floor(progress) + '%';
-
-                var newIdx = Math.min(Math.floor(progress / (100 / msgs.length)), msgs.length - 1);
-                if (newIdx !== msgIdx) { msgIdx = newIdx; setStatus(msgs[msgIdx]); }
-
-                if (progress < 100) {
-                    rafId = requestAnimationFrame(tickProgress);
-                } else {
-                    setStatus(msgs[msgs.length - 1]);
-
-                    // ── STEP 3: Cinematic exit main splash ────────────
                     setTimeout(function () {
-                        mainSplash.style.transition = 'filter 0.25s ease, opacity 0.25s ease';
-                        mainSplash.style.filter    = 'brightness(1.4) blur(0px)';
-                        mainSplash.style.opacity   = '0.95';
+                        mainSplash.style.display = 'none';
+                        document.body.style.overflow = 'auto';
 
-                        setTimeout(function() {
-                            mainSplash.style.transition = 'opacity 2.0s cubic-bezier(0.4,0,0.2,1), transform 2.0s cubic-bezier(0.4,0,0.2,1), filter 2.0s ease';
-                            mainSplash.style.opacity   = '0';
-                            mainSplash.style.transform = 'scale(1.025)';
-                            mainSplash.style.filter    = 'blur(10px) brightness(0.5)';
-
-                            // ── STEP 4: Halaman utama muncul — orchestrated ──
-                            setTimeout(function () {
-                                mainSplash.style.display = 'none';
-                                document.body.style.overflow = 'auto';
-
-                                if (mcInner) {
-                                    mcInner.style.transition = 'opacity 1.8s cubic-bezier(0.22,1,0.36,1), transform 1.8s cubic-bezier(0.22,1,0.36,1), filter 1.6s ease';
-                                    mcInner.style.opacity   = '1';
-                                    mcInner.style.transform = 'translateY(0)';
-                                    mcInner.style.filter    = 'blur(0px)';
-                                }
-                            }, 2000);
-                        }, 260);
-
-                    }, 2200);
-                }
+                        if (mcInner) {
+                            mcInner.style.transition = 'opacity 1.6s cubic-bezier(0.22,1,0.36,1)';
+                            mcInner.style.opacity    = '1';
+                        }
+                    }, 1200);
+                }, 2000);
             }
-            rafId = requestAnimationFrame(tickProgress);
+        }
+        rafId = requestAnimationFrame(tickProgress);
 
-        }, 1400); // durasi fase 2 splash exit
-    });
+    }, 900); // tunggu fade-out splash 1 selesai
 }
 
 function startMainSplashParticles() {
