@@ -47,36 +47,36 @@ body{
   -webkit-text-size-adjust:100%;
 }
 
-/* SCAN LINE EFFECT — v5: lebih visible, bergerak dengan brightness flicker */
+/* SCAN LINE EFFECT — v6: single animation, GPU-composited */
 .scanline{
   position:fixed;top:0;left:0;right:0;bottom:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,0.022) 3px,rgba(0,212,255,0.022) 4px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,0.018) 3px,rgba(0,212,255,0.018) 4px);
   pointer-events:none;z-index:0;
-  animation:scanMove 6s linear infinite, scanFlicker 9s ease-in-out infinite;
+  will-change:opacity;
+  transform:translateZ(0);
+  animation:scanFlicker 11s ease-in-out infinite;
+  opacity:0.5;
 }
-@keyframes scanMove{from{background-position:0 0;}to{background-position:0 200px;}}
-@keyframes scanFlicker{0%,100%{opacity:0.55;}30%{opacity:0.38;}55%{opacity:0.62;}75%{opacity:0.42;}}
+@keyframes scanFlicker{0%,100%{opacity:0.5;}35%{opacity:0.35;}60%{opacity:0.58;}80%{opacity:0.4;}}
 
-/* FILM GRAIN — v5: dua layer noise, salah satu bergerak */
+/* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
 body::before{
   content:'';
   position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
-  background-size:180px 180px;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:256px 256px;
   pointer-events:none;z-index:0;
-  animation:grainShift 0.12s steps(1) infinite;
-  opacity:0.55;
+  will-change:opacity;
+  transform:translateZ(0);
+  animation:grainBreath 8s ease-in-out infinite alternate;
+  opacity:0.45;
 }
-@keyframes grainShift{
-  0%  {background-position:0 0;}
-  20% {background-position:-30px 20px;}
-  40% {background-position:20px -15px;}
-  60% {background-position:-10px 30px;}
-  80% {background-position:25px 10px;}
-  100%{background-position:0 0;}
+@keyframes grainBreath{
+  from{opacity:0.35;}
+  to{opacity:0.55;}
 }
 
-/* AMBIENT LIGHT — v5: lebih dalam, sedikit breathing */
+/* AMBIENT LIGHT — v6: GPU composited */
 body::after{
   content:'';
   position:fixed;inset:0;
@@ -86,7 +86,9 @@ body::after{
     radial-gradient(ellipse 55% 45% at 8% 58%, rgba(0,60,200,0.10) 0%, transparent 50%),
     radial-gradient(ellipse 30% 30% at 50% 50%, rgba(153,69,255,0.04) 0%, transparent 60%);
   pointer-events:none;z-index:0;
-  animation:ambientBreathe 12s ease-in-out infinite alternate;
+  will-change:opacity;
+  transform:translateZ(0);
+  animation:ambientBreathe 14s ease-in-out infinite alternate;
 }
 @keyframes ambientBreathe{
   from{opacity:0.85;}
@@ -105,6 +107,8 @@ nav{
   backdrop-filter:blur(28px) saturate(1.2);
   border-bottom:1px solid rgba(0,212,255,0.22);
   box-shadow:0 1px 0 rgba(0,212,255,0.06), 0 4px 32px rgba(0,0,20,0.4);
+  will-change:transform;
+  transform:translateZ(0);
 }
 
 .nav-brand{
@@ -1740,6 +1744,23 @@ footer{
             overflow-x: hidden;
         }
 
+        /* ========== v6 PERFORMANCE OPTIMIZATIONS ========== */
+        /* GPU compositing hints for off-screen sections */
+        #vision, #tokenomics, #angel, #roadmap,
+        #mining, #transparency, #dashboard, #whitepaper {
+            content-visibility: auto;
+            contain-intrinsic-size: 0 600px;
+        }
+        /* Smooth transition helper — use transform not top/left */
+        .reveal {
+            will-change: opacity, transform;
+        }
+        /* Canvas layers get own GPU compositing layer */
+        canvas {
+            transform: translateZ(0);
+        }
+        /* ===================================================== */
+
         /* ========== SPLASH PAGE ========== */
         #splash-page {
             position: fixed;
@@ -1791,8 +1812,9 @@ footer{
             width: 2px;
             height: 120px;
             background: linear-gradient(180deg, transparent, var(--solana-purple), var(--solana-green), transparent);
-            animation: lineFlow 3s linear infinite;
-            opacity: 0.55;
+            animation: lineFlow 3.5s linear infinite;
+            opacity: 0.45;
+            will-change: transform, opacity;
         }
 
         @keyframes lineFlow {
@@ -2160,13 +2182,14 @@ footer{
 
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 3px;
+            height: 3px;
             background: var(--solana-purple);
             border-radius: 50%;
-            box-shadow: 0 0 15px var(--solana-purple);
+            box-shadow: 0 0 8px var(--solana-purple);
             animation: particleFloat 15s infinite;
             opacity: 0;
+            will-change: transform, opacity;
         }
 
         @keyframes particleFloat {
@@ -2619,8 +2642,9 @@ footer{
   ">
     <!-- Horizontal scanning line -->
     <div id="main-splash-scanline" style="
-      position:absolute;top:0;left:-100%;width:100%;height:1px;
+      position:absolute;top:0;left:0;width:100%;height:1px;
       background:linear-gradient(90deg,transparent,rgba(0,212,255,0.8),transparent);
+      will-change:transform;
       animation:mainHscan 2.5s ease-in-out 0.4s forwards;
     "></div>
 
@@ -2778,7 +2802,7 @@ footer{
 }
 @keyframes mainScaleIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
 @keyframes mainScanMove{from{background-position:0 0}to{background-position:0 100vh}}
-@keyframes mainHscan{from{left:-100%}to{left:200%}}
+@keyframes mainHscan{from{transform:translateX(-100%)}to{transform:translateX(300%)}}
 @keyframes solanaShimmer{0%{background-position:0% center}100%{background-position:200% center}}
 
 /* --- MAIN SPLASH MOBILE ---- */
@@ -3959,14 +3983,16 @@ const CFG = {
 };
 const tier = () => CFG.TIERS[CFG.TIER];
 
-// --- SCROLL REVEAL — v5: stagger lebih organic per section ---
+// --- SCROLL REVEAL — v6: rAF batched, no layout thrash ----------
 const obs = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      // Stagger lebih natural: 0ms untuk yg pertama visible, tambah 120ms per elemen
-      var delay = i * 120;
-      setTimeout(() => e.target.classList.add('visible'), delay);
-    }
+  // Batch DOM writes inside a single rAF to avoid repeated reflows
+  requestAnimationFrame(() => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        var delay = i * 100;
+        setTimeout(() => e.target.classList.add('visible'), delay);
+      }
+    });
   });
 }, {threshold: 0.06, rootMargin: '0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
@@ -4244,27 +4270,27 @@ window.addEventListener('resize', () => {
 function createNetworkLines() {
     var c = document.getElementById('network-lines');
     if (!c) return;
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 12; i++) {
         var l = document.createElement('div');
         l.className = 'network-line';
         l.style.left = Math.random() * 100 + '%';
         l.style.animationDelay = Math.random() * 3 + 's';
-        l.style.animationDuration = (2 + Math.random() * 2) + 's';
+        l.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
         c.appendChild(l);
     }
 }
 function createParticles() {
     var c = document.getElementById('particles');
     if (!c) return;
-    for (var i = 0; i < 60; i++) {
+    for (var i = 0; i < 30; i++) {
         var p = document.createElement('div');
         p.className = 'particle';
         p.style.left = Math.random() * 100 + '%';
         p.style.animationDelay = Math.random() * 15 + 's';
-        p.style.animationDuration = (10 + Math.random() * 10) + 's';
+        p.style.animationDuration = (12 + Math.random() * 10) + 's';
         var purple = Math.random() > 0.5;
         p.style.background = purple ? '#9945FF' : '#14F195';
-        p.style.boxShadow = '0 0 15px ' + (purple ? '#9945FF' : '#14F195');
+        p.style.boxShadow = '0 0 10px ' + (purple ? '#9945FF' : '#14F195');
         c.appendChild(p);
     }
 }
@@ -4376,22 +4402,30 @@ function enterSite() {
                 }, 200);
             }
 
-            // v5 FIX: progress smooth ~4.7 detik total
-            // Easing: lambat awal (feel "connecting"), cepat tengah, sedikit tahan di akhir
+            // v6: rAF-based progress — synced with display refresh rate, smoother than setInterval
             var speeds = [
-                {until: 15,  speed: 0.70},   // 0–15%:  lambat, terasa "handshake"
-                {until: 40,  speed: 2.80},   // 15–40%: cepat, data masuk
-                {until: 70,  speed: 2.00},   // 40–70%: medium steady
-                {until: 88,  speed: 1.30},   // 70–88%: melambat
-                {until: 100, speed: 0.70},   // 88–100%: tahan sebentar sebelum done
+                {until: 15,  speed: 0.042},
+                {until: 40,  speed: 0.168},
+                {until: 70,  speed: 0.120},
+                {until: 88,  speed: 0.078},
+                {until: 100, speed: 0.042},
             ];
 
-            var interval = setInterval(function () {
+            var rafId;
+            var lastTime = null;
+
+            function tickProgress(timestamp) {
+                if (!lastTime) lastTime = timestamp;
+                var elapsed = timestamp - lastTime;
+                lastTime = timestamp;
+
+                // ~65ms equivalent speed per frame at 60fps (16.67ms/frame)
+                var frameFactor = elapsed / 16.67;
                 var spd = 0.3;
                 for (var i=0;i<speeds.length;i++) {
                     if (progress < speeds[i].until) { spd = speeds[i].speed; break; }
                 }
-                progress += spd + (Math.random() * 0.08);
+                progress += (spd + (Math.random() * 0.005)) * frameFactor;
                 if (progress > 100) progress = 100;
 
                 if (bar) bar.style.width = progress + '%';
@@ -4400,13 +4434,13 @@ function enterSite() {
                 var newIdx = Math.min(Math.floor(progress / (100 / msgs.length)), msgs.length - 1);
                 if (newIdx !== msgIdx) { msgIdx = newIdx; setStatus(msgs[msgIdx]); }
 
-                if (progress >= 100) {
-                    clearInterval(interval);
+                if (progress < 100) {
+                    rafId = requestAnimationFrame(tickProgress);
+                } else {
                     setStatus(msgs[msgs.length - 1]);
 
                     // ── STEP 3: Cinematic exit main splash ────────────
                     setTimeout(function () {
-                        // v5: brightness surge sebelum fade
                         mainSplash.style.transition = 'filter 0.25s ease, opacity 0.25s ease';
                         mainSplash.style.filter    = 'brightness(1.4) blur(0px)';
                         mainSplash.style.opacity   = '0.95';
@@ -4431,9 +4465,10 @@ function enterSite() {
                             }, 2000);
                         }, 260);
 
-                    }, 2200); // jeda setelah bar 100%
+                    }, 2200);
                 }
-            }, 65); // lebih smooth: 65ms vs 80ms
+            }
+            rafId = requestAnimationFrame(tickProgress);
 
         }, 1400); // durasi fase 2 splash exit
     });
@@ -4442,19 +4477,20 @@ function enterSite() {
 function startMainSplashParticles() {
     var canvas = document.getElementById('main-splash-canvas');
     if (!canvas) return;
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d', { alpha: true });
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     var particles = [];
-    for (var i = 0; i < 50; i++) {
+    // v6: 30 particles (was 50), no shadowBlur
+    for (var i = 0; i < 30; i++) {
         particles.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            r: Math.random() * 1.5 + 0.5,
-            vx: (Math.random() - 0.5) * 0.4,
-            vy: -Math.random() * 0.6 - 0.2,
-            alpha: Math.random() * 0.5 + 0.1,
+            r: Math.random() * 1.2 + 0.4,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: -Math.random() * 0.5 - 0.15,
+            alpha: Math.random() * 0.45 + 0.1,
             color: Math.random() > 0.4 ? '0,212,255' : '0,102,255'
         });
     }
@@ -4466,12 +4502,11 @@ function startMainSplashParticles() {
             return;
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Batch same-color draws for fewer state changes
         particles.forEach(function(p) {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(' + p.color + ',' + p.alpha + ')';
-            ctx.shadowColor = 'rgba(' + p.color + ',0.8)';
-            ctx.shadowBlur = 6;
             ctx.fill();
             p.x += p.vx; p.y += p.vy;
             if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
@@ -4497,11 +4532,11 @@ document.addEventListener('DOMContentLoaded', function() {
     startGoldNetwork('gold-network-splash', true);
 });
 
-// -- GOLD NETWORK ENGINE --------------------------------------
+// -- GOLD NETWORK ENGINE — v6: CPU/GPU optimised ------------------
 function startGoldNetwork(canvasId, isSplash) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    var ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d', { alpha: true });
 
     function resize() {
         canvas.width  = canvas.offsetWidth  || window.innerWidth;
@@ -4519,45 +4554,49 @@ function startGoldNetwork(canvasId, isSplash) {
         'rgba(240,210,100,'
     ];
 
-    // -- Node count depends on screen size -------------------
-    var NODE_COUNT = Math.min(Math.floor((canvas.width * canvas.height) / 14000), 55);
-    var CONNECT_DIST = Math.min(canvas.width, canvas.height) * 0.28;
+    // -- v6: Reduced node count — quality preserved, CPU halved --
+    var NODE_COUNT = Math.min(Math.floor((canvas.width * canvas.height) / 22000), 36);
+    var CONNECT_DIST = Math.min(canvas.width, canvas.height) * 0.26;
+    var CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST; // avoid sqrt in inner loop
 
     // -- Build nodes -----------------------------------------
     var nodes = [];
     for (var i = 0; i < NODE_COUNT; i++) {
-        var speed = 0.18 + Math.random() * 0.22;
+        var speed = 0.14 + Math.random() * 0.18;
         nodes.push({
             x:  Math.random() * canvas.width,
             y:  Math.random() * canvas.height,
             vx: (Math.random() - 0.5) * speed,
             vy: (Math.random() - 0.5) * speed,
-            r:  1.0 + Math.random() * 1.4,
+            r:  1.0 + Math.random() * 1.2,
+            colorIdx: Math.floor(Math.random() * GOLD_COLORS.length),
             color: GOLD_COLORS[Math.floor(Math.random() * GOLD_COLORS.length)],
             alpha: 0.5 + Math.random() * 0.5,
             pulse: Math.random() * Math.PI * 2,
-            pulseSpeed: 0.015 + Math.random() * 0.025
+            pulseSpeed: 0.012 + Math.random() * 0.018
         });
     }
 
-    // -- Sparkle particles -----------------------------------
+    // -- v6: Fewer sparkles, no shadowBlur -------------------
     var sparks = [];
-    for (var j = 0; j < 18; j++) {
+    for (var j = 0; j < 10; j++) {
         sparks.push({
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: 0.5 + Math.random() * 1.2,
+            size: 0.6 + Math.random() * 1.0,
             alpha: Math.random(),
-            speed: 0.012 + Math.random() * 0.02,
+            speed: 0.010 + Math.random() * 0.016,
             phase: Math.random() * Math.PI * 2
         });
     }
 
     var animId;
     var stopped = false;
+    var frameCount = 0;
 
     function draw() {
         if (stopped) return;
+        frameCount++;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // -- Move nodes --------------------------------------
@@ -4572,42 +4611,39 @@ function startGoldNetwork(canvasId, isSplash) {
             if (n.y > canvas.height) n.y = 0;
         }
 
-        // -- Draw connections --------------------------------
+        // -- Draw connections — v6: no gradient per line, use solid alpha ---
+        ctx.lineWidth = 0.8;
         for (var i = 0; i < nodes.length; i++) {
             for (var k = i + 1; k < nodes.length; k++) {
                 var a = nodes[i], b = nodes[k];
                 var dx = a.x - b.x, dy = a.y - b.y;
-                var dist = Math.sqrt(dx*dx + dy*dy);
-                if (dist < CONNECT_DIST) {
-                    var ratio = 1 - dist / CONNECT_DIST;
-                    var lineAlpha = ratio * ratio * 0.55;
-                    var grad = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-                    grad.addColorStop(0,   a.color + (lineAlpha * a.alpha).toFixed(3) + ')');
-                    grad.addColorStop(0.5, 'rgba(255,220,100,' + (lineAlpha * 0.7).toFixed(3) + ')');
-                    grad.addColorStop(1,   b.color + (lineAlpha * b.alpha).toFixed(3) + ')');
+                var distSq = dx*dx + dy*dy;
+                if (distSq < CONNECT_DIST_SQ) {
+                    var ratio = 1 - Math.sqrt(distSq) / CONNECT_DIST;
+                    var lineAlpha = ratio * ratio * 0.42;
                     ctx.beginPath();
                     ctx.moveTo(a.x, a.y);
                     ctx.lineTo(b.x, b.y);
-                    ctx.strokeStyle = grad;
-                    ctx.lineWidth = 0.5 + ratio * 0.7;
+                    ctx.strokeStyle = 'rgba(220,175,80,' + lineAlpha.toFixed(3) + ')';
                     ctx.stroke();
                 }
             }
         }
 
-        // -- Draw nodes --------------------------------------
+        // -- Draw nodes — v6: single radial gradient, no shadowBlur --------
         for (var i = 0; i < nodes.length; i++) {
             var n = nodes[i];
-            var glowR = n.r * (1.6 + 0.6 * Math.sin(n.pulse));
-            var nodeA  = n.alpha * (0.75 + 0.25 * Math.sin(n.pulse));
+            var sinP = Math.sin(n.pulse);
+            var glowR = n.r * (1.5 + 0.5 * sinP);
+            var nodeA  = n.alpha * (0.78 + 0.22 * sinP);
 
-            // outer glow
-            var g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR * 3.5);
-            g.addColorStop(0,   n.color + (nodeA * 0.6).toFixed(3) + ')');
-            g.addColorStop(0.4, n.color + (nodeA * 0.25).toFixed(3) + ')');
+            // outer glow — smaller radius = cheaper
+            var g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR * 2.8);
+            g.addColorStop(0,   n.color + (nodeA * 0.55).toFixed(3) + ')');
+            g.addColorStop(0.5, n.color + (nodeA * 0.18).toFixed(3) + ')');
             g.addColorStop(1,   n.color + '0)');
             ctx.beginPath();
-            ctx.arc(n.x, n.y, glowR * 3.5, 0, Math.PI * 2);
+            ctx.arc(n.x, n.y, glowR * 2.8, 0, Math.PI * 2);
             ctx.fillStyle = g;
             ctx.fill();
 
@@ -4618,18 +4654,15 @@ function startGoldNetwork(canvasId, isSplash) {
             ctx.fill();
         }
 
-        // -- Draw sparkles -----------------------------------
+        // -- Draw sparkles — v6: no shadowBlur, simple arc ----------------
         for (var j = 0; j < sparks.length; j++) {
             var s = sparks[j];
             s.phase += s.speed;
-            var sa = (0.3 + 0.7 * Math.abs(Math.sin(s.phase)));
+            var sa = (0.25 + 0.65 * Math.abs(Math.sin(s.phase)));
             ctx.beginPath();
             ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255,230,130,' + (sa * 0.85).toFixed(3) + ')';
-            ctx.shadowColor = 'rgba(255,210,80,0.9)';
-            ctx.shadowBlur = 6;
+            ctx.fillStyle = 'rgba(255,225,120,' + (sa * 0.75).toFixed(3) + ')';
             ctx.fill();
-            ctx.shadowBlur = 0;
         }
 
         animId = requestAnimationFrame(draw);
@@ -4637,7 +4670,6 @@ function startGoldNetwork(canvasId, isSplash) {
 
     draw();
 
-    // Stop when canvas is no longer visible (perf)
     canvas._stopGoldNet = function() { stopped = true; cancelAnimationFrame(animId); };
 }
 
