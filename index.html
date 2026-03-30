@@ -2736,11 +2736,28 @@ footer{
   #main-splash-content{
     padding:0 16px!important;
     width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
   }
-  /* Logo smaller */
-  #main-splash-content > div:nth-child(3) > div:first-child{
-    width:100px!important;height:100px!important;
-    margin-bottom:0.8rem!important;
+  /* LOGO */
+  #main-splash-content img{
+    width:85% !important;
+    height:85% !important;
+    object-fit:contain;
+    display:block;
+    margin:0 auto;
+  }
+  /* LINGKARAN LOGO */
+  #main-splash-content img{
+    max-width:130px;
+  }
+  #main-splash-content > div{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
   /* Let's Start text */
   #main-splash-content > div[style*="Orbitron"]{
@@ -2768,7 +2785,7 @@ footer{
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-brand">
-    <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:36px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
+    <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:55px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
     <div class="nav-brand-text">
       <span class="nav-name">EXILLION</span>
       <span class="nav-sub">CAPITAL FINECOSYSTEM</span>
