@@ -2727,13 +2727,13 @@ footer{
       <div style="height:2px;background:rgba(0,212,255,0.1);border-radius:1px;overflow:hidden;position:relative;">
         <div id="main-splash-bar" style="
           height:100%;width:0%;
-          background:linear-gradient(90deg,#0044cc,#0066ff,#00d4ff,#00d4ff);
+          background:linear-gradient(90deg,#0044cc 0%,#0066ff 30%,#00d4ff 60%,rgba(255,255,255,0.6) 75%,#00d4ff 85%,#00d4ff 100%);
+          background-size:250% 100%;
           box-shadow:0 0 10px rgba(0,212,255,0.7), 0 0 20px rgba(0,212,255,0.35);
-          transition:width 0.06s linear;
-          position:relative;
-        ">
-          <div style="position:absolute;right:0;top:0;width:40px;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9));animation:barShimmer 1.2s ease-in-out infinite;"></div>
-        </div>
+          transition:width 0.055s linear;
+          will-change:width;
+          animation:barSweep 1.8s linear infinite;
+        "></div>
       </div>
     </div>
 
@@ -2754,8 +2754,8 @@ footer{
 
 <style>
 @keyframes mainFadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-/* v5: bar shimmer */
-@keyframes barShimmer{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
+/* v5: bar sweep shimmer — background-position animation */
+@keyframes barSweep{0%{background-position:100% 0%}100%{background-position:-100% 0%}}
 /* v5: status text glitch flicker */
 @keyframes statusGlitch{
   0%,96%,100%{opacity:1;transform:none;}
@@ -4376,14 +4376,14 @@ function enterSite() {
                 }, 200);
             }
 
-            // v5: progress lebih smooth dengan easing yang terasa nyata
-            // Lambat di awal (0–20%), medium (20–70%), lambat di akhir (70–100%)
+            // v5 FIX: progress smooth ~4.7 detik total
+            // Easing: lambat awal (feel "connecting"), cepat tengah, sedikit tahan di akhir
             var speeds = [
-                {until:20,  speed:0.22},
-                {until:50,  speed:0.90},
-                {until:75,  speed:0.60},
-                {until:92,  speed:0.35},
-                {until:100, speed:0.18},
+                {until: 15,  speed: 0.70},   // 0–15%:  lambat, terasa "handshake"
+                {until: 40,  speed: 2.80},   // 15–40%: cepat, data masuk
+                {until: 70,  speed: 2.00},   // 40–70%: medium steady
+                {until: 88,  speed: 1.30},   // 70–88%: melambat
+                {until: 100, speed: 0.70},   // 88–100%: tahan sebentar sebelum done
             ];
 
             var interval = setInterval(function () {
@@ -4391,7 +4391,7 @@ function enterSite() {
                 for (var i=0;i<speeds.length;i++) {
                     if (progress < speeds[i].until) { spd = speeds[i].speed; break; }
                 }
-                progress += spd + (Math.random() * 0.18);
+                progress += spd + (Math.random() * 0.08);
                 if (progress > 100) progress = 100;
 
                 if (bar) bar.style.width = progress + '%';
