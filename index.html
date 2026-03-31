@@ -4535,7 +4535,7 @@ function isMobileBrowser() {
 async function connectPhantom() {
   // ── MOBILE: tidak ada extension → deep link ke Phantom app ──
   if (isMobileBrowser()) {
-    const provider = window.phantom?.solana || window.solana;
+    const provider = window.phantom && window.phantom.solana ? window.phantom.solana : window.solana;
     if (!provider || !provider.isPhantom) {
       const currentUrl = encodeURIComponent(window.location.href);
       window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
@@ -4543,42 +4543,54 @@ async function connectPhantom() {
     }
   }
 
+  // ── DESKTOP: file:// tidak didukung oleh Phantom extension ──
+  if (window.location.protocol === 'file:') {
+    alert('⚠️  Phantom tidak dapat konek via file://\n\nGunakan local server untuk testing:\n• VS Code → klik kanan file → Open with Live Server\n• Terminal: python -m http.server 8080\n\nAtau upload ke GitHub Pages / Netlify untuk https://');
+    return;
+  }
+
   // ── DESKTOP: cek extension ──
-  const provider = window.phantom?.solana || window.solana;
+  const provider = window.phantom && window.phantom.solana ? window.phantom.solana : window.solana;
   if (!provider || !provider.isPhantom) {
-    // Tampilkan banner install, bukan confirm() bawaan browser
     showWalletHint('phantom');
     return;
   }
 
-  // ── Extension ada → langsung connect, Phantom popup muncul sendiri ──
+  // ── Extension ada → update button state ──
   const pBtn = document.getElementById('phantomBtn');
-  if (pBtn) { pBtn.disabled = true; pBtn.style.opacity = '0.6'; pBtn.querySelector('.wallet-name').textContent = 'Connecting…'; }
+  if (pBtn) {
+    pBtn.disabled = true;
+    pBtn.style.opacity = '0.6';
+    const nameEl = pBtn.querySelector('.wallet-name');
+    if (nameEl) nameEl.textContent = 'Connecting…';
+  }
 
   try {
+    // provider.connect() → ini yang trigger popup Phantom di Chrome
     const resp = await provider.connect();
     const address = resp.publicKey.toString();
     setConnected('Phantom', address);
 
-    provider.on('disconnect', function() {
-      if (connectedWallet === 'Phantom') disconnectWallet();
-    });
-    provider.on('accountChanged', function(pubKey) {
-      if (pubKey) {
-        connectedAddress = pubKey.toString();
-        setConnected('Phantom', connectedAddress);
-      } else {
-        disconnectWallet();
-      }
-    });
+    // Auto disconnect/account-change listeners
+    try { provider.on('disconnect', function() { if (connectedWallet === 'Phantom') disconnectWallet(); }); } catch(e){}
+    try {
+      provider.on('accountChanged', function(pubKey) {
+        if (pubKey) { connectedAddress = pubKey.toString(); setConnected('Phantom', connectedAddress); }
+        else { disconnectWallet(); }
+      });
+    } catch(e){}
+
   } catch(e) {
-    // Restore button jika user cancel / error
+    // Restore button
     if (pBtn) {
-      pBtn.disabled = false; pBtn.style.opacity = '1';
-      pBtn.querySelector('.wallet-name').textContent = 'Connect Phantom';
+      pBtn.disabled = false;
+      pBtn.style.opacity = '1';
+      const nameEl = pBtn.querySelector('.wallet-name');
+      if (nameEl) nameEl.textContent = 'Connect Phantom';
     }
+    // 4001 = user menutup popup sendiri, bukan error
     if (e.code !== 4001) {
-      alert('Phantom connection failed: ' + (e.message || 'Please try again.'));
+      alert('Phantom gagal connect: ' + (e.message || 'Silakan coba lagi.'));
     }
   }
 }
@@ -4594,6 +4606,12 @@ async function connectSolflare() {
     }
   }
 
+  // ── DESKTOP: file:// tidak didukung oleh Solflare extension ──
+  if (window.location.protocol === 'file:') {
+    alert('⚠️  Solflare tidak dapat konek via file://\n\nGunakan local server untuk testing:\n• VS Code → klik kanan file → Open with Live Server\n• Terminal: python -m http.server 8080\n\nAtau upload ke GitHub Pages / Netlify untuk https://');
+    return;
+  }
+
   // ── DESKTOP: cek extension ──
   const provider = window.solflare;
   if (!provider || !provider.isSolflare) {
@@ -4601,33 +4619,39 @@ async function connectSolflare() {
     return;
   }
 
-  // ── Extension ada → langsung connect ──
+  // ── Extension ada → update button state ──
   const sBtn = document.getElementById('solflareBtn');
-  if (sBtn) { sBtn.disabled = true; sBtn.style.opacity = '0.6'; sBtn.querySelector('.wallet-name').textContent = 'Connecting…'; }
+  if (sBtn) {
+    sBtn.disabled = true;
+    sBtn.style.opacity = '0.6';
+    const nameEl = sBtn.querySelector('.wallet-name');
+    if (nameEl) nameEl.textContent = 'Connecting…';
+  }
 
   try {
+    // provider.connect() → ini yang trigger popup Solflare di Chrome
     await provider.connect();
     const address = provider.publicKey.toString();
     setConnected('Solflare', address);
 
-    provider.on('disconnect', function() {
-      if (connectedWallet === 'Solflare') disconnectWallet();
-    });
-    provider.on('accountChanged', function() {
-      if (provider.publicKey) {
-        connectedAddress = provider.publicKey.toString();
-        setConnected('Solflare', connectedAddress);
-      } else {
-        disconnectWallet();
-      }
-    });
+    // Auto disconnect/account-change listeners
+    try { provider.on('disconnect', function() { if (connectedWallet === 'Solflare') disconnectWallet(); }); } catch(e){}
+    try {
+      provider.on('accountChanged', function() {
+        if (provider.publicKey) { connectedAddress = provider.publicKey.toString(); setConnected('Solflare', connectedAddress); }
+        else { disconnectWallet(); }
+      });
+    } catch(e){}
+
   } catch(e) {
     if (sBtn) {
-      sBtn.disabled = false; sBtn.style.opacity = '1';
-      sBtn.querySelector('.wallet-name').textContent = 'Connect Solflare';
+      sBtn.disabled = false;
+      sBtn.style.opacity = '1';
+      const nameEl = sBtn.querySelector('.wallet-name');
+      if (nameEl) nameEl.textContent = 'Connect Solflare';
     }
     if (e.code !== 4001) {
-      alert('Solflare connection failed: ' + (e.message || 'Please try again.'));
+      alert('Solflare gagal connect: ' + (e.message || 'Silakan coba lagi.'));
     }
   }
 }
@@ -4779,7 +4803,7 @@ async function proceedBuy(){
     let txSignature;
     try {
       if (connectedWallet === 'Phantom') {
-        const provider = window.phantom?.solana || window.solana;
+        const provider = (window.phantom && window.phantom.solana) ? window.phantom.solana : window.solana;
         // Phantom: signAndSendTransaction menerima raw bytes via object {message}
         // Cara paling kompatibel: kirim sebagai Buffer, biarkan Phantom parse sendiri
         const result = await provider.request({
