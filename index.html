@@ -3693,14 +3693,20 @@ footer{
             style="height:58px;">
           </a>
 
-          <!-- App Store — inline SVG agar tidak hilang di iOS mobile -->
-          <a href="#" style="display:inline-block;height:58px;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 40" height="58" aria-label="Download on the App Store">
-              <rect width="135" height="40" rx="7" fill="#000"/>
-              <path d="M19.8 20.5c0-3.2 2.6-4.8 2.7-4.9-1.5-2.1-3.7-2.4-4.5-2.4-1.9-.2-3.7 1.1-4.7 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4 1.2-5.1 3.1-2.2 3.8-.6 9.4 1.6 12.5 1 1.5 2.3 3.2 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.5 1 4.2 1c1.7 0 2.8-1.5 3.9-3 1.2-1.7 1.7-3.4 1.7-3.5-.1-.1-3.7-1.4-3.7-5z" fill="#fff"/>
-              <path d="M17 11.8c.9-1 1.4-2.5 1.3-3.9-1.3.1-2.8.9-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.8z" fill="#fff"/>
-              <text x="38" y="14" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="7" fill="#fff" letter-spacing="0.2">Download on the</text>
-              <text x="38" y="27" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="14" font-weight="600" fill="#fff" letter-spacing="-0.3">App Store</text>
+          <!-- App Store — inline SVG, same visual height as Google Play badge, white border ring -->
+          <a href="#" style="display:inline-block;line-height:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 646 192" height="58" aria-label="Download on the App Store" style="display:block;">
+              <!-- white outer ring border -->
+              <rect width="646" height="192" rx="30" fill="#fff"/>
+              <!-- black inner body -->
+              <rect x="5" y="5" width="636" height="182" rx="26" fill="#000"/>
+              <!-- Apple logo path scaled up -->
+              <g transform="translate(62,28) scale(5.5)">
+                <path d="M19.8 20.5c0-3.2 2.6-4.8 2.7-4.9-1.5-2.1-3.7-2.4-4.5-2.4-1.9-.2-3.7 1.1-4.7 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4 1.2-5.1 3.1-2.2 3.8-.6 9.4 1.6 12.5 1 1.5 2.3 3.2 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.5 1 4.2 1c1.7 0 2.8-1.5 3.9-3 1.2-1.7 1.7-3.4 1.7-3.5-.1-.1-3.7-1.4-3.7-5z" fill="#fff"/>
+                <path d="M17 11.8c.9-1 1.4-2.5 1.3-3.9-1.3.1-2.8.9-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.8z" fill="#fff"/>
+              </g>
+              <text x="230" y="74" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif" font-size="40" fill="#fff" letter-spacing="1">Download on the</text>
+              <text x="225" y="142" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif" font-size="68" font-weight="600" fill="#fff" letter-spacing="-1">App Store</text>
             </svg>
           </a>
 
@@ -4135,8 +4141,8 @@ footer{
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- BUY PANEL -->
-      <div id="buyPanel">
+      <!-- BUY PANEL — hidden until wallet connected -->
+      <div id="buyPanel" style="display:none;">
         <div class="form-field">
           <label class="field-label">Investment Amount (USDC)</label>
           <div class="amount-wrap">
@@ -4508,26 +4514,27 @@ function isMobileBrowser() {
 }
 
 async function connectPhantom() {
-  const provider = window.solana;
-
-  // Mobile: tidak ada extension — buka Phantom deep link / in-app browser
-  if (isMobileBrowser() && (!provider || !provider.isPhantom)) {
-    // Phantom mobile in-app browser: buka URL ini langsung di Phantom App
-    const currentUrl = encodeURIComponent(window.location.href);
-    const deepLink = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
-    if (confirm('Buka Phantom Mobile App untuk connect?\n\nPastikan Phantom sudah terinstall di HP kamu.')) {
-      window.location.href = deepLink;
+  // ── MOBILE: tidak ada extension → deep link ke Phantom app ──
+  if (isMobileBrowser()) {
+    const provider = window.phantom?.solana || window.solana;
+    if (!provider || !provider.isPhantom) {
+      const currentUrl = encodeURIComponent(window.location.href);
+      window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
+      return;
     }
-    return;
   }
 
-  // Desktop: extension tidak ada
+  // ── DESKTOP: cek extension ──
+  const provider = window.phantom?.solana || window.solana;
   if (!provider || !provider.isPhantom) {
-    if (confirm('Phantom wallet extension tidak terdeteksi di browser ini.\n\nInstall Phantom Extension untuk Chrome/Brave?')) {
-      window.open('https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa', '_blank');
-    }
+    // Tampilkan banner install, bukan confirm() bawaan browser
+    showWalletHint('phantom');
     return;
   }
+
+  // ── Extension ada → langsung connect, Phantom popup muncul sendiri ──
+  const pBtn = document.getElementById('phantomBtn');
+  if (pBtn) { pBtn.disabled = true; pBtn.style.opacity = '0.6'; pBtn.querySelector('.wallet-name').textContent = 'Connecting…'; }
 
   try {
     const resp = await provider.connect();
@@ -4546,6 +4553,11 @@ async function connectPhantom() {
       }
     });
   } catch(e) {
+    // Restore button jika user cancel / error
+    if (pBtn) {
+      pBtn.disabled = false; pBtn.style.opacity = '1';
+      pBtn.querySelector('.wallet-name').textContent = 'Connect Phantom';
+    }
     if (e.code !== 4001) {
       alert('Phantom connection failed: ' + (e.message || 'Please try again.'));
     }
@@ -4553,25 +4565,26 @@ async function connectPhantom() {
 }
 
 async function connectSolflare() {
+  // ── MOBILE: tidak ada extension → deep link ke Solflare app ──
+  if (isMobileBrowser()) {
+    const provider = window.solflare;
+    if (!provider || !provider.isSolflare) {
+      const currentUrl = encodeURIComponent(window.location.href);
+      window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
+      return;
+    }
+  }
+
+  // ── DESKTOP: cek extension ──
   const provider = window.solflare;
-
-  // Mobile: tidak ada extension — buka Solflare deep link
-  if (isMobileBrowser() && (!provider || !provider.isSolflare)) {
-    const currentUrl = encodeURIComponent(window.location.href);
-    const deepLink = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
-    if (confirm('Buka Solflare Mobile App untuk connect?\n\nPastikan Solflare sudah terinstall di HP kamu.')) {
-      window.location.href = deepLink;
-    }
-    return;
-  }
-
-  // Desktop: extension tidak ada
   if (!provider || !provider.isSolflare) {
-    if (confirm('Solflare wallet extension tidak terdeteksi di browser ini.\n\nInstall Solflare Extension untuk Chrome/Brave?')) {
-      window.open('https://chrome.google.com/webstore/detail/solflare-wallet/bhhhlbepdkbapadjdnnojkbgioiodbic', '_blank');
-    }
+    showWalletHint('solflare');
     return;
   }
+
+  // ── Extension ada → langsung connect ──
+  const sBtn = document.getElementById('solflareBtn');
+  if (sBtn) { sBtn.disabled = true; sBtn.style.opacity = '0.6'; sBtn.querySelector('.wallet-name').textContent = 'Connecting…'; }
 
   try {
     await provider.connect();
@@ -4590,10 +4603,58 @@ async function connectSolflare() {
       }
     });
   } catch(e) {
+    if (sBtn) {
+      sBtn.disabled = false; sBtn.style.opacity = '1';
+      sBtn.querySelector('.wallet-name').textContent = 'Connect Solflare';
+    }
     if (e.code !== 4001) {
       alert('Solflare connection failed: ' + (e.message || 'Please try again.'));
     }
   }
+}
+
+// ── Banner install wallet (mengganti confirm() bawaan browser) ──
+function showWalletHint(wallet) {
+  // Hapus hint lama kalau ada
+  const old = document.getElementById('walletHintBanner');
+  if (old) old.remove();
+
+  const isPhantom = wallet === 'phantom';
+  const name  = isPhantom ? 'Phantom' : 'Solflare';
+  const url   = isPhantom
+    ? 'https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa'
+    : 'https://chrome.google.com/webstore/detail/solflare-wallet/bhhhlbepdkbapadjdnnojkbgioiodbic';
+  const emoji = isPhantom ? '👻' : '☀️';
+
+  const banner = document.createElement('div');
+  banner.id = 'walletHintBanner';
+  banner.style.cssText = [
+    'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999',
+    'background:#04243d;border:1px solid rgba(0,212,255,0.4)',
+    'padding:14px 22px;border-radius:4px;display:flex;align-items:center;gap:14px',
+    'box-shadow:0 4px 32px rgba(0,0,0,0.6);max-width:480px;width:90%',
+    'animation:riseUp 0.35s ease both'
+  ].join(';');
+
+  banner.innerHTML = [
+    '<span style="font-size:1.6rem">' + emoji + '</span>',
+    '<div style="flex:1">',
+      '<div style="font-family:Orbitron,monospace;font-size:0.7rem;letter-spacing:2px;color:#00d4ff;margin-bottom:3px">' + name + ' Not Detected</div>',
+      '<div style="font-family:Orbitron,monospace;font-size:0.6rem;color:#6a8fa8">Install the extension, then click Connect again.</div>',
+    '</div>',
+    '<a href="' + url + '" target="_blank" style="',
+      'font-family:Orbitron,monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;',
+      'color:#000;background:#00d4ff;border:none;padding:8px 16px;cursor:pointer;',
+      'text-decoration:none;white-space:nowrap;border-radius:2px;font-weight:700',
+    '">Install</a>',
+    '<button onclick="document.getElementById(\'walletHintBanner\').remove()" style="',
+      'background:none;border:none;color:#6a8fa8;cursor:pointer;font-size:1.1rem;padding:0 0 0 8px;line-height:1',
+    '">✕</button>'
+  ].join('');
+
+  document.body.appendChild(banner);
+  // Auto-hilang setelah 8 detik
+  setTimeout(function() { if (banner.parentNode) banner.remove(); }, 8000);
 }
 
 // --- STEPS ---------------------------------------------------
@@ -4692,21 +4753,42 @@ async function proceedBuy(){
 
     // Step 2: Investor signs & sends USDC split transaction
     await txStep(2,'active','Please approve in your wallet...');
+
+    // Deserialize base64 → VersionedTransaction (compatible Phantom & Solflare)
     const txBytes = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
 
-    let signedTx, txSignature;
-    if(connectedWallet === 'Phantom'){
-      const { solana } = window;
-      const { signature } = await solana.signAndSendTransaction(
-        { serialize: () => txBytes, serializeMessage: () => txBytes }
-      );
-      txSignature = signature;
-    } else {
-      const { solflare } = window;
-      const result = await solflare.signAndSendTransaction(
-        { serialize: () => txBytes }
-      );
-      txSignature = result.signature;
+    let txSignature;
+    try {
+      if (connectedWallet === 'Phantom') {
+        const provider = window.phantom?.solana || window.solana;
+        // Phantom: signAndSendTransaction menerima raw bytes via object {message}
+        // Cara paling kompatibel: kirim sebagai Buffer, biarkan Phantom parse sendiri
+        const result = await provider.request({
+          method: 'signAndSendTransaction',
+          params: { message: btoa(String.fromCharCode(...txBytes)) }
+        }).catch(async () => {
+          // Fallback: gunakan signTransaction lalu kirim manual
+          const signedBytes = await provider.request({
+            method: 'signTransaction',
+            params: { message: btoa(String.fromCharCode(...txBytes)) }
+          });
+          const sig = await connection_fe.sendRawTransaction(
+            Uint8Array.from(atob(signedBytes.transaction), c => c.charCodeAt(0))
+          );
+          return { signature: sig };
+        });
+        txSignature = result.signature || result.publicKey;
+      } else {
+        // Solflare
+        const provider = window.solflare;
+        const result = await provider.signAndSendTransaction(
+          { serialize: () => txBytes, serializeMessage: () => txBytes }
+        );
+        txSignature = result.signature;
+      }
+    } catch(signErr) {
+      if (signErr.code === 4001) throw signErr; // user rejected
+      throw new Error('Wallet signing failed: ' + (signErr.message || 'Please try again'));
     }
     await txStep(2,'done',`USDC split confirmed ✓`);
 
