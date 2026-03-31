@@ -4,7 +4,25 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
 <title>Exillion — Capital Finecosystem | v5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+/* FONT METRICS OVERRIDE — mencegah layout shift saat Orbitron swap masuk.
+   size-adjust menyamakan dimensi fallback monospace agar identik dengan Orbitron,
+   sehingga tidak ada reflow/layout shift ketika font selesai load. */
+@font-face {
+  font-family: 'orbitron-fallback';
+  src: local('monospace');
+  size-adjust: 112%;
+  ascent-override: 75%;
+  descent-override: 20%;
+  line-gap-override: 0%;
+}
+body {
+  font-family: 'Orbitron', 'orbitron-fallback', monospace;
+}
+</style>
 <style>
 
   
@@ -45,6 +63,7 @@ body{
   color:var(--text-1);
   font-family:'Orbitron',monospace;
   overflow-x:hidden;
+  overflow-y:scroll; /* selalu reserve scrollbar space agar nav tidak shift */
   font-size:22px;
   line-height:1.7;
   -webkit-tap-highlight-color:transparent;
@@ -2288,7 +2307,6 @@ footer{
         /* Main content inner wrapper — halaman utama (semua kecuali main-splash) */
         #main-content-inner {
             opacity: 0;
-            transform: translateY(20px);
         }
 
         /* ========== DISCLAIMER MODAL ========== */
@@ -2667,6 +2685,29 @@ footer{
     </div>
 
 <!-- ========== MAIN WEBSITE CONTENT ========== -->
+<!-- NAV — di luar main-content agar font pre-render saat splash -->
+<nav id="main-nav" style="opacity:0;pointer-events:none;transition:opacity 0.6s ease;">
+  <a href="#" class="nav-brand">
+    <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:55px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
+    <div class="nav-brand-text">
+      <span class="nav-name">EXILLION</span>
+      <span class="nav-sub">CAPITAL FINECOSYSTEM</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#vision">About</a>
+    <a href="#mining">Mining</a>
+    <a href="#tokenomics">Tokenomics</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#whitepaper">Whitepaper</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#angel" class="nav-cta">The Angel Investor</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
 <div id="main-content">
 
 <!-- ========== MAIN SPLASH (SECOND SPLASH) ========== -->
@@ -2946,28 +2987,6 @@ footer{
 <div class="scanline"></div>
 
 <div id="main-content-inner">
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-brand">
-    <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:55px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
-    <div class="nav-brand-text">
-      <span class="nav-name">EXILLION</span>
-      <span class="nav-sub">CAPITAL FINECOSYSTEM</span>
-    </div>
-  </a>
-  <div class="nav-links" id="navLinks">
-    <a href="#vision">About</a>
-    <a href="#mining">Mining</a>
-    <a href="#tokenomics">Tokenomics</a>
-    <a href="#roadmap">Roadmap</a>
-    <a href="#whitepaper">Whitepaper</a>
-    <a href="#dashboard">Dashboard</a>
-    <a href="#angel" class="nav-cta">The Angel Investor</a>
-  </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
 
 <!-- HERO -->
 <section id="hero">
@@ -4952,11 +4971,10 @@ function enterSite() {
         splash.style.display = 'none';
 
         mc.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflowY = 'hidden';
 
         if (mcInner) {
             mcInner.style.opacity   = '0';
-            mcInner.style.transform = 'translateY(20px)';
             mcInner.style.filter    = '';
         }
 
@@ -5049,17 +5067,25 @@ function enterSite() {
 
                     setTimeout(function () {
                         mainSplash.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+                        document.body.style.overflowY = 'scroll';
+                        document.body.style.overflowX = 'hidden';
+
+                        // Nav dan konten fade-in BERSAMAAN dengan transisi identik
+                        var mainNav = document.getElementById('main-nav');
+                        var transition = 'opacity 1.6s cubic-bezier(0.22,1,0.36,1)';
+
+                        if (mainNav) {
+                            mainNav.style.transition = transition;
+                            mainNav.style.opacity = '1';
+                            mainNav.style.pointerEvents = 'auto';
+                        }
 
                         if (mcInner) {
-                            mcInner.style.willChange = 'opacity, transform';
-                            mcInner.style.transition = 'opacity 1.6s cubic-bezier(0.22,1,0.36,1), transform 1.6s cubic-bezier(0.22,1,0.36,1)';
+                            mcInner.style.transition = 'opacity 1.6s cubic-bezier(0.22,1,0.36,1)';
                             mcInner.style.opacity    = '1';
-                            mcInner.style.transform  = 'translateY(0)';
                             setTimeout(function () {
-                                mcInner.style.willChange = 'auto';
                                 mcInner.style.transition = '';
-                                mcInner.style.transform  = '';
+                                if (mainNav) mainNav.style.transition = '';
                             }, 1700);
                         }
                     }, 1200);
@@ -5117,7 +5143,7 @@ function startMainSplashParticles() {
 document.addEventListener('DOMContentLoaded', function() {
     createNetworkLines();
     createParticles();
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflowY = 'hidden';
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !isEntering) {
             var splash = document.getElementById('splash-page');
