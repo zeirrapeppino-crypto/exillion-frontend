@@ -3,10 +3,17 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
-<title>Exillion — Capital Finecosystem | v5</title>
+<meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
+<meta name="theme-color" content="#010b18"/>
+<meta property="og:title" content="Exillion — Capital Finecosystem | EXXE Angel Round"/>
+<meta property="og:description" content="Join the EXXE Angel Round. Tier I at $0.01/EXXE. On-chain transparent, Solana-powered."/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="robots" content="index, follow"/>
+<title>Exillion — Capital Finecosystem | EXXE Angel Round</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 /* FONT METRICS OVERRIDE — mencegah layout shift saat Orbitron swap masuk.
    size-adjust menyamakan dimensi fallback monospace agar identik dengan Orbitron,
@@ -49,6 +56,8 @@ body {
   --border-dim:  rgba(0,212,255,0.07);
   --green:       #00e5a0;
   --red:         #ff3366;
+  --solana-purple:#9945FF;
+  --solana-green: #14F195;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -81,6 +90,12 @@ body{
   opacity:0.5;
 }
 @keyframes scanFlicker{0%,100%{opacity:0.5;}35%{opacity:0.35;}60%{opacity:0.58;}80%{opacity:0.4;}}
+
+/* REDUCED MOTION — nonaktifkan animasi berat untuk aksesibilitas & low-end device */
+@media(prefers-reduced-motion:reduce){
+  .scanline,body::before,body::after{animation:none!important;}
+  .reveal{transition:none!important;}
+}
 
 /* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
 body::before{
@@ -366,7 +381,7 @@ nav{
   font-family:'Orbitron',monospace;
   max-width:1100px;
   font-size:1.1rem;
-  font-weight:399;
+  font-weight:400;
   color:var(--text-1);
   line-height:1.7;
   margin:1.5rem auto 1.5rem;
@@ -441,6 +456,12 @@ nav{
   from{box-shadow:0 0 8px rgba(0,212,255,0.35), 0 0 16px rgba(0,212,255,0.15);}
   to{box-shadow:0 0 16px rgba(0,212,255,0.7), 0 0 32px rgba(0,212,255,0.35);}
 }
+@keyframes goldSweepMain{0%{background-position:150% 0%}100%{background-position:-150% 0%}}
+@keyframes titleGoldGlowMain{
+  0%{filter:drop-shadow(0 0 8px rgba(255,215,0,0.6)) drop-shadow(0 0 20px rgba(204,125,7,0.4));}
+  50%{filter:drop-shadow(0 0 18px rgba(255,215,0,0.9)) drop-shadow(0 0 40px rgba(232,201,122,0.7)) drop-shadow(0 0 70px rgba(204,125,7,0.4));}
+  100%{filter:drop-shadow(0 0 8px rgba(255,215,0,0.6)) drop-shadow(0 0 20px rgba(204,125,7,0.4));}
+}
 
 /* --- VISION ------------------------------- */
 #vision{padding:0px 5% 80px;}
@@ -465,7 +486,7 @@ nav{
   margin-bottom:2rem;
 }
 
-centerquote{
+blockquote.centerquote{
   display:block;
   font-family:'Orbitron',monospace;
   font-size:clamp(1.4rem,2.8vw,2.2rem);
@@ -1548,57 +1569,8 @@ footer{
 
   /* Hero */
   #hero{ padding:80px 4% 40px!important; }
-  .hero-title{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(2.8rem, 7vw, 6rem);
-  font-weight:700;
-  letter-spacing:11px;
-  line-height:1;
-  background:linear-gradient(
-    90deg,
-    #4a2800 0%,
-    #7a4a10 8%,
-    #c17f13 18%,
-    #e8c97a 28%,
-    #ffd700 38%,
-    #ffe55c 45%,
-    #fff1a0 50%,
-    #ffe55c 55%,
-    #ffd700 62%,
-    #e8c97a 72%,
-    #c17f13 82%,
-    #7a4a10 92%,
-    #4a2800 100%
-  );
-  background-size:250% 100%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:riseUp 0.8s 0.2s ease both, goldSweepMain 5s linear infinite, titleGoldGlowMain 3s ease-in-out infinite alternate;
-}
-  .hero-ticker{
-  font-family:'Orbitron',monospace;
-  font-size:1.3rem;
-  letter-spacing:3px;
-  background:linear-gradient(
-    90deg,
-    #0d1b4b 0%,
-    #c17f13 18%,
-    #e8c97a 32%,
-    #ffd700 45%,
-    #fff5cc 50%,
-    #ffd700 55%,
-    #e8c97a 68%,
-    #c17f13 82%,
-    #7a4a10 100%
-  );
-  background-size:250% 100%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-top:0rem;
-  animation:riseUp 0.8s 0.3s ease both, goldSweepMain 5.5s linear infinite;
-}
+  .hero-title{ font-size:clamp(1.8rem,7vw,3.5rem)!important;letter-spacing:5px!important; }
+  .hero-ticker{ font-size:1.1rem!important;letter-spacing:2px!important; }
   .hero-tagline{ font-size:0.8rem!important;letter-spacing:1.5px!important; }
   .hero-desc{ font-size:0.82rem!important;padding:0 0.5rem;text-align:center; }
   .hero-actions{ flex-direction:column!important;align-items:center!important; }
@@ -1784,34 +1756,7 @@ footer{
 
 /* --- SMALL MOBILE 360px ------------------- */
 @media(max-width:360px){
-  .hero-title{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(2.8rem, 7vw, 6rem);
-  font-weight:700;
-  letter-spacing:11px;
-  line-height:1;
-  background:linear-gradient(
-    90deg,
-    #4a2800 0%,
-    #7a4a10 8%,
-    #c17f13 18%,
-    #e8c97a 28%,
-    #ffd700 38%,
-    #ffe55c 45%,
-    #fff1a0 50%,
-    #ffe55c 55%,
-    #ffd700 62%,
-    #e8c97a 72%,
-    #c17f13 82%,
-    #7a4a10 92%,
-    #4a2800 100%
-  );
-  background-size:250% 100%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:riseUp 0.8s 0.2s ease both, goldSweepMain 5s linear infinite, titleGoldGlowMain 3s ease-in-out infinite alternate;
-}
+  .hero-title{ font-size:clamp(1.5rem,6vw,2.8rem)!important;letter-spacing:3px!important; }
   .stat{ min-width:88px;padding:12px 10px; }
   .stat-val{ font-size:0.9rem; }
   .nav-cta{ padding:8px 14px;font-size:0.65rem; }
@@ -1829,29 +1774,6 @@ footer{
 }
 
 
-
-        :root {
-            --font-primary:'Orbitron', monospace; 
-            --font-secondary: 'Orbitron', monospace;
-            --font-body:'Orbitron', monospace; 
-            --solana-purple: #9945FF;
-            --solana-green: #14F195;
-            --dark-bg: #0a0a0f;
-            --neon-glow: rgba(149, 117, 205, 0.6);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--dark-bg);
-            color: #ffffff;
-            overflow-x: hidden;
-        }
 
         /* ========== v6 PERFORMANCE OPTIMIZATIONS ========== */
         /* GPU compositing hints for off-screen sections */
@@ -2046,19 +1968,9 @@ footer{
             100% { background-position: -150% 0%; }
         }
 
-        @keyframes luxBlueSweep {
-            0%   { background-position: 150% 0%; }
-            100% { background-position: -150% 0%; }
-        }
-
         @keyframes titleGoldGlow {
             from { filter: drop-shadow(0 0 10px rgba(204,125,7,0.4)) drop-shadow(0 0 4px rgba(232,201,122,0.25)); }
             to   { filter: drop-shadow(0 0 28px rgba(204,125,7,0.9)) drop-shadow(0 0 16px rgba(232,201,122,0.7)); }
-        }
-
-        @keyframes titleBlueGlow {
-            from { filter: drop-shadow(0 0 10px rgba(2,136,209,0.5)) drop-shadow(0 0 6px rgba(79,195,247,0.3)); }
-            to   { filter: drop-shadow(0 0 36px rgba(2,136,209,1)) drop-shadow(0 0 20px rgba(79,195,247,1)) drop-shadow(0 0 70px rgba(0,120,255,0.5)); }
         }
 
         /* Subtitle */
@@ -2133,11 +2045,6 @@ footer{
             font-size: clamp(0.85rem, 1.8vw, 1.1rem);
             font-weight: 900;
             letter-spacing: 3px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         @keyframes fadeInUp {
@@ -2952,12 +2859,6 @@ footer{
   from{filter:drop-shadow(0 0 20px rgba(204,160,30,0.7)) drop-shadow(0 0 40px rgba(255,200,50,0.4));}
   to{filter:drop-shadow(0 0 55px rgba(255,210,60,1)) drop-shadow(0 0 90px rgba(204,125,7,0.8)) drop-shadow(0 0 130px rgba(180,100,0,0.5));}
 }
-@keyframes goldSweepMain{0%{background-position:150% 0%}100%{background-position:-150% 0%}}
-@keyframes titleGoldGlowMain{
-  0%{filter:drop-shadow(0 0 8px rgba(255,215,0,0.6)) drop-shadow(0 0 20px rgba(204,125,7,0.4));}
-  50%{filter:drop-shadow(0 0 18px rgba(255,215,0,0.9)) drop-shadow(0 0 40px rgba(232,201,122,0.7)) drop-shadow(0 0 70px rgba(204,125,7,0.4));}
-  100%{filter:drop-shadow(0 0 8px rgba(255,215,0,0.6)) drop-shadow(0 0 20px rgba(204,125,7,0.4));}
-}
 @keyframes goldGlowMain{
   from{filter:drop-shadow(0 0 10px rgba(204,125,7,0.5)) drop-shadow(0 0 5px rgba(232,201,122,0.3));}
   to{filter:drop-shadow(0 0 32px rgba(204,125,7,1)) drop-shadow(0 0 18px rgba(248,220,100,0.9)) drop-shadow(0 0 60px rgba(200,140,0,0.5));}
@@ -3523,7 +3424,7 @@ footer{
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Official EXXE mint address — always verify before buy and trading</div>
           </div>
           <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u ?
+            2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u
           </a>
         </div>
       </div>
@@ -3536,7 +3437,7 @@ footer{
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Angel Investor Reserved</div>
           </div>
           <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr ?
+            4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
           </a>
         </div>
       </div>
@@ -3549,7 +3450,7 @@ footer{
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of all angel round funds — locked for Orca DEX listing</div>
           </div>
           <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D ?
+            G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D
           </a>
         </div>
       </div>
@@ -3562,7 +3463,7 @@ footer{
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of all angel round funds — team, marketing, legal</div>
           </div>
           <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF ?
+            DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF
           </a>
         </div>
       </div>
@@ -3575,7 +3476,7 @@ footer{
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of all angel round funds — app, smart contract, infrastructure</div>
           </div>
           <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o ?
+            GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o
           </a>
         </div>
       </div>
@@ -4252,7 +4153,7 @@ footer{
         <div class="success-sub">EXXE tokens have been sent to your wallet</div>
         <div class="success-details" id="successDetails"></div>
         <a id="solscanLink" href="#" target="_blank" class="btn-outline" style="margin-top:1.5rem;display:inline-block;padding:12px 24px;font-size:0.65rem;">
-          View on Solscan ?
+          View on Solscan ↗
         </a>
       </div>
     </div>
@@ -5525,12 +5426,16 @@ function startGoldNetwork(canvasId, isSplash) {
         const bal = await getUsdcBalance(WALLETS[i]);
         total += bal;
       }
+      rpcIndex = 0; // reset ke endpoint pertama setelah berhasil
       updateUI(total);
     } catch (e) {
-      // Try next RPC endpoint on failure
+      // Coba endpoint berikutnya
       rpcIndex++;
-      if (rpcIndex < RPC_ENDPOINTS.length * 2) {
+      if (rpcIndex < RPC_ENDPOINTS.length) {
         setTimeout(fetchFunding, 3000);
+      } else {
+        // Semua endpoint gagal — reset dan coba lagi di siklus berikutnya
+        rpcIndex = 0;
       }
     }
   }
