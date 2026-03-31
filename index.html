@@ -626,7 +626,7 @@ centerquote{
 
 .tier-grid{
   display:grid;grid-template-columns:1fr 1fr 1fr;
-  gap:1.2rem;margin-bottom:3rem;
+  gap:1.2rem;margin-bottom:0.8rem;
 }
 
 .tier-card{
@@ -682,9 +682,33 @@ centerquote{
   padding:4px 10px;margin-top:0.8rem;
 }
 .tier-badge.open{
-  color:var(--green);
-  border:1px solid rgba(0,229,160,0.3);
-  background:rgba(0,229,160,0.05);
+  color:#fff;
+  border:1px solid rgba(20,241,149,0.6);
+  background:linear-gradient(135deg,rgba(20,241,149,0.15) 0%,rgba(0,212,255,0.1) 100%);
+  animation:buyNowPulse 1.8s ease-in-out infinite;
+  text-shadow:0 0 12px rgba(20,241,149,0.9),0 0 28px rgba(20,241,149,0.6),0 0 60px rgba(0,212,255,0.4);
+  box-shadow:0 0 12px rgba(20,241,149,0.4),0 0 30px rgba(20,241,149,0.2),inset 0 0 12px rgba(20,241,149,0.05);
+  letter-spacing:3px;
+  font-weight:700;
+}
+.tier-badge.open:hover{
+  background:linear-gradient(135deg,rgba(20,241,149,0.3) 0%,rgba(0,212,255,0.2) 100%);
+  text-shadow:0 0 20px #14F195,0 0 40px #14F195,0 0 80px rgba(0,212,255,0.8);
+  box-shadow:0 0 24px rgba(20,241,149,0.7),0 0 60px rgba(20,241,149,0.4),0 0 100px rgba(0,212,255,0.3);
+  transform:scale(1.06);
+  transition:all 0.2s ease;
+}
+@keyframes buyNowPulse{
+  0%,100%{
+    box-shadow:0 0 12px rgba(20,241,149,0.4),0 0 30px rgba(20,241,149,0.2),inset 0 0 12px rgba(20,241,149,0.05);
+    text-shadow:0 0 12px rgba(20,241,149,0.9),0 0 28px rgba(20,241,149,0.6),0 0 60px rgba(0,212,255,0.4);
+    border-color:rgba(20,241,149,0.6);
+  }
+  50%{
+    box-shadow:0 0 24px rgba(20,241,149,0.8),0 0 60px rgba(20,241,149,0.5),0 0 100px rgba(0,212,255,0.3),inset 0 0 20px rgba(20,241,149,0.1);
+    text-shadow:0 0 20px #14F195,0 0 50px #14F195,0 0 90px rgba(0,212,255,0.7);
+    border-color:rgba(20,241,149,1);
+  }
 }
 .tier-badge.soon{
   color:var(--text-1);
@@ -3706,7 +3730,7 @@ footer{
         <div style="display:flex; justify-content:center; gap:12px; align-items:center; flex-wrap:wrap;">
   
           <!-- Google Play -->
-          <a href="#" style="display:inline-block;line-height:0;border-radius:9px;box-shadow:0 0 0 3.5px #fff;">
+          <a href="#" style="display:inline-block;line-height:0;">
             <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
             alt="Get it on Google Play"
             style="height:58px;display:block;border-radius:9px;">
@@ -3716,7 +3740,7 @@ footer{
           <a href="#" style="display:inline-block;line-height:0;">
             <svg xmlns="http://www.w3.org/2000/svg" width="175" height="58" viewBox="0 0 175 58" style="display:block;">
               <rect width="175" height="58" rx="9" fill="#000"/>
-              <rect x="0.75" y="0.75" width="173.5" height="56.5" rx="8.5" fill="none" stroke="#fff" stroke-width="3.5"/>
+              <rect x="0.75" y="0.75" width="173.5" height="56.5" rx="8.5" fill="none" stroke="#fff" stroke-width="1.5"/>
               <g transform="translate(13, 14)">
                 <path d="M12.5 0c-.3 1.6.5 3.2 1.5 4.2 1 1.1 2.6 1.8 4 1.7.3-1.6-.5-3.1-1.5-4.2C15.5.6 13.9 0 12.5 0z" fill="#fff"/>
                 <path d="M17.2 6.3c-2 0-2.8 1-4.2 1s-2.3-1-4-1C6.2 6.3 3 8.8 3 13.6c0 5.5 3.8 11.4 6.8 11.4 1.4 0 1.8-.9 3.2-.9s1.9.9 3.2.9c3 0 5.8-5.3 6.7-8.7-1.5-.7-3.5-2.3-3.5-5.1 0-2.8 1.8-4.3 3.6-4.6-1-1.5-2.6-1.3-2.8-1.3z" fill="#fff"/>
@@ -3728,7 +3752,7 @@ footer{
 
         </div>
 
-        <p style="font-family:'Orbitron',monospace;font-size:0.9rem;letter-spacing:2px;color:var(--cyan);margin-bottom:1.5rem;">Android &amp; iOS — Coming Soon</p>
+        <p style="font-family:'Orbitron',monospace;font-size:0.9rem;letter-spacing:2px;color:var(--cyan);margin-top:2.5rem;margin-bottom:1.5rem;">Android &amp; iOS — Coming Soon</p>
 
       </div>
     </div>
@@ -4071,7 +4095,7 @@ footer{
           <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
         </div>
         <div class="tier-detail">330M EXXE available<br/>Min $10 — Max $250 USDC</div>
-        <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;">⚡ BUY NOW</span>
+        <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;">⚡ BUY NOW ⚡</span>
       </div>
       <div class="tier-card">
         <div class="tier-num">Tier II</div>
@@ -4095,17 +4119,6 @@ footer{
       </div>
     </div>
 
-    
-      <!-- NFT TEASER -->
-      <div style="text-align:center;margin-bottom:2rem;" class="reveal">
-        <div style="display:inline-flex;align-items:center;gap:12px;padding:14px 28px;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);">
-          <span style="font-size:1.5rem;">🖼️</span>
-          <div style="text-align:left;">
-            <div style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;color:var(--cyan);margin-bottom:2px;">EXCLUSIVE NFT INCLUDED</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.6rem;color:var(--text-1);">Every purchase receives an Exillion Logo NFT on Solana</div>
-          </div>
-        </div>
-      </div>
     <div class="buy-form reveal" id="angelWalletForm">
       <div class="buy-form-title" style="text-align:center;">Angel Investor Wallet</div>
 
@@ -4690,35 +4703,41 @@ function showWalletHint(wallet) {
 
 // "Join The Angel Investor" → scroll ke Tier I, kelihatan utuh dari atas
 function scrollToTierI() {
-  var el = document.getElementById('angel');
+  // Scroll presisi ke tier-grid (kotak Tier I Tier II Tier III)
+  var tierGrid = document.querySelector('#angel .tier-grid');
+  var fallback = document.getElementById('angel');
+  var el = tierGrid || fallback;
   if (!el) return;
-  var navH = 80; // tinggi navbar
+  var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 24 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight Tier I card
+  // Highlight semua tier card sebentar
   setTimeout(function() {
-    var card = document.querySelector('#angel .tier-card.active');
-    if (!card) return;
-    card.style.transition = 'box-shadow 0.4s ease';
-    card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.9), 0 0 40px rgba(0,212,255,0.5)';
-    setTimeout(function() { card.style.boxShadow = ''; }, 2000);
-  }, 700);
+    var cards = document.querySelectorAll('#angel .tier-card');
+    cards.forEach(function(card) {
+      card.style.transition = 'box-shadow 0.4s ease';
+      card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.75), 0 0 32px rgba(0,212,255,0.35)';
+    });
+    setTimeout(function() {
+      cards.forEach(function(card) { card.style.boxShadow = ''; });
+    }, 1800);
+  }, 600);
 }
 
-// "BUY NOW" → scroll ke Angel Investor Wallet, kelihatan utuh dari atas
+// "BUY NOW" → scroll presisi ke kotak besar Angel Investor Wallet
 function scrollToWallet() {
   var el = document.getElementById('angelWalletForm');
   if (!el) el = document.getElementById('walletConnectBox');
   if (!el) return;
-  var navH = 90;
+  var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 16 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight seluruh kotak wallet
+  // Highlight kotak wallet
   setTimeout(function() {
     el.style.transition = 'box-shadow 0.4s ease';
-    el.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.9), 0 0 50px rgba(0,212,255,0.35)';
+    el.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.9), 0 0 50px rgba(201,168,76,0.3)';
     setTimeout(function() { el.style.boxShadow = ''; }, 2200);
-  }, 700);
+  }, 650);
 }
 
 // --- STEPS ---------------------------------------------------
