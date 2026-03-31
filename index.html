@@ -3693,11 +3693,15 @@ footer{
             style="height:58px;">
           </a>
 
-          <!-- App Store -->
-          <a href="#">
-            <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg"
-            alt="Download on the App Store"
-            style="height:40px;">
+          <!-- App Store — inline SVG agar tidak hilang di iOS mobile -->
+          <a href="#" style="display:inline-block;height:58px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 135 40" height="58" aria-label="Download on the App Store">
+              <rect width="135" height="40" rx="7" fill="#000"/>
+              <path d="M19.8 20.5c0-3.2 2.6-4.8 2.7-4.9-1.5-2.1-3.7-2.4-4.5-2.4-1.9-.2-3.7 1.1-4.7 1.1-1 0-2.5-1.1-4.1-1.1-2.1 0-4 1.2-5.1 3.1-2.2 3.8-.6 9.4 1.6 12.5 1 1.5 2.3 3.2 3.9 3.1 1.6-.1 2.2-1 4.1-1s2.5 1 4.2 1c1.7 0 2.8-1.5 3.9-3 1.2-1.7 1.7-3.4 1.7-3.5-.1-.1-3.7-1.4-3.7-5z" fill="#fff"/>
+              <path d="M17 11.8c.9-1 1.4-2.5 1.3-3.9-1.3.1-2.8.9-3.7 1.9-.8.9-1.5 2.4-1.3 3.8 1.4.1 2.8-.7 3.7-1.8z" fill="#fff"/>
+              <text x="38" y="14" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="7" fill="#fff" letter-spacing="0.2">Download on the</text>
+              <text x="38" y="27" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="14" font-weight="600" fill="#fff" letter-spacing="-0.3">App Store</text>
+            </svg>
           </a>
 
         </div>
@@ -4498,24 +4502,41 @@ async function disconnectWallet() {
   if (wcb) wcb.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
+// --- Utility: detect mobile browser ---
+function isMobileBrowser() {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
 async function connectPhantom() {
   const provider = window.solana;
-  if (!provider || !provider.isPhantom) {
-    if (confirm('Phantom wallet not detected.\nInstall Phantom to continue?')) {
-      window.open('https://phantom.app', '_blank');
+
+  // Mobile: tidak ada extension — buka Phantom deep link / in-app browser
+  if (isMobileBrowser() && (!provider || !provider.isPhantom)) {
+    // Phantom mobile in-app browser: buka URL ini langsung di Phantom App
+    const currentUrl = encodeURIComponent(window.location.href);
+    const deepLink = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
+    if (confirm('Buka Phantom Mobile App untuk connect?\n\nPastikan Phantom sudah terinstall di HP kamu.')) {
+      window.location.href = deepLink;
     }
     return;
   }
+
+  // Desktop: extension tidak ada
+  if (!provider || !provider.isPhantom) {
+    if (confirm('Phantom wallet extension tidak terdeteksi di browser ini.\n\nInstall Phantom Extension untuk Chrome/Brave?')) {
+      window.open('https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa', '_blank');
+    }
+    return;
+  }
+
   try {
     const resp = await provider.connect();
     const address = resp.publicKey.toString();
     setConnected('Phantom', address);
 
-    // Listen for wallet disconnect event
     provider.on('disconnect', function() {
       if (connectedWallet === 'Phantom') disconnectWallet();
     });
-    // Listen for account change
     provider.on('accountChanged', function(pubKey) {
       if (pubKey) {
         connectedAddress = pubKey.toString();
@@ -4533,22 +4554,33 @@ async function connectPhantom() {
 
 async function connectSolflare() {
   const provider = window.solflare;
-  if (!provider || !provider.isSolflare) {
-    if (confirm('Solflare wallet not detected.\nInstall Solflare to continue?')) {
-      window.open('https://solflare.com', '_blank');
+
+  // Mobile: tidak ada extension — buka Solflare deep link
+  if (isMobileBrowser() && (!provider || !provider.isSolflare)) {
+    const currentUrl = encodeURIComponent(window.location.href);
+    const deepLink = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
+    if (confirm('Buka Solflare Mobile App untuk connect?\n\nPastikan Solflare sudah terinstall di HP kamu.')) {
+      window.location.href = deepLink;
     }
     return;
   }
+
+  // Desktop: extension tidak ada
+  if (!provider || !provider.isSolflare) {
+    if (confirm('Solflare wallet extension tidak terdeteksi di browser ini.\n\nInstall Solflare Extension untuk Chrome/Brave?')) {
+      window.open('https://chrome.google.com/webstore/detail/solflare-wallet/bhhhlbepdkbapadjdnnojkbgioiodbic', '_blank');
+    }
+    return;
+  }
+
   try {
     await provider.connect();
     const address = provider.publicKey.toString();
     setConnected('Solflare', address);
 
-    // Listen for wallet disconnect event
     provider.on('disconnect', function() {
       if (connectedWallet === 'Solflare') disconnectWallet();
     });
-    // Listen for account change
     provider.on('accountChanged', function() {
       if (provider.publicKey) {
         connectedAddress = provider.publicKey.toString();
