@@ -2040,7 +2040,7 @@ footer{
                        goldSweep 9s ease-in-out infinite,
                        titleGoldGlow 5s ease-in-out infinite;
             position: relative;
-            margin-top: 0;
+            margin-top: -11px;
             margin-bottom: 0;
         }
 
@@ -2085,7 +2085,7 @@ footer{
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: splashSlideUp 1.2s ease-out 0.28s both, goldSweep 11s ease-in-out infinite;
-            margin-top: 4px;
+            margin-top: -12px;
             margin-bottom: 0;
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: none;
@@ -2349,6 +2349,13 @@ footer{
         #main-content {
             display: none;
             will-change: opacity, transform, filter;
+        }
+
+        /* Pre-promote main-splash to GPU layer for zero-delay transition */
+        #main-splash {
+            will-change: opacity, transform, filter;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
 
         /* Main content inner wrapper — main page (everything except main-splash) */
@@ -2805,15 +2812,19 @@ footer{
         <!-- BLOCK 1: Logo -->
         <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
           <div style="width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-            <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" fetchpriority="high" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;transform:translateZ(0);" onerror="this.style.display='none'"/>
+            <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" fetchpriority="high" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;transform:translateZ(0);"/>
           </div>
         </div>
 
-        <!-- BLOCK 2: Title + Subtitle + Tagline -->
+        <!-- BLOCK 2: Title + Subtitle only -->
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
             <p class="splash-subtitle">Capital Finecosystem</p>
-            <p class="splash-tagline">Everybody Has A Second Chance</p>
+        </div>
+
+        <!-- BLOCK 2.5: Tagline — centered between subtitle and collateral -->
+        <div style="z-index:10;width:100%;display:flex;justify-content:center;align-items:center;">
+            <p class="splash-tagline" style="margin:0;">Everybody Has A Second Chance</p>
         </div>
 
         <!-- BLOCK 3: Collateral text -->
@@ -5198,8 +5209,36 @@ function enterSite() {
     var mainSplash = document.getElementById('main-splash');
     if (!splash || !mc || !mainSplash) return;
 
-    // ── STEP 1: Fade-out splash 1 fast & smooth ──────────────────
-    splash.style.transition = 'opacity 0.35s cubic-bezier(0.4,0,0.2,1)';
+    // ── BUTTON PRESS FEEDBACK — instant haptic-feel ─────────────
+    var enterBtn = document.getElementById('enter-btn');
+    if (enterBtn) {
+        enterBtn.style.transform = 'scale(0.94)';
+        enterBtn.style.transition = 'transform 0.08s ease';
+        setTimeout(function(){ enterBtn.style.transform = 'scale(1.06)'; }, 80);
+        setTimeout(function(){ enterBtn.style.transform = 'scale(1)'; }, 180);
+    }
+
+    // ── FLASH OVERLAY — cinematic white flash on press ──────────
+    var flashEl = document.createElement('div');
+    flashEl.style.cssText = [
+        'position:fixed;inset:0;z-index:99999;',
+        'background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(255,255,255,0.92) 0%,rgba(153,69,255,0.6) 40%,rgba(20,241,149,0.4) 70%,transparent 100%);',
+        'pointer-events:none;',
+        'opacity:0;',
+        'transition:opacity 0.06s ease;',
+    ].join('');
+    document.body.appendChild(flashEl);
+
+    // Flash in
+    setTimeout(function(){ flashEl.style.opacity = '1'; }, 90);
+    // Flash out
+    setTimeout(function(){ flashEl.style.transition = 'opacity 0.22s ease'; flashEl.style.opacity = '0'; }, 170);
+    setTimeout(function(){ if(flashEl.parentNode) flashEl.parentNode.removeChild(flashEl); }, 420);
+
+    // ── STEP 1: Splash 1 → compress + vanish (snappy warp feel) ─
+    splash.style.transition = 'opacity 0.18s cubic-bezier(0.55,0,1,0.45), transform 0.18s cubic-bezier(0.55,0,1,0.45), filter 0.18s ease';
+    splash.style.transform  = 'scale(1.04)';
+    splash.style.filter     = 'brightness(1.8) blur(3px)';
     splash.style.opacity    = '0';
 
     setTimeout(function () {
@@ -5212,33 +5251,55 @@ function enterSite() {
         document.body.style.overflowY = 'hidden';
 
         if (mcInner) {
-            mcInner.style.opacity   = '0';
-            mcInner.style.filter    = '';
+            mcInner.style.opacity = '0';
+            mcInner.style.filter  = '';
         }
 
-        // ── STEP 2: Main splash appears immediately & fast ──
+        // ── STEP 2: Main splash SLAMS in from depth — warp arrival ──
         mainSplash.style.display    = 'flex';
         mainSplash.style.opacity    = '0';
-        mainSplash.style.transform  = 'none';
-        mainSplash.style.filter     = 'none';
+        mainSplash.style.transform  = 'scale(1.08) translateY(-12px)';
+        mainSplash.style.filter     = 'brightness(2.2) blur(8px)';
 
-        requestAnimationFrame(function () {
-            requestAnimationFrame(function () {
-                mainSplash.style.transition = 'opacity 0.3s ease';
-                mainSplash.style.opacity    = '1';
-            });
-        });
-
-        // Start canvas animation & gold network
+        // Pre-start canvas so it's ready when splash reveals
         startMainSplashParticles();
         startGoldNetwork('gold-network-main', false);
 
-        // ── Progress bar ─────────────────────────────────────────────
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                // Snappy deceleration — like slamming into focus
+                mainSplash.style.transition = [
+                    'opacity 0.28s cubic-bezier(0.0,0.0,0.2,1)',
+                    'transform 0.45s cubic-bezier(0.16,1,0.3,1)',
+                    'filter 0.38s cubic-bezier(0.0,0.0,0.2,1)'
+                ].join(', ');
+                mainSplash.style.opacity    = '1';
+                mainSplash.style.transform  = 'scale(1) translateY(0)';
+                mainSplash.style.filter     = 'brightness(1) blur(0px)';
+            });
+        });
+
+        // ── Scan line sweep on arrival ───────────────────────────
+        var scanFlash = document.createElement('div');
+        scanFlash.style.cssText = [
+            'position:absolute;left:0;top:0;width:100%;height:3px;z-index:9999;',
+            'background:linear-gradient(90deg,transparent,rgba(0,212,255,0.95),rgba(255,255,255,0.8),rgba(0,212,255,0.95),transparent);',
+            'box-shadow:0 0 24px rgba(0,212,255,0.8);',
+            'opacity:0;pointer-events:none;',
+        ].join('');
+        mainSplash.appendChild(scanFlash);
+        setTimeout(function(){
+            scanFlash.style.transition = 'top 0.55s cubic-bezier(0.4,0,0.6,1), opacity 0.1s ease';
+            scanFlash.style.opacity = '1';
+            scanFlash.style.top = '100%';
+            setTimeout(function(){ scanFlash.style.opacity = '0'; setTimeout(function(){ if(scanFlash.parentNode) scanFlash.parentNode.removeChild(scanFlash); }, 200); }, 500);
+        }, 120);
+
+        // ── Progress bar ─────────────────────────────────────────
         var bar    = document.getElementById('main-splash-bar');
         var pct    = document.getElementById('main-splash-pct');
         var status = document.getElementById('main-splash-status');
 
-        // Messages to welcome the angel investor with respect
         var msgs = [
             'Authenticating secure channel...',
             'Verifying EXXE smart contract integrity...',
@@ -5257,18 +5318,17 @@ function enterSite() {
             status.style.opacity = '0';
             setTimeout(function () {
                 status.textContent = text;
-                status.style.transition = 'opacity 0.25s ease';
+                status.style.transition = 'opacity 0.2s ease';
                 status.style.opacity = '1';
-            }, 120);
+            }, 100);
         }
 
-        // Faster across all phases
         var speeds = [
-            {until: 20,  speed: 0.28},
-            {until: 50,  speed: 0.38},
-            {until: 78,  speed: 0.28},
-            {until: 92,  speed: 0.18},
-            {until: 100, speed: 0.10},
+            {until: 20,  speed: 0.32},
+            {until: 50,  speed: 0.44},
+            {until: 78,  speed: 0.30},
+            {until: 92,  speed: 0.20},
+            {until: 100, speed: 0.11},
         ];
 
         var rafId;
@@ -5300,39 +5360,38 @@ function enterSite() {
 
                 // ── STEP 3: Elegant exit main splash → main page ──
                 setTimeout(function () {
-                    mainSplash.style.transition = 'opacity 0.45s cubic-bezier(0.4,0,0.2,1)';
+                    mainSplash.style.transition = 'opacity 0.5s cubic-bezier(0.4,0,0.2,1), transform 0.5s cubic-bezier(0.4,0,0.2,1)';
                     mainSplash.style.opacity    = '0';
+                    mainSplash.style.transform  = 'scale(0.97) translateY(8px)';
 
                     setTimeout(function () {
                         mainSplash.style.display = 'none';
                         document.body.style.overflowY = 'scroll';
                         document.body.style.overflowX = 'hidden';
 
-                        // Nav and content fade-in SIMULTANEOUSLY
                         var mainNav = document.getElementById('main-nav');
-                        var transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1)';
+                        var transition = 'opacity 0.85s cubic-bezier(0.22,1,0.36,1)';
 
                         if (mainNav) {
                             mainNav.style.transition = transition;
                             mainNav.style.opacity = '1';
                             mainNav.style.pointerEvents = 'auto';
                         }
-
                         if (mcInner) {
-                            mcInner.style.transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1)';
+                            mcInner.style.transition = 'opacity 0.85s cubic-bezier(0.22,1,0.36,1)';
                             mcInner.style.opacity    = '1';
                             setTimeout(function () {
                                 mcInner.style.transition = '';
                                 if (mainNav) mainNav.style.transition = '';
-                            }, 900);
+                            }, 950);
                         }
-                    }, 500);
+                    }, 520);
                 }, 800);
             }
         }
         rafId = requestAnimationFrame(tickProgress);
 
-    }, 350); // wait for splash 1 fade-out to finish
+    }, 220); // snappier — splash 1 exits in 0.18s, give 40ms buffer
 }
 
 function startMainSplashParticles() {
