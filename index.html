@@ -1930,7 +1930,7 @@ footer{
         .splash-logo {
             text-align: center;
             z-index: 10;
-            padding: clamp(10px, 2vh, 24px) 20px clamp(2px, 0.4vh, 5px);
+            padding: clamp(2px, 0.5vh, 8px) 20px clamp(2px, 0.3vh, 4px);
             position: relative;
             width: 100%;
             max-width: 700px;
@@ -1938,26 +1938,27 @@ footer{
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 0;
         }
 
-        /* Logo wrapper — animasi ringan, tidak ada translateY besar */
+        /* Logo wrapper */
         .splash-logo-img-wrap {
             display: block;
             margin: 0 auto;
-            margin-bottom: 0;
-            animation: logoFadeIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s both;
-            will-change: opacity, transform;
+            margin-bottom: -18px;
+            will-change: opacity, transform, filter;
         }
 
-        @keyframes logoFadeIn {
-            from { opacity: 0; transform: scale(0.92); }
-            to   { opacity: 1; transform: scale(1); }
+        /* Satu keyframe untuk semua elemen splash — dari bawah, smooth */
+        @keyframes splashSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         /* Main Title - EXILLION — Luxury Blue Futuristic */
         .splash-title {
             font-family: 'Orbitron', monospace;
-            font-size: clamp(2.2rem, 6vw, 4.2rem);
+            font-size: clamp(2rem, 5.5vw, 3.6rem);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: clamp(2px, 0.8vw, 6px);
@@ -1981,11 +1982,11 @@ footer{
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: splashTitleIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.15s both,
+            animation: splashSlideUp 1.2s ease-out 0.15s both,
                        goldSweep 5s linear infinite,
                        titleGoldGlow 3s ease-in-out infinite alternate;
             position: relative;
-            margin-top: -10px;
+            margin-top: -4px;
             margin-bottom: 0;
         }
 
@@ -2027,8 +2028,8 @@ footer{
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: splashTitleIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.22s both, goldSweep 5.5s linear infinite;
-            margin-top: -15px;
+            animation: splashSlideUp 1.2s ease-out 0.28s both, goldSweep 5.5s linear infinite;
+            margin-top: -12px;
             margin-bottom: 0;
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: none;
@@ -2044,8 +2045,10 @@ footer{
             margin-bottom: 18px;
             letter-spacing: clamp(1px, 0.4vw, 2.5px);
             text-transform: none;
-            animation: splashTitleIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.32s both;
+            animation: splashSlideUp 1.2s ease-out 0.42s both;
             text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.3);
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         /* Collateral Text - No Box */
@@ -2056,8 +2059,8 @@ footer{
             max-width: 680px;
             text-align: center;
             line-height: 2;
-            margin: clamp(6px, 1.2vh, 14px) auto clamp(4px, 0.8vh, 10px);
-            animation: splashTitleIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.42s both;
+            margin: clamp(4px, 0.8vh, 8px) auto clamp(2px, 0.5vh, 6px);
+            animation: splashSlideUp 1.2s ease-out 0.56s both;
         }
 
         .splash-collateral span {
@@ -2105,8 +2108,8 @@ footer{
         /* Loading Bar - Minimalist */
         .loading-container {
             width: min(380px, 80vw);
-            margin-top: clamp(16px, 2.5vh, 30px);
-            animation: splashTitleIn 0.5s cubic-bezier(0.22,1,0.36,1) 0.55s both;
+            margin-top: clamp(8px, 1.5vh, 18px);
+            animation: splashSlideUp 1.2s ease-out 0.70s both;
         }
 
         .loading-bar {
@@ -2168,7 +2171,7 @@ footer{
         /* Enter Button */
         .enter-btn {
             font-family:'Orbitron', monospace;
-            margin-top: clamp(16px, 2.5vh, 30px);
+            margin-top: clamp(10px, 1.8vh, 22px);
             padding: 18px 60px;
             background: transparent;
             border: 2px solid transparent;
@@ -2675,8 +2678,8 @@ footer{
         <div id="splash-hscan" style="position:absolute;left:-100%;top:38%;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.6),rgba(255,255,255,0.4),rgba(0,212,255,0.6),transparent);pointer-events:none;z-index:3;opacity:0;animation:splashHscanIn 1.2s ease 0.8s forwards;"></div>
         
         <div class="splash-logo">
-            <div class="splash-logo-img-wrap">
-              <div style="width:clamp(141px,22vw,221px);height:clamp(141px,22vw,221px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+            <div class="splash-logo-img-wrap" style="animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
+              <div style="width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
                 <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" fetchpriority="high" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;transform:translateZ(0);" onerror="this.style.display='none'"/>
               </div>
             </div>
@@ -2800,7 +2803,7 @@ footer{
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
-      <div style="display:flex;justify-content:center;margin-bottom:0.8rem;animation:neonRingGlow 3s ease-in-out infinite;"><div style="width:clamp(180px,28vw,260px);height:clamp(180px,28vw,260px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
+      <div style="display:flex;justify-content:center;margin-bottom:0.8rem;"><div style="width:clamp(180px,28vw,260px);height:clamp(180px,28vw,260px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
       <h1 style="
         font-family:'Orbitron',monospace;
         font-size:clamp(2.4rem,6vw,4rem);
@@ -3004,7 +3007,7 @@ footer{
 <section id="hero">
   <div class="hero-eyebrow">Do Kindness-The Universe Will Pay You Back</div>
 
-  <div style="display:block;margin-bottom:0.5rem;animation:riseUp 0.8s 0.1s ease both, neonRingGlow 3s ease-in-out infinite;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
+  <div style="display:block;margin-top:-18px;margin-bottom:0.5rem;animation:riseUp 0.8s 0.1s ease both;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
 
   <h1 class="hero-title">EXILLION</h1>
   <p class="hero-ticker">Capital Finecosystem</p>
