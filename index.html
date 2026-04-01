@@ -13,7 +13,8 @@
 <title>Exillion — Capital Finecosystem | EXXE Angel Round</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<!-- font-display:block mencegah FOUC: browser BLOK render teks sampai Orbitron siap -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
 <style>
 /* FONT METRICS OVERRIDE — mencegah layout shift saat Orbitron swap masuk.
    size-adjust menyamakan dimensi fallback monospace agar identik dengan Orbitron,
@@ -25,6 +26,13 @@
   ascent-override: 75%;
   descent-override: 20%;
   line-gap-override: 0%;
+}
+/* CRITICAL: sembunyikan teks splash SAMPAI Orbitron siap — cegah FOUC */
+#splash-page .splash-title,
+#splash-page .splash-subtitle,
+#splash-page .splash-tagline,
+#splash-page .splash-collateral {
+  visibility: hidden;
 }
 body {
   font-family: 'Orbitron', 'orbitron-fallback', monospace;
@@ -1961,7 +1969,7 @@ footer{
             -webkit-text-fill-color: transparent;
             animation: goldSweep 5s linear infinite, titleGoldGlow 3s ease-in-out infinite alternate;
             position: relative;
-            margin-top: -20px;
+            margin-top: -10px;
             margin-bottom: 0;
         }
 
@@ -1999,7 +2007,7 @@ footer{
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: fadeIn 2s ease-out 0.5s both, goldSweep 5.5s linear infinite;
-            margin-top: -14px;
+            margin-top: -11px;
             margin-bottom: 0;
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: none;
@@ -2011,6 +2019,7 @@ footer{
             font-size: clamp(0.9rem, 2.2vw, 1.25rem);
             font-weight: 600;
             color: #00d4ff;
+            margin-top: 14px;
             margin-bottom: clamp(10px, 2vh, 22px);
             letter-spacing: clamp(1px, 0.4vw, 2.5px);
             text-transform: none;
@@ -2135,7 +2144,7 @@ footer{
             position: relative;
             overflow: hidden;
             transition: all 0.5s ease;
-            animation: fadeInUp 1.5s ease-out 4s forwards;
+            animation: fadeInUp 1.5s ease-out 5.2s forwards;
             /* Solana gradient border */
             background-image: linear-gradient(#0a0a0f, #0a0a0f),
                               linear-gradient(90deg, #9945FF, #14F195, #9945FF);
@@ -2549,6 +2558,15 @@ footer{
   display: none;
 }
 
+/* Teks splash direveal via JS setelah font ready */
+#splash-page .splash-title.font-ready,
+#splash-page .splash-subtitle.font-ready,
+#splash-page .splash-tagline.font-ready,
+#splash-page .splash-collateral.font-ready {
+  visibility: visible;
+  animation-play-state: running;
+}
+
 
 @keyframes neonBoxGlow {
   0%   { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,212,255,0.3); }
@@ -2580,6 +2598,26 @@ footer{
 }
 
 </style>
+<!-- CRITICAL FONT-READY SCRIPT: reveal teks splash hanya setelah Orbitron loaded -->
+<script>
+(function(){
+  function revealSplashText(){
+    var els = document.querySelectorAll(
+      '#splash-page .splash-title, #splash-page .splash-subtitle, '+
+      '#splash-page .splash-tagline, #splash-page .splash-collateral'
+    );
+    els.forEach(function(el){ el.classList.add('font-ready'); });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(revealSplashText);
+  } else {
+    // Fallback: tunggu 300ms lalu reveal
+    window.addEventListener('load', function(){ setTimeout(revealSplashText, 100); });
+  }
+  // Safety: reveal maksimum 2 detik supaya tidak blank selamanya
+  setTimeout(revealSplashText, 2000);
+})();
+</script>
 </head>
 <body>
 
@@ -2599,7 +2637,7 @@ footer{
         <div id="splash-hscan" style="position:absolute;left:-100%;top:38%;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.6),rgba(255,255,255,0.4),rgba(0,212,255,0.6),transparent);pointer-events:none;z-index:3;opacity:0;animation:splashHscanIn 1.2s ease 0.8s forwards;"></div>
         
         <div class="splash-logo">
-            <div style="display:block;margin:0 auto;margin-bottom:1.2rem;animation:riseUp 0.8s ease both, neonRingGlow 3s ease-in-out infinite;">
+            <div style="display:block;margin:0 auto;margin-bottom:0.3rem;animation:riseUp 0.8s ease both, neonRingGlow 3s ease-in-out infinite;">
               <div style="width:clamp(130px,22vw,210px);height:clamp(130px,22vw,210px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
                 <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;-webkit-transform:translateZ(0);transform:translateZ(0);" onerror="this.style.display='none'"/>
               </div>
@@ -2727,8 +2765,8 @@ footer{
       <div style="display:flex;justify-content:center;margin-bottom:0.5rem;animation:neonRingGlow 3s ease-in-out infinite;"><div style="width:clamp(180px,28vw,260px);height:clamp(180px,28vw,260px);border-radius:50%;background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
       <h1 style="
         font-family:'Orbitron',monospace;
-        font-size:clamp(1.8rem,5vw,3rem);
-        font-weight:900;letter-spacing:clamp(2px,0.6vw,5px);line-height:1;
+        font-size:clamp(2.4rem,6vw,4rem);
+        font-weight:900;letter-spacing:clamp(4px,0.8vw,8px);line-height:1;
         background:linear-gradient(90deg,
           #3d2800 0%,
           #8b5e00 10%,
@@ -2751,7 +2789,7 @@ footer{
       ">EXILLION</h1>
       <div style="
         font-family:'Orbitron',monospace;
-        font-size:clamp(0.75rem,1.8vw,1.05rem);
+        font-size:clamp(0.65rem,1.4vw,0.88rem);
         font-weight:600;
         letter-spacing:clamp(2px,0.8vw,4px);
         color:#e8c97a;
@@ -2760,7 +2798,7 @@ footer{
           0 0 40px rgba(204,125,7,0.7),
           0 0 70px rgba(204,125,7,0.4);
         animation:goldGlowMain 2.5s ease-in-out infinite alternate;
-        margin-top:6px;
+        margin-top:4px;
         margin-bottom:1.4rem;
         text-transform:none;
         display:block;
@@ -2946,7 +2984,7 @@ footer{
     animation:riseUp 0.8s 0.55s ease both;
   " id="journey-block">
     <p style="
-      font-family:'Orbitron',serif;
+      font-family:'Orbitron',monospace;
       font-size:clamp(1rem,2.2vw,1.45rem);
       font-weight:700;
       letter-spacing:6px;
@@ -2967,7 +3005,7 @@ footer{
       animation:solanaShimmer 4s linear infinite;
     "></div>
     <p style="
-      font-family:'Orbitron',serif;
+      font-family:'Orbitron',monospace;
       font-size:clamp(0.65rem,1.1vw,0.78rem);
       letter-spacing:3px;
       color:var(--text-1);
@@ -3910,7 +3948,6 @@ footer{
       font-weight:700;
       box-shadow:0 0 24px rgba(193,127,19,0.35),0 4px 16px rgba(193,127,19,0.2);
       animation:navCtaPulse 3s ease-in-out infinite;
-    font-weight:800;
     ">JOIN THE ANGEL INVESTOR</a>
   </div>
 </section>
@@ -4974,6 +5011,9 @@ function enterSite() {
 
     setTimeout(function () {
         splash.style.display = 'none';
+        // Stop canvas splash untuk free memory
+        var splashCanvas = document.getElementById('gold-network-splash');
+        if (splashCanvas && splashCanvas._stopGoldNet) splashCanvas._stopGoldNet();
 
         mc.style.display = 'block';
         document.body.style.overflowY = 'hidden';
