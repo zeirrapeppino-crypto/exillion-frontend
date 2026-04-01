@@ -226,75 +226,82 @@ nav{
   font-weight:700;
   letter-spacing:2.5px;
   text-transform:uppercase;
-  color:#c9a84c!important;
-  background:transparent;
+  color:#0a0e1a!important;
+  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%)!important;
+  background-size:200% 200%!important;
   padding:10px 24px;
-  border:1.5px solid #c17f13;
+  border:none!important;
   border-radius:2px;
   transition:all 0.3s ease!important;
   text-decoration:none!important;
   position:relative;
+  overflow:hidden;
   display:inline-flex;
   align-items:center;
   gap:8px;
-  box-shadow:
-    0 0 10px rgba(193,127,19,0.3),
-    inset 0 0 10px rgba(193,127,19,0.05);
-  animation:navCtaPulse 3s ease-in-out infinite;
+  box-shadow:0 0 18px rgba(232,201,122,0.45),0 0 40px rgba(193,127,19,0.25);
+  animation:goldBtnShift 4s ease-in-out infinite;
+  -webkit-text-fill-color:#0a0e1a!important;
 }
 .nav-cta::before{
   content:'';
   position:absolute;
-  inset:0;
-  border-radius:2px;
-  background:linear-gradient(135deg,
-    rgba(193,127,19,0.12) 0%,
-    rgba(8,18,25,0.0) 50%,
-    rgba(193,127,19,0.08) 100%);
+  top:-20%;left:-80%;
+  width:55%;height:140%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
+  animation:goldSunlight 3.5s ease-in-out infinite;
   pointer-events:none;
+  border-radius:2px;
 }
 .nav-cta:hover{
-  color:#081219!important;
-  background:linear-gradient(135deg, #e8c97a 0%, #c17f13 100%)!important;
-  border-color:#e8c97a!important;
+  color:#0a0e1a!important;
+  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%)!important;
   transform:translateY(-2px)!important;
-  box-shadow:
-    0 4px 20px rgba(193,127,19,0.5),
-    0 0 40px rgba(193,127,19,0.2),
-    inset 0 0 0 rgba(0,0,0,0)!important;
+  box-shadow:0 0 36px rgba(232,201,122,0.8),0 0 70px rgba(193,127,19,0.5)!important;
   letter-spacing:3px!important;
-}
-@keyframes navCtaPulse{
-  0%,100%{
-    box-shadow:0 0 8px rgba(193,127,19,0.3),inset 0 0 10px rgba(193,127,19,0.05);
-    border-color:rgba(193,127,19,0.7);
-  }
-  50%{
-    box-shadow:0 0 16px rgba(193,127,19,0.55),inset 0 0 14px rgba(193,127,19,0.1);
-    border-color:rgba(232,201,122,1);
-  }
+  -webkit-text-fill-color:#0a0e1a!important;
 }
 
 .btn-gold{
   font-family:'Orbitron',monospace;
   font-size:1rem;letter-spacing:2.5px;font-weight:700;
   color:#0a0e1a;
-  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 100%);
+  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
+  background-size:200% 200%;
   border:none;
   padding:15px 40px;
   cursor:pointer;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
-  transition:all 0.2s;
+  transition:all 0.3s ease;
   text-decoration:none;display:inline-block;
+  position:relative;overflow:hidden;
+  box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
+  animation:goldBtnShift 4s ease-in-out infinite;
+  -webkit-text-fill-color:#0a0e1a;
 }
-.btn-gold:hover{background:linear-gradient(135deg,#ffe58a 0%,#e8a020 100%);transform:translateY(-2px);box-shadow:0 0 32px rgba(232,201,122,0.7),0 0 70px rgba(193,127,19,0.4);}
+.btn-gold::before{
+  content:'';
+  position:absolute;
+  top:-20%;left:-80%;
+  width:55%;height:140%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
+  animation:goldSunlight 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.btn-gold::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 50%,rgba(255,255,255,0.06) 100%);
+  pointer-events:none;
+}
+.btn-gold:hover{
+  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%);
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 0 55px rgba(232,201,122,0.9),0 0 100px rgba(193,127,19,0.6),0 8px 30px rgba(0,0,0,0.5);
+  letter-spacing:3.5px;
+}
 .btn-gold-glow{
-  animation:goldBtnPulse 2s ease-in-out infinite;
-  box-shadow:0 0 16px rgba(232,201,122,0.5),0 0 40px rgba(193,127,19,0.3);
-}
-@keyframes goldBtnPulse{
-  0%,100%{box-shadow:0 0 16px rgba(232,201,122,0.5),0 0 40px rgba(193,127,19,0.3);text-shadow:0 0 8px rgba(232,201,122,0.3);}
-  50%{box-shadow:0 0 30px rgba(232,201,122,0.9),0 0 70px rgba(193,127,19,0.6),0 0 110px rgba(232,160,32,0.3);text-shadow:0 0 16px rgba(232,201,122,0.7),0 0 32px rgba(193,127,19,0.4);}
+  animation:goldBtnShift 4s ease-in-out infinite;
 }
 
 .btn-outline{
@@ -1013,12 +1020,33 @@ blockquote.centerquote{
   cursor:not-allowed;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   transition:all 0.3s;
+  position:relative;overflow:hidden;
 }
 .buy-btn.ready{
-  background:var(--gold);color:var(--void);
-  cursor:pointer;border-color:var(--gold);
+  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
+  background-size:200% 200%;
+  color:#0a0e1a;
+  -webkit-text-fill-color:#0a0e1a;
+  cursor:pointer;
+  border:none;
+  box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
+  animation:goldBtnShift 4s ease-in-out infinite;
+  font-weight:700;
 }
-.buy-btn.ready:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,0.25);}
+.buy-btn.ready::before{
+  content:'';
+  position:absolute;
+  top:-20%;left:-80%;
+  width:55%;height:140%;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
+  animation:goldSunlight 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.buy-btn.ready:hover{
+  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%);
+  transform:translateY(-2px);
+  box-shadow:0 0 55px rgba(232,201,122,0.9),0 0 100px rgba(193,127,19,0.6),0 8px 30px rgba(0,0,0,0.5);
+}
 
 .form-note{
   font-size:0.78rem;font-style:italic;
@@ -1963,6 +1991,107 @@ footer{
             .glow-orb-3 { width: 200px; height: 200px; }
         }
 
+        /* ── MOBILE SPLASH — match desktop proportions exactly ── */
+        @media (max-width: 768px) {
+            /* Splash 1 padding */
+            #splash-page {
+                padding: 48px 20px 48px;
+            }
+
+            /* Splash 1 logo size */
+            #splash-page > div:first-of-type > div {
+                width: 220px !important;
+                height: 220px !important;
+            }
+
+            /* Splash 1 — EXILLION title */
+            #splash-page .splash-title {
+                font-size: 4rem !important;
+                letter-spacing: 5px !important;
+                margin-top: -10px !important;
+            }
+
+            /* Splash 1 — Capital Finecosystem */
+            #splash-page .splash-subtitle {
+                font-size: 1rem !important;
+                letter-spacing: 3.5px !important;
+                margin-top: -18px !important;
+            }
+
+            /* Splash 1 — Tagline */
+            #splash-page .splash-tagline {
+                font-size: 1.1rem !important;
+                letter-spacing: 2px !important;
+            }
+
+            /* Splash 1 — Collateral text */
+            #splash-page .splash-collateral {
+                font-size: 0.82rem !important;
+            }
+
+            /* Splash 1 — Enter button */
+            #splash-page .enter-btn {
+                font-size: 0.95rem !important;
+                padding: 18px 52px !important;
+                letter-spacing: 4px !important;
+                margin-top: 18px !important;
+            }
+
+            /* Splash 1 — Loading bar */
+            #splash-page .loading-container {
+                width: 340px !important;
+            }
+
+            /* ── Main Splash (Splash 2) ── */
+
+            /* Main splash logo */
+            #main-splash-content > div > div > div {
+                width: 240px !important;
+                height: 240px !important;
+            }
+
+            /* Main splash — Welcome tag */
+            #main-splash-content > div:first-child {
+                font-size: 1rem !important;
+                letter-spacing: 4px !important;
+            }
+
+            /* Main splash — EXILLION h1 */
+            #main-splash-content h1 {
+                font-size: 3.8rem !important;
+                letter-spacing: 7px !important;
+            }
+
+            /* Main splash — Capital Finecosystem subtitle */
+            #main-splash-content > div > div {
+                font-size: 0.85rem !important;
+                letter-spacing: 3.5px !important;
+            }
+
+            /* Main splash — Taglines */
+            #main-splash-content p {
+                font-size: 0.9rem !important;
+                letter-spacing: 2px !important;
+            }
+
+            /* Main splash — Stats numbers */
+            #main-splash-content [style*="825 M"],
+            #main-splash-content [style*="0.01"] {
+                font-size: 1.1rem !important;
+            }
+
+            /* Main splash — progress bar */
+            #main-splash-content > div[style*="width:min"] {
+                width: 340px !important;
+            }
+
+            /* Main splash — status text */
+            #main-splash-status {
+                font-size: 0.62rem !important;
+                letter-spacing: 1.5px !important;
+            }
+        }
+
         /* All orbs use transform+opacity — GPU only, no filter animation */
         @keyframes orbDrift1 {
             0%, 100% { transform: translate(0px, 0px) translateZ(0); opacity: 0.7; }
@@ -2040,7 +2169,7 @@ footer{
                        goldSweep 9s ease-in-out infinite,
                        titleGoldGlow 5s ease-in-out infinite;
             position: relative;
-            margin-top: -11px;
+            margin-top: -10px;
             margin-bottom: 0;
         }
 
@@ -2085,7 +2214,7 @@ footer{
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: splashSlideUp 1.2s ease-out 0.28s both, goldSweep 11s ease-in-out infinite;
-            margin-top: -12px;
+            margin-top: -18px;
             margin-bottom: 0;
             letter-spacing: clamp(2px, 0.8vw, 4px);
             text-transform: none;
@@ -2221,16 +2350,14 @@ footer{
             100% { width: 100%; }
         }
 
-        /* Enter Button */
+        /* Enter Button — Gold Fill Premium */
         .enter-btn {
             font-family:'Orbitron', monospace;
             margin-top: clamp(12px, 2vh, 22px);
-            padding: clamp(12px, 1.8vh, 18px) clamp(32px, 8vw, 60px);
-            background-image: linear-gradient(#0a0a0f, #0a0a0f),
-                              linear-gradient(90deg, #9945FF, #14F195, #9945FF);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            border: 2px solid transparent;
+            padding: clamp(14px, 1.8vh, 20px) clamp(36px, 8vw, 64px);
+            background: linear-gradient(135deg, #e8c97a 0%, #c17f13 40%, #f5d060 70%, #c17f13 100%);
+            background-size: 200% 200%;
+            border: none;
             border-radius: 5px;
             font-size: clamp(0.75rem, 1.8vw, 1.05rem);
             font-weight: 700;
@@ -2241,75 +2368,77 @@ footer{
             transform: translateY(16px);
             position: relative;
             overflow: hidden;
-            transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
-            box-shadow: 0 0 24px rgba(153,69,255,0.3), 0 0 48px rgba(20,241,149,0.15);
+            transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease, background-position 0.4s ease;
+            box-shadow:
+                0 0 28px rgba(232,201,122,0.55),
+                0 0 60px rgba(193,127,19,0.35),
+                0 4px 20px rgba(0,0,0,0.4);
+            animation: goldBtnShift 4s ease-in-out infinite;
             -webkit-tap-highlight-color: transparent;
+        }
+        @keyframes goldBtnShift {
+            0%,100% { background-position: 0% 50%; box-shadow: 0 0 28px rgba(232,201,122,0.55), 0 0 60px rgba(193,127,19,0.35), 0 4px 20px rgba(0,0,0,0.4); }
+            50%      { background-position: 100% 50%; box-shadow: 0 0 44px rgba(232,201,122,0.85), 0 0 90px rgba(193,127,19,0.55), 0 4px 24px rgba(0,0,0,0.4); }
         }
         .enter-btn.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Solana gradient text on the button */
+        /* Button text — dark for contrast on gold */
         .enter-btn-text {
-            background: linear-gradient(
-                90deg,
-                #9945FF 0%,
-                #14F195 30%,
-                #9945FF 60%,
-                #14F195 100%
-            );
-            background-size: 250% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: solanaTextSweep 3s linear infinite;
+            color: #0a0a0f;
+            font-weight: 900;
+            letter-spacing: inherit;
             display: inline-block;
+            -webkit-text-fill-color: #0a0a0f;
         }
 
-        @keyframes solanaTextSweep {
-            0%   { background-position: 150% 0%; }
-            100% { background-position: -150% 0%; }
-        }
-
-        /* v5: horizontal scan sweep on splash 1 */
-        @keyframes splashHscanIn {
-            0%   { left:-100%; opacity:0; }
-            10%  { opacity:1; }
-            90%  { opacity:1; }
-            100% { left:200%; opacity:0; }
-        }
-
+        /* Sunlight shimmer — white ray sweeping across gold */
         .enter-btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(149, 117, 205, 0.5), transparent);
-            transition: left 0.6s;
+            top: -20%;
+            left: -80%;
+            width: 55%;
+            height: 140%;
+            background: linear-gradient(
+                105deg,
+                transparent 20%,
+                rgba(255,255,255,0.18) 40%,
+                rgba(255,255,255,0.55) 50%,
+                rgba(255,255,255,0.18) 60%,
+                transparent 80%
+            );
+            animation: goldSunlight 3.5s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes goldSunlight {
+            0%   { left: -80%; opacity: 0; }
+            8%   { opacity: 1; }
+            55%  { left: 130%; opacity: 1; }
+            60%  { opacity: 0; }
+            100% { left: 130%; opacity: 0; }
         }
 
-        .enter-btn:hover::before {
-            left: 100%;
+        /* Hover shimmer override */
+        .enter-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%, rgba(255,255,255,0.06) 100%);
+            pointer-events: none;
         }
-
         .enter-btn:hover {
-            background-image: linear-gradient(rgba(153,69,255,0.08), rgba(20,241,149,0.08)),
-                              linear-gradient(90deg, #9945FF, #14F195, #9945FF);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            box-shadow: 
-                0 0 50px rgba(153, 69, 255, 0.6),
-                0 0 80px rgba(20, 241, 149, 0.3),
-                inset 0 0 20px rgba(153, 69, 255, 0.08);
-            transform: scale(1.05);
-            letter-spacing: 7px;
+            transform: scale(1.05) translateY(-2px);
+            box-shadow:
+                0 0 55px rgba(232,201,122,0.9),
+                0 0 100px rgba(193,127,19,0.6),
+                0 8px 30px rgba(0,0,0,0.5);
+            letter-spacing: 6px;
         }
-
         .enter-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
         }
 
         /* Particles */
@@ -2356,6 +2485,15 @@ footer{
             will-change: opacity, transform, filter;
             backface-visibility: hidden;
             -webkit-backface-visibility: hidden;
+        }
+
+        @keyframes livePulse {
+            0%,100% { opacity:1; transform:scale(1); }
+            50%      { opacity:0.4; transform:scale(0.85); }
+        }
+        @keyframes solanaShimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
         }
 
         /* Main content inner wrapper — main page (everything except main-splash) */
@@ -2811,18 +2949,37 @@ footer{
         
         <!-- BLOCK 1: Logo -->
         <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
+          <!-- LIVE indicator — pojok kanan atas -->
+          <div style="position:absolute;top:clamp(18px,3vh,32px);right:clamp(16px,4vw,36px);display:flex;align-items:center;gap:7px;z-index:20;animation:splashSlideUp 1.2s ease-out 0.9s both;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 10px #14F195,0 0 22px rgba(20,241,149,0.6);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.48rem,1vw,0.6rem);font-weight:700;letter-spacing:2px;color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.8);text-transform:uppercase;">LIVE · Angel Investor Round Open</span>
+          </div>
           <div style="width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
             <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" fetchpriority="high" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;transform:translateZ(0);"/>
           </div>
         </div>
 
-        <!-- BLOCK 2: Title + Subtitle only -->
+        <!-- BLOCK 2: Title + Subtitle + Trust Badge -->
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
             <p class="splash-subtitle">Capital Finecosystem</p>
+            <!-- Trust Badge -->
+            <div style="display:flex;align-items:center;gap:clamp(8px,2vw,18px);margin-top:10px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
+                <div style="height:1px;width:clamp(20px,4vw,40px);background:linear-gradient(90deg,transparent,rgba(20,241,149,0.4));"></div>
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.9vw,0.58rem);letter-spacing:2px;font-weight:600;
+                    background:linear-gradient(90deg,#9945FF,#14F195,#00d4ff,#14F195,#9945FF);
+                    background-size:200% auto;
+                    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+                    animation:solanaShimmer 4s linear infinite;
+                    filter:drop-shadow(0 0 8px rgba(20,241,149,0.5));
+                    white-space:nowrap;">
+                    Solana Blockchain &nbsp;·&nbsp; SPL Token &nbsp;·&nbsp; Verified On-Chain
+                </span>
+                <div style="height:1px;width:clamp(20px,4vw,40px);background:linear-gradient(90deg,rgba(153,69,255,0.4),transparent);"></div>
+            </div>
         </div>
 
-        <!-- BLOCK 2.5: Tagline — centered between subtitle and collateral -->
+        <!-- BLOCK 2.5: Tagline -->
         <div style="z-index:10;width:100%;display:flex;justify-content:center;align-items:center;">
             <p class="splash-tagline" style="margin:0;">Everybody Has A Second Chance</p>
         </div>
@@ -2834,14 +2991,25 @@ footer{
             <span>These are your Collateral</span>
         </div>
 
-        <!-- BLOCK 4: Loading bar + Enter button -->
-        <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;">
+        <!-- BLOCK 4: Loading bar + Enter button + Micro-copy + Early Investors -->
+        <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;gap:0;">
             <div class="loading-container">
                 <div class="loading-bar">
                     <div class="loading-progress"></div>
                 </div>
             </div>
-            <button class="enter-btn" id="enter-btn" onclick="enterSite()"><span class="enter-btn-text">ENTER YOUR JOURNEY</span></button>
+            <button class="enter-btn" id="enter-btn" onclick="enterSite()"><span class="enter-btn-text">JOIN ANGEL INVESTOR ROUND</span></button>
+            <!-- Micro-copy -->
+            <div style="margin-top:10px;animation:splashSlideUp 1.2s ease-out 1.0s both;opacity:0.7;">
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.38rem,0.8vw,0.52rem);letter-spacing:2.5px;color:rgba(200,220,255,0.65);text-transform:uppercase;">
+                    No KYC &nbsp;·&nbsp; Connect Wallet &nbsp;·&nbsp; Transparency On-Chain
+                </span>
+            </div>
+            <!-- Early Investors -->
+            <div style="margin-top:14px;display:flex;align-items:center;gap:8px;animation:splashSlideUp 1.2s ease-out 1.1s both;">
+                <div style="width:7px;height:7px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 18px rgba(20,241,149,0.5);animation:livePulse 2s ease-in-out infinite;flex-shrink:0;"></div>
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.9vw,0.56rem);letter-spacing:2px;color:rgba(20,241,149,0.85);text-shadow:0 0 10px rgba(20,241,149,0.4);font-weight:600;">247 Early Investors Joined</span>
+            </div>
         </div>
 
     </div>
@@ -2863,7 +3031,7 @@ footer{
     <a href="#roadmap">Roadmap</a>
     <a href="#whitepaper">Whitepaper</a>
     <a href="#dashboard">Dashboard</a>
-    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierI();">The Angel Investor</a>
+    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
     <span></span><span></span><span></span>
@@ -3620,7 +3788,7 @@ footer{
     <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
-      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join The Angel Investor</a>
+      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
     </div>
 
   </div>
@@ -3711,7 +3879,7 @@ footer{
 
 <!-- JOIN ANGEL INVESTOR BUTTON -->
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
-  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join The Angel Investor</a>
+  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
   <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Minimum $10 USDC</span>
     <span style="color:rgba(255,255,255,0.3);margin:0 6px;">·</span>
@@ -4118,22 +4286,7 @@ footer{
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal">
     <a href="#" class="btn-outline" onclick="event.preventDefault();alert('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.');">Download Full Whitepaper (PDF)</a>
-    <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold" style="
-      font-family:'Orbitron',monospace;
-      font-size:0.9rem;letter-spacing:2.5px;
-      color:#081219;
-      background:linear-gradient(135deg,#e8c97a 0%,#c17f13 100%);
-      border:none;
-      padding:15px 40px;
-      cursor:pointer;
-      clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
-      transition:all 0.3s ease;
-      text-decoration:none;
-      display:inline-block;
-      font-weight:700;
-      box-shadow:0 0 24px rgba(193,127,19,0.35),0 4px 16px rgba(193,127,19,0.2);
-      animation:navCtaPulse 3s ease-in-out infinite;
-    ">JOIN THE ANGEL INVESTOR</a>
+    <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
   </div>
 </section>
 
@@ -4229,7 +4382,7 @@ footer{
           <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
         </div>
         <div class="tier-detail">330 M EXXE available<br/>Min $10 — Max $250 USDC</div>
-        <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;font-weight:800;">BUY NOW</span>
+        <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;font-weight:800;">JOIN NOW</span>
       </div>
       <div class="tier-card">
         <div class="tier-num">Tier II</div>
