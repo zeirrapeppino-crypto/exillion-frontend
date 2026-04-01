@@ -311,7 +311,7 @@ nav{
   color:var(--cyan);
   opacity:0.7;
   text-transform:none;
-  margin-bottom:2rem;
+  margin-bottom:1rem;
   display:flex;align-items:center;gap:8px;
   animation:riseUp 0.8s ease both;
 }
@@ -2126,11 +2126,10 @@ footer{
             height: 100%;
             background: linear-gradient(90deg, var(--solana-purple), #00a8ff, var(--solana-green));
             background-size: 200% 100%;
-            animation: loading 5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards,
-                       barColorShift 3s linear infinite;
             position: relative;
             box-shadow: 0 0 12px rgba(153, 69, 255, 0.5), 0 0 24px rgba(20, 241, 149, 0.25);
             will-change: width;
+            transition: width 0.3s ease;
         }
 
         .loading-progress::after {
@@ -2182,17 +2181,20 @@ footer{
             text-transform: uppercase;
             letter-spacing: 5px;
             opacity: 0;
+            transform: translateY(16px);
             position: relative;
             overflow: hidden;
-            transition: all 0.5s ease;
-            animation: fadeInUp 1.5s ease-out 5.2s forwards;
-            /* Solana gradient border */
+            transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
             background-image: linear-gradient(#0a0a0f, #0a0a0f),
                               linear-gradient(90deg, #9945FF, #14F195, #9945FF);
             background-origin: border-box;
             background-clip: padding-box, border-box;
             border: 2px solid transparent;
             box-shadow: 0 0 24px rgba(153,69,255,0.3), 0 0 48px rgba(20,241,149,0.15);
+        }
+        .enter-btn.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* Solana gradient text on the button */
@@ -2639,9 +2641,10 @@ footer{
 }
 
 </style>
-<!-- CRITICAL FONT-READY SCRIPT: reveal teks splash hanya setelah Orbitron loaded -->
+<!-- SPLASH LOADING ORCHESTRATOR: logo → loading bar → tombol, semua tersinkron -->
 <script>
 (function(){
+  // --- 1. Reveal teks splash setelah font Orbitron ready ---
   function revealSplashText(){
     var els = document.querySelectorAll(
       '#splash-page .splash-title, #splash-page .splash-subtitle, '+
@@ -2649,14 +2652,85 @@ footer{
     );
     els.forEach(function(el){ el.classList.add('font-ready'); });
   }
+
+  // --- 2. Jalankan loading bar secara JS, smooth & sinkron ---
+  function runLoadingBar(onComplete) {
+    var bar = document.querySelector('.loading-progress');
+    if (!bar) { onComplete && onComplete(); return; }
+
+    // Tahapan progress: [target%, delay_ms, duration_ms]
+    var steps = [
+      [15,   0,   400],
+      [35,   420, 500],
+      [55,   940, 600],
+      [72,  1560, 500],
+      [85,  2080, 600],
+      [94,  2700, 500],
+      [100, 3220, 400],
+    ];
+
+    steps.forEach(function(s) {
+      var target = s[0], delay = s[1], dur = s[2];
+      setTimeout(function() {
+        bar.style.transition = 'width ' + dur + 'ms cubic-bezier(0.4,0,0.2,1)';
+        bar.style.width = target + '%';
+      }, delay);
+    });
+
+    // Total durasi: ~3620ms lalu panggil onComplete
+    setTimeout(function() {
+      onComplete && onComplete();
+    }, 3700);
+  }
+
+  // --- 3. Tampilkan tombol enter setelah loading selesai ---
+  function showEnterBtn() {
+    var btn = document.getElementById('enter-btn');
+    if (btn) btn.classList.add('visible');
+  }
+
+  // --- 4. Preload gambar logo secara agresif ---
+  function preloadLogo(src, onReady) {
+    var img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload  = onReady;
+    img.onerror = onReady; // tetap lanjut meski gagal
+    img.src = src;
+    // Safety: maks 3 detik tunggu gambar
+    var timer = setTimeout(onReady, 3000);
+    img.onload = img.onerror = function() {
+      clearTimeout(timer);
+      onReady();
+    };
+  }
+
+  // --- 5. Orkestrasi utama ---
+  var LOGO_SRC = 'https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png';
+
+  // Reveal teks secepat mungkin setelah font ready
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(revealSplashText);
   } else {
-    // Fallback: tunggu 300ms lalu reveal
     window.addEventListener('load', function(){ setTimeout(revealSplashText, 100); });
   }
-  // Safety: reveal maksimum 2 detik supaya tidak blank selamanya
-  setTimeout(revealSplashText, 2000);
+  // Safety fallback reveal teks
+  setTimeout(revealSplashText, 1500);
+
+  // Preload logo, lalu langsung jalankan loading bar
+  // Logo wrapper sudah visible dari CSS (animation splashSlideUp 0s delay)
+  // Loading bar mulai SETELAH logo confirmed ready atau maks 1 detik
+  window.addEventListener('DOMContentLoaded', function() {
+    preloadLogo(LOGO_SRC, function() {
+      // Logo sudah siap — mulai loading bar
+      setTimeout(function() {
+        runLoadingBar(function() {
+          // Loading selesai — tampilkan tombol
+          showEnterBtn();
+        });
+      }, 200); // jeda kecil 200ms agar logo animasi slide-up selesai dulu
+    });
+  });
+
 })();
 </script>
 </head>
@@ -3007,7 +3081,7 @@ footer{
 <section id="hero">
   <div class="hero-eyebrow">Do Kindness-The Universe Will Pay You Back</div>
 
-  <div style="display:block;margin-top:-18px;margin-bottom:0.5rem;animation:riseUp 0.8s 0.1s ease both;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
+  <div style="display:block;margin-top:-1rem;margin-bottom:1rem;animation:riseUp 0.8s 0.1s ease both;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
 
   <h1 class="hero-title">EXILLION</h1>
   <p class="hero-ticker">Capital Finecosystem</p>
