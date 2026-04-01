@@ -1,13 +1,15 @@
 <!DOCTYPE html>
+<!-- Exillion Capital Finecosystem — v9 (Fully English, Bug Fixed & Optimized) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
 <meta property="og:title" content="Exillion — Capital Finecosystem | EXXE Angel Round"/>
 <meta property="og:description" content="Join the EXXE Angel Round. Tier I at $0.01/EXXE. On-chain transparent, Solana-powered."/>
 <meta property="og:type" content="website"/>
+<meta property="og:url" content="https://exillion.io"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://exillion.io"/>
@@ -16,12 +18,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
-<!-- font-display:block mencegah FOUC: browser BLOK render teks sampai Orbitron siap -->
+<!-- font-display:block prevents FOUC: browser BLOCKS text render until Orbitron is ready -->
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
 <style>
-/* FONT METRICS OVERRIDE — mencegah layout shift saat Orbitron swap masuk.
-   size-adjust menyamakan dimensi fallback monospace agar identik dengan Orbitron,
-   sehingga tidak ada reflow/layout shift ketika font selesai load. */
+/* FONT METRICS OVERRIDE — prevents layout shift when Orbitron swaps in.
+   size-adjust matches fallback monospace dimensions to Orbitron,
+   so there is no reflow/layout shift when the font finishes loading. */
 @font-face {
   font-family: 'orbitron-fallback';
   src: local('monospace');
@@ -30,7 +32,7 @@
   descent-override: 20%;
   line-gap-override: 0%;
 }
-/* CRITICAL: sembunyikan teks splash SAMPAI Orbitron siap — cegah FOUC */
+/* CRITICAL: hide splash text UNTIL Orbitron is ready — prevent FOUC */
 #splash-page .splash-title,
 #splash-page .splash-subtitle,
 #splash-page .splash-tagline,
@@ -74,11 +76,20 @@ body {
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 
-/* Fix anchor offset agar tidak tertutup fixed nav */
-[id] { scroll-margin-top: 80px; }
+/* Keyboard focus ring — accessibility */
+:focus-visible{
+  outline:2px solid var(--cyan);
+  outline-offset:2px;
+}
+:focus:not(:focus-visible){
+  outline:none;
+}
+
+/* Fix anchor offset so it is not hidden behind the fixed nav */
+[id] { scroll-margin-top: 90px; }
 
 html{
-  background:#080614; /* iOS overscroll area — cegah layar putih */
+  background:#080614; /* iOS overscroll area — prevent white flash */
 }
 
 body{
@@ -86,7 +97,7 @@ body{
   color:var(--text-1);
   font-family:'Orbitron',monospace;
   overflow-x:hidden;
-  overflow-y:scroll; /* selalu reserve scrollbar space agar nav tidak shift */
+  overflow-y:scroll; /* always reserve scrollbar space so nav does not shift */
   font-size:16px;
   line-height:1.7;
   -webkit-tap-highlight-color:transparent;
@@ -105,7 +116,7 @@ body{
 }
 @keyframes scanFlicker{0%,100%{opacity:0.5;}35%{opacity:0.35;}60%{opacity:0.58;}80%{opacity:0.4;}}
 
-/* REDUCED MOTION — nonaktifkan animasi berat untuk aksesibilitas & low-end device */
+/* REDUCED MOTION — disable heavy animations for accessibility & low-end devices */
 @media(prefers-reduced-motion:reduce){
   .scanline,body::before,body::after{animation:none!important;}
   .reveal{transition:none!important;}
@@ -155,6 +166,8 @@ nav{
   height:auto;
   display:flex;align-items:center;justify-content:space-between;
   padding:16px 5%;
+  padding-left:max(5%, env(safe-area-inset-left));
+  padding-right:max(5%, env(safe-area-inset-right));
   background:rgba(1,11,24,0.94);
   backdrop-filter:blur(28px) saturate(1.2);
   border-bottom:1px solid rgba(0,212,255,0.22);
@@ -410,12 +423,13 @@ nav{
 
 /* STATS */
 .hero-stats{
-  display:flex;justify-content:center;flex-wrap:nowrap;
+  display:flex;justify-content:center;flex-wrap:wrap;
   border-top:1px solid var(--border-dim);
   border-bottom:1px solid var(--border-dim);
   margin-top:4rem;width:100%;
   animation:riseUp 0.8s 0.7s ease both;
   overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .stat{
   padding:22px 36px;
@@ -516,7 +530,7 @@ blockquote.centerquote{
   letter-spacing:2px;
 }
 
-/* v6 — Vision text: optimal untuk keterbacaan & kepercayaan investor */
+/* v6 — Vision text: optimised for readability & investor trust */
 .vision-text p{
   font-size:clamp(0.95rem,1.3vw,1.08rem);
   font-weight:300;
@@ -525,7 +539,7 @@ blockquote.centerquote{
   margin-bottom:1.35rem;
   letter-spacing:0.3px;
 }
-/* Kalimat pembuka di tiap blok — sedikit lebih besar & medium weight */
+/* Opening sentence in each block — slightly larger & medium weight */
 .vision-text p:first-of-type{
   font-size:clamp(1rem,1.45vw,1.18rem);
   font-weight:400;
@@ -820,6 +834,8 @@ blockquote.centerquote{
   position:relative;
   overflow:hidden;
   clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+  min-height:64px;
+  -webkit-tap-highlight-color:transparent;
 }
 .wallet-btn::before{
   content:'';
@@ -1097,7 +1113,7 @@ blockquote.centerquote{
   font-size:0.75rem;letter-spacing:1.5px;font-weight:600;
   color:var(--cyan);
 }
-/* Kalimat utama — satu baris tebal, langsung ke poin */
+/* Main sentence — one bold line, straight to the point */
 .wp-hook{
   font-family:'Orbitron',monospace;
   font-size:clamp(0.82rem,1.1vw,0.96rem);
@@ -1106,7 +1122,7 @@ blockquote.centerquote{
   line-height:1.75;
   letter-spacing:0.2px;
 }
-/* Detail pendukung — lebih tipis, sebagai konteks singkat */
+/* Supporting detail — lighter weight, as brief context */
 .wp-text{
   font-size:0.78rem;
   font-style:italic;
@@ -1329,8 +1345,12 @@ footer{
   position:fixed;inset:0;z-index:9999;
   background:rgba(1,11,24,0.97);
   backdrop-filter:blur(16px);
-  display:none;align-items:center;justify-content:center;
+  display:none;
+  align-items:center;justify-content:center;
   padding:20px;
+}
+.modal-overlay.active{
+  display:flex;
   animation:fadeIn 0.3s ease;
 }
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
@@ -1421,6 +1441,7 @@ footer{
   border-top:1px solid rgba(0,212,255,0.15);
   backdrop-filter:blur(10px);
   padding:8px 5%;
+  padding-bottom:max(8px, env(safe-area-inset-bottom));
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
   transform:translateY(100%);transition:transform 0.3s ease;
 }
@@ -1504,7 +1525,7 @@ footer{
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
 
 .reveal{opacity:0;transform:translateY(40px);filter:blur(4px);transition:opacity 0.85s cubic-bezier(0.22,1,0.36,1),transform 0.85s cubic-bezier(0.22,1,0.36,1),filter 0.85s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);filter:blur(0px);}
+.reveal.visible{opacity:1;transform:translateY(0);filter:blur(0px);will-change:auto;}
 
 /* --- RESPONSIVE --------------------------- */
 
@@ -1514,6 +1535,13 @@ footer{
   /* Nav — show hamburger, hide links */
   .hamburger{ display:flex!important; }
   .nav-cta{ display:none!important; }
+  /* Show invest CTA inside the mobile dropdown menu */
+  .nav-links.open .nav-cta{
+    display:flex!important;
+    margin:0.5rem 6%;
+    text-align:center;
+    justify-content:center;
+  }
   .nav-links{
     display:none;
     position:fixed;
@@ -1602,7 +1630,7 @@ footer{
   /* Stats */
   .stat{ min-width:100px;padding:14px 16px; }
   .stat-val{ font-size:1rem; }
-  .stat-lbl{ font-size:0.38rem;letter-spacing:1px; }
+  .stat-lbl{ font-size:0.48rem;letter-spacing:1px; }
 
   /* Sections */
   .section-title{ font-size:1.3rem!important;letter-spacing:2px!important; }
@@ -1762,7 +1790,7 @@ footer{
 
   /* Transparency wallet addresses */
   #transparency a[href*="solscan"]{
-    font-size:0.45rem!important;
+    font-size:0.55rem!important;
     word-break:break-all;
     line-height:1.6;
   }
@@ -1850,7 +1878,7 @@ footer{
                 linear-gradient(rgba(153,69,255,0.10) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(20,241,149,0.07) 1px, transparent 1px);
             background-size: 60px 60px, 50px 50px, 50px 50px;
-            /* opacity-only animation — GPU composited, tidak trigger repaint */
+            /* opacity-only animation — GPU composited, does not trigger repaint */
             animation: networkPulse 8s ease-in-out infinite;
             will-change: opacity;
             transform: translateZ(0);
@@ -1874,7 +1902,7 @@ footer{
             width: 2px;
             height: 120px;
             background: linear-gradient(180deg, transparent, var(--solana-purple), var(--solana-green), transparent);
-            /* transform+opacity saja — GPU composited */
+            /* transform+opacity only — GPU composited */
             animation: lineFlow 3.5s linear infinite;
             opacity: 0;
             will-change: transform, opacity;
@@ -1892,7 +1920,7 @@ footer{
         .glow-orb {
             position: absolute;
             border-radius: 50%;
-            /* blur statis — tidak dianimasikan, jauh lebih ringan */
+            /* static blur — not animated, much lighter on CPU */
             filter: blur(70px);
             pointer-events: none;
             will-change: transform, opacity;
@@ -1923,11 +1951,11 @@ footer{
             background: radial-gradient(circle, rgba(153,69,255,0.12) 0%, rgba(20,241,149,0.06) 50%, transparent 70%);
             top: 50%;
             left: 50%;
-            /* translate pakai transform, scale ringan karena GPU */
+            /* translate via transform, scale is GPU-accelerated */
             animation: orbDrift3 8s ease-in-out infinite;
         }
 
-        /* Mobile — kurangi orb agar tidak berat di iOS */
+        /* Mobile — reduce orb size to keep it light on iOS */
         @media (max-width: 600px) {
             .glow-orb { filter: blur(45px); }
             .glow-orb-1 { width: 260px; height: 260px; top: -70px; left: -70px; }
@@ -1935,7 +1963,7 @@ footer{
             .glow-orb-3 { width: 200px; height: 200px; }
         }
 
-        /* Semua orb pakai transform+opacity — GPU only, no filter animation */
+        /* All orbs use transform+opacity — GPU only, no filter animation */
         @keyframes orbDrift1 {
             0%, 100% { transform: translate(0px, 0px) translateZ(0); opacity: 0.7; }
             50%       { transform: translate(25px, 20px) translateZ(0); opacity: 1.0; }
@@ -1975,7 +2003,7 @@ footer{
             transform: translateZ(0);
         }
 
-        /* Satu keyframe untuk semua elemen splash — dari bawah, smooth */
+        /* Single keyframe for all splash elements — slides up from below, smooth */
         @keyframes splashSlideUp {
             from { opacity: 0; transform: translateY(30px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -2021,7 +2049,7 @@ footer{
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* Luxury Blue sweep + glow animations — 2 arah, lebih lambat */
+        /* Luxury Blue sweep + glow animations — bidirectional, slower */
         @keyframes goldSweep {
             0%   { background-position: 150% 0%; }
             50%  { background-position: -150% 0%; }
@@ -2198,7 +2226,10 @@ footer{
             font-family:'Orbitron', monospace;
             margin-top: clamp(12px, 2vh, 22px);
             padding: clamp(12px, 1.8vh, 18px) clamp(32px, 8vw, 60px);
-            background: transparent;
+            background-image: linear-gradient(#0a0a0f, #0a0a0f),
+                              linear-gradient(90deg, #9945FF, #14F195, #9945FF);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
             border: 2px solid transparent;
             border-radius: 5px;
             font-size: clamp(0.75rem, 1.8vw, 1.05rem);
@@ -2211,12 +2242,8 @@ footer{
             position: relative;
             overflow: hidden;
             transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
-            background-image: linear-gradient(#0a0a0f, #0a0a0f),
-                              linear-gradient(90deg, #9945FF, #14F195, #9945FF);
-            background-origin: border-box;
-            background-clip: padding-box, border-box;
-            border: 2px solid transparent;
             box-shadow: 0 0 24px rgba(153,69,255,0.3), 0 0 48px rgba(20,241,149,0.15);
+            -webkit-tap-highlight-color: transparent;
         }
         .enter-btn.visible {
             opacity: 1;
@@ -2324,7 +2351,7 @@ footer{
             will-change: opacity, transform, filter;
         }
 
-        /* Main content inner wrapper — halaman utama (semua kecuali main-splash) */
+        /* Main content inner wrapper — main page (everything except main-splash) */
         #main-content-inner {
             opacity: 0;
         }
@@ -2628,7 +2655,7 @@ footer{
   display: none;
 }
 
-/* Teks splash direveal via JS setelah font ready */
+/* Splash text revealed via JS after font is ready */
 #splash-page .splash-title.font-ready,
 #splash-page .splash-subtitle.font-ready,
 #splash-page .splash-tagline.font-ready,
@@ -2668,10 +2695,10 @@ footer{
 }
 
 </style>
-<!-- SPLASH LOADING ORCHESTRATOR: logo → loading bar → tombol, semua tersinkron -->
+<!-- SPLASH LOADING ORCHESTRATOR: logo → loading bar → button, all synchronised -->
 <script>
 (function(){
-  // --- 1. Reveal teks splash setelah font Orbitron ready ---
+  // --- 1. Reveal splash text after Orbitron font is ready ---
   function revealSplashText(){
     var els = document.querySelectorAll(
       '#splash-page .splash-title, #splash-page .splash-subtitle, '+
@@ -2680,7 +2707,7 @@ footer{
     els.forEach(function(el){ el.classList.add('font-ready'); });
   }
 
-  // --- 2. Jalankan loading bar secara JS, smooth & sinkron ---
+  // --- 2. Run loading bar via JS, smooth & synchronised ---
   function runLoadingBar(onComplete) {
     var bar = document.querySelector('.loading-progress');
     if (!bar) { onComplete && onComplete(); return; }
@@ -2704,13 +2731,13 @@ footer{
       }, delay);
     });
 
-    // Total durasi: ~3620ms lalu panggil onComplete
+    // Total duration: ~3620ms then call onComplete
     setTimeout(function() {
       onComplete && onComplete();
     }, 3700);
   }
 
-  // --- 3. Tampilkan tombol enter setelah loading selesai ---
+  // --- 3. Show enter button after loading completes ---
   function showEnterBtn() {
     var btn = document.getElementById('enter-btn');
     if (btn) btn.classList.add('visible');
@@ -2728,10 +2755,10 @@ footer{
     img.src = src;
   }
 
-  // --- 5. Orkestrasi utama ---
+  // --- 5. Main orchestration ---
   var LOGO_SRC = 'https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png';
 
-  // Reveal teks secepat mungkin setelah font ready
+  // Reveal text as soon as possible after font is ready
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(revealSplashText);
   } else {
@@ -2740,18 +2767,18 @@ footer{
   // Safety fallback reveal teks
   setTimeout(revealSplashText, 1500);
 
-  // Preload logo, lalu langsung jalankan loading bar
-  // Logo wrapper sudah visible dari CSS (animation splashSlideUp 0s delay)
-  // Loading bar mulai SETELAH logo confirmed ready atau maks 1 detik
+  // Preload logo, then immediately start the loading bar
+  // Logo wrapper is already visible from CSS (splashSlideUp animation at 0s delay)
+  // Loading bar starts AFTER logo is confirmed ready or max 1 second
   window.addEventListener('DOMContentLoaded', function() {
     preloadLogo(LOGO_SRC, function() {
-      // Logo sudah siap — mulai loading bar
+      // Logo is ready — start loading bar
       setTimeout(function() {
         runLoadingBar(function() {
-          // Loading selesai — tampilkan tombol
+          // Loading complete — show button
           showEnterBtn();
         });
-      }, 200); // jeda kecil 200ms agar logo animasi slide-up selesai dulu
+      }, 200); // small 200ms delay so logo slide-up animation finishes first
     });
   });
 
@@ -2809,7 +2836,7 @@ footer{
     </div>
 
 <!-- ========== MAIN WEBSITE CONTENT ========== -->
-<!-- NAV — di luar main-content agar font pre-render saat splash -->
+<!-- NAV — outside main-content so font pre-renders during splash -->
 <nav id="main-nav" style="opacity:0;pointer-events:none;transition:opacity 0.6s ease;">
   <a href="#" class="nav-brand">
     <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:55px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
@@ -3223,7 +3250,7 @@ footer{
   </div>
   </div>
 
-<!-- TOMBOL BAWAH -->
+<!-- BOTTOM BUTTON -->
 
 </section>
 
@@ -3326,7 +3353,7 @@ footer{
 
 <!-- ═══════════════════════════════════════════════════════
      INFOGRAPHIC — HOW EXILLION WORKS
-     Psikologi: transparansi + alur logis = kepercayaan investor
+     Psychology: transparency + logical flow = investor trust
      ═══════════════════════════════════════════════════════ -->
 <section id="how-it-works" style="padding:0px 5% 60px;margin-top:-40px;">
 
@@ -3534,7 +3561,7 @@ footer{
 
   <div class="infog-wrap">
 
-    <!-- ── BAGIAN 3: Demand Flywheel ─────────────────── -->
+    <!-- ── SECTION 3: Demand Flywheel ─────────────────── -->
     <div class="infog-flywheel reveal">
 
       <div class="infog-flywheel-side">
@@ -3579,7 +3606,7 @@ footer{
 
     </div>
 
-    <!-- ── BAGIAN 4: CTA bawah infografis ────────────── -->
+    <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
       <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join The Angel Investor</a>
@@ -3671,7 +3698,7 @@ footer{
   </div>
 </section>
 
-<!-- TOMBOL JOIN ANGEL INVESTOR -->
+<!-- JOIN ANGEL INVESTOR BUTTON -->
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
   <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join The Angel Investor</a>
   <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
@@ -3693,7 +3720,7 @@ footer{
 
   <div style="max-width:1080px;margin:0 auto;">
 
-    <!-- Tagline besar -->
+    <!-- Large tagline -->
     <div class="reveal" style="text-align:center;margin-bottom:5rem;margin-top:-4.5rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(1rem,2vw,1.4rem);color:var(--cyan);letter-spacing:3px;line-height:1.8;opacity:0.9;">
         Your Time. Your Discipline. Your Responsibility. Your Effort.<br>
@@ -3834,14 +3861,16 @@ footer{
           <a href="#" style="display:inline-block;line-height:0;">
             <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
             alt="Get it on Google Play"
-            style="height:58px;display:block;border-radius:9px;">
+            width="195" height="58"
+            style="height:58px;width:auto;display:block;border-radius:9px;">
           </a>
 
           <!-- App Store Badge -->
           <a href="#" style="display:inline-block;line-height:0;background:transparent;">
             <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg"
             alt="Download on the App Store"
-            style="height:58px;display:block;border-radius:9px;">
+            width="174" height="58"
+            style="height:58px;width:auto;display:block;border-radius:9px;">
           </a>
 
         </div>
@@ -4345,11 +4374,11 @@ footer{
 </section>
 
 <!-- FOOTER -->
-<footer style="margin-top:-50px;">
+<footer>
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-logo-row">
-        <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" style="height:32px;width:auto;filter:drop-shadow(0 0 6px rgba(204,125,7,0.5));"/>
+        <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" loading="lazy" width="32" height="32" style="height:32px;width:auto;filter:drop-shadow(0 0 6px rgba(204,125,7,0.5));"/>
         <span class="footer-name">EXILLION Capital Finecosystem</span>
       </div>
       <p>Everybody Has A Second Chance — An innovative financial system through Collateral Mobile Mining mEXXE (VCMT) as collateral for everyone who needs EXXE for The Capital.</p>
@@ -4472,7 +4501,7 @@ const CFG = {
 };
 const tier = () => CFG.TIERS[CFG.TIER];
 
-// ── Wallet provider helpers — satu sumber kebenaran ──────────────
+// ── Wallet provider helpers — single source of truth ──────────────
 function getPhantomProvider() {
   return (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom)
     ? window.phantom.solana
@@ -4501,9 +4530,10 @@ document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
 let disclaimerAccepted = false;
 
 function updateModal(){
-  const checked = ['mc1','mc2','mc3','mc4'].filter(id=>document.getElementById(id).checked).length;
-  document.getElementById('checkCount').textContent = checked;
+  const checked = ['mc1','mc2','mc3','mc4'].filter(id=>{ const el=document.getElementById(id); return el && el.checked; }).length;
+  const countEl = document.getElementById('checkCount'); if(countEl) countEl.textContent = checked;
   const btn = document.getElementById('agreeBtn');
+  if(!btn) return;
   if(checked===4){ btn.classList.add('ready'); btn.textContent='I Understand — Proceed'; }
   else { btn.classList.remove('ready'); btn.textContent=`Please confirm ${4-checked} remaining item(s)`; }
 }
@@ -4513,7 +4543,7 @@ function acceptDisclaimer(){
   disclaimerAccepted = true;
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
-  setTimeout(()=>overlay.style.display='none',300);
+  setTimeout(()=>{ overlay.classList.remove('active'); overlay.style.opacity=''; overlay.style.transition=''; },300);
   setTimeout(()=>{ const _sb=document.getElementById('stickyBanner'); if(_sb) _sb.classList.add('show'); },500);
   // Proceed with the actual buy transaction
   setTimeout(()=>proceedBuy(), 400);
@@ -4521,7 +4551,11 @@ function acceptDisclaimer(){
 
 function declineDisclaimer(){
   const overlay = document.getElementById('disclaimerOverlay');
-  if (overlay) { overlay.style.opacity='0'; overlay.style.transition='opacity 0.3s'; setTimeout(()=>overlay.style.display='none',300); }
+  if (overlay) {
+    overlay.style.opacity='0';
+    overlay.style.transition='opacity 0.3s';
+    setTimeout(()=>{ overlay.classList.remove('active'); overlay.style.opacity=''; overlay.style.transition=''; },300);
+  }
 }
 
 // --- WALLET --------------------------------------------------
@@ -4637,20 +4671,31 @@ function isMobileBrowser() {
   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
 }
 
+// Returns true if we are already running inside Phantom's in-app browser
+function isInsidePhantom() {
+  return !!(window.phantom && window.phantom.solana);
+}
+
+// Returns true if we are already running inside Solflare's in-app browser
+function isInsideSolflare() {
+  return !!(window.solflare && window.solflare.isSolflare);
+}
+
 async function connectPhantom() {
-  // ── MOBILE: tidak ada extension → deep link ke Phantom app ──
+  // ── MOBILE: no extension → deep link into Phantom in-app browser ──
   if (isMobileBrowser()) {
     const provider = getPhantomProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
+      // Phantom Universal Link v2 (current as of 2024) — opens site inside Phantom browser
+      window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
-  // ── DESKTOP: file:// tidak didukung oleh Phantom extension ──
+  // ── DESKTOP: file:// is not supported by the Phantom extension ──
   if (window.location.protocol === 'file:') {
-    alert('⚠️  Phantom tidak dapat konek via file://\n\nGunakan local server atau deploy ke https://');
+    alert('⚠️  Phantom cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
@@ -4671,7 +4716,7 @@ async function connectPhantom() {
   }
 
   try {
-    // provider.connect() → ini yang trigger popup Phantom di Chrome
+    // provider.connect() → triggers the Phantom popup in Chrome
     const resp = await provider.connect();
     const address = resp.publicKey.toString();
     setConnected('Phantom', address);
@@ -4695,25 +4740,26 @@ async function connectPhantom() {
     }
     // 4001 = user menutup popup sendiri, bukan error
     if (e.code !== 4001) {
-      alert('Phantom gagal connect: ' + (e.message || 'Silakan coba lagi.'));
+      alert('Phantom connection failed: ' + (e.message || 'Please try again.'));
     }
   }
 }
 
 async function connectSolflare() {
-  // ── MOBILE: tidak ada extension → deep link ke Solflare app ──
+  // ── MOBILE: no extension → deep link into Solflare in-app browser ──
   if (isMobileBrowser()) {
     const provider = getSolflareProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
+      // Solflare Universal Link (current scheme)
+      window.location.href = 'https://solflare.com/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
-  // ── DESKTOP: file:// tidak didukung oleh Solflare extension ──
+  // ── DESKTOP: file:// is not supported by the Solflare extension ──
   if (window.location.protocol === 'file:') {
-    alert('⚠️  Solflare tidak dapat konek via file://\n\nGunakan local server atau deploy ke https://');
+    alert('⚠️  Solflare cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
@@ -4734,7 +4780,7 @@ async function connectSolflare() {
   }
 
   try {
-    // provider.connect() → ini yang trigger popup Solflare di Chrome
+    // provider.connect() → triggers the Solflare popup in Chrome
     await provider.connect();
     const address = provider.publicKey.toString();
     setConnected('Solflare', address);
@@ -4756,14 +4802,14 @@ async function connectSolflare() {
       if (nameEl) nameEl.textContent = 'Connect Solflare';
     }
     if (e.code !== 4001) {
-      alert('Solflare gagal connect: ' + (e.message || 'Silakan coba lagi.'));
+      alert('Solflare connection failed: ' + (e.message || 'Please try again.'));
     }
   }
 }
 
-// ── Banner install wallet (mengganti confirm() bawaan browser) ──
+// ── Install wallet banner (replaces the browser's native confirm()) ──
 function showWalletHint(wallet) {
-  // Hapus hint lama kalau ada
+  // Remove any existing hint banner
   const old = document.getElementById('walletHintBanner');
   if (old) old.remove();
 
@@ -4801,15 +4847,15 @@ function showWalletHint(wallet) {
   ].join('');
 
   document.body.appendChild(banner);
-  // Auto-hilang setelah 8 detik
+  // Auto-dismiss after 8 seconds
   setTimeout(function() { if (banner.parentNode) banner.remove(); }, 8000);
 }
 
 // --- SCROLL HELPERS ------------------------------------------
 
-// "Join The Angel Investor" → scroll ke Tier I, kelihatan utuh dari atas
+// "Join The Angel Investor" → scroll to Tier I, fully visible from the top
 function scrollToTierI() {
-  // Scroll presisi ke tier-grid (kotak Tier I Tier II Tier III)
+  // Precise scroll to tier-grid (Tier I, Tier II, Tier III cards)
   var tierGrid = document.querySelector('#angel .tier-grid');
   var fallback = document.getElementById('angel');
   var el = tierGrid || fallback;
@@ -4817,7 +4863,7 @@ function scrollToTierI() {
   var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 24 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight semua tier card sebentar
+  // Briefly highlight all tier cards
   setTimeout(function() {
     var cards = document.querySelectorAll('#angel .tier-card');
     cards.forEach(function(card) {
@@ -4830,7 +4876,7 @@ function scrollToTierI() {
   }, 600);
 }
 
-// "BUY NOW" → scroll presisi ke kotak besar Angel Investor Wallet
+// "BUY NOW" → precise scroll to the Angel Investor Wallet box
 function scrollToWallet() {
   var el = document.getElementById('angelWalletForm');
   if (!el) el = document.getElementById('walletConnectBox');
@@ -4838,7 +4884,7 @@ function scrollToWallet() {
   var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 16 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight kotak wallet
+  // Highlight the wallet box
   setTimeout(function() {
     el.style.transition = 'box-shadow 0.4s ease';
     el.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.9), 0 0 50px rgba(201,168,76,0.3)';
@@ -4893,7 +4939,7 @@ function checkReady(){
     goStep(3);
   } else {
     btn.classList.remove('ready');
-    document.getElementById('buyBtnText').textContent='Pay with USDC — Receive EXXE';
+    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with USDC — Receive EXXE';
   }
 }
 
@@ -4902,22 +4948,23 @@ async function executeBuy(){
   const _bb = document.getElementById('buyBtn');
   if(!_bb || !_bb.classList.contains('ready')) return;
 
-  // Kalau belum setuju disclaimer, tampilkan modal dulu
+  // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
-    // Reset checkboxes disclaimer agar investor baca ulang
+    // Reset disclaimer checkboxes so investor reads again
     ['mc1','mc2','mc3','mc4'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
     });
     const _cc=document.getElementById('checkCount'); if(_cc) _cc.textContent='0';
     const btn = document.getElementById('agreeBtn');
     if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm 4 remaining item(s)'; }
-    // Tampilkan modal
-    document.getElementById('disclaimerOverlay').style.display='flex';
-    document.getElementById('disclaimerOverlay').style.opacity='1';
+    // Show modal
+    const _ov = document.getElementById('disclaimerOverlay');
+    _ov.classList.add('active');
+    _ov.style.opacity='1';
     return;
   }
 
-  // Disclaimer sudah disetujui, lanjut transaksi
+  // Disclaimer accepted — proceed with transaction
   proceedBuy();
 }
 
@@ -4931,7 +4978,7 @@ async function proceedBuy(){
   const _procP = document.getElementById('processingPanel');
   if (_buyP) _buyP.style.display='none';
   if (_procP) _procP.style.display='block';
-  goStep(3);
+  // Step 4 is final — keep step 3 (form review) active until tx completes
 
   try {
     // Step 1: Build split transaction from Railway backend
@@ -4955,17 +5002,17 @@ async function proceedBuy(){
       if (connectedWallet === 'Phantom') {
         const provider = getPhantomProvider();
         // Phantom: signAndSendTransaction menerima raw bytes via object {message}
-        // Cara paling kompatibel: kirim sebagai Buffer, biarkan Phantom parse sendiri
+        // Most compatible approach: send as Buffer, let Phantom parse it
         const result = await provider.request({
           method: 'signAndSendTransaction',
           params: { message: btoa(String.fromCharCode(...txBytes)) }
         }).catch(async () => {
-          // Fallback: gunakan signTransaction lalu kirim manual
+          // Fallback: use signTransaction then send manually
           const signedBytes = await provider.request({
             method: 'signTransaction',
             params: { message: btoa(String.fromCharCode(...txBytes)) }
           });
-          // Kirim raw tx via RPC langsung (tidak butuh @solana/web3.js)
+          // Send raw tx via RPC directly (no @solana/web3.js needed)
           const rawTxBytes = Uint8Array.from(atob(signedBytes.transaction), c => c.charCodeAt(0));
           const rpcRes = await fetch('https://api.mainnet-beta.solana.com', {
             method: 'POST',
@@ -4986,7 +5033,7 @@ async function proceedBuy(){
         // Solflare
         const provider = getSolflareProvider();
         if (!provider) throw new Error('Solflare not available');
-        // Solflare menerima object dengan method serialize() yang return Uint8Array
+        // Solflare accepts an object with a serialize() method that returns Uint8Array
         const result = await provider.signAndSendTransaction({
           serialize: () => txBytes
         });
@@ -5070,10 +5117,8 @@ document.querySelectorAll('#navLinks a').forEach(a => {
     document.getElementById('hamburger').classList.remove('open');
   });
 });
-// Show hamburger on mobile
-if(window.innerWidth <= 768){
-  const _hb2 = document.getElementById('hamburger'); if(_hb2) _hb2.style.display = 'flex';
-}
+// Hamburger visibility is handled by CSS media query (display:flex at <=768px)
+// JS resize listener below ensures desktop hides menu panel when resizing up
 window.addEventListener('resize', () => {
   const hb = document.getElementById('hamburger');
   if (!hb) return;
@@ -5118,7 +5163,7 @@ function createParticles() {
         c.appendChild(p);
     }
 }
-// ── Guard: pastikan enterSite() hanya dipanggil sekali ─────────
+// ── Guard: ensure enterSite() is only called once ─────────
 var isEntering = false;
 
 // ── v5: Chromatic aberration flash helper ───────────────────────
@@ -5153,13 +5198,13 @@ function enterSite() {
     var mainSplash = document.getElementById('main-splash');
     if (!splash || !mc || !mainSplash) return;
 
-    // ── STEP 1: Fade-out splash 1 cepat & smooth ──────────────────
+    // ── STEP 1: Fade-out splash 1 fast & smooth ──────────────────
     splash.style.transition = 'opacity 0.35s cubic-bezier(0.4,0,0.2,1)';
     splash.style.opacity    = '0';
 
     setTimeout(function () {
         splash.style.display = 'none';
-        // Stop canvas splash untuk free memory
+        // Stop splash canvas to free memory
         var splashCanvas = document.getElementById('gold-network-splash');
         if (splashCanvas && splashCanvas._stopGoldNet) splashCanvas._stopGoldNet();
 
@@ -5171,7 +5216,7 @@ function enterSite() {
             mcInner.style.filter    = '';
         }
 
-        // ── STEP 2: Main splash muncul langsung & cepat ──
+        // ── STEP 2: Main splash appears immediately & fast ──
         mainSplash.style.display    = 'flex';
         mainSplash.style.opacity    = '0';
         mainSplash.style.transform  = 'none';
@@ -5184,7 +5229,7 @@ function enterSite() {
             });
         });
 
-        // Start animasi canvas & gold network
+        // Start canvas animation & gold network
         startMainSplashParticles();
         startGoldNetwork('gold-network-main', false);
 
@@ -5193,7 +5238,7 @@ function enterSite() {
         var pct    = document.getElementById('main-splash-pct');
         var status = document.getElementById('main-splash-status');
 
-        // Messages yang menyambut angel investor dengan hormat
+        // Messages to welcome the angel investor with respect
         var msgs = [
             'Authenticating secure channel...',
             'Verifying EXXE smart contract integrity...',
@@ -5217,7 +5262,7 @@ function enterSite() {
             }, 120);
         }
 
-        // Lebih cepat di semua fase
+        // Faster across all phases
         var speeds = [
             {until: 20,  speed: 0.28},
             {until: 50,  speed: 0.38},
@@ -5253,7 +5298,7 @@ function enterSite() {
             } else {
                 setStatus(msgs[msgs.length - 1]);
 
-                // ── STEP 3: Elegant exit main splash → halaman utama ──
+                // ── STEP 3: Elegant exit main splash → main page ──
                 setTimeout(function () {
                     mainSplash.style.transition = 'opacity 0.45s cubic-bezier(0.4,0,0.2,1)';
                     mainSplash.style.opacity    = '0';
@@ -5263,7 +5308,7 @@ function enterSite() {
                         document.body.style.overflowY = 'scroll';
                         document.body.style.overflowX = 'hidden';
 
-                        // Nav dan konten fade-in BERSAMAAN
+                        // Nav and content fade-in SIMULTANEOUSLY
                         var mainNav = document.getElementById('main-nav');
                         var transition = 'opacity 0.8s cubic-bezier(0.22,1,0.36,1)';
 
@@ -5287,7 +5332,7 @@ function enterSite() {
         }
         rafId = requestAnimationFrame(tickProgress);
 
-    }, 350); // tunggu fade-out splash 1 selesai
+    }, 350); // wait for splash 1 fade-out to finish
 }
 
 function startMainSplashParticles() {
@@ -5354,13 +5399,28 @@ function startGoldNetwork(canvasId, isSplash) {
     if (!canvas) return;
     var ctx = canvas.getContext('2d', { alpha: true });
 
+    // Resize canvas immediately then debounce — no blank frame on device rotate
     var _resizeTimer;
+    var _firstResize = true;
     function resize() {
+        if (_firstResize) {
+            // Instant on first call — canvas must be ready before first draw()
+            _firstResize = false;
+            canvas.width  = canvas.offsetWidth  || window.innerWidth;
+            canvas.height = canvas.offsetHeight || window.innerHeight;
+            return;
+        }
+        // Subsequent calls (window resize / orientation change) — short debounce
         clearTimeout(_resizeTimer);
         _resizeTimer = setTimeout(function() {
             canvas.width  = canvas.offsetWidth  || window.innerWidth;
             canvas.height = canvas.offsetHeight || window.innerHeight;
-        }, 150);
+            // Re-scatter nodes into new viewport so none are off-screen
+            for (var ri = 0; ri < nodes.length; ri++) {
+                if (nodes[ri].x > canvas.width)  nodes[ri].x = Math.random() * canvas.width;
+                if (nodes[ri].y > canvas.height) nodes[ri].y = Math.random() * canvas.height;
+            }
+        }, 80); // 80ms — fast enough to not look blank, slow enough to batch rapid events
     }
     resize();
     window.addEventListener('resize', resize);
@@ -5490,7 +5550,11 @@ function startGoldNetwork(canvasId, isSplash) {
 
     draw();
 
-    canvas._stopGoldNet = function() { stopped = true; cancelAnimationFrame(animId); };
+    canvas._stopGoldNet = function() {
+        stopped = true;
+        cancelAnimationFrame(animId);
+        window.removeEventListener('resize', resize);
+    };
 }
 
 // Start gold network for main splash when it becomes visible
@@ -5620,7 +5684,7 @@ function startGoldNetwork(canvasId, isSplash) {
         const bal = await getUsdcBalance(WALLETS[i]);
         total += bal;
       }
-      rpcIndex = 0; // reset ke endpoint pertama setelah berhasil
+      rpcIndex = 0; // reset to first endpoint after success
       updateUI(total);
     } catch (e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
