@@ -10,6 +10,7 @@
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://exillion.io"/>
 <title>Exillion — Capital Finecosystem | EXXE Angel Round</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -55,8 +56,8 @@ body {
   --gold:        #cc7d07;
   --gold-light:  #e8c97a;
   --gold-dim:    #7a5e2a;
-  --gold-glow:   rgba(0,212,255,0.15);
-  --gold-subtle: rgba(0,212,255,0.06);
+  --gold-glow:   rgba(204,125,7,0.15);
+  --gold-subtle: rgba(204,125,7,0.06);
   --cyan:        #00d4ff;
   --cyan-dim:    rgba(0,212,255,0.12);
   --text-1:      #e8f4ff;
@@ -73,6 +74,9 @@ body {
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 
+/* Fix anchor offset agar tidak tertutup fixed nav */
+[id] { scroll-margin-top: 80px; }
+
 html{
   background:#080614; /* iOS overscroll area — cegah layar putih */
 }
@@ -83,7 +87,7 @@ body{
   font-family:'Orbitron',monospace;
   overflow-x:hidden;
   overflow-y:scroll; /* selalu reserve scrollbar space agar nav tidak shift */
-  font-size:22px;
+  font-size:16px;
   line-height:1.7;
   -webkit-tap-highlight-color:transparent;
   -webkit-text-size-adjust:100%;
@@ -453,11 +457,11 @@ nav{
 }
 .section-rule{
   width:48px;
+  height:2px;
   background:linear-gradient(90deg,var(--cyan),#0066ff);
   margin:1.2rem auto 0;
   opacity:1;
   box-shadow:0 0 10px rgba(0,212,255,0.4), 0 0 20px rgba(0,212,255,0.2);
-  height:2px;
   animation:ruleGlow 3s ease-in-out infinite alternate;
 }
 @keyframes ruleGlow{
@@ -946,7 +950,9 @@ blockquote.centerquote{
   border:1px solid var(--border);
   padding:1.2rem 1.5rem;
   margin:1rem 0;
-  display:none;flex-direction:column;gap:0.5rem;
+  display:none;
+  flex-direction:column;
+  gap:0.5rem;
 }
 .calc-row{display:flex;justify-content:space-between;align-items:center;}
 .calc-lbl{
@@ -2714,15 +2720,12 @@ footer{
   function preloadLogo(src, onReady) {
     var img = new Image();
     img.crossOrigin = 'anonymous';
-    img.onload  = onReady;
-    img.onerror = onReady; // tetap lanjut meski gagal
-    img.src = src;
-    // Safety: maks 3 detik tunggu gambar
-    var timer = setTimeout(onReady, 3000);
+    var done = false;
+    var timer = setTimeout(function() { if(!done){ done=true; onReady(); }}, 3000);
     img.onload = img.onerror = function() {
-      clearTimeout(timer);
-      onReady();
+      if (!done) { done = true; clearTimeout(timer); onReady(); }
     };
+    img.src = src;
   }
 
   // --- 5. Orkestrasi utama ---
@@ -2833,7 +2836,7 @@ footer{
 
 <!-- ========== MAIN SPLASH (SECOND SPLASH) ========== -->
 <div id="main-splash" style="
-  position:fixed;top:0;left:0;width:100%;height:100vh;
+  position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;
   background:#010b18;
   z-index:9999;
   display:none;flex-direction:column;align-items:center;justify-content:center;
@@ -4074,7 +4077,7 @@ footer{
     </div>
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal">
-    <a href="#" class="btn-outline">Download Full Whitepaper (PDF)</a>
+    <a href="#" class="btn-outline" onclick="event.preventDefault();alert('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.');">Download Full Whitepaper (PDF)</a>
     <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold" style="
       font-family:'Orbitron',monospace;
       font-size:0.9rem;letter-spacing:2.5px;
@@ -4445,7 +4448,7 @@ footer{
   <div class="banner-text">
     <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Maximum $250 USDC per investor — Tier I: The Founding Member.
   </div>
-  <button class="banner-close" onclick="document.getElementById('stickyBanner').style.display='none'">✕</button>
+  <button class="banner-close" onclick="this.closest('.sticky-banner').classList.remove('show')">✕</button>
 </div>
 
 <script>
@@ -4517,8 +4520,8 @@ function acceptDisclaimer(){
 }
 
 function declineDisclaimer(){
-  if(confirm('You have chosen not to accept the Risk Disclaimer. You will be redirected.'))
-    window.location.href='https://google.com';
+  const overlay = document.getElementById('disclaimerOverlay');
+  if (overlay) { overlay.style.opacity='0'; overlay.style.transition='opacity 0.3s'; setTimeout(()=>overlay.style.display='none',300); }
 }
 
 // --- WALLET --------------------------------------------------
@@ -4640,7 +4643,7 @@ async function connectPhantom() {
     const provider = getPhantomProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
+      window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
@@ -4847,6 +4850,7 @@ function scrollToWallet() {
 function goStep(n){
   for(let i=1;i<=4;i++){
     const el=document.getElementById('step'+i);
+    if(!el) continue;
     el.classList.remove('active','done');
     if(i<n) el.classList.add('done');
     if(i===n) el.classList.add('active');
@@ -4860,6 +4864,7 @@ function calcTokens(){
   const t=tier();
   let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
   if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
+  if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
   const box=document.getElementById('calcBox');
   if(usdc>=t.min){
     const exxe=usdc/t.price;
@@ -4939,7 +4944,6 @@ async function proceedBuy(){
     if(!buildRes.ok) throw new Error('Failed to build transaction');
     const { transaction } = await buildRes.json();
     await txStep(1,'done','Transaction prepared ✓');
-
     // Step 2: Investor signs & sends USDC split transaction
     await txStep(2,'active','Please approve in your wallet...');
 
@@ -5018,8 +5022,10 @@ async function proceedBuy(){
     showSuccess(usdc, exxe, connectedAddress, exxeTx);
 
   } catch(e) {
-    document.getElementById('processingPanel').style.display='none';
-    document.getElementById('buyPanel').style.display='block';
+    const _procP2 = document.getElementById('processingPanel');
+    const _buyP2  = document.getElementById('buyPanel');
+    if (_procP2) _procP2.style.display='none';
+    if (_buyP2)  _buyP2.style.display='block';
     if(e.code !== 4001) alert('Transaction failed: ' + (e.message || 'Please try again.'));
     goStep(2);
   }
@@ -5028,8 +5034,7 @@ async function proceedBuy(){
 async function txStep(n,status,label){
   const icon=document.getElementById('ti'+n);
   const lbl=document.getElementById('tl'+n);
-  icon.className='tx-icon '+status;
-  icon.textContent=status==='done'?'✓':status==='active'?'▶':'○';
+  if(icon){ icon.className='tx-icon '+status; icon.textContent=status==='done'?'✓':status==='active'?'▶':'○'; }
   if(lbl) lbl.textContent=label;
   await sleep(300);
 }
@@ -5071,10 +5076,12 @@ if(window.innerWidth <= 768){
 }
 window.addEventListener('resize', () => {
   const hb = document.getElementById('hamburger');
+  if (!hb) return;
   if(window.innerWidth <= 768){ hb.style.display = 'flex'; }
   else {
     hb.style.display = 'none';
-    document.getElementById('navLinks').classList.remove('open');
+    const nl = document.getElementById('navLinks');
+    if (nl) nl.classList.remove('open');
     hb.classList.remove('open');
   }
 });
@@ -5347,9 +5354,13 @@ function startGoldNetwork(canvasId, isSplash) {
     if (!canvas) return;
     var ctx = canvas.getContext('2d', { alpha: true });
 
+    var _resizeTimer;
     function resize() {
-        canvas.width  = canvas.offsetWidth  || window.innerWidth;
-        canvas.height = canvas.offsetHeight || window.innerHeight;
+        clearTimeout(_resizeTimer);
+        _resizeTimer = setTimeout(function() {
+            canvas.width  = canvas.offsetWidth  || window.innerWidth;
+            canvas.height = canvas.offsetHeight || window.innerHeight;
+        }, 150);
     }
     resize();
     window.addEventListener('resize', resize);
@@ -5560,7 +5571,7 @@ function startGoldNetwork(canvasId, isSplash) {
       const amount = accounts[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
       return parseFloat(amount) || 0;
     } catch(e) {
-      rpcIndex++;
+      rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
       return 0;
     }
   }
@@ -5612,14 +5623,8 @@ function startGoldNetwork(canvasId, isSplash) {
       rpcIndex = 0; // reset ke endpoint pertama setelah berhasil
       updateUI(total);
     } catch (e) {
-      // Coba endpoint berikutnya
-      rpcIndex++;
-      if (rpcIndex < RPC_ENDPOINTS.length) {
-        setTimeout(fetchFunding, 3000);
-      } else {
-        // Semua endpoint gagal — reset dan coba lagi di siklus berikutnya
-        rpcIndex = 0;
-      }
+      rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+      setTimeout(fetchFunding, 5000);
     }
   }
 
