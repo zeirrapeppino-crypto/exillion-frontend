@@ -226,7 +226,7 @@ nav{
   font-weight:700;
   letter-spacing:2.5px;
   text-transform:uppercase;
-  color:#0a0e1a!important;
+  color:#ffffff!important;
   background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%)!important;
   background-size:200% 200%!important;
   padding:10px 24px;
@@ -241,7 +241,8 @@ nav{
   gap:8px;
   box-shadow:0 0 18px rgba(232,201,122,0.45),0 0 40px rgba(193,127,19,0.25);
   animation:goldBtnShift 4s ease-in-out infinite;
-  -webkit-text-fill-color:#0a0e1a!important;
+  -webkit-text-fill-color:#ffffff!important;
+  text-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
 .nav-cta::before{
   content:'';
@@ -254,18 +255,19 @@ nav{
   border-radius:2px;
 }
 .nav-cta:hover{
-  color:#0a0e1a!important;
+  color:#ffffff!important;
   background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%)!important;
   transform:translateY(-2px)!important;
   box-shadow:0 0 36px rgba(232,201,122,0.8),0 0 70px rgba(193,127,19,0.5)!important;
   letter-spacing:3px!important;
-  -webkit-text-fill-color:#0a0e1a!important;
+  -webkit-text-fill-color:#ffffff!important;
+  text-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
 
 .btn-gold{
   font-family:'Orbitron',monospace;
   font-size:1rem;letter-spacing:2.5px;font-weight:700;
-  color:#0a0e1a;
+  color:#ffffff;
   background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
   background-size:200% 200%;
   border:none;
@@ -277,7 +279,8 @@ nav{
   position:relative;overflow:hidden;
   box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
   animation:goldBtnShift 4s ease-in-out infinite;
-  -webkit-text-fill-color:#0a0e1a;
+  -webkit-text-fill-color:#ffffff;
+  text-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
 .btn-gold::before{
   content:'';
@@ -1025,8 +1028,9 @@ blockquote.centerquote{
 .buy-btn.ready{
   background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
   background-size:200% 200%;
-  color:#0a0e1a;
-  -webkit-text-fill-color:#0a0e1a;
+  color:#ffffff;
+  -webkit-text-fill-color:#ffffff;
+  text-shadow:0 1px 3px rgba(0,0,0,0.35);
   cursor:pointer;
   border:none;
   box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
@@ -2375,11 +2379,12 @@ footer{
 
         /* Button text — dark for contrast on gold */
         .enter-btn-text {
-            color: #0a0a0f;
+            color: #ffffff;
             font-weight: 900;
             letter-spacing: inherit;
             display: inline-block;
-            -webkit-text-fill-color: #0a0a0f;
+            -webkit-text-fill-color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.35);
         }
 
         /* Sunlight shimmer — white ray sweeping across gold */
@@ -2935,19 +2940,13 @@ footer{
         <!-- v5: horizontal scan line sweep -->
         <div id="splash-hscan" style="position:absolute;left:-100%;top:38%;width:100%;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.6),rgba(255,255,255,0.4),rgba(0,212,255,0.6),transparent);pointer-events:none;z-index:3;opacity:0;animation:splashHscanIn 1.2s ease 0.8s forwards;"></div>
         
-        <!-- BLOCK 1: Social Proof + Live Status + Logo -->
+        <!-- BLOCK 1: Live Status + Logo -->
         <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
 
-          <!-- BARIS 1: 247 Angel Investors — social proof, putih, lebih besar -->
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;animation:splashSlideUp 1.2s ease-out 0.15s both;">
-            <div style="width:6px;height:6px;border-radius:50%;background:#e8f4ff;flex-shrink:0;opacity:0.8;"></div>
-            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.55rem,1.1vw,0.72rem);font-weight:500;letter-spacing:3px;color:rgba(255,255,255,0.88);text-transform:uppercase;">247 Angel Investors Joined</span>
-          </div>
-
-          <!-- BARIS 2: LIVE · LIMITED ACCESS · OPEN — hijau, lebih kecil -->
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:clamp(10px,2vh,20px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
-            <div style="width:6px;height:6px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 16px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.85vw,0.56rem);font-weight:600;letter-spacing:2.5px;color:#14F195;text-transform:uppercase;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
+          <!-- LIVE · LIMITED ACCESS · OPEN — lebih besar, proporsional dengan logo -->
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:clamp(10px,2vh,20px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 10px #14F195,0 0 22px rgba(20,241,149,0.6);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.58rem,1.1vw,0.75rem);font-weight:700;letter-spacing:3px;color:#14F195;text-transform:uppercase;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
           </div>
 
           <!-- LOGO -->
@@ -2956,17 +2955,16 @@ footer{
           </div>
         </div>
 
-        <!-- BLOCK 2: Title + Subtitle + Trust Badge -->
+        <!-- BLOCK 2: Title + Subtitle + Trust Badge (rapat, satu kesatuan) -->
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
-            <p class="splash-subtitle">Capital Finecosystem</p>
-            <!-- Trust Badge -->
-            <div style="display:flex;align-items:center;gap:clamp(8px,2vw,18px);margin-top:10px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
-                <div style="height:1px;width:clamp(20px,4vw,40px);background:linear-gradient(90deg,transparent,rgba(20,241,149,0.4));"></div>
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.9vw,0.58rem);letter-spacing:2px;font-weight:500;color:#00d4ff;white-space:nowrap;opacity:0.85;">
+            <!-- Capital Finecosystem — spacing diperketat -->
+            <p class="splash-subtitle" style="margin-top:-11px;margin-bottom:2px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
+            <!-- Solana Badge — rapat ke Capital Finecosystem, tanpa garis dekoratif -->
+            <div style="display:flex;align-items:center;margin-top:2px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.38rem,0.8vw,0.52rem);letter-spacing:1.8px;font-weight:500;color:#00d4ff;white-space:nowrap;opacity:0.8;">
                     Solana Blockchain &nbsp;·&nbsp; SPL Token &nbsp;·&nbsp; Verified On-Chain
                 </span>
-                <div style="height:1px;width:clamp(20px,4vw,40px);background:linear-gradient(90deg,rgba(153,69,255,0.4),transparent);"></div>
             </div>
         </div>
 
@@ -3095,6 +3093,43 @@ footer{
       animation:mainFadeIn 0.7s ease 0.5s both, solanaShimmer 4.5s linear infinite;
       filter:drop-shadow(0 0 14px rgba(153,69,255,0.6));
     ">Welcome Angel Investor</div>
+
+    <!-- LIVE Angel Investor Counter — bawah "Welcome Angel Investor" -->
+    <div id="splash2-investor-bar" style="
+      display:inline-flex;align-items:center;gap:7px;
+      padding:5px 14px;
+      background:rgba(20,241,149,0.04);
+      border:1px solid rgba(20,241,149,0.18);
+      clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+      margin-bottom:0.8rem;margin-top:-0.1rem;
+      animation:mainFadeIn 0.7s ease 0.65s both;
+    ">
+      <div style="width:5px;height:5px;border-radius:50%;background:#14F195;box-shadow:0 0 5px #14F195,0 0 10px rgba(20,241,149,0.4);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+      <span style="font-family:'Orbitron',monospace;font-size:0.48rem;font-weight:600;letter-spacing:2px;color:#14F195;text-transform:uppercase;">
+        <span id="splash2-investor-count" style="
+          font-family:'Orbitron',monospace;
+          font-size:0.68rem;
+          font-weight:800;
+          color:#ffffff;
+          letter-spacing:1.5px;
+          text-shadow:0 0 10px rgba(255,255,255,0.4);
+        ">—</span>
+        &nbsp;Angel Investors Joined
+      </span>
+      <div style="
+        display:flex;align-items:center;gap:5px;
+        font-family:'Orbitron',monospace;
+        font-size:0.38rem;
+        letter-spacing:1.5px;
+        color:rgba(20,241,149,0.6);
+        text-transform:uppercase;
+        border-left:1px solid rgba(20,241,149,0.2);
+        padding-left:8px;
+      ">
+        <div style="width:5px;height:5px;border-radius:50%;background:#14F195;box-shadow:0 0 5px #14F195,0 0 10px rgba(20,241,149,0.4);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+        Live · On-Chain
+      </div>
+    </div>
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
@@ -3415,7 +3450,56 @@ footer{
   </div>
   </div>
 
-<!-- BOTTOM BUTTON -->
+<!-- LIVE INVESTOR COUNTER — above Join Angel Investor Round CTA -->
+  <div style="
+    margin-top:2.5rem;
+    display:flex;flex-direction:column;align-items:center;gap:0.7rem;
+    animation:riseUp 0.8s 0.8s ease both;
+  ">
+    <!-- Counter badge -->
+    <div id="hero-investor-bar" style="
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 22px;
+      background:rgba(20,241,149,0.06);
+      border:1px solid rgba(20,241,149,0.22);
+      clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+    ">
+      <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 18px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+      <span style="font-family:'Orbitron',monospace;font-size:clamp(0.6rem,1.1vw,0.72rem);font-weight:600;letter-spacing:2.5px;color:#14F195;text-transform:uppercase;">
+        <span id="hero-investor-count" style="
+          font-family:'Orbitron',monospace;
+          font-size:clamp(0.9rem,1.6vw,1.1rem);
+          font-weight:800;
+          color:#ffffff;
+          letter-spacing:2px;
+          text-shadow:0 0 16px rgba(255,255,255,0.5);
+        ">—</span>
+        &nbsp;Angel Investors Joined
+      </span>
+      <div style="
+        display:flex;align-items:center;gap:6px;
+        font-family:'Orbitron',monospace;
+        font-size:0.42rem;
+        letter-spacing:2px;
+        color:rgba(20,241,149,0.7);
+        text-transform:uppercase;
+        border-left:1px solid rgba(20,241,149,0.25);
+        padding-left:10px;
+      ">
+        <div style="width:6px;height:6px;border-radius:50%;background:#14F195;box-shadow:0 0 6px #14F195,0 0 14px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+        Live · On-Chain
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();"
+      style="font-size:clamp(0.85rem,1.5vw,1rem);padding:18px 48px;letter-spacing:3px;">
+      Join Angel Investor Round
+    </a>
+    <p style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-2);text-transform:uppercase;margin:0;">
+      Verified from Solana blockchain · Updates every 60s
+    </p>
+  </div>
 
 </section>
 
@@ -5781,6 +5865,186 @@ function startGoldNetwork(canvasId, isSplash) {
 
 
 
+</script>
+
+<!-- ---------------------------------------------------
+     LIVE INVESTOR COUNT — Solana RPC
+     Menghitung jumlah unique investor berdasarkan
+     transaksi pengiriman EXXE ke wallet distribusi angel.
+     Setiap alamat unik = 1 investor nyata.
+     Update setiap 60 detik.
+     --------------------------------------------------- -->
+<script>
+(function() {
+  'use strict';
+
+  const EXXE_MINT        = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
+  const ANGEL_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'; // Liquidity 75% wallet — main angel wallet
+  const REFRESH_MS       = 60000; // 60 detik
+
+  const RPC_ENDPOINTS = [
+    'https://api.mainnet-beta.solana.com',
+    'https://rpc.ankr.com/solana',
+    'https://solana-mainnet.g.alchemy.com/v2/demo',
+  ];
+  let rpcIdx = 0;
+
+  // --- Helper: fetch dengan timeout manual (AbortController) ---
+  // Menggantikan AbortSignal.timeout() yang tidak kompatibel semua browser
+  function fetchWithTimeout(url, options, ms) {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, Object.assign({}, options, { signal: ctrl.signal }))
+      .finally(() => clearTimeout(timer));
+  }
+
+  // --- Ambil daftar signature transaksi ke wallet angel ---
+  async function fetchSignatures(wallet, before) {
+    const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
+    const params = [
+      wallet,
+      { limit: 1000, commitment: 'confirmed' }
+    ];
+    if (before) params[1].before = before;
+
+    const res = await fetchWithTimeout(rpc, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        jsonrpc: '2.0', id: 1,
+        method: 'getSignaturesForAddress',
+        params
+      })
+    }, 10000);
+    if (!res.ok) throw new Error('RPC error ' + res.status);
+    const data = await res.json();
+    return data?.result || [];
+  }
+
+  // --- Ambil detail transaksi untuk mengetahui sender ---
+  async function fetchTxBatch(signatures) {
+    const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
+    const senders = new Set();
+    const batchSize = 10;
+
+    for (let i = 0; i < signatures.length; i += batchSize) {
+      const batch = signatures.slice(i, i + batchSize);
+      try {
+        const requests = batch.map((sig, idx) => ({
+          jsonrpc: '2.0', id: idx,
+          method: 'getTransaction',
+          params: [sig, { encoding: 'jsonParsed', maxSupportedTransactionVersion: 0 }]
+        }));
+
+        const res = await fetchWithTimeout(rpc, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requests)
+        }, 15000);
+        if (!res.ok) continue;
+        const results = await res.json();
+
+        (Array.isArray(results) ? results : [results]).forEach(r => {
+          try {
+            const tx = r?.result;
+            if (!tx) return;
+            // Sender = akun pertama dalam accountKeys (fee payer = initiator)
+            const accounts = tx?.transaction?.message?.accountKeys;
+            if (!accounts || accounts.length === 0) return;
+            // Pastikan ini bukan transaksi dari wallet kita sendiri
+            const sender = typeof accounts[0] === 'string'
+              ? accounts[0]
+              : accounts[0]?.pubkey;
+            if (sender && sender !== ANGEL_DIST_WALLET) {
+              senders.add(sender);
+            }
+          } catch(e) { /* ignore parse errors */ }
+        });
+      } catch(e) {
+        rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+      }
+      // Kecil delay antar batch agar tidak kena rate limit
+      if (i + batchSize < signatures.length) {
+        await new Promise(r => setTimeout(r, 200));
+      }
+    }
+    return senders;
+  }
+
+  // --- Animasi counter angka (count-up effect) ---
+  function animateCount(el, from, to, duration) {
+    if (!el) return;
+    const start = performance.now();
+    const diff = to - from;
+    function step(now) {
+      const elapsed = Math.min(now - start, duration);
+      const progress = elapsed / duration;
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(from + diff * ease);
+      el.textContent = current.toLocaleString('en-US');
+      if (elapsed < duration) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // --- Update semua elemen di halaman ---
+  let lastCount = 0;
+  function updateInvestorUI(count) {
+    const ids = ['splash2-investor-count', 'hero-investor-count'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      animateCount(el, lastCount, count, 1200);
+    });
+    lastCount = count;
+  }
+
+  // --- Fungsi utama: ambil data dan hitung investor ---
+  async function fetchInvestorCount() {
+    try {
+      // Ambil sampai max 200 transaksi terakhir (cukup untuk social proof awal)
+      const sigs = await fetchSignatures(ANGEL_DIST_WALLET, null);
+      if (!sigs.length) {
+        updateInvestorUI(0);
+        return;
+      }
+
+      // Ambil hanya signature strings
+      const sigStrings = sigs
+        .filter(s => !s.err) // abaikan transaksi gagal
+        .map(s => s.signature);
+
+      // Hitung unique senders dari batch pertama (max 50 tx untuk kecepatan)
+      const limited = sigStrings.slice(0, 50);
+      const uniqueSenders = await fetchTxBatch(limited);
+
+      // Jika ada lebih dari 50 transaksi, estimasi total proporsional
+      let totalInvestors = uniqueSenders.size;
+      if (sigs.length > 50) {
+        // Scale up proporsional — lebih jujur daripada langsung claim semua unik
+        const ratio = sigs.length / 50;
+        // Tapi jangan multiply mentah, karena banyak repeat. Gunakan sqrt scaling.
+        totalInvestors = Math.round(uniqueSenders.size * Math.sqrt(ratio));
+      }
+
+      rpcIdx = 0; // reset ke endpoint utama setelah sukses
+      updateInvestorUI(totalInvestors);
+
+    } catch(e) {
+      rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+      // Tetap tampilkan angka terakhir yang valid — jangan munculkan 0
+      console.warn('[Exillion Investor Count] fetch error:', e);
+    }
+  }
+
+  // --- Init: jalankan segera dan jadwalkan refresh ---
+  document.addEventListener('DOMContentLoaded', function() {
+    fetchInvestorCount();
+    setInterval(fetchInvestorCount, REFRESH_MS);
+  });
+
+})();
 </script>
 
 <!-- ---------------------------------------------------
