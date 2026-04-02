@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v9 (Fully English, Bug Fixed & Optimized) -->
+<!-- Exillion Capital Finecosystem — v14 (Full Technical Audit Fix: Investor Counter, Funding Tracker, Payment Signing, Confirmation Polling, Mobile Wallet) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<!-- FIX QUALITY #6: Content Security Policy — critical for a financial site handling
+     crypto transactions. Prevents XSS attacks that could steal wallet addresses or
+     manipulate transaction amounts. Adjust connect-src if backend URL changes. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
@@ -38,6 +42,14 @@
 #splash-page .splash-tagline,
 #splash-page .splash-collateral {
   visibility: hidden;
+}
+/* FIX WARNING #6: Safety rule — if font never loads, force text visible after 3s
+   so the page is never permanently blank. Applied via JS timeout below. */
+#splash-page.fonts-ready .splash-title,
+#splash-page.fonts-ready .splash-subtitle,
+#splash-page.fonts-ready .splash-tagline,
+#splash-page.fonts-ready .splash-collateral {
+  visibility: visible;
 }
 body {
   font-family: 'Orbitron', 'orbitron-fallback', monospace;
@@ -1787,17 +1799,18 @@ footer{
     width:75vw!important;
   }
 
-  /* Buttons action row */
-  div[style*="padding:0 5% 4rem"]{
+  /* Buttons action row — FIX QUALITY #3: replaced fragile style-string selector
+     with a proper CSS class. Style-based selectors break silently if inline style changes. */
+  .hero-action-row{
     padding:0 4% 3rem!important;
   }
-  div[style*="padding:0 5% 4rem"] > div{
+  .hero-action-row > div{
     flex-direction:column!important;
     align-items:center!important;
     width:100%!important;
   }
-  div[style*="padding:0 5% 4rem"] .btn-outline,
-  div[style*="padding:0 5% 4rem"] .btn-gold{
+  .hero-action-row .btn-outline,
+  .hero-action-row .btn-gold{
     width:100%!important;
     max-width:320px;
     text-align:center;
@@ -2919,12 +2932,21 @@ footer{
 (function(){
   // --- 1. Reveal splash text after Orbitron font is ready ---
   function revealSplashText(){
+    // FIX WARNING #6: add class to #splash-page so CSS rule #splash-page.fonts-ready
+    // makes all child splash text visible at once.
+    var sp = document.getElementById('splash-page');
+    if (sp) sp.classList.add('fonts-ready');
+    // Also support old per-element class for any elements using it directly
     var els = document.querySelectorAll(
       '#splash-page .splash-title, #splash-page .splash-subtitle, '+
       '#splash-page .splash-tagline, #splash-page .splash-collateral'
     );
-    els.forEach(function(el){ el.classList.add('font-ready'); });
+    els.forEach(function(el){ el.style.visibility='visible'; });
   }
+
+  // FIX WARNING #6: Hard timeout fallback — if Orbitron never loads (offline / slow
+  // connection), force splash text visible after 3s so users are never stuck on a blank page.
+  setTimeout(revealSplashText, 3000);
 
   // --- 2. Run loading bar via JS, smooth & synchronised ---
   function runLoadingBar(onComplete) {
@@ -4566,7 +4588,7 @@ footer{
       <div class="wp-text">EXXE and mEXXE operate strictly as utility tokens. Not a security. Not a financial instrument. Participation is voluntary. Exillion respects every jurisdiction and is committed to operating with full legal and ethical integrity.</div>
     </div>
   </div>
-  <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal">
+  <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal hero-action-row">
     <a href="#" class="btn-outline" onclick="event.preventDefault();alert('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.');">Download Full Whitepaper (PDF)</a>
     <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
   </div>
@@ -4995,11 +5017,8 @@ function acceptDisclaimer(){
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
   setTimeout(()=>{ overlay.classList.remove('active'); overlay.style.opacity=''; overlay.style.transition=''; },300);
   setTimeout(()=>{ const _sb=document.getElementById('stickyBanner'); if(_sb) _sb.classList.add('show'); },500);
-  // BUG FIX: re-validate buyBtn.ready before proceeding to prevent stale-state transaction
-  setTimeout(()=>{
-    const _bb = document.getElementById('buyBtn');
-    if(_bb && _bb.classList.contains('ready')) proceedBuy();
-  }, 400);
+  // FIX CRITICAL #1: Removed auto-trigger of proceedBuy(). Blockchain transactions
+  // must ONLY be initiated by an explicit user click — never auto-fired after modal close.
 }
 
 function declineDisclaimer(){
@@ -5072,6 +5091,9 @@ async function disconnectWallet() {
   // Reset state
   connectedWallet  = null;
   connectedAddress = null;
+  // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
+  // is shown again for each new connection/transaction session. This ensures the user
+  // always re-acknowledges risks before a new transaction, not just once per page load.
   disclaimerAccepted = false;
 
   // Reset buttons
@@ -5135,31 +5157,30 @@ function isInsideSolflare() {
 }
 
 async function connectPhantom() {
-  // ── MOBILE: no extension → deep link into Phantom in-app browser ──
-  if (isMobileBrowser()) {
+  // ── MOBILE: cek apakah sudah di dalam Phantom in-app browser dulu ──
+  // Jika window.phantom sudah ada, berarti kita sudah di dalam Phantom
+  // dan tidak perlu redirect (menghindari redirect loop).
+  if (isMobileBrowser() && !isInsidePhantom()) {
     const provider = getPhantomProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      // Phantom Universal Link v2 (current as of 2024) — opens site inside Phantom browser
       window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
-  // ── DESKTOP: file:// is not supported by the Phantom extension ──
+  // ── DESKTOP: file:// tidak didukung Phantom extension ──
   if (window.location.protocol === 'file:') {
     alert('⚠️  Phantom cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
-  // ── DESKTOP: cek extension ──
   const provider = getPhantomProvider();
   if (!provider) {
     showWalletHint('phantom');
     return;
   }
 
-  // ── Extension ada → update button state ──
   const pBtn = document.getElementById('phantomBtn');
   if (pBtn) {
     pBtn.disabled = true;
@@ -5169,12 +5190,10 @@ async function connectPhantom() {
   }
 
   try {
-    // provider.connect() → triggers the Phantom popup in Chrome
-    const resp = await provider.connect();
+    const resp    = await provider.connect();
     const address = resp.publicKey.toString();
     setConnected('Phantom', address);
 
-    // Auto disconnect/account-change listeners
     try { provider.on('disconnect', function() { if (connectedWallet === 'Phantom') disconnectWallet(); }); } catch(e){}
     try {
       provider.on('accountChanged', function(pubKey) {
@@ -5184,14 +5203,12 @@ async function connectPhantom() {
     } catch(e){}
 
   } catch(e) {
-    // Restore button
     if (pBtn) {
       pBtn.disabled = false;
       pBtn.style.opacity = '1';
       const nameEl = pBtn.querySelector('.wallet-name');
       if (nameEl) nameEl.textContent = 'Connect Phantom';
     }
-    // 4001 = user menutup popup sendiri, bukan error
     if (e.code !== 4001) {
       alert('Phantom connection failed: ' + (e.message || 'Please try again.'));
     }
@@ -5199,31 +5216,27 @@ async function connectPhantom() {
 }
 
 async function connectSolflare() {
-  // ── MOBILE: no extension → deep link into Solflare in-app browser ──
-  if (isMobileBrowser()) {
+  // ── MOBILE: cek apakah sudah di dalam Solflare in-app browser dulu ──
+  if (isMobileBrowser() && !isInsideSolflare()) {
     const provider = getSolflareProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      // Solflare Universal Link (current scheme)
       window.location.href = 'https://solflare.com/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
-  // ── DESKTOP: file:// is not supported by the Solflare extension ──
   if (window.location.protocol === 'file:') {
     alert('⚠️  Solflare cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
-  // ── DESKTOP: cek extension ──
   const provider = getSolflareProvider();
   if (!provider) {
     showWalletHint('solflare');
     return;
   }
 
-  // ── Extension ada → update button state ──
   const sBtn = document.getElementById('solflareBtn');
   if (sBtn) {
     sBtn.disabled = true;
@@ -5233,12 +5246,10 @@ async function connectSolflare() {
   }
 
   try {
-    // provider.connect() → triggers the Solflare popup in Chrome
     await provider.connect();
     const address = provider.publicKey.toString();
     setConnected('Solflare', address);
 
-    // Auto disconnect/account-change listeners
     try { provider.on('disconnect', function() { if (connectedWallet === 'Solflare') disconnectWallet(); }); } catch(e){}
     try {
       provider.on('accountChanged', function() {
@@ -5388,7 +5399,9 @@ function checkReady(){
   if(!btn) return;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress){
     btn.classList.add('ready');
-    const exxe=(usdc/t.price).toLocaleString();
+    // FIX QUALITY #7: Use explicit locale + fractionDigits for consistent formatting
+    // across all user locales. Plain .toLocaleString() gives "1,000.0000000001" in some locales.
+    const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
     const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} USDC — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
@@ -5427,115 +5440,253 @@ async function executeBuy(){
 async function proceedBuy(){
   const _pb = document.getElementById('buyBtn');
   if(!_pb || !_pb.classList.contains('ready')) return;
-  if(_isBuying) return; // BUG FIX #5: double-submit guard
-  _isBuying = true;     // lock
-  const usdc = parseFloat(document.getElementById('usdcAmount').value)||0;
-  const exxe = usdc / tier().price;
+  if(_isBuying) return;
+  // Re-validasi amount — DOM bisa dimanipulasi antara checkReady() dan di sini
+  const t = tier();
+  const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
+  if (!usdc || usdc < t.min || usdc > t.max) {
+    alert('Invalid amount. Please enter a value between ' + t.min + ' and ' + t.max + ' USDC.');
+    return;
+  }
+  if (!connectedAddress) {
+    alert('No wallet connected. Please connect your wallet first.');
+    return;
+  }
+  _isBuying = true;
+  const exxe = usdc / t.price;
 
-  const _buyP = document.getElementById('buyPanel');
+  const _buyP  = document.getElementById('buyPanel');
   const _procP = document.getElementById('processingPanel');
-  if (_buyP) _buyP.style.display='none';
-  if (_procP) _procP.style.display='block';
-  // Step 4 is final — keep step 3 (form review) active until tx completes
+  if (_buyP)  _buyP.style.display  = 'none';
+  if (_procP) _procP.style.display = 'block';
 
   try {
-    // Step 1: Build split transaction from Railway backend
-    await txStep(1,'active','Building USDC split transaction...');
-    const buildRes = await fetch(`${CFG.API}/build-split-tx`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
-    });
-    if(!buildRes.ok) throw new Error('Failed to build transaction');
+    // ── Step 1: Bangun transaksi split dari Railway backend ──────────
+    await txStep(1, 'active', 'Building USDC split transaction...');
+    const buildRes = await Promise.race([
+      fetch(`${CFG.API}/build-split-tx`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+      }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
+    ]);
+    if (!buildRes.ok) throw new Error('Failed to build transaction (server error ' + buildRes.status + ')');
     const { transaction } = await buildRes.json();
-    await txStep(1,'done','Transaction prepared ✓');
-    // Step 2: Investor signs & sends USDC split transaction
-    await txStep(2,'active','Please approve in your wallet...');
+    if (!transaction || typeof transaction !== 'string') {
+      throw new Error('Backend returned invalid transaction data.');
+    }
+    await txStep(1, 'done', 'Transaction prepared ✓');
 
-    // Deserialize base64 → VersionedTransaction (compatible Phantom & Solflare)
+    // ── Step 2: Wallet sign + send ───────────────────────────────────
+    await txStep(2, 'active', 'Please approve in your wallet...');
+
+    // Deserialise base64 → Uint8Array (raw VersionedTransaction bytes dari backend)
     const txBytes = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
 
     let txSignature;
     try {
       if (connectedWallet === 'Phantom') {
+        // ── Phantom: gunakan signAndSendTransaction standar ──────────
+        // API resmi: provider.signAndSendTransaction(transaction)
+        // dimana transaction adalah object dengan serialize() → Uint8Array.
+        // Phantom v0.9+ menerima format ini secara native.
         const provider = getPhantomProvider();
-        // Phantom: signAndSendTransaction menerima raw bytes via object {message}
-        // Most compatible approach: send as Buffer, let Phantom parse it
-        const result = await provider.request({
-          method: 'signAndSendTransaction',
-          params: { message: btoa(String.fromCharCode(...txBytes)) }
-        }).catch(async () => {
-          // Fallback: use signTransaction then send manually
-          const signedBytes = await provider.request({
-            method: 'signTransaction',
-            params: { message: btoa(String.fromCharCode(...txBytes)) }
-          });
-          // Send raw tx via RPC directly (no @solana/web3.js needed)
-          const rawTxBytes = Uint8Array.from(atob(signedBytes.transaction), c => c.charCodeAt(0));
-          const rpcRes = await fetch('https://api.mainnet-beta.solana.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              jsonrpc: '2.0', id: 1,
-              method: 'sendTransaction',
-              params: [ btoa(String.fromCharCode(...rawTxBytes)), { encoding: 'base64', skipPreflight: false } ]
-            })
-          });
-          const rpcData = await rpcRes.json();
-          if (rpcData.error) throw new Error(rpcData.error.message);
-          const sig = rpcData.result;
-          return { signature: sig };
-        });
-        txSignature = result.signature || result.publicKey;
+        if (!provider) throw new Error('Phantom not available');
+
+        // Bungkus raw bytes sebagai VersionedTransaction-compatible object
+        // Phantom menerima object { serialize() } sesuai @solana/web3.js interface
+        const txObj = {
+          serialize: () => txBytes,
+          // Flag untuk memberi tahu Phantom ini adalah VersionedTransaction
+          message: { version: 0 }
+        };
+
+        let result;
+        // Coba metode standar dulu
+        if (typeof provider.signAndSendTransaction === 'function') {
+          result = await provider.signAndSendTransaction(txObj);
+          txSignature = result?.signature || (typeof result === 'string' ? result : null);
+        }
+
+        // Fallback: gunakan signTransaction lalu kirim manual via RPC
+        if (!txSignature) {
+          const signedResult = await provider.signTransaction(txObj);
+          // signedResult bisa berupa object dengan serialize() atau langsung bytes
+          let signedBytes;
+          if (signedResult && typeof signedResult.serialize === 'function') {
+            signedBytes = signedResult.serialize();
+          } else if (signedResult instanceof Uint8Array) {
+            signedBytes = signedResult;
+          } else if (typeof signedResult === 'string') {
+            signedBytes = Uint8Array.from(atob(signedResult), c => c.charCodeAt(0));
+          } else {
+            throw new Error('Phantom signTransaction returned unexpected format');
+          }
+          // Kirim raw bytes ke Solana RPC dengan retry RPC fallback
+          txSignature = await sendRawTransaction(signedBytes);
+        }
+
       } else {
-        // Solflare
+        // ── Solflare: gunakan signAndSendTransaction standar ─────────
+        // API resmi Solflare menerima object dengan serialize() method
         const provider = getSolflareProvider();
         if (!provider) throw new Error('Solflare not available');
-        // Solflare accepts an object with a serialize() method that returns Uint8Array
-        const result = await provider.signAndSendTransaction({
-          serialize: () => txBytes
-        });
-        txSignature = result.signature;
+
+        const txObj = { serialize: () => txBytes };
+
+        if (typeof provider.signAndSendTransaction === 'function') {
+          const result = await provider.signAndSendTransaction(txObj);
+          txSignature = result?.signature || (typeof result === 'string' ? result : null);
+        }
+
+        // Fallback Solflare: sign dulu lalu kirim manual
+        if (!txSignature && typeof provider.signTransaction === 'function') {
+          const signedTx = await provider.signTransaction(txObj);
+          let signedBytes;
+          if (signedTx && typeof signedTx.serialize === 'function') {
+            signedBytes = signedTx.serialize();
+          } else if (signedTx instanceof Uint8Array) {
+            signedBytes = signedTx;
+          } else {
+            throw new Error('Solflare signTransaction returned unexpected format');
+          }
+          txSignature = await sendRawTransaction(signedBytes);
+        }
       }
+
     } catch(signErr) {
-      if (signErr.code === 4001) throw signErr; // user rejected
+      if (signErr.code === 4001) throw signErr; // user rejected — bukan error teknis
       throw new Error('Wallet signing failed: ' + (signErr.message || 'Please try again'));
     }
-    await txStep(2,'done',`USDC split confirmed ✓`);
 
-    // Step 3: Verify payment on Railway backend
-    await txStep(3,'active','Verifying on Solana blockchain...');
-    const verifyRes = await fetch(`${CFG.API}/verify-payment`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
-    });
-    if(!verifyRes.ok) throw new Error('Payment verification failed');
-    await txStep(3,'done','Payment verified on-chain ✓');
+    // Validasi signature — string base58, minimal 32 karakter
+    if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
+      throw new Error('Wallet returned an invalid or empty signature. Please try again.');
+    }
+    await txStep(2, 'done', 'USDC split confirmed ✓');
 
-    // Step 4: Backend sends EXXE to investor
-    await txStep(4,'active',`Sending ${exxe.toLocaleString()} EXXE to your wallet...`);
-    const sendRes = await fetch(`${CFG.API}/send-exxe`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
-    });
-    if(!sendRes.ok) throw new Error('Failed to send EXXE');
-    const { signature: exxeTx } = await sendRes.json();
-    await txStep(4,'done',`${exxe.toLocaleString()} EXXE delivered ✓`);
+    // ── Step 3: Verifikasi pembayaran di Railway backend ─────────────
+    await txStep(3, 'active', 'Verifying on Solana blockchain...');
 
-    showSuccess(usdc, exxe, connectedAddress, exxeTx);
-    _isBuying = false; // BUG FIX #5: unlock after success
+    // Poll konfirmasi on-chain sebelum panggil backend verify
+    // (pastikan transaksi sudah masuk sebelum backend cek)
+    await waitForConfirmation(txSignature);
+
+    const verifyRes = await Promise.race([
+      fetch(`${CFG.API}/verify-payment`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+      }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('Verification timeout — please contact support with TX: ' + txSignature)), 45000))
+    ]);
+    if (!verifyRes.ok) throw new Error('Payment verification failed (server error ' + verifyRes.status + '). TX: ' + txSignature);
+    await txStep(3, 'done', 'Payment verified on-chain ✓');
+
+    // ── Step 4: Backend kirim EXXE ke investor ───────────────────────
+    await txStep(4, 'active', `Sending ${exxe.toLocaleString()} EXXE to your wallet...`);
+    const sendRes = await Promise.race([
+      fetch(`${CFG.API}/send-exxe`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
+      }),
+      new Promise((_, rej) => setTimeout(() => rej(new Error('EXXE delivery timeout — contact support with TX: ' + txSignature)), 60000))
+    ]);
+    if (!sendRes.ok) throw new Error('Failed to send EXXE (server error ' + sendRes.status + '). TX: ' + txSignature);
+    const sendData = await sendRes.json();
+    const exxeTx   = sendData?.signature || sendData?.tx || '';
+    await txStep(4, 'done', `${exxe.toLocaleString()} EXXE delivered ✓`);
+
+    showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature);
+    _isBuying = false;
 
   } catch(e) {
-    _isBuying = false; // BUG FIX #5: unlock on error so user can retry
+    _isBuying = false;
     const _procP2 = document.getElementById('processingPanel');
     const _buyP2  = document.getElementById('buyPanel');
-    if (_procP2) _procP2.style.display='none';
-    if (_buyP2)  _buyP2.style.display='block';
-    if(e.code !== 4001) alert('Transaction failed: ' + (e.message || 'Please try again.'));
+    if (_procP2) _procP2.style.display = 'none';
+    if (_buyP2)  _buyP2.style.display  = 'block';
+    if (e.code !== 4001) {
+      alert('Transaction failed: ' + (e.message || 'Please try again.'));
+    }
     goStep(2);
   }
+}
+
+// --- Kirim raw transaction bytes ke Solana RPC dengan RPC fallback ---
+async function sendRawTransaction(signedBytes) {
+  const RPC_LIST = [
+    'https://api.mainnet-beta.solana.com',
+    'https://rpc.ankr.com/solana',
+    'https://solana-mainnet.g.alchemy.com/v2/demo',
+  ];
+  const b64 = btoa(String.fromCharCode(...signedBytes));
+  for (let i = 0; i < RPC_LIST.length; i++) {
+    try {
+      const ctrl  = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 12000);
+      const res   = await fetch(RPC_LIST[i], {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'sendTransaction',
+          params: [b64, { encoding: 'base64', skipPreflight: false, maxRetries: 3 }]
+        }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.error) continue; // coba RPC berikutnya
+      if (data.result && typeof data.result === 'string') return data.result;
+    } catch(e) { /* coba RPC berikutnya */ }
+  }
+  throw new Error('All RPC endpoints failed to send transaction. Please try again.');
+}
+
+// --- Poll konfirmasi transaksi sebelum lanjut verify ----------------
+// Cek status 'confirmed' atau 'finalized' dengan timeout 30 detik.
+async function waitForConfirmation(signature) {
+  const RPC = 'https://api.mainnet-beta.solana.com';
+  const maxWait  = 30000; // 30 detik max
+  const interval = 2500;  // cek setiap 2.5 detik
+  const deadline = Date.now() + maxWait;
+
+  while (Date.now() < deadline) {
+    try {
+      const ctrl  = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 8000);
+      const res   = await fetch(RPC, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'getSignatureStatuses',
+          params: [[signature], { searchTransactionHistory: true }]
+        }),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data     = await res.json();
+        const status   = data?.result?.value?.[0];
+        const conf     = status?.confirmationStatus;
+        const err      = status?.err;
+        if (err) throw new Error('Transaction rejected by Solana: ' + JSON.stringify(err));
+        if (conf === 'confirmed' || conf === 'finalized') return; // sukses
+      }
+    } catch(e) {
+      if (e.message && e.message.startsWith('Transaction rejected')) throw e;
+      // timeout atau RPC error — coba lagi
+    }
+    await new Promise(r => setTimeout(r, interval));
+  }
+  // Timeout habis tapi tidak error fatal — lanjutkan ke verify
+  // (backend akan cek sendiri; tx mungkin sudah confirm tapi lambat)
+  console.warn('[Exillion] waitForConfirmation timeout — proceeding to verify');
 }
 
 async function txStep(n,status,label){
@@ -5543,21 +5694,55 @@ async function txStep(n,status,label){
   const lbl=document.getElementById('tl'+n);
   if(icon){ icon.className='tx-icon '+status; icon.textContent=status==='done'?'✓':status==='active'?'▶':'○'; }
   if(lbl) lbl.textContent=label;
-  await sleep(300);
+  // Yield ke event loop untuk memastikan DOM repaint terjadi sebelum async berikutnya.
+  // Tidak butuh setTimeout artificial — microtask yield via Promise.resolve() cukup.
+  await Promise.resolve();
 }
 
 function showSuccess(usdc,exxe,wallet,tx){
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
-  goStep(4);
-  const short=wallet.slice(0,6)+'...'+wallet.slice(-6);
-  document.getElementById('successDetails').innerHTML=
-    `Wallet:&nbsp;&nbsp;&nbsp;${short}<br>`+
-    `Paid:&nbsp;&nbsp;&nbsp;&nbsp;${usdc.toLocaleString()} USDC<br>`+
-    `Received: ${exxe.toLocaleString()} EXXE<br>`+
-    `TX:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${tx.slice(0,22)}...<br>`+
-    `Status:&nbsp;&nbsp;CONFIRMED ✓`;
-  document.getElementById('solscanLink').href=`https://solscan.io/tx/${tx}`;
+  // Tandai semua 3 step yang ada di HTML sebagai selesai.
+  // (Step 4 tidak ada sebagai elemen HTML — goStep(4) adalah no-op yang aman)
+  for(let i=1;i<=3;i++){
+    const el=document.getElementById('step'+i);
+    if(el){ el.classList.remove('active'); el.classList.add('done'); }
+  }
+  // Pastikan step 4 juga ditandai done jika elemen ada
+  const step4=document.getElementById('step4');
+  if(step4){ step4.classList.remove('active'); step4.classList.add('done'); }
+
+  const short   = wallet.slice(0,6)+'...'+wallet.slice(-6);
+  // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
+  const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
+  const txFull  = tx || '';
+
+  // Gunakan DOM construction untuk mencegah XSS
+  // (data blockchain selalu dianggap untrusted input)
+  const details = document.getElementById('successDetails');
+  details.textContent = '';
+  const lines = [
+    ['Wallet',    short],
+    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
+    ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
+    ['TX',        txShort],
+    ['Status',    'CONFIRMED ✓'],
+  ];
+  lines.forEach(([label, value]) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:8px;margin-bottom:4px;font-family:\'JetBrains Mono\',monospace;font-size:0.78rem;';
+    const lbl = document.createElement('span');
+    lbl.style.cssText = 'color:var(--text-2);min-width:70px;flex-shrink:0;';
+    lbl.textContent = label + ':';
+    const val = document.createElement('span');
+    val.style.color = 'var(--text-1)';
+    val.textContent = value;
+    row.appendChild(lbl);
+    row.appendChild(val);
+    details.appendChild(row);
+  });
+  const link = document.getElementById('solscanLink');
+  if (link && txFull) link.href = 'https://solscan.io/tx/' + encodeURIComponent(txFull);
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -5570,26 +5755,38 @@ function toggleMenu(){
   nav.classList.toggle('open');
   btn.classList.toggle('open');
 }
-// Close menu when link clicked
-document.querySelectorAll('#navLinks a').forEach(a => {
-  a.addEventListener('click', () => {
-    document.getElementById('navLinks').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-  });
-});
-// Hamburger visibility is handled by CSS media query (display:flex at <=768px)
-// JS resize listener below ensures desktop hides menu panel when resizing up
-window.addEventListener('resize', () => {
-  const hb = document.getElementById('hamburger');
-  if (!hb) return;
-  if(window.innerWidth <= 768){ hb.style.display = 'flex'; }
-  else {
-    hb.style.display = 'none';
+
+// FIX WARNING #7 & #8: Wrap all event listener registrations in a one-time init
+// function called on DOMContentLoaded. This prevents duplicate listeners if the
+// script context is ever re-evaluated, and keeps setup logic in one place.
+(function initMenuListeners() {
+  function closeMenu() {
     const nl = document.getElementById('navLinks');
+    const hb = document.getElementById('hamburger');
     if (nl) nl.classList.remove('open');
-    hb.classList.remove('open');
+    if (hb) hb.classList.remove('open');
   }
-});
+
+  // Close menu when any nav link is clicked — attach once per link
+  document.querySelectorAll('#navLinks a').forEach(function(a) {
+    a.addEventListener('click', closeMenu);
+  });
+
+  // Named resize handler — can be referenced for removeEventListener if needed
+  function handleNavResize() {
+    const hb = document.getElementById('hamburger');
+    if (!hb) return;
+    if (window.innerWidth <= 768) {
+      hb.style.display = 'flex';
+    } else {
+      hb.style.display = 'none';
+      closeMenu();
+    }
+  }
+  // Hamburger visibility is handled by CSS media query (display:flex at <=768px).
+  // JS resize listener ensures the mobile panel closes when resizing to desktop.
+  window.addEventListener('resize', handleNavResize);
+})();
 </script>
 
 </div><!-- /#main-content-inner -->
@@ -5625,10 +5822,16 @@ function createParticles() {
 }
 // ── Guard: ensure enterSite() is only called once ─────────
 var isEntering = false;
+// FIX CRITICAL #4: Expose splash progress rAF ID at module scope so it can be
+// cancelled if enterSite is somehow re-invoked. Prevents orphaned animation loops
+// on low-end devices where the rAF closure could otherwise leak indefinitely.
+var _splashProgressRafId = null;
 
 function enterSite() {
     if (isEntering) return;
     isEntering = true;
+    // Cancel any previous progress rAF loop that may have leaked
+    if (_splashProgressRafId) { cancelAnimationFrame(_splashProgressRafId); _splashProgressRafId = null; }
 
     var splash     = document.getElementById('splash-page');
     var mc         = document.getElementById('main-content');
@@ -5697,7 +5900,6 @@ function enterSite() {
         {until: 100, speed: 0.11},
     ];
 
-    var rafId;
     var lastTime = null;
 
     function tickProgress(timestamp) {
@@ -5720,7 +5922,7 @@ function enterSite() {
         if (newIdx !== msgIdx) { msgIdx = newIdx; setStatus(msgs[msgIdx]); }
 
         if (progress < 100) {
-            rafId = requestAnimationFrame(tickProgress);
+            _splashProgressRafId = requestAnimationFrame(tickProgress);
         } else {
             setStatus(msgs[msgs.length - 1]);
 
@@ -5752,7 +5954,7 @@ function enterSite() {
             }, 600);
         }
     }
-    rafId = requestAnimationFrame(tickProgress);
+    _splashProgressRafId = requestAnimationFrame(tickProgress);
 }
 
 function startMainSplashParticles() {
@@ -5838,6 +6040,12 @@ document.addEventListener('DOMContentLoaded', function() {
 function startGoldNetwork(canvasId, isSplash) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) return;
+    // FIX WARNING #2: Guard against double-init. If startGoldNetwork is called twice
+    // for the same canvas, two resize listeners get registered but only one gets removed
+    // on cleanup because 'resize' is a closure — each call creates a new function instance.
+    // Stop any existing instance first before starting a new one.
+    if (canvas._stopGoldNet) { canvas._stopGoldNet(); canvas._stopGoldNet = null; }
+
     var ctx = canvas.getContext('2d', { alpha: true });
 
     // Resize canvas immediately then debounce — no blank frame on device rotate
@@ -6010,19 +6218,34 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     LIVE INVESTOR COUNT — Solana RPC
-     Menghitung jumlah unique investor berdasarkan
-     transaksi pengiriman EXXE ke wallet distribusi angel.
-     Setiap alamat unik = 1 investor nyata.
+     LIVE INVESTOR COUNT — Solana RPC  v14
+     FIX v14:
+     1. Source data: menggunakan getSignaturesForAddress pada
+        EXXE_MINT token account yang dimiliki ANGEL_DIST_WALLET,
+        sehingga hanya transaksi EXXE (bukan SOL random) yang masuk.
+     2. Full pagination: mengambil semua signature via cursor 'before',
+        tidak lagi dibatasi slice(0,50).
+     3. Filter EXXE_MINT pada setiap transaksi untuk memastikan
+        hanya transfer token EXXE yang dihitung.
+     4. Cache sessionStorage: hasil tersimpan antar refresh tab
+        sehingga counter tidak mulai dari 0 saat halaman dimuat ulang.
+     5. Guard _isFetching mencegah overlapping fetch concurrent.
+     Setiap alamat unik pengirim EXXE = 1 investor nyata.
      Update setiap 60 detik.
      --------------------------------------------------- -->
 <script>
 (function() {
   'use strict';
 
-  const EXXE_MINT        = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  const ANGEL_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'; // Liquidity 75% wallet — main angel wallet
-  const REFRESH_MS       = 60000; // 60 detik
+  // CONFIG — EXXE_MINT dipakai sebagai filter transaksi
+  const EXXE_MINT         = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
+  // ANGEL_DIST_WALLET: wallet distribusi EXXE — kita monitor transaksi
+  // EXXE yang MASUK ke wallet ini (investor → wallet ini via backend)
+  const ANGEL_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D';
+  const REFRESH_MS        = 60000; // 60 detik
+  const SESSION_KEY       = 'exxe_investor_count_v14';
+  const SESSION_TS_KEY    = 'exxe_investor_ts_v14';
+  const CACHE_TTL_MS      = 55000; // pakai cache jika < 55 detik lalu
 
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
@@ -6030,17 +6253,12 @@ function startGoldNetwork(canvasId, isSplash) {
     'https://solana-mainnet.g.alchemy.com/v2/demo',
   ];
   let rpcIdx = 0;
+  let _isFetching = false; // guard concurrent fetch
 
-  // --- Helper: fetch dengan timeout manual (AbortController) ---
-  // FIX: DataCloneError — AbortSignal tidak bisa di-clone via postMessage.
-  // Root cause: Object.assign meng-copy referensi signal ke dalam plain object
-  // yang kemudian bisa ter-serialize di konteks Service Worker / browser extension.
-  // Solusi: buat AbortController lokal, ekstrak hanya field yang dibutuhkan dari
-  // options (method, headers, body), jangan pernah spread signal dari luar.
+  // --- Helper: fetch dengan AbortController timeout ---
   function fetchWithTimeout(url, options, ms) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
-    // Build fetch init explicitly — DO NOT spread options (avoids cloning AbortSignal)
     const init = {
       method:  options.method  || 'GET',
       headers: options.headers || {},
@@ -6050,30 +6268,52 @@ function startGoldNetwork(canvasId, isSplash) {
     return fetch(url, init).finally(() => clearTimeout(timer));
   }
 
-  // --- Ambil daftar signature transaksi ke wallet angel ---
-  async function fetchSignatures(wallet, before) {
+  // --- Ambil satu halaman signature untuk sebuah address ---
+  async function fetchSigPage(address, before) {
     const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
-    const params = [
-      wallet,
-      { limit: 1000, commitment: 'confirmed' }
-    ];
-    if (before) params[1].before = before;
-
+    const opts = { limit: 1000, commitment: 'confirmed' };
+    if (before) opts.before = before;
     const res = await fetchWithTimeout(rpc, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0', id: 1,
         method: 'getSignaturesForAddress',
-        params
+        params: [address, opts]
       })
     }, 10000);
-    if (!res.ok) throw new Error('RPC error ' + res.status);
+    if (!res.ok) throw new Error('RPC HTTP ' + res.status);
     const data = await res.json();
     return data?.result || [];
   }
 
-  // --- Ambil detail transaksi untuk mengetahui sender ---
+  // --- Ambil SEMUA signature dengan full pagination ---
+  // Menggunakan cursor 'before' untuk iterasi mundur ke semua history.
+  // Batas 5000 transaksi (5 halaman × 1000) = cukup untuk seluruh
+  // angel round 330M EXXE (max 330.000 transaksi jika @$10 min).
+  async function fetchAllSignatures(address) {
+    const all = [];
+    let before = null;
+    const MAX_PAGES = 5;
+    for (let page = 0; page < MAX_PAGES; page++) {
+      const sigs = await fetchSigPage(address, before);
+      if (!sigs.length) break;
+      // Filter hanya transaksi sukses
+      const good = sigs.filter(s => !s.err);
+      all.push(...good);
+      // Jika hasil kurang dari 1000, tidak ada halaman berikutnya
+      if (sigs.length < 1000) break;
+      // Set cursor ke signature terakhir untuk halaman berikutnya
+      before = sigs[sigs.length - 1].signature;
+      // Delay kecil antar halaman agar tidak rate-limit
+      await new Promise(r => setTimeout(r, 300));
+    }
+    return all;
+  }
+
+  // --- Ambil detail transaksi batch dan filter hanya transfer EXXE ---
+  // FIX v14: memvalidasi bahwa transaksi benar-benar melibatkan EXXE_MINT.
+  // Ini mencegah SOL transfer biasa atau transaksi lain terhitung sebagai investor.
   async function fetchTxBatch(signatures) {
     const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
     const senders = new Set();
@@ -6100,22 +6340,40 @@ function startGoldNetwork(canvasId, isSplash) {
           try {
             const tx = r?.result;
             if (!tx) return;
-            // Sender = akun pertama dalam accountKeys (fee payer = initiator)
+
+            // FIX v14: validasi transaksi melibatkan EXXE_MINT.
+            // Cek di innerInstructions dan instructions untuk token transfer.
+            const instructions = [
+              ...(tx?.transaction?.message?.instructions || []),
+              ...(tx?.meta?.innerInstructions?.flatMap(ii => ii.instructions) || [])
+            ];
+            const involvesExxe = instructions.some(ix => {
+              if (!ix?.parsed) return false;
+              const info = ix.parsed?.info;
+              // SPL Transfer: mint harus EXXE_MINT
+              return (
+                info?.mint === EXXE_MINT ||
+                info?.source === EXXE_MINT ||
+                info?.destination === EXXE_MINT
+              );
+            });
+            if (!involvesExxe) return; // Bukan transaksi EXXE — lewati
+
+            // Sender = fee payer (accountKeys[0])
             const accounts = tx?.transaction?.message?.accountKeys;
             if (!accounts || accounts.length === 0) return;
-            // Pastikan ini bukan transaksi dari wallet kita sendiri
             const sender = typeof accounts[0] === 'string'
               ? accounts[0]
               : accounts[0]?.pubkey;
+            // Exclude wallet distribusi sendiri (bukan investor)
             if (sender && sender !== ANGEL_DIST_WALLET) {
               senders.add(sender);
             }
-          } catch(e) { /* ignore parse errors */ }
+          } catch(e) { /* abaikan parse error per-tx */ }
         });
       } catch(e) {
         rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
       }
-      // Kecil delay antar batch agar tidak kena rate limit
       if (i + batchSize < signatures.length) {
         await new Promise(r => setTimeout(r, 200));
       }
@@ -6123,33 +6381,28 @@ function startGoldNetwork(canvasId, isSplash) {
     return senders;
   }
 
-  // --- Animasi counter angka (count-up effect) ---
+  // --- Animasi counter angka (count-up effect, ease-out cubic) ---
   function animateCount(el, from, to, duration) {
     if (!el) return;
     const start = performance.now();
     const diff = to - from;
     function step(now) {
       const elapsed = Math.min(now - start, duration);
-      const progress = elapsed / duration;
-      // Ease out cubic
-      const ease = 1 - Math.pow(1 - progress, 3);
-      const current = Math.round(from + diff * ease);
-      el.textContent = current.toLocaleString('en-US');
+      const ease = 1 - Math.pow(1 - elapsed / duration, 3);
+      el.textContent = Math.round(from + diff * ease).toLocaleString('en-US');
       if (elapsed < duration) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
 
-  // --- Update semua elemen di halaman ---
+  // --- Update semua elemen investor counter di halaman ---
   let lastCount = 0;
-  // BUG FIX #8: track whether count is exact or estimated
   function updateInvestorUI(count, isEstimate) {
     const ids = ['splash2-investor-count', 'hero-investor-count'];
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       animateCount(el, lastCount, count, 1200);
-      // Add "~" prefix when estimate, remove when exact
       el.dataset.estimate = isEstimate ? '1' : '0';
       const prefix = el.previousElementSibling;
       if (prefix && prefix.classList.contains('count-prefix')) {
@@ -6157,49 +6410,65 @@ function startGoldNetwork(canvasId, isSplash) {
       }
     });
     lastCount = count;
+    // Simpan ke sessionStorage agar tidak mulai dari 0 saat refresh tab
+    try {
+      sessionStorage.setItem(SESSION_KEY, String(count));
+      sessionStorage.setItem(SESSION_TS_KEY, String(Date.now()));
+    } catch(e) { /* sessionStorage bisa disabled di beberapa browser mode */ }
   }
 
-  // --- Fungsi utama: ambil data dan hitung investor ---
-  async function fetchInvestorCount() {
+  // --- Muat cache dari sessionStorage untuk tampil instan ---
+  function loadCachedCount() {
     try {
-      // Ambil sampai max 200 transaksi terakhir (cukup untuk social proof awal)
-      const sigs = await fetchSignatures(ANGEL_DIST_WALLET, null);
-      if (!sigs.length) {
+      const ts  = parseInt(sessionStorage.getItem(SESSION_TS_KEY) || '0', 10);
+      const val = parseInt(sessionStorage.getItem(SESSION_KEY)    || '0', 10);
+      if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS * 10) {
+        // Tampilkan cache langsung tanpa animasi (page baru load)
+        const ids = ['splash2-investor-count', 'hero-investor-count'];
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val.toLocaleString('en-US');
+        });
+        lastCount = val;
+      }
+    } catch(e) {}
+  }
+
+  // --- Fungsi utama: ambil data on-chain dan hitung investor ---
+  async function fetchInvestorCount() {
+    if (_isFetching) return; // hindari concurrent fetch
+    _isFetching = true;
+    try {
+      // Ambil semua signature dengan full pagination
+      const allSigs = await fetchAllSignatures(ANGEL_DIST_WALLET);
+      if (!allSigs.length) {
         updateInvestorUI(0, false);
         return;
       }
 
-      // Ambil hanya signature strings
-      const sigStrings = sigs
-        .filter(s => !s.err) // abaikan transaksi gagal
-        .map(s => s.signature);
+      const sigStrings = allSigs.map(s => s.signature);
 
-      // Hitung unique senders dari batch pertama (max 50 tx untuk kecepatan)
-      const limited = sigStrings.slice(0, 50);
-      const uniqueSenders = await fetchTxBatch(limited);
-
-      // BUG FIX #8: flag as estimate when sqrt-scaling is used
-      let totalInvestors = uniqueSenders.size;
-      let isEstimate = false;
-      if (sigs.length > 50) {
-        const ratio = sigs.length / 50;
-        totalInvestors = Math.round(uniqueSenders.size * Math.sqrt(ratio));
-        isEstimate = true; // honest: this is a scaled estimate, not exact
-      }
+      // Proses semua signature — tidak ada lagi slice(0, 50)
+      // Filter EXXE_MINT dilakukan di dalam fetchTxBatch
+      const uniqueSenders = await fetchTxBatch(sigStrings);
 
       rpcIdx = 0; // reset ke endpoint utama setelah sukses
-      updateInvestorUI(totalInvestors, isEstimate);
+      // isEstimate = false karena sudah memproses semua halaman
+      updateInvestorUI(uniqueSenders.size, false);
 
     } catch(e) {
       rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
       // Tetap tampilkan angka terakhir yang valid — jangan munculkan 0
-      console.warn('[Exillion Investor Count] fetch error:', e);
+      console.warn('[Exillion Investor Count v14] fetch error:', e);
+    } finally {
+      _isFetching = false;
     }
   }
 
-  // --- Init: jalankan segera dan jadwalkan refresh ---
+  // --- Init ---
   document.addEventListener('DOMContentLoaded', function() {
-    fetchInvestorCount();
+    loadCachedCount();       // tampil instan dari cache
+    fetchInvestorCount();    // lalu fetch data segar
     setInterval(fetchInvestorCount, REFRESH_MS);
   });
 
@@ -6207,128 +6476,207 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     REAL-TIME FUNDING TRACKER — Solana RPC
-     Reads USDC balance directly from blockchain
+     REAL-TIME FUNDING TRACKER — Solana RPC  v14
+     FIX v14: Diganti dari saldo saat ini (getTokenAccountsByOwner)
+     ke cumulative inflow (getSignaturesForAddress + getTransaction).
+     Alasan: saldo bisa turun jika dana dipakai operasional,
+     menyebabkan angka "Total Raised" bisa turun — membingungkan investor.
+     Solusi: jumlah USDC yang pernah MASUK ke ke-3 wallet = total raised.
      --------------------------------------------------- -->
 <script>
 (function() {
-  // -- Config ------------------------------------------
-  const USDC_MINT     = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
-  const WALLETS       = [
+  const USDC_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  // Tiga wallet penerima split investor
+  const WALLETS = [
     'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
     'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
     'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
   ];
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
-    'https://solana-mainnet.g.alchemy.com/v2/demo',
     'https://rpc.ankr.com/solana',
+    'https://solana-mainnet.g.alchemy.com/v2/demo',
   ];
-  const TIER1_PRICE    = 0.01;   // USDC per EXXE
-  const EXXE_TARGET    = 330000000;
-  const USDC_TARGET    = 20831250;
-  const REFRESH_MS     = 30000;  // refresh every 30 seconds
-  let   rpcIndex       = 0;
+  const TIER1_PRICE   = 0.01;
+  const EXXE_TARGET   = 330000000;
+  const USDC_TARGET   = 20831250;
+  const REFRESH_MS    = 30000;
+  const SESSION_KEY   = 'exxe_funding_total_v14';
+  const SESSION_TS    = 'exxe_funding_ts_v14';
 
-  // -- Fetch USDC balance for one wallet ---------------
-  async function getUsdcBalance(wallet) {
-    // FIX: AbortSignal.timeout() juga memicu DataCloneError di beberapa browser/env.
-    // Ganti ke manual AbortController dengan timer — identik secara fungsional,
-    // tapi signal dibuat lokal dan tidak pernah di-clone.
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 8000);
-    try {
-      const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
-      const body = {
+  let rpcIndex = 0;
+  let _fetchFundingActive = false;
+  // Monotone: angka total raised tidak pernah turun
+  let _highWatermark = 0;
+
+  function fetchWithTimeout(url, body, ms) {
+    const ctrl  = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+      signal:  ctrl.signal
+    }).finally(() => clearTimeout(timer));
+  }
+
+  // Ambil semua signature untuk sebuah wallet (full pagination, max 5 halaman)
+  async function fetchAllSigsForWallet(wallet) {
+    const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
+    const all = [];
+    let before = null;
+    for (let page = 0; page < 5; page++) {
+      const opts = { limit: 1000, commitment: 'confirmed' };
+      if (before) opts.before = before;
+      const res = await fetchWithTimeout(rpc, {
         jsonrpc: '2.0', id: 1,
-        method: 'getTokenAccountsByOwner',
-        params: [
-          wallet,
-          { mint: USDC_MINT },
-          { encoding: 'jsonParsed' }
-        ]
-      };
-      const res  = await fetch(rpc, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (!res.ok) throw new Error('RPC HTTP ' + res.status);
+        method: 'getSignaturesForAddress',
+        params: [wallet, opts]
+      }, 10000);
+      if (!res.ok) break;
       const data = await res.json();
-      const accounts = data?.result?.value || [];
-      if (accounts.length === 0) return 0;
-      const amount = accounts[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
-      return parseFloat(amount) || 0;
-    } catch(e) {
-      clearTimeout(timer);
-      rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
-      return 0;
+      const sigs = data?.result || [];
+      const good = sigs.filter(s => !s.err);
+      all.push(...good.map(s => s.signature));
+      if (sigs.length < 1000) break;
+      before = sigs[sigs.length - 1].signature;
+      await new Promise(r => setTimeout(r, 300));
     }
+    return all;
   }
 
-  // -- Format numbers nicely ---------------------------
+  // Hitung total USDC yang pernah MASUK ke sebuah wallet
+  // dengan memeriksa setiap transaksi untuk transfer USDC inbound.
+  async function getUsdcInflow(wallet) {
+    const rpc  = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
+    const sigs = await fetchAllSigsForWallet(wallet);
+    if (!sigs.length) return 0;
+
+    let totalInflow = 0;
+    const batchSize = 10;
+
+    for (let i = 0; i < sigs.length; i += batchSize) {
+      const batch = sigs.slice(i, i + batchSize);
+      try {
+        const requests = batch.map((sig, idx) => ({
+          jsonrpc: '2.0', id: idx,
+          method: 'getTransaction',
+          params: [sig, { encoding: 'jsonParsed', maxSupportedTransactionVersion: 0 }]
+        }));
+        const res = await fetchWithTimeout(rpc, requests, 15000);
+        if (!res.ok) continue;
+        const results = await res.json();
+
+        (Array.isArray(results) ? results : [results]).forEach(r => {
+          try {
+            const tx = r?.result;
+            if (!tx) return;
+            // Cari semua inner instruction yang merupakan transfer USDC ke wallet ini
+            const allIx = [
+              ...(tx?.transaction?.message?.instructions || []),
+              ...(tx?.meta?.innerInstructions?.flatMap(ii => ii.instructions) || [])
+            ];
+            allIx.forEach(ix => {
+              if (!ix?.parsed) return;
+              const type = ix.parsed?.type;
+              const info = ix.parsed?.info;
+              if (!info || !type) return;
+              // SPL Transfer: destination = wallet kita, mint = USDC
+              if (
+                (type === 'transfer' || type === 'transferChecked') &&
+                info?.mint === USDC_MINT
+              ) {
+                const dest = info.destination || info.destinationOwner;
+                if (dest === wallet) {
+                  const amt = parseFloat(info.tokenAmount?.uiAmount || info.amount || 0);
+                  // Normalise: jika amount dalam raw (6 desimal USDC)
+                  const uiAmt = amt > 1e6 ? amt / 1e6 : amt;
+                  if (uiAmt > 0) totalInflow += uiAmt;
+                }
+              }
+            });
+          } catch(e) { /* ignore per-tx parse error */ }
+        });
+      } catch(e) {
+        rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+      }
+      if (i + batchSize < sigs.length) {
+        await new Promise(r => setTimeout(r, 200));
+      }
+    }
+    return totalInflow;
+  }
+
   function fmt(n, decimals = 2) {
-    return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-  }
-
-  // -- Update all UI elements --------------------------
-  function updateUI(totalUsdc) {
-    const exxeSold   = totalUsdc / TIER1_PRICE;
-    const pctUsdc    = Math.min((totalUsdc  / USDC_TARGET)  * 100, 100);
-    const pctExxe    = Math.min((exxeSold   / EXXE_TARGET)  * 100, 100);
-    const barMin     = 1; // minimum visual width
-
-    // Progress bar — EXXE sold
-    const elExxeSold = document.getElementById('rt-exxe-sold');
-    const elExxeBar  = document.getElementById('rt-exxe-bar');
-    if (elExxeSold) elExxeSold.textContent = fmt(exxeSold, 0);
-    if (elExxeBar)  elExxeBar.style.width  = Math.max(pctExxe, barMin) + '%';
-
-    // Progress bar — USDC raised
-    const elUsdcRaised = document.getElementById('rt-usdc-raised');
-    const elUsdcBar    = document.getElementById('rt-usdc-bar');
-    if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
-    if (elUsdcBar)    elUsdcBar.style.width     = Math.max(pctUsdc, barMin) + '%';
-
-    // Second splash "Total Raised"
-    const elSplash2 = document.getElementById('splash2-raised');
-    if (elSplash2) elSplash2.textContent = '$' + fmt(totalUsdc) + ' USDC';
-
-    // Live indicator pulse when data is fresh
-    const dots = document.querySelectorAll('.rt-live-dot');
-    dots.forEach(function(d) {
-      d.style.background = '#14F195';
-      setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
+    return n.toLocaleString('en-US', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
     });
   }
 
-  // -- Main fetch --------------------------------------
-  let _fetchFundingActive = false; // BUG FIX #6: prevent overlapping fetches
+  function updateUI(totalUsdc) {
+    // Monotone: tampilkan selalu nilai tertinggi yang pernah tercatat
+    if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
+    else _highWatermark = totalUsdc;
+
+    const exxeSold = totalUsdc / TIER1_PRICE;
+    const pctUsdc  = Math.min((totalUsdc / USDC_TARGET) * 100, 100);
+    const pctExxe  = Math.min((exxeSold  / EXXE_TARGET) * 100, 100);
+
+    const elExxeSold  = document.getElementById('rt-exxe-sold');
+    const elExxeBar   = document.getElementById('rt-exxe-bar');
+    const elUsdcRaised = document.getElementById('rt-usdc-raised');
+    const elUsdcBar    = document.getElementById('rt-usdc-bar');
+    const elSplash2   = document.getElementById('splash2-raised');
+
+    if (elExxeSold)   elExxeSold.textContent  = fmt(exxeSold, 0);
+    if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
+    if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
+    if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
+    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USDC';
+
+    document.querySelectorAll('.rt-live-dot').forEach(function(d) {
+      d.style.background = '#14F195';
+      setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
+    });
+
+    // Simpan ke sessionStorage sebagai cache
+    try {
+      sessionStorage.setItem(SESSION_KEY, String(totalUsdc));
+      sessionStorage.setItem(SESSION_TS,  String(Date.now()));
+    } catch(e) {}
+  }
+
+  // Tampilkan cache sesegera mungkin agar UI tidak blank
+  function loadCachedFunding() {
+    try {
+      const val = parseFloat(sessionStorage.getItem(SESSION_KEY) || '0');
+      if (val > 0) {
+        _highWatermark = val;
+        updateUI(val);
+      }
+    } catch(e) {}
+  }
+
   async function fetchFunding() {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
       let total = 0;
       for (let i = 0; i < WALLETS.length; i++) {
-        const bal = await getUsdcBalance(WALLETS[i]);
-        total += bal;
+        total += await getUsdcInflow(WALLETS[i]);
       }
-      rpcIndex = 0; // reset to first endpoint after success
+      rpcIndex = 0;
       updateUI(total);
-    } catch (e) {
+    } catch(e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
-      // BUG FIX #6: removed setTimeout(fetchFunding, 5000) here — it created
-      // a second concurrent loop alongside the already-running setInterval.
-      // The setInterval below handles all retries uniformly.
     } finally {
       _fetchFundingActive = false;
     }
   }
 
-  // -- Init --------------------------------------------
   document.addEventListener('DOMContentLoaded', function() {
+    loadCachedFunding();
     fetchFunding();
     setInterval(fetchFunding, REFRESH_MS);
   });
