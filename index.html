@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v14 (Full Technical Audit Fix: Investor Counter, Funding Tracker, Payment Signing, Confirmation Polling, Mobile Wallet) -->
+<!-- Exillion Capital Finecosystem — v13 (Full Audit Fix: Critical bugs, Security, Performance & Code Quality) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
-<meta name="theme-color" content="#010b18"/>
+<meta name="theme-color" content="#070f1a"/>
 <meta property="og:title" content="Exillion — Capital Finecosystem | EXXE Angel Round"/>
 <meta property="og:description" content="Join the EXXE Angel Round. Tier I at $0.01/EXXE. On-chain transparent, Solana-powered."/>
 <meta property="og:type" content="website"/>
@@ -17,13 +17,14 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="robots" content="index, follow"/>
 <link rel="canonical" href="https://exillion.io"/>
-<title>Exillion — Capital Finecosystem | EXXE Angel Round</title>
+<title>Exillion Capital Finecosystem — EXXE Angel Round | Invest Early</title>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" as="style"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
 <!-- font-display:block prevents FOUC: browser BLOCKS text render until Orbitron is ready -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
 <style>
 /* FONT METRICS OVERRIDE — prevents layout shift when Orbitron swaps in.
    size-adjust matches fallback monospace dimensions to Orbitron,
@@ -52,37 +53,62 @@
   visibility: visible;
 }
 body {
-  font-family: 'Orbitron', 'orbitron-fallback', monospace;
+  font-family: 'DM Sans', 'Orbitron', 'orbitron-fallback', sans-serif;
 }
 </style>
 <style>
 
   
 /* -------------------------------------------
-   DESIGN SYSTEM — EXILLION NAVY BLUE FUTURISTIC
+   DESIGN SYSTEM — EXILLION SOVEREIGN WEALTH
+   v14 Premium — Angel Investor Grade
    ------------------------------------------- */
 :root{
-  --void:        #010b18;
-  --deep:        #021525;
-  --surface:     #031d30;
-  --card:        #04243d;
-  --card-hover:  #052e4f;
-  --gold:        #cc7d07;
-  --gold-light:  #e8c97a;
-  --gold-dim:    #7a5e2a;
-  --gold-glow:   rgba(204,125,7,0.15);
-  --gold-subtle: rgba(204,125,7,0.06);
-  --cyan:        #00d4ff;
-  --cyan-dim:    rgba(0,212,255,0.12);
-  --text-1:      #e8f4ff;
-  --text-2:      #6a8fa8;
-  --text-3:      #2a4a63;
-  --border:      rgba(0,212,255,0.18);
-  --border-dim:  rgba(0,212,255,0.07);
-  --green:       #00e5a0;
-  --red:         #ff3366;
+  /* === BACKGROUNDS === */
+  --void:        #070f1a;
+  --deep:        #0a1628;
+  --surface:     #0f1e34;
+  --card:        #132238;
+  --card-hover:  #192c45;
+
+  /* === GOLD — Primary CTA & Premium Moments === */
+  --gold:        #c9a227;
+  --gold-light:  #e8d5a3;
+  --gold-mid:    #dab842;
+  --gold-dim:    #7a6020;
+  --gold-glow:   rgba(201,162,39,0.15);
+  --gold-subtle: rgba(201,162,39,0.06);
+
+  /* === CYAN — Data, Informational Only === */
+  --cyan:        #00c4ef;
+  --cyan-dim:    rgba(0,196,239,0.10);
+
+  /* === TEXT === */
+  --text-1:      #f0f4ff;
+  --text-2:      #9dbdd4;
+  --text-3:      #3d5f7a;
+  --text-body:   #ccdcea;
+
+  /* === BORDERS === */
+  --border:      rgba(0,196,239,0.20);
+  --border-dim:  rgba(0,196,239,0.08);
+  --border-gold: rgba(201,162,39,0.25);
+
+  /* === STATUS COLORS === */
+  --green:       #00d98a;
+  --red:         #e8405a;
   --solana-purple:#9945FF;
   --solana-green: #14F195;
+
+  /* === SECTION RHYTHM === */
+  --section-py:  120px;
+  --section-px:  5%;
+
+  /* === TYPOGRAPHY SCALE === */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-brand:   'Orbitron', monospace;
+  --font-body:    'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -98,35 +124,33 @@ html{scroll-behavior:smooth;}
 }
 
 /* Fix anchor offset so it is not hidden behind the fixed nav */
-[id] { scroll-margin-top: 90px; }
+[id] { scroll-margin-top: 80px; }
 
 html{
-  background:#080614; /* iOS overscroll area — prevent white flash */
+  background:#060d16;
 }
 
 body{
   background:var(--void);
-  color:var(--text-1);
-  font-family:'Orbitron',monospace;
+  color:var(--text-body);
+  font-family: var(--font-body);
   overflow-x:hidden;
-  overflow-y:scroll; /* always reserve scrollbar space so nav does not shift */
+  overflow-y:scroll;
   font-size:16px;
-  line-height:1.7;
+  line-height:1.65;
   -webkit-tap-highlight-color:transparent;
   -webkit-text-size-adjust:100%;
 }
 
-/* SCAN LINE EFFECT — v6: single animation, GPU-composited */
+/* SCAN LINE EFFECT — very subtle, institutional feel */
 .scanline{
   position:fixed;top:0;left:0;right:0;bottom:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,0.018) 3px,rgba(0,212,255,0.018) 4px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 4px,rgba(0,196,239,0.008) 4px,rgba(0,196,239,0.008) 5px);
   pointer-events:none;z-index:0;
   will-change:opacity;
   transform:translateZ(0);
-  animation:scanFlicker 11s ease-in-out infinite;
-  opacity:0.5;
+  opacity:0.3;
 }
-@keyframes scanFlicker{0%,100%{opacity:0.5;}35%{opacity:0.35;}60%{opacity:0.58;}80%{opacity:0.4;}}
 
 /* REDUCED MOTION — disable heavy animations for accessibility & low-end devices */
 @media(prefers-reduced-motion:reduce){
@@ -134,40 +158,28 @@ body{
   .reveal{transition:none!important;}
 }
 
-/* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
+/* FILM GRAIN — very subtle, static */
 body::before{
   content:'';
   position:fixed;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   background-size:256px 256px;
   pointer-events:none;z-index:0;
-  will-change:opacity;
   transform:translateZ(0);
-  animation:grainBreath 8s ease-in-out infinite alternate;
-  opacity:0.45;
-}
-@keyframes grainBreath{
-  from{opacity:0.35;}
-  to{opacity:0.55;}
+  opacity:0.2;
 }
 
-/* AMBIENT LIGHT — v6: GPU composited */
+/* AMBIENT LIGHT — refined, sovereign wealth feel */
 body::after{
   content:'';
   position:fixed;inset:0;
   background:
-    radial-gradient(ellipse 80% 55% at 50% -5%, rgba(0,80,255,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 45% 35% at 82% 92%, rgba(0,212,255,0.09) 0%, transparent 50%),
-    radial-gradient(ellipse 55% 45% at 8% 58%, rgba(0,60,200,0.10) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(153,69,255,0.04) 0%, transparent 60%);
+    radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0,60,180,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 82% 92%, rgba(0,180,230,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 45% 40% at 8% 58%, rgba(0,50,160,0.08) 0%, transparent 50%);
   pointer-events:none;z-index:0;
-  will-change:opacity;
   transform:translateZ(0);
-  animation:ambientBreathe 14s ease-in-out infinite alternate;
-}
-@keyframes ambientBreathe{
-  from{opacity:0.85;}
-  to{opacity:1.0;}
+  opacity:0.9;
 }
 
 
@@ -175,46 +187,46 @@ body::after{
 /* --- NAVIGATION --------------------------- */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  height:auto;
+  height:72px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 5%;
-  padding-left:max(5%, env(safe-area-inset-left));
-  padding-right:max(5%, env(safe-area-inset-right));
-  background:rgba(1,11,24,0.94);
-  backdrop-filter:blur(28px) saturate(1.2);
-  border-bottom:1px solid rgba(0,212,255,0.22);
-  box-shadow:0 1px 0 rgba(0,212,255,0.06), 0 4px 32px rgba(0,0,20,0.4);
+  padding:0 var(--section-px);
+  padding-left:max(var(--section-px), env(safe-area-inset-left));
+  padding-right:max(var(--section-px), env(safe-area-inset-right));
+  background:rgba(7,15,26,0.96);
+  backdrop-filter:blur(24px) saturate(1.3);
+  border-bottom:1px solid rgba(201,162,39,0.12);
+  box-shadow:0 1px 0 rgba(0,196,239,0.04), 0 4px 32px rgba(0,0,20,0.4);
   will-change:transform;
   transform:translateZ(0);
 }
 
 .nav-brand{
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;gap:10px;
   text-decoration:none;
 }
 
-
 .nav-brand-text{
   display:flex;flex-direction:column;
-  gap:0;
+  gap:1px;
 }
 
 .nav-name{
-  font-family:'Orbitron',monospace;
-  font-size:0.95rem;
-  font-weight:600;
-  letter-spacing:1px;
+  font-family:var(--font-brand);
+  font-size:0.92rem;
+  font-weight:700;
+  letter-spacing:2px;
   color:var(--gold);
   line-height:1;
 }
 
 .nav-sub{
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;
-  font-weight:600;
-  letter-spacing:1.5px;
-  color:var(--gold);
+  font-family:var(--font-body);
+  font-size:0.6rem;
+  font-weight:500;
+  letter-spacing:1px;
+  color:var(--text-2);
   margin-top:1px;
+  text-transform:uppercase;
 }
 
 .nav-links{
@@ -222,28 +234,29 @@ nav{
 }
 
 .nav-links a{
-  font-family:'Orbitron',monospace;
-  font-size:0.58rem;
-  letter-spacing:2.5px;
+  font-family:var(--font-body);
+  font-size:0.8rem;
+  font-weight:500;
+  letter-spacing:0.03em;
   text-transform:uppercase;
   color:var(--text-2);
   text-decoration:none;
   transition:color 0.2s;
 }
-.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover{color:var(--text-1);}
 
 .nav-cta{
-  font-family:'Orbitron',monospace;
-  font-size:0.58rem;
-  font-weight:700;
-  letter-spacing:2.5px;
+  font-family:var(--font-body);
+  font-size:0.78rem;
+  font-weight:600;
+  letter-spacing:0.04em;
   text-transform:uppercase;
   color:#ffffff!important;
-  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%)!important;
+  background:linear-gradient(135deg,#dab842 0%,#c9a227 40%,#e8d5a3 70%,#c9a227 100%)!important;
   background-size:200% 200%!important;
-  padding:10px 24px;
+  padding:10px 22px;
   border:none!important;
-  border-radius:2px;
+  border-radius:3px;
   transition:all 0.3s ease!important;
   text-decoration:none!important;
   position:relative;
@@ -251,36 +264,33 @@ nav{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  box-shadow:0 0 18px rgba(232,201,122,0.45),0 0 40px rgba(193,127,19,0.25);
-  animation:goldBtnShift 4s ease-in-out infinite;
+  box-shadow:0 2px 16px rgba(201,162,39,0.35);
+  animation:goldBtnShift 5s ease-in-out infinite;
   -webkit-text-fill-color:#ffffff!important;
-  text-shadow:0 1px 3px rgba(0,0,0,0.35);
+  text-shadow:0 1px 2px rgba(0,0,0,0.3);
 }
 .nav-cta::before{
   content:'';
   position:absolute;
   top:-20%;left:-80%;
   width:55%;height:140%;
-  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
-  animation:goldSunlight 3.5s ease-in-out infinite;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.15) 40%,rgba(255,255,255,0.4) 50%,rgba(255,255,255,0.15) 60%,transparent 80%);
+  animation:goldSunlight 4s ease-in-out infinite;
   pointer-events:none;
-  border-radius:2px;
+  border-radius:3px;
 }
 .nav-cta:hover{
   color:#ffffff!important;
-  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%)!important;
-  transform:translateY(-2px)!important;
-  box-shadow:0 0 36px rgba(232,201,122,0.8),0 0 70px rgba(193,127,19,0.5)!important;
-  letter-spacing:3px!important;
+  transform:translateY(-1px)!important;
+  box-shadow:0 4px 28px rgba(201,162,39,0.55)!important;
   -webkit-text-fill-color:#ffffff!important;
-  text-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
 
 .btn-gold{
-  font-family:'Orbitron',monospace;
-  font-size:1rem;letter-spacing:2.5px;font-weight:700;
+  font-family:var(--font-body);
+  font-size:0.9rem;letter-spacing:0.06em;font-weight:600;
   color:#ffffff;
-  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
+  background:linear-gradient(135deg,#dab842 0%,#c9a227 40%,#e8d5a3 70%,#c9a227 100%);
   background-size:200% 200%;
   border:none;
   padding:15px 40px;
@@ -289,49 +299,35 @@ nav{
   transition:all 0.3s ease;
   text-decoration:none;display:inline-block;
   position:relative;overflow:hidden;
-  box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
-  animation:goldBtnShift 4s ease-in-out infinite;
+  box-shadow:0 2px 20px rgba(201,162,39,0.40), 0 4px 16px rgba(0,0,0,0.3);
+  animation:goldBtnShift 5s ease-in-out infinite;
   -webkit-text-fill-color:#ffffff;
-  text-shadow:0 1px 3px rgba(0,0,0,0.35);
-}
-.btn-gold::before{
-  content:'';
-  position:absolute;
-  top:-20%;left:-80%;
-  width:55%;height:140%;
-  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
-  animation:goldSunlight 3.5s ease-in-out infinite;
-  pointer-events:none;
-}
-.btn-gold::after{
-  content:'';
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 50%,rgba(255,255,255,0.06) 100%);
-  pointer-events:none;
+  text-shadow:0 1px 2px rgba(0,0,0,0.3);
+  text-transform:uppercase;
 }
 .btn-gold:hover{
-  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%);
-  transform:translateY(-2px) scale(1.03);
-  box-shadow:0 0 55px rgba(232,201,122,0.9),0 0 100px rgba(193,127,19,0.6),0 8px 30px rgba(0,0,0,0.5);
-  letter-spacing:3.5px;
+  background:linear-gradient(135deg,#e8d060 0%,#d4a82a 40%,#f0e080 70%,#d4a82a 100%);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 6px 32px rgba(201,162,39,0.6), 0 8px 24px rgba(0,0,0,0.4);
 }
 .btn-gold-glow{
-  animation:goldBtnShift 4s ease-in-out infinite;
+  animation:goldBtnShift 5s ease-in-out infinite;
 }
 
 .btn-outline{
-  font-family:'Orbitron',monospace;
-  font-size:0.9rem;letter-spacing:2.5px;
-  color:var(--cyan);
+  font-family:var(--font-body);
+  font-size:0.85rem;letter-spacing:0.05em;font-weight:500;
+  color:var(--text-2);
   background:transparent;
-  border:1.5px solid rgba(0,212,255,0.4);
+  border:1px solid rgba(157,189,212,0.3);
   padding:15px 40px;
   cursor:pointer;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   transition:all 0.2s;
   text-decoration:none;display:inline-block;
+  text-transform:uppercase;
 }
-.btn-outline:hover{border-color:var(--cyan);background:rgba(0,212,255,0.06);box-shadow:0 0 20px rgba(0,212,255,0.15);}
+.btn-outline:hover{border-color:var(--text-2);color:var(--text-1);background:rgba(157,189,212,0.05);}
 
 /* --- HERO --------------------------------- */
 #hero{
@@ -339,16 +335,16 @@ nav{
   display:flex;align-items:center;justify-content:center;
   flex-direction:column;
   text-align:center;
-  padding:100px 5% 80px;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,66,255,0.12) 0%, transparent 70%);
+  padding:100px var(--section-px) 80px;
+  background:radial-gradient(ellipse 70% 55% at 50% 0%, rgba(0,50,200,0.10) 0%, transparent 65%);
 }
 
 .hero-eyebrow{
-  font-family:'Orbitron',monospace;
-  font-size:0.88rem;
-  letter-spacing:2px;
-  color:var(--cyan);
-  opacity:0.7;
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-style:italic;
+  letter-spacing:0.02em;
+  color:var(--gold-light);
   text-transform:none;
   margin-bottom:2rem;
   display:flex;align-items:center;gap:8px;
@@ -360,79 +356,64 @@ nav{
 
 
 .hero-title{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-brand);
   font-size:clamp(2.8rem, 7vw, 6rem);
-  font-weight:700;
-  letter-spacing:11px;
+  font-weight:900;
+  letter-spacing:10px;
   line-height:1;
   background:linear-gradient(
     90deg,
-    #4a2800 0%,
-    #7a4a10 8%,
-    #c17f13 18%,
-    #e8c97a 28%,
-    #ffd700 38%,
-    #ffe55c 45%,
-    #fff1a0 50%,
-    #ffe55c 55%,
-    #ffd700 62%,
-    #e8c97a 72%,
-    #c17f13 82%,
-    #7a4a10 92%,
-    #4a2800 100%
+    #5a3a00 0%,
+    #8a5a10 8%,
+    #c9a227 18%,
+    #dab842 28%,
+    #e8d060 38%,
+    #f5e480 45%,
+    #fff5c0 50%,
+    #f5e480 55%,
+    #e8d060 62%,
+    #dab842 72%,
+    #c9a227 82%,
+    #8a5a10 92%,
+    #5a3a00 100%
   );
   background-size:250% 100%;
   -webkit-background-clip:text;
   background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:riseUp 0.8s 0.2s ease both, goldSweepMain 9s ease-in-out infinite, titleGoldGlowMain 6s ease-in-out infinite alternate;
+  animation:riseUp 0.8s 0.2s ease both, goldSweepMain 10s ease-in-out infinite, titleGoldGlowMain 7s ease-in-out infinite alternate;
 }
 
 .hero-ticker{
-  font-family:'Orbitron',monospace;
-  font-size:1.3rem;
-  letter-spacing:3px;
-  background:linear-gradient(
-    90deg,
-    #0d1b4b 0%,
-    #c17f13 18%,
-    #e8c97a 32%,
-    #ffd700 45%,
-    #fff5cc 50%,
-    #ffd700 55%,
-    #e8c97a 68%,
-    #c17f13 82%,
-    #7a4a10 100%
-  );
-  background-size:250% 100%;
-  -webkit-background-clip:text;
-  background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-top:0rem;
-  animation:riseUp 0.8s 0.3s ease both, goldSweepMain 11s ease-in-out infinite;
+  font-family:var(--font-display);
+  font-size:1.5rem;
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:0.05em;
+  color:var(--gold-light);
+  margin-top:0.3rem;
+  animation:riseUp 0.8s 0.3s ease both;
 }
 .hero-ticker span{}
 
 .hero-tagline{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(1rem,2.2vw,1.45rem);
+  font-family:var(--font-body);
+  font-size:clamp(0.9rem,1.8vw,1.15rem);
   font-weight:400;
-  letter-spacing:3.9px;
-  color:var(--cyan);
+  letter-spacing:0.04em;
+  color:var(--text-2);
   margin-top:1rem;
-  opacity:0.8;
   animation:riseUp 0.8s 0.4s ease both;
 }
 
 .hero-desc{
-  font-family:'Orbitron',monospace;
-  max-width:1100px;
-  font-size:1.1rem;
+  font-family:var(--font-body);
+  max-width:860px;
+  font-size:1.05rem;
   font-weight:400;
-  color:var(--text-1);
-  line-height:1.7;
+  color:var(--text-body);
+  line-height:1.75;
   margin:1.5rem auto 1.5rem;
-  font-style:normal;
   text-align:center;
   animation:riseUp 0.8s 0.5s ease both;
   padding:0 2rem;
@@ -463,46 +444,45 @@ nav{
 }
 .stat:last-child{border-right:none;}
 .stat-val{
-  font-family:'Orbitron',monospace;
-  font-size:1.4rem;font-weight:600;
+  font-family:var(--font-brand);
+  font-size:1.3rem;font-weight:600;
   color:var(--cyan);
   line-height:1;
-  text-shadow:0 0 16px rgba(0,212,255,0.4);
 }
 .stat-lbl{
-  font-family:'Orbitron',monospace;
-  font-size:0.5rem;letter-spacing:2px;
-  color:var(--text-1);
-  margin-top:6px;text-transform:uppercase;
+  font-family:var(--font-body);
+  font-size:0.72rem;letter-spacing:0.04em;
+  color:var(--text-2);
+  margin-top:6px;text-transform:uppercase;font-weight:500;
 }
 
 /* --- SECTION HEADER ----------------------- */
 .section-header{text-align:center;margin-bottom:5rem;}
 .section-tag{
-  font-family:'Orbitron',monospace;
-  font-size:0.8rem;letter-spacing:4px;
+  font-family:var(--font-body);
+  font-size:0.72rem;letter-spacing:0.1em;
   color:var(--cyan);
-  opacity:0.7;
-  display:block;margin-bottom:1rem;
+  font-weight:600;
+  text-transform:uppercase;
+  display:block;margin-bottom:0.8rem;
 }
 .section-title{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(1.6rem,3vw,2.8rem);
-  font-weight:600;letter-spacing:4px;
+  font-family:var(--font-display);
+  font-size:clamp(2rem,3.5vw,3.2rem);
+  font-weight:500;
+  font-style:italic;
+  letter-spacing:normal;
   color:var(--text-1);
+  margin-bottom:0.8rem;
+  line-height:1.2;
+}
 }
 .section-rule{
-  width:48px;
-  height:2px;
-  background:linear-gradient(90deg,var(--cyan),#0066ff);
-  margin:1.2rem auto 0;
-  opacity:1;
-  box-shadow:0 0 10px rgba(0,212,255,0.4), 0 0 20px rgba(0,212,255,0.2);
-  animation:ruleGlow 3s ease-in-out infinite alternate;
-}
-@keyframes ruleGlow{
-  from{box-shadow:0 0 8px rgba(0,212,255,0.35), 0 0 16px rgba(0,212,255,0.15);}
-  to{box-shadow:0 0 16px rgba(0,212,255,0.7), 0 0 32px rgba(0,212,255,0.35);}
+  width:40px;
+  height:1px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-dim));
+  margin:1rem auto 0;
+  
 }
 @keyframes goldSweepMain{
   0%   { background-position: 150% 0%; }
@@ -516,7 +496,7 @@ nav{
 }
 
 /* --- VISION ------------------------------- */
-#vision{padding:0px 5% 80px;}
+#vision{padding:var(--section-py) var(--section-px);}
 #vision .section-header{margin-bottom:3.5rem;}
 
 .vision-grid{
@@ -527,46 +507,46 @@ nav{
 }
 
 .vision-text blockquote{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-display);
   font-size:clamp(1.4rem,2.5vw,2rem);
   font-style:italic;
-  font-weight:300;
+  font-weight:500;
   color:var(--text-1);
   line-height:1.5;
-  border-left:2px solid rgba(0,212,255,0.5);
+  border-left:2px solid rgba(201,162,39,0.4);
   padding-left:2rem;
   margin-bottom:2rem;
 }
 
 blockquote.centerquote{
   display:block;
-  font-family:'Orbitron',monospace;
-  font-size:clamp(1.4rem,2.8vw,2.2rem);
-  font-weight:600;
+  font-family:var(--font-display);
+  font-size:clamp(1.5rem,2.8vw,2.4rem);
+  font-weight:500;
   font-style:italic;
   color:var(--gold-light);
   text-align:center;
   line-height:1.4;
   margin-bottom:2rem;
-  text-shadow:0 0 30px rgba(232,201,122,0.35), 0 0 60px rgba(201,168,76,0.15);
-  letter-spacing:2px;
+  letter-spacing:0.01em;
 }
 
-/* v6 — Vision text: optimised for readability & investor trust */
+/* Vision text — readable, investor-grade */
 .vision-text p{
-  font-size:clamp(0.95rem,1.3vw,1.08rem);
-  font-weight:300;
-  color:var(--text-1);
-  line-height:2.05;
-  margin-bottom:1.35rem;
-  letter-spacing:0.3px;
-}
-/* Opening sentence in each block — slightly larger & medium weight */
-.vision-text p:first-of-type{
-  font-size:clamp(1rem,1.45vw,1.18rem);
+  font-family:var(--font-body);
+  font-size:1rem;
   font-weight:400;
-  line-height:2.0;
-  color:#d8eeff;
+  color:var(--text-body);
+  line-height:1.75;
+  margin-bottom:1.2rem;
+  letter-spacing:normal;
+}
+/* Opening sentence in each block */
+.vision-text p:first-of-type{
+  font-size:1.05rem;
+  font-weight:500;
+  line-height:1.7;
+  color:var(--text-1);
 }
 
 .features{display:flex;flex-direction:column;gap:1.2rem;}
@@ -575,22 +555,22 @@ blockquote.centerquote{
   padding:1.4rem 1.6rem;
   background:var(--card);
   border:1px solid var(--border-dim);
-  border-left:2px solid rgba(0,212,255,0.3);
+  border-left:2px solid rgba(201,162,39,0.3);
   transition:all 0.3s;
 }
-.feature:hover{border-left-color:var(--cyan);background:var(--card-hover);box-shadow:0 0 20px rgba(0,212,255,0.06);}
+.feature:hover{border-left-color:var(--gold);background:var(--card-hover);}
 .feature-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px;}
 .feature-body h4{
-  font-family:'Orbitron',monospace;
-  font-size:1rem;letter-spacing:2px;
-  color:var(--cyan);margin-bottom:0.3rem;
+  font-family:var(--font-body);
+  font-size:0.95rem;letter-spacing:0.03em;font-weight:600;
+  color:var(--text-1);margin-bottom:0.3rem;
 }
-.feature-body p{font-size:0.8rem;color:var(--text-1);font-style:italic;}
+.feature-body p{font-size:0.9rem;color:var(--text-body);font-style:normal;line-height:1.6;}
 
 /* --- TOKENOMICS --------------------------- */
 #tokenomics{
-  padding:110px 5%;
-  background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);
+  padding:var(--section-py) var(--section-px);
+  background:linear-gradient(180deg,rgba(10,22,40,0) 0%,rgba(15,30,52,0.6) 50%,rgba(10,22,40,0) 100%);
 }
 
 .token-layout{
@@ -608,15 +588,14 @@ blockquote.centerquote{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
 }
 .donut-total{
-  font-family:'Orbitron',monospace;
-  font-size:1.3rem;font-weight:600;
+  font-family:var(--font-brand);
+  font-size:1.2rem;font-weight:600;
   color:var(--cyan);line-height:1;
-  text-shadow:0 0 12px rgba(0,212,255,0.5);
 }
 .donut-sub{
-  font-family:'Orbitron',monospace;
-  font-size:0.5rem;letter-spacing:2px;
-  color:var(--text-1);margin-top:4px;
+  font-family:var(--font-body);
+  font-size:0.68rem;letter-spacing:0.04em;
+  color:var(--text-2);margin-top:6px;font-weight:500;text-transform:uppercase;
 }
 
 
@@ -633,17 +612,17 @@ blockquote.centerquote{
 .legend-row:last-child{border-bottom:none;}
 .ldot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
 .lname{
-  flex:1;font-size:0.85rem;
-  font-style:italic;color:var(--text-1);
+  flex:1;font-size:0.9rem;font-family:var(--font-body);
+  color:var(--text-body);
 }
 .lpct{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-brand);
   font-size:0.72rem;color:var(--text-1);
   width:3.5rem;text-align:right;
 }
 .lamt{
-  font-family:'Orbitron',monospace;
-  font-size:0.65rem;color:var(--cyan);
+  font-family:var(--font-mono);
+  font-size:0.68rem;color:var(--cyan);
   width:3.5rem;text-align:right;
 }
 
@@ -656,30 +635,30 @@ blockquote.centerquote{
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);
   transition:border-color 0.3s;
 }
-.tcard:hover{border-color:var(--border);}
+.tcard:hover{border-color:var(--border-gold);}
 .tcard-tag{
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;letter-spacing:3px;
-  color:var(--cyan);opacity:0.6;margin-bottom:0.5rem;
+  font-family:var(--font-body);
+  font-size:0.68rem;letter-spacing:0.08em;font-weight:600;
+  color:var(--cyan);text-transform:uppercase;margin-bottom:0.5rem;
 }
 .tcard-val{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-brand);
   font-size:1.3rem;font-weight:600;
   color:var(--gold);
 }
-.tcard-sub{font-size:0.85rem;font-style:italic;color:var(--text-1);margin-top:0.2rem;}
+.tcard-sub{font-size:0.9rem;color:var(--text-body);margin-top:0.2rem;font-family:var(--font-body);}
 
 /* PRICE TABLE */
 .price-table{
   background:var(--card);
-  border:1px solid var(--border);
+  border:1px solid var(--border-gold);
   padding:1.6rem 1.8rem;
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);
 }
 .price-table-head{
-  font-family:'Orbitron',monospace;
-  font-size:0.65rem;letter-spacing:3px;
-  color:var(--cyan);opacity:0.7;margin-bottom:1.2rem;
+  font-family:var(--font-body);
+  font-size:0.72rem;letter-spacing:0.08em;font-weight:600;
+  color:var(--cyan);text-transform:uppercase;margin-bottom:1.2rem;
 }
 .price-row{
   display:flex;align-items:center;justify-content:space-between;
@@ -687,22 +666,22 @@ blockquote.centerquote{
   border-bottom:1px solid var(--border-dim);
 }
 .price-row:last-child{border-bottom:none;}
-.price-tier{font-size:0.85rem;font-style:italic;color:var(--text-1);}
+.price-tier{font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);}
 .price-amt{
-  font-family:'Orbitron',monospace;
-  font-size:0.95rem;font-weight:500;
+  font-family:var(--font-brand);
+  font-size:0.95rem;font-weight:600;
 }
 .t1{color:var(--green);}
 .t2{color:var(--gold-light);}
 .t3{color:var(--gold);}
 .tl{color:var(--cyan);}
 .gain{
-  font-family:'Orbitron',monospace;
-  font-size:0.7rem;color:var(--green);
+  font-family:var(--font-body);
+  font-size:0.75rem;color:var(--green);font-weight:500;
 }
 
 /* --- ANGEL ROUND -------------------------- */
-#angel{padding:110px 5%;}
+#angel{padding:var(--section-py) var(--section-px);}
 
 .angel-wrapper{max-width:900px;margin:0 auto;}
 
@@ -721,96 +700,80 @@ blockquote.centerquote{
   clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
 }
 .tier-card.active{
-  border-color:rgba(0,212,255,0.4);
-  background:rgba(0,212,255,0.04);
-  box-shadow:0 0 30px rgba(0,212,255,0.08), inset 0 0 30px rgba(0,212,255,0.02);
+  border-color:rgba(201,162,39,0.35);
+  background:rgba(201,162,39,0.04);
+  box-shadow:0 0 30px rgba(201,162,39,0.06), inset 0 0 30px rgba(201,162,39,0.02);
 }
 .tier-card.active::before{
   content:'';
   position:absolute;top:0;left:0;right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  box-shadow:0 0 8px rgba(0,212,255,0.4);
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
 }
 .tier-num{
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;letter-spacing:3px;
-  color:var(--cyan);margin-bottom:0.5rem;
+  font-family:var(--font-body);
+  font-size:0.68rem;letter-spacing:0.08em;font-weight:600;
+  color:var(--cyan);margin-bottom:0.5rem;text-transform:uppercase;
 }
 .tier-name{
-  font-family:'Orbitron',monospace;
-  font-size:0.75rem;letter-spacing:1px;
+  font-family:var(--font-body);
+  font-size:0.85rem;font-weight:500;
   color:var(--text-1);margin-bottom:1rem;
 }
 .tier-price{
-  font-family:'Orbitron',monospace;
-  font-size:1.8rem;font-weight:600;
+  font-family:var(--font-brand);
+  font-size:1.8rem;font-weight:700;
   color:var(--gold);line-height:1;
 }
-.tier-price sub{font-size:0.7rem;color:var(--text-1);}
+.tier-price sub{font-size:0.7rem;color:var(--text-2);}
 .tier-detail{
-  font-size:0.8rem;font-style:italic;
-  color:var(--text-1);margin-top:0.5rem;
+  font-size:0.88rem;
+  color:var(--text-body);margin-top:0.5rem;font-family:var(--font-body);
 }
 .tier-gain{
-  font-family:'Orbitron',monospace;
-  font-size:0.7rem;color:var(--green);
-  margin-top:0.8rem;font-weight:500;
+  font-family:var(--font-body);
+  font-size:0.78rem;color:var(--green);
+  margin-top:0.8rem;font-weight:600;
 }
 .tier-badge{
   display:inline-block;
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;letter-spacing:2px;
-  padding:4px 10px;margin-top:0.8rem;
+  font-family:var(--font-body);
+  font-size:0.68rem;letter-spacing:0.06em;font-weight:600;
+  padding:5px 12px;margin-top:0.8rem;text-transform:uppercase;
 }
 .tier-badge.open{
   color:#fff;
-  border:1px solid rgba(20,241,149,0.6);
-  background:linear-gradient(135deg,rgba(20,241,149,0.15) 0%,rgba(0,212,255,0.1) 100%);
-  animation:buyNowPulse 1.8s ease-in-out infinite;
-  text-shadow:0 0 12px rgba(20,241,149,0.9),0 0 28px rgba(20,241,149,0.6),0 0 60px rgba(0,212,255,0.4);
-  box-shadow:0 0 12px rgba(20,241,149,0.4),0 0 30px rgba(20,241,149,0.2),inset 0 0 12px rgba(20,241,149,0.05);
-  letter-spacing:3px;
-  font-weight:700;
+  border:1px solid rgba(20,241,149,0.5);
+  background:rgba(20,241,149,0.1);
+  animation:buyNowPulse 2s ease-in-out infinite;
 }
 .tier-badge.open:hover{
-  background:linear-gradient(135deg,rgba(20,241,149,0.3) 0%,rgba(0,212,255,0.2) 100%);
-  text-shadow:0 0 20px #14F195,0 0 40px #14F195,0 0 80px rgba(0,212,255,0.8);
-  box-shadow:0 0 24px rgba(20,241,149,0.7),0 0 60px rgba(20,241,149,0.4),0 0 100px rgba(0,212,255,0.3);
-  transform:scale(1.06);
+  background:rgba(20,241,149,0.2);
+  border-color:rgba(20,241,149,0.8);
+  transform:scale(1.04);
   transition:all 0.2s ease;
 }
 @keyframes buyNowPulse{
-  0%,100%{
-    box-shadow:0 0 12px rgba(20,241,149,0.4),0 0 30px rgba(20,241,149,0.2),inset 0 0 12px rgba(20,241,149,0.05);
-    text-shadow:0 0 12px rgba(20,241,149,0.9),0 0 28px rgba(20,241,149,0.6),0 0 60px rgba(0,212,255,0.4);
-    border-color:rgba(20,241,149,0.6);
-  }
-  50%{
-    box-shadow:0 0 24px rgba(20,241,149,0.8),0 0 60px rgba(20,241,149,0.5),0 0 100px rgba(0,212,255,0.3),inset 0 0 20px rgba(20,241,149,0.1);
-    text-shadow:0 0 20px #14F195,0 0 50px #14F195,0 0 90px rgba(0,212,255,0.7);
-    border-color:rgba(20,241,149,1);
-  }
+  0%,100%{box-shadow:0 0 8px rgba(20,241,149,0.3);border-color:rgba(20,241,149,0.5);}
+  50%{box-shadow:0 0 18px rgba(20,241,149,0.6);border-color:rgba(20,241,149,0.9);}
 }
 .tier-badge.soon{
-  color:var(--text-1);
+  color:var(--text-2);
   border:1px solid var(--border-dim);
 }
 
 /* BUY FORM */
 .buy-form{
   background:var(--card);
-  border:1px solid var(--border);
-  box-shadow:0 0 60px rgba(0,212,255,0.07), inset 0 0 60px rgba(0,212,255,0.01);
+  border:1px solid var(--border-gold);
   padding:1.6rem 2rem;
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
 }
 
 .buy-form-title{
-  font-family:'Orbitron',monospace;
-  font-size:1.2rem;letter-spacing:4px;
-  color:var(--cyan);
-  text-shadow:0 0 20px rgba(0,212,255,0.5);
+  font-family:var(--font-display);
+  font-size:1.4rem;font-style:italic;font-weight:500;
+  color:var(--gold-light);
   padding-bottom:1.2rem;
   border-bottom:1px solid var(--border-dim);
   margin-bottom:1.6rem;
@@ -824,7 +787,7 @@ blockquote.centerquote{
 }
 .bstep{
   display:flex;flex-direction:column;align-items:center;
-  gap:4px;opacity:0.3;transition:opacity 0.3s;
+  gap:4px;transition:opacity 0.3s;
 }
 .bstep.active{opacity:1;}
 .bstep.done{opacity:0.6;}
@@ -832,13 +795,13 @@ blockquote.centerquote{
   width:28px;height:28px;border-radius:50%;
   border:1px solid var(--text-3);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Orbitron',monospace;font-size:0.65rem;
+  font-family:var(--font-body);font-size:0.75rem;font-weight:600;
   transition:all 0.3s;
 }
-.bstep.active .bstep-num{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,0.3);}
+.bstep.active .bstep-num{border-color:var(--gold);color:var(--gold);}
 .bstep.done .bstep-num{background:var(--green);border-color:var(--green);color:#fff;}
-.bstep-lbl{font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-1);}
-.bstep.active .bstep-lbl{color:var(--cyan);}
+.bstep-lbl{font-family:var(--font-body);font-size:0.62rem;letter-spacing:0.04em;color:var(--text-body);text-transform:uppercase;font-weight:500;}
+.bstep.active .bstep-lbl{color:var(--gold);}
 .step-line{flex:1;height:1px;background:var(--border-dim);max-width:50px;margin:0 4px 14px;}
 
 /* WALLET BUTTONS */
@@ -848,8 +811,8 @@ blockquote.centerquote{
   border:1px solid var(--border-dim);
   color:var(--text-1);
   padding:18px 20px;
-  font-family:'Orbitron',monospace;
-  font-size:0.72rem;letter-spacing:2px;
+  font-family:var(--font-body);
+  font-size:0.82rem;letter-spacing:0.02em;font-weight:500;
   cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:12px;
   transition:all 0.3s ease;
@@ -867,51 +830,33 @@ blockquote.centerquote{
 }
 .wallet-btn .wallet-icon{font-size:1.4rem;flex-shrink:0;}
 .wallet-btn .wallet-label{display:flex;flex-direction:column;align-items:flex-start;gap:2px;}
-.wallet-btn .wallet-name{font-size:0.75rem;font-weight:700;letter-spacing:2px;}
-.wallet-btn .wallet-sub{font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:2px;opacity:0.6;font-weight:400;}
+.wallet-btn .wallet-name{font-size:0.82rem;font-weight:600;letter-spacing:0.02em;}
+.wallet-btn .wallet-sub{font-family:var(--font-body);font-size:0.65rem;letter-spacing:0.02em;font-weight:400;}
 
 .wallet-btn.phantom{
-  background:linear-gradient(135deg,rgba(153,69,255,0.22) 0%,rgba(101,31,255,0.12) 60%,rgba(80,20,200,0.08) 100%);
-  border:1.5px solid rgba(153,69,255,0.55);
+  background:linear-gradient(135deg,rgba(153,69,255,0.18) 0%,rgba(101,31,255,0.08) 60%,rgba(80,20,200,0.05) 100%);
+  border:1px solid rgba(153,69,255,0.45);
   color:#d8bcff;
-  text-shadow:0 0 10px rgba(153,69,255,0.5);
-  box-shadow:
-    0 0 20px rgba(153,69,255,0.18),
-    0 4px 24px rgba(101,31,255,0.15),
-    inset 0 1px 0 rgba(200,160,255,0.12);
 }
 .wallet-btn.phantom:hover{
-  background:linear-gradient(135deg,rgba(153,69,255,0.38) 0%,rgba(101,31,255,0.22) 60%,rgba(80,20,200,0.15) 100%);
-  border-color:rgba(180,120,255,0.9);
+  background:linear-gradient(135deg,rgba(153,69,255,0.30) 0%,rgba(101,31,255,0.18) 60%,rgba(80,20,200,0.12) 100%);
+  border-color:rgba(180,120,255,0.75);
   color:#ecdcff;
-  transform:translateY(-2px);
-  box-shadow:
-    0 0 30px rgba(153,69,255,0.35),
-    0 8px 32px rgba(101,31,255,0.25),
-    inset 0 1px 0 rgba(220,180,255,0.18);
+  transform:translateY(-1px);
 }
 .wallet-btn.solflare{
-  background:linear-gradient(135deg,rgba(255,140,0,0.18) 0%,rgba(255,80,0,0.1) 60%,rgba(200,60,0,0.07) 100%);
-  border:1.5px solid rgba(255,140,0,0.5);
+  background:linear-gradient(135deg,rgba(255,140,0,0.14) 0%,rgba(255,80,0,0.07) 60%,rgba(200,60,0,0.04) 100%);
+  border:1px solid rgba(255,140,0,0.4);
   color:#ffd580;
-  text-shadow:0 0 10px rgba(255,140,0,0.45);
-  box-shadow:
-    0 0 20px rgba(255,140,0,0.15),
-    0 4px 24px rgba(255,80,0,0.12),
-    inset 0 1px 0 rgba(255,200,100,0.1);
 }
 .wallet-btn.solflare:hover{
-  background:linear-gradient(135deg,rgba(255,140,0,0.32) 0%,rgba(255,80,0,0.2) 60%,rgba(200,60,0,0.14) 100%);
-  border-color:rgba(255,180,60,0.9);
+  background:linear-gradient(135deg,rgba(255,140,0,0.26) 0%,rgba(255,80,0,0.16) 60%,rgba(200,60,0,0.10) 100%);
+  border-color:rgba(255,180,60,0.75);
   color:#ffe9aa;
-  transform:translateY(-2px);
-  box-shadow:
-    0 0 30px rgba(255,140,0,0.3),
-    0 8px 32px rgba(255,80,0,0.22),
-    inset 0 1px 0 rgba(255,220,140,0.16);
+  transform:translateY(-1px);
 }
-.wallet-btn.connected-phantom{border-color:rgba(153,69,255,0.7);color:#c4a3ff;background:rgba(153,69,255,0.15);}
-.wallet-btn.connected-solflare{border-color:rgba(255,140,0,0.6);color:#ffd580;background:rgba(255,140,0,0.1);}
+.wallet-btn.connected-phantom{border-color:rgba(153,69,255,0.6);color:#c4a3ff;background:rgba(153,69,255,0.12);}
+.wallet-btn.connected-solflare{border-color:rgba(255,140,0,0.5);color:#ffd580;background:rgba(255,140,0,0.08);}
 
 .wallet-status{
   display:none;
@@ -920,14 +865,14 @@ blockquote.centerquote{
   background:rgba(76,175,122,0.05);
   border:1px solid rgba(76,175,122,0.15);
   margin-bottom:1.5rem;
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-body);
   font-size:0.65rem;color:var(--green);
   justify-content:space-between;
 }
 .ws-left{display:flex;align-items:center;gap:8px;}
 .ws-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s infinite;}
 .ws-disconnect{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-body);
   font-size:0.52rem;letter-spacing:1.5px;
   color:rgba(255,51,102,0.6);
   background:transparent;
@@ -949,43 +894,43 @@ blockquote.centerquote{
 
 .form-field{margin-bottom:1.2rem;}
 .field-label{
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;letter-spacing:3px;
-  color:var(--cyan);
-  opacity:0.7;
+  font-family:var(--font-body);
+  font-size:0.72rem;letter-spacing:0.08em;font-weight:600;
+  color:var(--text-2);
+  text-transform:uppercase;
   display:block;margin-bottom:6px;
 }
 .amount-wrap{position:relative;}
 .field-input{
   width:100%;
-  background:rgba(5,6,8,0.8);
+  background:rgba(7,15,26,0.9);
   border:1px solid var(--border-dim);
   color:var(--text-1);
   padding:12px 16px;
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-body);
   font-size:1rem;
   outline:none;
   transition:border-color 0.2s;
 }
-.field-input:focus{border-color:rgba(0,212,255,0.5);box-shadow:0 0 12px rgba(0,212,255,0.08);}
-.field-input::placeholder{color:var(--text-3);font-style:italic;}
+.field-input:focus{border-color:var(--gold);box-shadow:0 0 8px rgba(201,162,39,0.12);}
+.field-input::placeholder{color:var(--text-3);}
 .field-currency{
   position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  font-family:'Orbitron',monospace;font-size:0.65rem;color:var(--text-1);
+  font-family:var(--font-mono);font-size:0.72rem;color:var(--text-2);
 }
 
 .amount-hints{display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;}
 .hint{
   background:transparent;border:1px solid var(--border-dim);
-  color:var(--text-1);padding:4px 12px;
-  font-family:'Orbitron',monospace;font-size:0.6rem;
+  color:var(--text-2);padding:5px 12px;
+  font-family:var(--font-body);font-size:0.72rem;font-weight:500;
   cursor:pointer;transition:all 0.2s;
 }
-.hint:hover{border-color:rgba(0,212,255,0.5);color:var(--cyan);}
+.hint:hover{border-color:var(--gold-dim);color:var(--gold-light);}
 
 .live-calc{
-  background:rgba(0,212,255,0.03);
-  border:1px solid var(--border);
+  background:rgba(201,162,39,0.03);
+  border:1px solid var(--border-gold);
   padding:1.2rem 1.5rem;
   margin:1rem 0;
   display:none;
@@ -994,11 +939,11 @@ blockquote.centerquote{
 }
 .calc-row{display:flex;justify-content:space-between;align-items:center;}
 .calc-lbl{
-  font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:2px;
-  color:var(--text-1);
+  font-family:var(--font-body);font-size:0.75rem;font-weight:500;
+  color:var(--text-2);text-transform:uppercase;letter-spacing:0.04em;
 }
 .calc-amt{
-  font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:500;
+  font-family:var(--font-brand);font-size:0.95rem;font-weight:600;
   color:var(--text-1);
 }
 .calc-amt.gold{color:var(--gold);font-size:1.1rem;}
@@ -1007,46 +952,46 @@ blockquote.centerquote{
 
 /* CHECKS */
 .checks{
-  border:1px solid rgba(0,212,255,0.12);
+  border:1px solid var(--border-dim);
   padding:1.2rem 1.4rem;
   margin:1.2rem 0;
-  background:rgba(0,212,255,0.02);
+  background:rgba(201,162,39,0.02);
 }
 .check-title{
-  font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;
-  color:var(--cyan);opacity:0.6;margin-bottom:0.8rem;
+  font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.08em;font-weight:600;
+  color:var(--text-2);text-transform:uppercase;margin-bottom:0.8rem;
 }
 .check-item{
   display:flex;align-items:flex-start;gap:10px;
   margin-bottom:0.6rem;cursor:pointer;
 }
 .check-item:last-child{margin-bottom:0;}
-.check-item input{accent-color:var(--cyan);margin-top:3px;flex-shrink:0;}
-.check-item label{font-size:0.82rem;font-style:italic;color:var(--text-1);cursor:pointer;}
-.check-item label strong{color:var(--cyan);font-style:normal;}
+.check-item input{accent-color:var(--gold);margin-top:3px;flex-shrink:0;}
+.check-item label{font-size:0.9rem;color:var(--text-body);cursor:pointer;line-height:1.5;font-family:var(--font-body);}
+.check-item label strong{color:var(--gold-light);font-weight:600;}
 
 .buy-btn{
   width:100%;margin-top:1.2rem;
-  background:rgba(0,30,60,0.8);
-  border:1px solid rgba(0,212,255,0.15);
-  color:rgba(0,212,255,0.3);
+  background:rgba(7,15,26,0.8);
+  border:1px solid var(--border-dim);
+  color:var(--text-3);
   padding:16px;
-  font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:2.5px;
+  font-family:var(--font-body);font-size:0.85rem;letter-spacing:0.04em;font-weight:600;
   cursor:not-allowed;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   transition:all 0.3s;
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;text-transform:uppercase;
 }
 .buy-btn.ready{
-  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
+  background:linear-gradient(135deg,#dab842 0%,#c9a227 40%,#e8d5a3 70%,#c9a227 100%);
   background-size:200% 200%;
   color:#ffffff;
   -webkit-text-fill-color:#ffffff;
-  text-shadow:0 1px 3px rgba(0,0,0,0.35);
+  text-shadow:0 1px 2px rgba(0,0,0,0.3);
   cursor:pointer;
   border:none;
-  box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
-  animation:goldBtnShift 4s ease-in-out infinite;
+  box-shadow:0 2px 20px rgba(201,162,39,0.45), 0 4px 16px rgba(0,0,0,0.3);
+  animation:goldBtnShift 5s ease-in-out infinite;
   font-weight:700;
 }
 .buy-btn.ready::before{
@@ -1054,22 +999,21 @@ blockquote.centerquote{
   position:absolute;
   top:-20%;left:-80%;
   width:55%;height:140%;
-  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
-  animation:goldSunlight 3.5s ease-in-out infinite;
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.15) 40%,rgba(255,255,255,0.4) 50%,rgba(255,255,255,0.15) 60%,transparent 80%);
+  animation:goldSunlight 4s ease-in-out infinite;
   pointer-events:none;
 }
 .buy-btn.ready:hover{
-  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%);
-  transform:translateY(-2px);
-  box-shadow:0 0 55px rgba(232,201,122,0.9),0 0 100px rgba(193,127,19,0.6),0 8px 30px rgba(0,0,0,0.5);
+  background:linear-gradient(135deg,#e8d060 0%,#d4a82a 40%,#f0e080 70%,#d4a82a 100%);
+  transform:translateY(-1px);
+  box-shadow:0 6px 28px rgba(201,162,39,0.60), 0 8px 20px rgba(0,0,0,0.4);
 }
 
 .form-note{
-  font-size:0.78rem;font-style:italic;
-  color:var(--text-1);
+  font-size:0.85rem;
+  color:var(--text-2);
   text-align:center;margin-top:1rem;
-  line-height:1.6;
-  opacity:0.7;
+  line-height:1.6;font-family:var(--font-body);
 }
 
 /* TX PROCESSING */
@@ -1077,48 +1021,46 @@ blockquote.centerquote{
 .tx-spinner{
   width:50px;height:50px;border-radius:50%;
   border:2px solid var(--border-dim);
-  border-top:2px solid var(--cyan);
-  box-shadow:0 0 12px rgba(0,212,255,0.3);
+  border-top:2px solid var(--gold);
   animation:spin 1s linear infinite;
   margin:0 auto 1.5rem;
 }
 @keyframes spin{to{transform:rotate(360deg);}}
 .tx-title{
-  font-family:'Orbitron',monospace;font-size:0.8rem;letter-spacing:2px;
+  font-family:var(--font-body);font-size:0.9rem;letter-spacing:0.04em;font-weight:500;
   color:var(--text-1);margin-bottom:1.5rem;
 }
 .tx-list{display:flex;flex-direction:column;gap:0.8rem;text-align:left;max-width:320px;margin:0 auto 1.5rem;}
-.tx-item{display:flex;align-items:center;gap:12px;font-size:0.85rem;font-style:italic;color:var(--text-1);}
+.tx-item{display:flex;align-items:center;gap:12px;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);}
 .tx-icon{font-size:0.9rem;flex-shrink:0;width:18px;}
 .tx-icon.done{color:var(--green);}
-.tx-icon.active{color:var(--cyan);}
+.tx-icon.active{color:var(--gold);}
 .tx-note{
-  font-family:'Orbitron',monospace;font-size:0.55rem;
-  letter-spacing:2px;color:var(--text-1);
+  font-family:var(--font-body);font-size:0.72rem;
+  letter-spacing:0.04em;color:var(--text-2);text-transform:uppercase;font-weight:500;
 }
 
 /* SUCCESS */
 #successPanel{display:none;padding:2rem;text-align:center;}
 .success-icon{font-size:3.5rem;margin-bottom:1rem;}
 .success-title{
-  font-family:'Orbitron',monospace;font-size:1.1rem;letter-spacing:2px;
+  font-family:var(--font-display);font-size:1.6rem;font-style:italic;font-weight:500;
   color:var(--green);margin-bottom:0.5rem;
 }
-.success-sub{font-size:0.9rem;font-style:italic;color:var(--text-1);margin-bottom:1.5rem;}
+.success-sub{font-size:0.95rem;color:var(--text-body);margin-bottom:1.5rem;font-family:var(--font-body);}
 .success-details{
-  background:rgba(76,175,122,0.04);
-  border:1px solid rgba(76,175,122,0.15);
+  background:rgba(0,217,138,0.04);
+  border:1px solid rgba(0,217,138,0.15);
   padding:1rem 1.5rem;
-  font-family:'Orbitron',monospace;
-  font-size:0.72rem;color:var(--text-1);
+  font-family:var(--font-mono);
+  font-size:0.75rem;color:var(--text-body);
   line-height:1.9;text-align:left;
 }
 
 /* --- WHITEPAPER --------------------------- */
 #whitepaper{
-  padding:0px 5% 80px;
-  margin-top:-30px;
-  background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);
+  padding:var(--section-py) var(--section-px);
+  background:linear-gradient(180deg,rgba(15,30,52,0.4) 0%,rgba(10,22,40,0.2) 50%,rgba(15,30,52,0.4) 100%);
 }
 
 .wp-grid{
@@ -1137,46 +1079,45 @@ blockquote.centerquote{
 .wp-card::before{
   content:'';
   position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,var(--cyan),transparent);
+  background:linear-gradient(90deg,var(--gold),transparent);
   transform:scaleX(0);transform-origin:left;
   transition:transform 0.3s;
 }
 .wp-card:hover::before{transform:scaleX(1);}
-.wp-card:hover{border-color:var(--border);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,212,255,0.07);}
+.wp-card:hover{border-color:var(--border-gold);transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,162,39,0.08);}
 
 .wp-card-header{display:flex;align-items:center;gap:1rem;margin-bottom:0.3rem;}
 .wp-num{
-  font-family:'Orbitron',monospace;
-  font-size:1.6rem;font-weight:700;
-  color:var(--green);line-height:1;
+  font-family:var(--font-brand);
+  font-size:1.4rem;font-weight:700;
+  color:var(--gold-dim);line-height:1;
   flex-shrink:0;
 }
 .wp-icon{font-size:1.5rem;flex-shrink:0;}
 .wp-title{
-  font-family:'Orbitron',monospace;
-  font-size:0.75rem;letter-spacing:1.5px;font-weight:600;
-  color:var(--cyan);
+  font-family:var(--font-body);
+  font-size:0.9rem;letter-spacing:0.02em;font-weight:600;
+  color:var(--text-1);
 }
-/* Main sentence — one bold line, straight to the point */
+/* Main sentence */
 .wp-hook{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(0.82rem,1.1vw,0.96rem);
+  font-family:var(--font-body);
+  font-size:clamp(0.88rem,1.1vw,0.97rem);
   font-weight:500;
   color:var(--text-1);
-  line-height:1.75;
-  letter-spacing:0.2px;
+  line-height:1.65;
 }
-/* Supporting detail — lighter weight, as brief context */
+/* Supporting detail */
 .wp-text{
-  font-size:0.78rem;
-  font-style:italic;
-  font-weight:300;
+  font-size:0.88rem;
+  font-weight:400;
   color:var(--text-2);
-  line-height:1.75;
+  line-height:1.65;
+  font-family:var(--font-body);
 }
 
 /* --- DASHBOARD ---------------------------- */
-#dashboard{padding:110px 5%;}
+#dashboard{padding:var(--section-py) var(--section-px);}
 
 .dash-cards{
   display:grid;grid-template-columns:repeat(4,1fr);
@@ -1189,22 +1130,22 @@ blockquote.centerquote{
   clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);
   transition:border-color 0.2s;
 }
-.dash-card:hover{border-color:var(--border);box-shadow:0 0 20px rgba(0,212,255,0.06);}
+.dash-card:hover{border-color:var(--border);box-shadow:0 0 20px rgba(0,196,239,0.06);}
 .dash-metric{
-  font-family:'Orbitron',monospace;
-  font-size:0.55rem;letter-spacing:3px;
+  font-family:var(--font-body);
+  font-size:0.55rem;letter-spacing:0.06em;
   color:var(--text-1);margin-bottom:0.5rem;
 }
 .dash-val{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-body);
   font-size:1.2rem;font-weight:600;
   color:var(--text-1);
 }
 .dash-note{
-  font-family:'Orbitron',monospace;
+  font-family:var(--font-brand);
   font-size:0.6rem;margin-top:4px;
 }
-.note-gold{color:var(--cyan);opacity:0.7;}
+.note-gold{color:var(--cyan);}
 .note-muted{color:var(--text-3);}
 .note-cyan{color:var(--green);opacity:0.85;}
 
@@ -1216,20 +1157,20 @@ blockquote.centerquote{
   clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));
 }
 .progress-label{
-  font-family:'Orbitron',monospace;
-  font-size:0.7rem;letter-spacing:2px;
+  font-family:var(--font-body);
+  font-size:0.7rem;letter-spacing:0.04em;
   color:var(--text-1);margin-bottom:1.5rem;
 }
 .prog-item{margin-bottom:1.2rem;}
 .prog-item:last-child{margin-bottom:0;}
 .prog-meta{
   display:flex;justify-content:space-between;
-  font-family:'Orbitron',monospace;font-size:0.6rem;
+  font-family:var(--font-body);font-size:0.6rem;
   color:var(--text-1);margin-bottom:6px;
 }
 .prog-track{
   width:100%;height:4px;
-  background:rgba(0,212,255,0.06);
+  background:rgba(0,196,239,0.06);
   position:relative;
 }
 .prog-fill{
@@ -1237,20 +1178,20 @@ blockquote.centerquote{
   background:linear-gradient(90deg,#0066ff,var(--cyan));
   position:relative;
   animation:fillBar 2s ease both;
-  box-shadow:0 0 8px rgba(0,212,255,0.4);
+  box-shadow:0 0 8px rgba(0,196,239,0.4);
 }
 .prog-fill::after{
   content:'';position:absolute;right:-4px;top:-2px;
   width:8px;height:8px;border-radius:50%;
   background:var(--cyan);
-  box-shadow:0 0 6px rgba(0,212,255,0.6);
+  box-shadow:0 0 6px rgba(0,196,239,0.6);
 }
 @keyframes fillBar{from{width:0!important;}to{}}
 
 /* --- ROADMAP ------------------------------ */
 #roadmap{
-  padding:0px 5% 80px;
-  background:linear-gradient(180deg,transparent,rgba(0,66,255,0.05),transparent);
+  padding:var(--section-py) var(--section-px);
+  background:linear-gradient(180deg,rgba(15,30,52,0.3) 0%,rgba(10,22,40,0.1) 50%,rgba(15,30,52,0.3) 100%);
 }
 
 .roadmap-line{
@@ -1261,9 +1202,9 @@ blockquote.centerquote{
   content:'';
   position:absolute;left:50%;top:0;bottom:0;
   width:1px;
-  background:linear-gradient(180deg,var(--text-3),rgba(0,212,255,0.2),transparent);
+  background:linear-gradient(180deg,var(--text-3),rgba(0,196,239,0.2),transparent);
   transform:translateX(-50%);
-  box-shadow:0 0 8px rgba(0,212,255,0.2);
+  box-shadow:0 0 8px rgba(0,196,239,0.2);
 }
 
 .rm-item{
@@ -1275,30 +1216,30 @@ blockquote.centerquote{
 
 .rm-content{flex:1;}
 .rm-phase{
-  font-family:'Orbitron',monospace;font-size:0.55rem;
+  font-family:var(--font-body);font-size:0.55rem;
   color:var(--cyan);
   letter-spacing:4px;
-  opacity:0.9;
+  
   margin-bottom:0.5rem;
   text-transform:uppercase;
 }
 .rm-title{
-  font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:1px;
+  font-family:var(--font-display);font-size:1rem;letter-spacing:1px;
   color:var(--text-1);margin-bottom:0.8rem;
   position:relative;
 }
 .rm-tasks{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
-.rm-tasks li{font-size:0.88rem;font-style:italic;color:var(--text-1);display:flex;align-items:center;gap:8px;}
-.rm-tasks li::before{content:'◆';color:rgba(0,212,255,0.5);font-size:0.5rem;flex-shrink:0;}
+.rm-tasks li{font-size:0.88rem;color:var(--text-1);display:flex;align-items:center;gap:8px;}
+.rm-tasks li::before{content:'◆';color:rgba(0,196,239,0.5);font-size:0.5rem;flex-shrink:0;}
 .rm-item:nth-child(even) .rm-tasks li{flex-direction:row-reverse;}
 
 .rm-node{
   width:18px;height:18px;border-radius:50%;
-  background:linear-gradient(135deg,#0066ff 0%,#00d4ff 100%);
-  border:2px solid rgba(0,212,255,0.6);
+  background:linear-gradient(135deg,#0066ff 0%,#00c4ef 100%);
+  border:2px solid rgba(0,196,239,0.6);
   box-shadow:
     0 0 0 5px rgba(0,102,255,0.12),
-    0 0 14px rgba(0,212,255,0.55),
+    0 0 14px rgba(0,196,239,0.55),
     0 0 30px rgba(0,102,255,0.3),
     inset 0 1px 0 rgba(255,255,255,0.25);
   flex-shrink:0;position:relative;z-index:1;margin-top:2px;
@@ -1316,16 +1257,16 @@ blockquote.centerquote{
   transform:scale(1.18);
   box-shadow:
     0 0 0 7px rgba(0,102,255,0.18),
-    0 0 22px rgba(0,212,255,0.75),
+    0 0 22px rgba(0,196,239,0.75),
     0 0 45px rgba(0,102,255,0.4),
     inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .rm-node.dim{
   background:linear-gradient(135deg,#1a2a3a 0%,#0d1f2e 100%);
-  border-color:rgba(0,212,255,0.2);
+  border-color:rgba(0,196,239,0.2);
   box-shadow:
-    0 0 0 5px rgba(0,212,255,0.05),
-    0 0 10px rgba(0,212,255,0.15);
+    0 0 0 5px rgba(0,196,239,0.05),
+    0 0 10px rgba(0,196,239,0.15);
 }
 .rm-node.dim::after{
   background:rgba(100,150,180,0.4);
@@ -1347,8 +1288,8 @@ footer{
 .footer-brand{}
 .footer-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
 .footer-name{
-  font-family:'Orbitron',monospace;font-size:1rem;font-weight:600;
-  letter-spacing:3px;color:var(--gold);
+  font-family:var(--font-brand);font-size:1rem;font-weight:600;
+  letter-spacing:0.06em;color:var(--gold);
 }
 .footer-brand p{
   font-size:0.88rem;
@@ -1357,8 +1298,8 @@ footer{
 }
 
 .footer-col h5{
-  font-family:'Orbitron',monospace;font-size:0.85rem;letter-spacing:3px;
-  color:var(--cyan);text-shadow:0 0 10px rgba(0,212,255,0.35);margin-bottom:1.2rem;
+  font-family:var(--font-body);font-size:0.85rem;letter-spacing:0.06em;
+  color:var(--cyan);text-shadow:0 0 10px rgba(0,196,239,0.35);margin-bottom:1.2rem;
 }
 .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
 .footer-col ul a{
@@ -1374,8 +1315,8 @@ footer{
 }
 .footer-copy{font-size:0.78rem;color:var(--text-1);}
 .footer-chain{
-  font-family:'Orbitron',monospace;font-size:0.58rem;
-  letter-spacing:2px;color:var(--text-1);
+  font-family:var(--font-body);font-size:0.58rem;
+  letter-spacing:0.04em;color:var(--text-1);
   display:flex;align-items:center;gap:6px;
 }
 .chain-pulse{
@@ -1402,8 +1343,8 @@ footer{
 .modal-box{
   max-width:660px;width:100%;
   background:var(--card);
-  border:1px solid rgba(0,212,255,0.25);
-  box-shadow:0 0 80px rgba(0,212,255,0.1), 0 0 160px rgba(0,66,255,0.05);
+  border:1px solid rgba(0,196,239,0.25);
+  box-shadow:0 0 80px rgba(0,196,239,0.1), 0 0 160px rgba(0,66,255,0.05);
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   padding:2.5rem;
   max-height:90vh;overflow-y:auto;
@@ -1412,16 +1353,16 @@ footer{
 .modal-box::before{
   content:'';position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,var(--cyan),transparent);
-  box-shadow:0 0 15px rgba(0,212,255,0.4);
+  box-shadow:0 0 15px rgba(0,196,239,0.4);
 }
 
 .modal-icon{font-size:2.5rem;text-align:center;display:block;margin-bottom:1rem;}
 .modal-title{
-  font-family:'Orbitron',monospace;font-size:1rem;letter-spacing:3px;
+  font-family:var(--font-display);font-size:1rem;letter-spacing:0.06em;
   color:var(--gold);text-align:center;margin-bottom:0.4rem;
 }
 .modal-sub{
-  font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;
+  font-family:var(--font-body);font-size:0.55rem;letter-spacing:0.06em;
   color:var(--text-1);text-align:center;margin-bottom:1.5rem;
 }
 .modal-rule{height:1px;background:var(--border-dim);margin:1.5rem 0;}
@@ -1430,11 +1371,11 @@ footer{
 .risk-item{
   display:flex;gap:12px;align-items:flex-start;
   padding:0.8rem 1rem;
-  background:rgba(0,212,255,0.03);
-  border-left:2px solid rgba(0,212,255,0.3);
+  background:rgba(0,196,239,0.03);
+  border-left:2px solid rgba(0,196,239,0.3);
 }
 .risk-icon{font-size:0.9rem;flex-shrink:0;margin-top:2px;}
-.risk-text{font-size:0.83rem;font-style:italic;color:var(--text-1);line-height:1.5;}
+.risk-text{font-size:0.83rem;color:var(--text-1);line-height:1.5;}
 .risk-text strong{color:var(--text-1);font-style:normal;}
 
 .modal-checks{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;}
@@ -1445,11 +1386,11 @@ footer{
 }
 .modal-check:hover{border-color:var(--border);}
 .modal-check input{accent-color:var(--cyan);flex-shrink:0;margin-top:2px;}
-.modal-check label{font-size:0.83rem;font-style:italic;color:var(--text-1);cursor:pointer;line-height:1.5;}
+.modal-check label{font-size:0.83rem;color:var(--text-1);cursor:pointer;line-height:1.5;}
 .modal-check label strong{color:var(--cyan);font-style:normal;}
 
 .modal-progress{
-  font-family:'Orbitron',monospace;font-size:0.6rem;
+  font-family:var(--font-body);font-size:0.6rem;
   text-align:center;color:var(--text-1);margin-bottom:1rem;
 }
 .modal-progress span{color:var(--cyan);}
@@ -1457,9 +1398,9 @@ footer{
 .modal-agree{
   width:100%;padding:15px;
   background:rgba(0,30,60,0.8);
-  border:1px solid rgba(0,212,255,0.15);
-  color:rgba(0,212,255,0.3);
-  font-family:'Orbitron',monospace;font-size:0.72rem;letter-spacing:2px;
+  border:1px solid rgba(0,196,239,0.15);
+  color:rgba(0,196,239,0.3);
+  font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.04em;
   cursor:not-allowed;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   transition:all 0.3s;
@@ -1472,32 +1413,32 @@ footer{
 .modal-decline{
   width:100%;margin-top:0.8rem;padding:10px;
   background:transparent;border:1px solid var(--border-dim);
-  color:var(--text-1);
-  font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:2px;
-  cursor:pointer;transition:all 0.2s;
+  color:var(--text-2);
+  font-family:var(--font-body);font-size:0.8rem;letter-spacing:0.04em;font-weight:500;
+  cursor:pointer;transition:all 0.2s;text-transform:uppercase;
 }
 .modal-decline:hover{border-color:var(--red);color:var(--red);}
 
 /* --- STICKY BANNER ------------------------ */
 .sticky-banner{
   position:fixed;bottom:0;left:0;right:0;z-index:500;
-  background:rgba(1,11,24,0.97);
-  border-top:1px solid rgba(0,212,255,0.15);
-  backdrop-filter:blur(10px);
-  padding:8px 5%;
-  padding-bottom:max(8px, env(safe-area-inset-bottom));
+  background:rgba(7,15,26,0.97);
+  border-top:1px solid var(--border-gold);
+  backdrop-filter:blur(12px);
+  padding:10px var(--section-px);
+  padding-bottom:max(10px, env(safe-area-inset-bottom));
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
   transform:translateY(100%);transition:transform 0.3s ease;
 }
 .sticky-banner.show{transform:translateY(0);}
 .banner-text{
-  font-family:'Orbitron',monospace;font-size:0.58rem;
-  color:var(--text-1);letter-spacing:1px;line-height:1.5;
+  font-family:var(--font-body);font-size:0.82rem;font-weight:400;
+  color:var(--text-body);letter-spacing:0;line-height:1.5;
 }
-.banner-text em{color:var(--cyan);opacity:0.8;font-style:normal;}
+.banner-text em{color:var(--gold-light);font-style:normal;font-weight:600;}
 .banner-close{
   background:transparent;border:none;
-  color:var(--text-1);font-size:1rem;cursor:pointer;
+  color:var(--text-2);font-size:1rem;cursor:pointer;
   padding:4px 8px;transition:color 0.2s;flex-shrink:0;
 }
 .banner-close:hover{color:var(--text-1);}
@@ -1511,21 +1452,21 @@ footer{
   gap:5px;
   width:40px;height:40px;
   background:transparent;
-  border:1px solid rgba(0,212,255,0.2);
-  border-radius:4px;
+  border:1px solid var(--border-gold);
+  border-radius:3px;
   cursor:pointer;
   padding:8px;
   transition:all 0.3s ease;
   flex-shrink:0;
 }
 .hamburger:hover{
-  border-color:rgba(0,212,255,0.5);
-  background:rgba(0,212,255,0.05);
+  border-color:var(--gold);
+  background:rgba(201,162,39,0.05);
 }
 .hamburger span{
   display:block;
   width:20px;height:1.5px;
-  background:var(--cyan);
+  background:var(--gold);
   transition:all 0.3s ease;
   transform-origin:center;
 }
@@ -1566,10 +1507,141 @@ footer{
       0 0 120px rgba(204,125,7,0.2);
   }
 }
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{transform:scale(0.8);}}
 
 .reveal{opacity:0;transform:translateY(40px);filter:blur(4px);transition:opacity 0.85s cubic-bezier(0.22,1,0.36,1),transform 0.85s cubic-bezier(0.22,1,0.36,1),filter 0.85s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);filter:blur(0px);will-change:auto;}
+
+
+/* ---- SECTION DIVIDERS — Visual Breathing Room ---- */
+.section-divider{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border-dim),transparent);
+  margin:0;
+}
+#main-content-inner > section,
+#main-content-inner > div[id]{
+  position:relative;
+  z-index:1;
+}
+
+
+/* ============================================================
+   PREMIUM TYPOGRAPHY ENHANCEMENTS — v14
+   ============================================================ */
+
+/* Base body text for all main content */
+#main-content-inner {
+  font-family: var(--font-body);
+  color: var(--text-body);
+}
+
+/* All paragraphs in main content — clean readable */
+#main-content-inner p,
+#main-content-inner li,
+#main-content-inner span:not([class*="nav"]):not([class*="brand"]):not([class*="ticker"]) {
+  font-family: inherit;
+}
+
+/* Section headers — display serif for prestige */
+#main-content-inner .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: 1.15;
+}
+
+/* Section dividers — gold accent */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(201,162,39,0.15) 30%, rgba(201,162,39,0.15) 70%, transparent 100%);
+}
+
+/* Improved card hover — gold border instead of cyan */
+.tcard:hover,
+.wp-card:hover,
+.feature:hover {
+  border-color: var(--border-gold);
+}
+
+/* Vision grid gap refinement */
+.vision-grid {
+  margin-top: 0;
+}
+
+/* Quote accent — premium gold left border */
+blockquote,
+.vision-text blockquote {
+  border-left-color: rgba(201,162,39,0.5);
+}
+
+/* Progress bar tracks — gold color scheme */
+.prog-track {
+  background: rgba(201,162,39,0.08);
+}
+
+/* Form input focus ring — gold */
+.field-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 1px rgba(201,162,39,0.2);
+  outline: none;
+}
+
+/* Wallet address in transparency section — mono font */
+.wallet-address {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  word-break: break-all;
+  color: var(--cyan);
+}
+
+/* Angel investor counter badge */
+#hero-investor-bar,
+#splash2-investor-bar {
+  border-color: rgba(20,241,149,0.2);
+}
+
+/* All links in main body — no underline unless hover */
+#main-content-inner a {
+  text-decoration: none;
+}
+#main-content-inner a:hover {
+  text-decoration: none;
+}
+
+/* ============================================================
+   SECTION ALTERNATING BACKGROUNDS — Visual Chunking
+   ============================================================ */
+#hero {
+  background: radial-gradient(ellipse 70% 55% at 50% 0%, rgba(0,50,200,0.10) 0%, transparent 65%);
+}
+#vision {
+  background: rgba(10,22,40,0.0);
+}
+#tokenomics {
+  background: linear-gradient(180deg, rgba(19,34,56,0.5) 0%, rgba(10,22,40,0.2) 50%, rgba(19,34,56,0.5) 100%);
+}
+#angel {
+  background: rgba(10,22,40,0.0);
+}
+#whitepaper {
+  background: linear-gradient(180deg, rgba(19,34,56,0.5) 0%, rgba(10,22,40,0.2) 50%, rgba(19,34,56,0.5) 100%);
+}
+#roadmap {
+  background: rgba(10,22,40,0.0);
+}
+#dashboard {
+  background: linear-gradient(180deg, rgba(19,34,56,0.5) 0%, rgba(10,22,40,0.2) 50%, rgba(19,34,56,0.5) 100%);
+}
+#transparency {
+  background: rgba(10,22,40,0.0);
+}
+#mining {
+  background: linear-gradient(180deg, rgba(19,34,56,0.5) 0%, rgba(10,22,40,0.2) 50%, rgba(19,34,56,0.5) 100%);
+}
 
 /* --- RESPONSIVE --------------------------- */
 
@@ -1589,10 +1661,10 @@ footer{
   .nav-links{
     display:none;
     position:fixed;
-    top:74px;left:0;right:0;
+    top:72px;left:0;right:0;
     background:rgba(1,11,24,0.98);
     backdrop-filter:blur(24px);
-    border-bottom:1px solid rgba(0,212,255,0.2);
+    border-bottom:1px solid rgba(0,196,239,0.2);
     flex-direction:column;
     align-items:stretch;
     gap:0;
@@ -1603,14 +1675,14 @@ footer{
   .nav-links.open{ display:flex; }
   .nav-links a{
     padding:14px 6%;
-    font-size:0.8rem;
-    letter-spacing:2px;
-    border-bottom:1px solid rgba(0,212,255,0.06);
+    font-size:0.9rem;
+    letter-spacing:0.03em;
+    border-bottom:1px solid rgba(0,196,239,0.06);
     transition:background 0.2s,color 0.2s;
   }
   .nav-links a:last-child{ border-bottom:none; }
   .nav-links a:hover{
-    background:rgba(0,212,255,0.05);
+    background:rgba(0,196,239,0.05);
     color:var(--cyan);
   }
 
@@ -1697,7 +1769,7 @@ footer{
 
   /* Dashboard */
   .dash-val{ font-size:1rem; }
-  .dash-metric{ font-size:0.48rem;letter-spacing:2px; }
+  .dash-metric{ font-size:0.48rem;letter-spacing:0.04em; }
 
   /* Angel Round */
   .buy-form{ padding:1.2rem 1rem!important; }
@@ -2250,7 +2322,7 @@ footer{
         /* Collateral Text - No Box */
         .splash-collateral {
             font-family:'Orbitron', monospace; 
-            font-size: clamp(0.65rem, 1.4vw, 0.85rem);
+            font-size: clamp(0.72rem, 1.4vw, 0.85rem);
             color: rgba(255, 255, 255, 0.85);
             max-width: 680px;
             text-align: center;
@@ -2271,7 +2343,7 @@ footer{
         }
 
         .splash-collateral span:last-child {
-            color: #00d4ff;
+            color: #00c4ef;
             text-shadow: none;
             margin-top: 8px;
             font-size: clamp(0.85rem, 1.8vw, 1.1rem);
@@ -2898,17 +2970,17 @@ footer{
 
 
 @keyframes neonBoxGlow {
-  0%   { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,212,255,0.3); }
-  33%  { box-shadow: 0 0 12px 4px rgba(0,212,255,0.8), 0 0 32px 9px rgba(0,150,255,0.6), 0 0 60px 15px rgba(153,69,255,0.3); }
-  66%  { box-shadow: 0 0 11px 4px rgba(255,80,200,0.8), 0 0 28px 8px rgba(153,69,255,0.7), 0 0 55px 14px rgba(0,212,255,0.3); }
-  100% { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,212,255,0.3); }
+  0%   { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,196,239,0.3); }
+  33%  { box-shadow: 0 0 12px 4px rgba(0,196,239,0.8), 0 0 32px 9px rgba(0,150,255,0.6), 0 0 60px 15px rgba(153,69,255,0.3); }
+  66%  { box-shadow: 0 0 11px 4px rgba(255,80,200,0.8), 0 0 28px 8px rgba(153,69,255,0.7), 0 0 55px 14px rgba(0,196,239,0.3); }
+  100% { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,196,239,0.3); }
 }
 
 @keyframes neonRingPulse {
   0%   { filter: drop-shadow(0 0 8px rgba(255,160,0,0.85))
                  drop-shadow(0 0 20px rgba(204,80,255,0.75))
                  drop-shadow(0 0 42px rgba(153,69,255,0.5)); }
-  33%  { filter: drop-shadow(0 0 12px rgba(0,212,255,0.9))
+  33%  { filter: drop-shadow(0 0 12px rgba(0,196,239,0.9))
                  drop-shadow(0 0 28px rgba(0,150,255,0.8))
                  drop-shadow(0 0 55px rgba(153,69,255,0.45)); }
   66%  { filter: drop-shadow(0 0 10px rgba(255,80,200,0.9))
@@ -2921,8 +2993,8 @@ footer{
 
 @keyframes neonRingGlow {
   0%   { filter: drop-shadow(0 0 8px rgba(255,160,0,0.9)) drop-shadow(0 0 20px rgba(204,80,255,0.7)) drop-shadow(0 0 40px rgba(153,69,255,0.5)); }
-  33%  { filter: drop-shadow(0 0 10px rgba(0,212,255,0.9)) drop-shadow(0 0 24px rgba(0,160,255,0.8)) drop-shadow(0 0 48px rgba(153,69,255,0.45)); }
-  66%  { filter: drop-shadow(0 0 9px rgba(255,80,200,0.9)) drop-shadow(0 0 22px rgba(153,69,255,0.8)) drop-shadow(0 0 44px rgba(0,212,255,0.4)); }
+  33%  { filter: drop-shadow(0 0 10px rgba(0,196,239,0.9)) drop-shadow(0 0 24px rgba(0,160,255,0.8)) drop-shadow(0 0 48px rgba(153,69,255,0.45)); }
+  66%  { filter: drop-shadow(0 0 9px rgba(255,80,200,0.9)) drop-shadow(0 0 22px rgba(153,69,255,0.8)) drop-shadow(0 0 44px rgba(0,196,239,0.4)); }
   100% { filter: drop-shadow(0 0 8px rgba(255,160,0,0.9)) drop-shadow(0 0 20px rgba(204,80,255,0.7)) drop-shadow(0 0 40px rgba(153,69,255,0.5)); }
 }
 
@@ -3049,7 +3121,7 @@ footer{
           <!-- LIVE · LIMITED ACCESS · OPEN — lebih besar, proporsional dengan logo -->
           <div style="display:flex;align-items:center;gap:9px;margin-bottom:clamp(10px,2vh,20px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
             <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 10px #14F195,0 0 22px rgba(20,241,149,0.6);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.58rem,1.1vw,0.75rem);font-weight:700;letter-spacing:3px;color:#14F195;text-transform:uppercase;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
+            <span style="font-family:var(--font-body);font-size:clamp(0.72rem,1.1vw,0.82rem);font-weight:700;letter-spacing:0.1em;color:#14F195;text-transform:uppercase;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
           </div>
 
           <!-- LOGO -->
@@ -3062,10 +3134,10 @@ footer{
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
             <!-- Capital Finecosystem — spacing diperketat -->
-            <p class="splash-subtitle" style="margin-top:-20px;margin-bottom:0px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
+            <p class="splash-subtitle" style="margin-top:-20px;margin-bottom:0px;font-size:clamp(0.72rem, 1.4vw, 0.88rem);">Capital Finecosystem</p>
             <!-- Solana Badge — rapat di bawah Capital Finecosystem -->
             <div style="display:flex;align-items:center;margin-top:0px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:1.6px;font-weight:500;color:#00d4ff;white-space:nowrap;opacity:0.75;">
+                <span style="font-family:var(--font-body);font-size:clamp(0.72rem, 0.9vw, 0.78rem);letter-spacing:0.06em;font-weight:500;color:#00c4ef;white-space:nowrap;">
                     Solana Blockchain &nbsp;·&nbsp; SPL Token &nbsp;·&nbsp; Verified On-Chain
                 </span>
             </div>
@@ -3077,10 +3149,10 @@ footer{
         </div>
 
         <!-- BLOCK 3: Collateral text — DIPERKECIL -->
-        <div class="splash-collateral" style="z-index:10;font-size:clamp(0.50rem,1.05vw,0.68rem);line-height:1.75;">
+        <div class="splash-collateral" style="z-index:10;font-size:clamp(0.72rem, 1.05vw, 0.68rem);line-height:1.75;">
             <span style="letter-spacing:1.5px;">Your Time. Your Discipline.</span>
             <span style="letter-spacing:1.5px;">Your Responsibility. Your Effort.</span>
-            <span style="font-size:clamp(0.62rem,1.3vw,0.82rem);letter-spacing:2px;margin-top:5px;">These are your Asset</span>
+            <span style="font-size:clamp(0.72rem, 1.3vw, 0.82rem);letter-spacing:2px;margin-top:5px;">These are your Asset</span>
         </div>
 
         <!-- BLOCK 4: Loading bar + Enter button + Micro-copy -->
@@ -3092,12 +3164,12 @@ footer{
             </div>
             <!-- Tombol DIPERKECIL: padding & font lebih kecil -->
             <button class="enter-btn" id="enter-btn" onclick="enterSite()"
-              style="margin-top:clamp(8px,1.4vh,16px);padding:clamp(10px,1.3vh,15px) clamp(24px,5.5vw,48px);font-size:clamp(0.62rem,1.4vw,0.82rem);letter-spacing:clamp(2px,0.6vw,3.5px);">
+              style="margin-top:clamp(8px,1.4vh,16px);padding:clamp(10px,1.3vh,15px) clamp(24px,5.5vw,48px);font-size:clamp(0.72rem, 1.4vw, 0.82rem);letter-spacing:clamp(2px,0.6vw,3.5px);">
               <span class="enter-btn-text">JOIN ANGEL INVESTOR ROUND</span>
             </button>
             <!-- Micro-copy -->
             <div style="margin-top:8px;animation:splashSlideUp 1.2s ease-out 1.0s both;opacity:0.7;">
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:2px;color:rgba(200,220,255,0.65);text-transform:uppercase;">
+                <span style="font-family:var(--font-body);font-size:clamp(0.72rem, 0.85vw, 0.75rem);letter-spacing:0.06em;font-weight:500;color:rgba(200,220,255,0.65);text-transform:uppercase;">
                     No KYC &nbsp;·&nbsp; Connect Wallet &nbsp;·&nbsp; Transparency On-Chain
                 </span>
             </div>
@@ -3134,7 +3206,7 @@ footer{
 <!-- ========== MAIN SPLASH (SECOND SPLASH) ========== -->
 <div id="main-splash" style="
   position:fixed;top:0;left:0;width:100%;height:100vh;height:100dvh;
-  background:#010b18;
+  background:#070f1a;
   z-index:9999;
   display:none;flex-direction:column;align-items:center;justify-content:center;
   overflow:hidden;
@@ -3144,22 +3216,22 @@ footer{
   <div style="
     position:absolute;inset:0;
     background-image:
-      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(0,196,239,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,196,239,0.04) 1px, transparent 1px);
     background-size:60px 60px;
     pointer-events:none;
   "></div>
 
   <!-- Glow orbs - diperkuat -->
   <div style="position:absolute;top:-15%;left:50%;transform:translateX(-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(0,102,255,0.32) 0%,transparent 70%);pointer-events:none;"></div>
-  <div style="position:absolute;bottom:-10%;right:-10%;width:600px;height:500px;background:radial-gradient(ellipse,rgba(0,212,255,0.16) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-10%;right:-10%;width:600px;height:500px;background:radial-gradient(ellipse,rgba(0,196,239,0.16) 0%,transparent 60%);pointer-events:none;"></div>
   <div style="position:absolute;top:30%;left:-8%;width:500px;height:500px;background:radial-gradient(ellipse,rgba(0,66,200,0.18) 0%,transparent 60%);pointer-events:none;"></div>
   <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(153,69,255,0.08) 0%,transparent 65%);pointer-events:none;"></div>
 
   <!-- Scanline -->
   <div style="
     position:absolute;inset:0;
-    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,212,255,0.015) 2px,rgba(0,212,255,0.015) 4px);
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,196,239,0.015) 2px,rgba(0,196,239,0.015) 4px);
     pointer-events:none;opacity:0.4;
     animation:mainScanMove 8s linear infinite;
   "></div>
@@ -3181,7 +3253,7 @@ footer{
     <!-- Horizontal scanning line -->
     <div id="main-splash-scanline" style="
       position:absolute;top:0;left:0;width:100%;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(0,212,255,0.8),transparent);
+      background:linear-gradient(90deg,transparent,rgba(0,196,239,0.8),transparent);
       will-change:transform;
       animation:mainHscan 2.5s ease-in-out 0.4s forwards;
     "></div>
@@ -3189,9 +3261,9 @@ footer{
     <!-- Tag -->
     <div style="
       font-family:'Orbitron',monospace;
-      font-size:clamp(0.75rem,2vw,1.05rem);letter-spacing:4px;
+      font-size:clamp(0.9rem,2vw,1.1rem);letter-spacing:0.12em;
       font-weight:600;
-      text-transform:uppercase;margin-top:0.4rem;margin-bottom:0.8rem;
+      text-transform:uppercase;margin-top:0.4rem;margin-bottom:0.8rem;font-family:var(--font-body);
       background:linear-gradient(90deg, #9945FF 0%, #00d4ff 35%, #14F195 50%, #00d4ff 65%, #9945FF 100%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
@@ -3212,7 +3284,7 @@ footer{
       animation:mainFadeIn 0.7s ease 0.65s both;
     ">
       <div style="width:5px;height:5px;border-radius:50%;background:#14F195;box-shadow:0 0 5px #14F195,0 0 10px rgba(20,241,149,0.4);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-      <span style="font-family:'Orbitron',monospace;font-size:0.48rem;font-weight:600;letter-spacing:2px;color:#14F195;text-transform:uppercase;">
+      <span style="font-family:var(--font-body);font-size:0.72rem;font-weight:600;letter-spacing:0.06em;color:#14F195;text-transform:uppercase;">
         <span id="splash2-investor-count" style="
           font-family:'Orbitron',monospace;
           font-size:0.68rem;
@@ -3267,7 +3339,7 @@ footer{
       ">EXILLION</h1>
       <div style="
         font-family:'Orbitron',monospace;
-        font-size:clamp(0.65rem,1.4vw,0.88rem);
+        font-size:clamp(0.72rem, 1.4vw, 0.88rem);
         font-weight:600;
         letter-spacing:clamp(2px,0.8vw,4px);
         color:#e8c97a;
@@ -3287,8 +3359,8 @@ footer{
     <p style="
       font-family:'Orbitron',monospace;
       font-size:clamp(0.75rem,1.6vw,0.95rem);
-      letter-spacing:2.5px;color:rgba(0,212,255,0.9);
-      text-shadow:0 0 16px rgba(0,212,255,0.5);
+      letter-spacing:2.5px;color:rgba(0,196,239,0.9);
+      text-shadow:0 0 16px rgba(0,196,239,0.5);
       margin-bottom:0.2rem;
       margin-top:-0.4rem;
       animation:mainFadeIn 0.7s ease 0.85s both;
@@ -3296,7 +3368,7 @@ footer{
 
     <p style="
       font-family:'Orbitron',monospace;
-      font-size:clamp(0.55rem,1vw,0.68rem);
+      font-size:clamp(0.72rem, 1vw, 0.68rem);
       letter-spacing:2px;
       color:rgba(232,201,122,0.7);
       margin-bottom:0.9rem;
@@ -3312,13 +3384,13 @@ footer{
       animation:mainFadeIn 0.7s ease 1.1s both;
     ">
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825 M EXXE</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
+        <div style="font-family:var(--font-brand);font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:700;color:var(--cyan);">825 M EXXE</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;">Angel Investor Reserved</div>
       </div>
-      <div style="width:1px;height:32px;background:rgba(0,212,255,0.2);"></div>
+      <div style="width:1px;height:32px;background:rgba(0,196,239,0.2);"></div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Founding Price</div>
+        <div style="font-family:var(--font-brand);font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:700;color:#e8c97a;">$0.01</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;">Tier I Founding Price</div>
       </div>
     </div>
 
@@ -3330,18 +3402,18 @@ footer{
       <div style="
         display:flex;justify-content:space-between;
         font-family:'Orbitron',monospace;font-size:0.38rem;
-        letter-spacing:1.5px;color:rgba(0,212,255,0.5);
+        letter-spacing:1.5px;color:rgba(0,196,239,0.5);
         text-transform:uppercase;margin-bottom:4px;
       ">
         <span>Preparing your access...</span>
         <span id="main-splash-pct">0%</span>
       </div>
-      <div style="height:2px;background:rgba(0,212,255,0.1);border-radius:1px;overflow:hidden;position:relative;">
+      <div style="height:2px;background:rgba(0,196,239,0.1);border-radius:1px;overflow:hidden;position:relative;">
         <div id="main-splash-bar" style="
           height:100%;width:0%;
           background:linear-gradient(90deg,#0044cc 0%,#0066ff 30%,#00d4ff 60%,rgba(255,255,255,0.6) 75%,#00d4ff 85%,#00d4ff 100%);
           background-size:250% 100%;
-          box-shadow:0 0 10px rgba(0,212,255,0.7), 0 0 20px rgba(0,212,255,0.35);
+          box-shadow:0 0 10px rgba(0,196,239,0.7), 0 0 20px rgba(0,196,239,0.35);
           transition:width 0.055s linear;
           will-change:width;
           animation:barSweep 1.8s linear infinite;
@@ -3353,7 +3425,7 @@ footer{
     <div id="main-splash-status" style="
       font-family:'Orbitron',monospace;
       font-size:0.35rem;letter-spacing:1.5px;
-      color:rgba(0,212,255,0.55);
+      color:rgba(0,196,239,0.55);
       text-transform:uppercase;
       min-height:14px;
       transition:opacity 0.25s ease;
@@ -3566,7 +3638,7 @@ footer{
 
 <div class="scanline"></div>
 
-<div id="main-content-inner">
+<div id="main-content-inner" style="font-family:var(--font-body);">
 
 <!-- HERO -->
 <section id="hero">
@@ -3590,34 +3662,28 @@ footer{
     animation:riseUp 0.8s 0.55s ease both;
   " id="journey-block">
     <p style="
-      font-family:'Orbitron',monospace;
-      font-size:clamp(1rem,2.2vw,1.45rem);
-      font-weight:700;
-      letter-spacing:6px;
-      text-transform:uppercase;
-      background:linear-gradient(90deg, #e8c97a 0%, #ffffff 40%, #00d4ff 70%, #e8c97a 100%);
-      background-size:200% auto;
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-      animation:riseUp 0.8s 0.55s ease both, solanaShimmer 4s linear infinite;
-      filter:drop-shadow(0 0 18px rgba(232,201,122,0.55));
+      font-family:var(--font-display);
+      font-size:clamp(1.3rem,2.5vw,2rem);
+      font-weight:500;
+      font-style:italic;
+      letter-spacing:0.02em;
+      color:var(--gold-light);
+      animation:riseUp 0.8s 0.55s ease both;
       margin:0;
     ">Let's Start Your Investment Journey</p>
     <div id="journey-line" style="
-      width:320px;height:1.5px;
-      background:linear-gradient(90deg,transparent,#e8c97a,#00d4ff,#e8c97a,transparent);
-      opacity:0.7;
-      animation:solanaShimmer 4s linear infinite;
+      width:240px;height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold),transparent);
+      opacity:0.5;
     "></div>
     <p style="
-      font-family:'Orbitron',monospace;
-      font-size:clamp(0.65rem,1.1vw,0.78rem);
-      letter-spacing:3px;
-      color:var(--text-1);
+      font-family:var(--font-body);
+      font-size:0.78rem;
+      letter-spacing:0.06em;
+      color:var(--text-2);
       margin:0;
       text-transform:uppercase;
-      opacity:0.85;
+      font-weight:500;
     ">Early Access · Limited Allocation · Verified On-Chain</p>
 
   <div id="hero-stat-block" style="
@@ -3644,8 +3710,8 @@ footer{
         border-right:1px solid var(--border-dim);
         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
       ">
-        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">825 M EXXE</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Angel Investor Reserved</div>
+        <div style="font-family:var(--font-brand);font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;">825 M EXXE</div>
+        <div style="font-family:var(--font-body);font-size:0.75rem;letter-spacing:0.06em;color:var(--text-2);text-transform:uppercase;font-weight:500;">Angel Investor Reserved</div>
       </div>
 
       <!-- $0.01 -->
@@ -3660,10 +3726,10 @@ footer{
         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
       ">
         <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
-          <div style="font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 60px rgba(201,168,76,0.3);">$0.01</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</div>
+          <div style="font-family:var(--font-brand);font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;">$0.01</div>
+          <div style="font-family:var(--font-body);font-size:0.72rem;color:var(--text-2);line-height:1;margin-bottom:4px;font-weight:500;">per EXXE</div>
         </div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Tier I Presale Price</div>
+        <div style="font-family:var(--font-body);font-size:0.75rem;letter-spacing:0.06em;color:var(--text-2);text-transform:uppercase;font-weight:500;">Tier I Presale Price</div>
       </div>
 
       <!-- $0.10 -->
@@ -3674,10 +3740,10 @@ footer{
         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
       ">
         <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
-          <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:600;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">$0.10</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.75;line-height:1;margin-bottom:1px;">per EXXE</div>
+          <div style="font-family:var(--font-brand);font-size:1.5rem;font-weight:600;color:var(--cyan);line-height:1;">$0.10</div>
+          <div style="font-family:var(--font-body);font-size:0.72rem;color:var(--text-2);line-height:1;margin-bottom:1px;font-weight:500;">per EXXE</div>
         </div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">ORCA Listing Price</div>
+        <div style="font-family:var(--font-body);font-size:0.75rem;letter-spacing:0.06em;color:var(--text-2);text-transform:uppercase;font-weight:500;">ORCA Listing Price</div>
       </div>
 
     </div>
@@ -3699,22 +3765,22 @@ footer{
       clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
     ">
       <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 18px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-      <span style="font-family:'Orbitron',monospace;font-size:clamp(0.6rem,1.1vw,0.72rem);font-weight:600;letter-spacing:2.5px;color:#14F195;text-transform:uppercase;">
+      <span style="font-family:var(--font-body);font-size:0.75rem;font-weight:600;letter-spacing:0.04em;color:#14F195;text-transform:uppercase;">
         <span id="hero-investor-count" style="
-          font-family:'Orbitron',monospace;
-          font-size:clamp(0.9rem,1.6vw,1.1rem);
-          font-weight:800;
+          font-family:var(--font-brand);
+          font-size:1.1rem;
+          font-weight:700;
           color:#ffffff;
-          letter-spacing:2px;
-          text-shadow:0 0 16px rgba(255,255,255,0.5);
+          letter-spacing:0.02em;
         ">—</span>
         &nbsp;Angel Investors Joined
       </span>
       <div style="
         display:flex;align-items:center;gap:6px;
-        font-family:'Orbitron',monospace;
-        font-size:0.42rem;
-        letter-spacing:2px;
+        font-family:var(--font-body);
+        font-size:0.68rem;
+        font-weight:500;
+        letter-spacing:0.04em;
         color:rgba(20,241,149,0.7);
         text-transform:uppercase;
         border-left:1px solid rgba(20,241,149,0.25);
@@ -3730,13 +3796,16 @@ footer{
       style="font-size:clamp(0.85rem,1.5vw,1rem);padding:18px 48px;letter-spacing:3px;">
       Join Angel Investor Round
     </a>
-    <p style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-2);text-transform:uppercase;margin:0;">
+    <p style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:var(--text-2);text-transform:uppercase;margin:0;">
       Verified from Solana blockchain · Updates every 60s
     </p>
   </div>
 
 </section>
 
+
+<div class="section-divider"></div>
+<div class="section-divider"></div>
 <!-- VISION -->
 <section id="vision">
   <div class="section-header reveal">
@@ -3838,13 +3907,13 @@ footer{
      INFOGRAPHIC — HOW EXILLION WORKS
      Psychology: transparency + logical flow = investor trust
      ═══════════════════════════════════════════════════════ -->
-<section id="how-it-works" style="padding:0px 5% 60px;margin-top:-40px;">
+<section id="how-it-works" style="padding:var(--section-py) var(--section-px);">
 
   <!-- Header -->
   <div class="section-header reveal" style="margin-bottom:1.8rem;">
     <h2 class="section-title" style="font-size:clamp(1.8rem,3.5vw,3rem);">How Exillion Works</h2>
     <div class="section-rule"></div>
-    <p style="font-family:'Orbitron',monospace;font-size:clamp(0.78rem,1.1vw,0.92rem);color:var(--text-2);margin-top:1.2rem;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.9;font-weight:300;">Every dollar you invest becomes structural demand for EXXE — built into the protocol, verified on-chain, and impossible to remove.</p>
+    <p style="font-family:var(--font-body);font-size:1rem;color:var(--text-body);margin-top:1.2rem;max-width:680px;margin-left:auto;margin-right:auto;line-height:1.75;font-weight:400;">Every dollar you invest becomes structural demand for EXXE — built into the protocol, verified on-chain, and impossible to remove.</p>
   </div>
 
   <style>
@@ -3871,14 +3940,14 @@ footer{
   }
   .infog-step:first-child{border-radius:4px 0 0 4px;border-left:1px solid var(--border-dim);}
   .infog-step:last-child{border-right:1px solid var(--border-dim);border-radius:0 4px 4px 0;}
-  .infog-step:hover{background:var(--card-hover);border-color:rgba(0,212,255,0.22);z-index:2;}
+  .infog-step:hover{background:var(--card-hover);border-color:rgba(0,196,239,0.22);z-index:2;}
   .infog-step:hover .infog-icon-wrap{transform:scale(1.12);box-shadow:0 0 30px var(--is-glow);}
 
   /* Arrow between steps */
   .infog-arrow{
     width:32px;flex-shrink:0;
     display:flex;align-items:center;justify-content:center;
-    color:rgba(0,212,255,0.3);
+    color:rgba(0,196,239,0.3);
     font-size:1.1rem;
     background:var(--card);
     border-top:1px solid var(--border-dim);
@@ -3898,39 +3967,38 @@ footer{
     flex-shrink:0;
   }
   .infog-step-num{
-    font-family:'Orbitron',monospace;
-    font-size:0.42rem;letter-spacing:2.5px;
+    font-family:var(--font-body);
+    font-size:0.65rem;letter-spacing:0.1em;
     color:var(--is-color);
     margin-bottom:0.35rem;
     text-transform:uppercase;
-    opacity:0.8;
+    font-weight:600;
   }
   .infog-step-title{
-    font-family:'Orbitron',monospace;
-    font-size:clamp(0.6rem,0.9vw,0.78rem);
-    font-weight:700;letter-spacing:1px;
+    font-family:var(--font-body);
+    font-size:clamp(0.78rem,0.9vw,0.9rem);
+    font-weight:700;letter-spacing:0.02em;
     color:var(--text-1);
     margin-bottom:0.5rem;
     line-height:1.3;
   }
   .infog-step-desc{
-    font-family:'Orbitron',monospace;
-    font-size:clamp(0.52rem,0.7vw,0.62rem);
+    font-family:var(--font-body);
+    font-size:clamp(0.78rem,0.85vw,0.88rem);
     color:var(--text-2);
-    line-height:1.7;font-weight:300;
-    font-style:italic;
+    line-height:1.65;font-weight:400;
   }
   .infog-step-tag{
     margin-top:0.7rem;
     display:inline-block;
-    font-family:'Orbitron',monospace;
-    font-size:0.45rem;letter-spacing:1.5px;
-    padding:3px 8px;
+    font-family:var(--font-body);
+    font-size:0.65rem;letter-spacing:0.08em;font-weight:600;
+    padding:4px 10px;
     border-radius:2px;
     background:var(--is-bg);
     color:var(--is-color);
     border:1px solid var(--is-color);
-    opacity:0.85;
+    text-transform:uppercase;
   }
 
   /* ── ROW 2: 3-column trust pillars ──────────────────── */
@@ -3942,7 +4010,7 @@ footer{
     padding:2rem 1.6rem;
     background:var(--card);
     border:1px solid var(--border-dim);
-    border-top:3px solid var(--ip-color);
+    border-top:2px solid var(--ip-color);
     text-align:center;
     transition:all 0.3s;
     clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);
@@ -3950,29 +4018,28 @@ footer{
   .infog-pillar:hover{background:var(--card-hover);box-shadow:0 0 30px var(--ip-glow);}
   .infog-pillar-icon{font-size:2rem;margin-bottom:0.8rem;display:block;}
   .infog-pillar-val{
-    font-family:'Orbitron',monospace;
+    font-family:var(--font-brand);
     font-size:clamp(1.4rem,2.5vw,2rem);
     font-weight:700;color:var(--ip-color);
     line-height:1;margin-bottom:0.4rem;
-    text-shadow:0 0 20px var(--ip-glow);
   }
   .infog-pillar-label{
-    font-family:'Orbitron',monospace;
-    font-size:0.58rem;letter-spacing:2px;
+    font-family:var(--font-body);
+    font-size:0.72rem;letter-spacing:0.06em;font-weight:600;
     color:var(--text-1);margin-bottom:0.6rem;
     text-transform:uppercase;
   }
   .infog-pillar-desc{
-    font-family:'Orbitron',monospace;
-    font-size:0.62rem;color:var(--text-2);
-    line-height:1.7;font-weight:300;font-style:italic;
+    font-family:var(--font-body);
+    font-size:0.88rem;color:var(--text-2);
+    line-height:1.65;font-weight:400;
   }
 
   /* ── ROW 3: Demand flywheel ──────────────────────────── */
   .infog-flywheel{
     display:grid;grid-template-columns:1fr auto 1fr;
     gap:2rem;align-items:center;
-    background:linear-gradient(135deg,rgba(0,212,255,0.03),rgba(0,66,255,0.05));
+    background:linear-gradient(135deg,rgba(201,162,39,0.04),rgba(7,15,26,0.8));
     border:1px solid var(--border);
     padding:2.5rem 2rem;
     clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
@@ -3990,9 +4057,9 @@ footer{
     width:8px;height:8px;border-radius:50%;flex-shrink:0;
   }
   .infog-fw-text{
-    font-family:'Orbitron',monospace;
-    font-size:0.6rem;color:var(--text-1);
-    line-height:1.5;font-style:italic;
+    font-family:var(--font-body);
+    font-size:0.88rem;color:var(--text-body);
+    line-height:1.55;
   }
   .infog-fw-center{
     display:flex;flex-direction:column;align-items:center;
@@ -4000,32 +4067,31 @@ footer{
   }
   .infog-fw-ring{
     width:110px;height:110px;border-radius:50%;
-    border:2px solid rgba(0,212,255,0.3);
+    border:1px solid rgba(201,162,39,0.3);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:radial-gradient(circle,rgba(0,66,255,0.15),rgba(0,212,255,0.05));
-    box-shadow:0 0 30px rgba(0,212,255,0.15),inset 0 0 20px rgba(0,212,255,0.05);
+    background:radial-gradient(circle,rgba(201,162,39,0.08),rgba(201,162,39,0.02));
     animation:infogPulse 3s ease-in-out infinite;
   }
   .infog-fw-ring-label{
-    font-family:'Orbitron',monospace;
-    font-size:0.55rem;letter-spacing:1.5px;
-    color:var(--cyan);font-weight:700;
+    font-family:var(--font-brand);
+    font-size:0.7rem;letter-spacing:0.06em;
+    color:var(--gold);font-weight:600;
     line-height:1.3;
   }
   .infog-fw-ring-sub{
-    font-family:'Orbitron',monospace;
-    font-size:0.42rem;letter-spacing:1px;
+    font-family:var(--font-body);
+    font-size:0.65rem;letter-spacing:0.04em;font-weight:500;
     color:var(--text-2);margin-top:3px;
   }
   .infog-fw-arrows{
-    font-family:'Orbitron',monospace;
-    font-size:0.45rem;letter-spacing:1.5px;
-    color:rgba(0,212,255,0.5);
+    font-family:var(--font-body);
+    font-size:0.65rem;letter-spacing:0.06em;font-weight:500;
+    color:rgba(201,162,39,0.5);
     text-align:center;
   }
   @keyframes infogPulse{
-    0%,100%{box-shadow:0 0 20px rgba(0,212,255,0.15),inset 0 0 20px rgba(0,212,255,0.05);}
-    50%{box-shadow:0 0 40px rgba(0,212,255,0.3),inset 0 0 30px rgba(0,212,255,0.1);}
+    0%,100%{box-shadow:0 0 16px rgba(201,162,39,0.1);}
+    50%{box-shadow:0 0 28px rgba(201,162,39,0.22);}
   }
 
   /* ── Responsive ──────────────────────────────────────── */
@@ -4048,13 +4114,13 @@ footer{
     <div class="infog-flywheel reveal">
 
       <div class="infog-flywheel-side">
-        <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--cyan);margin-bottom:0.5rem;opacity:0.7;">YOUR INVESTMENT DOES THIS →</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:var(--cyan);margin-bottom:0.5rem;">YOUR INVESTMENT DOES THIS →</div>
         <div class="infog-fw-item">
           <div class="infog-fw-dot" style="background:#9945FF;box-shadow:0 0 8px #9945FF;"></div>
           <div class="infog-fw-text">Angel capital funds the EXXE/USDC liquidity pool on Orca DEX</div>
         </div>
         <div class="infog-fw-item">
-          <div class="infog-fw-dot" style="background:#00d4ff;box-shadow:0 0 8px #00d4ff;"></div>
+          <div class="infog-fw-dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan);"></div>
           <div class="infog-fw-text">Liquidity creates a stable market floor — EXXE price is protected</div>
         </div>
         <div class="infog-fw-item">
@@ -4072,7 +4138,7 @@ footer{
       </div>
 
       <div class="infog-flywheel-side">
-        <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--gold-light);margin-bottom:0.5rem;opacity:0.7;text-align:right;">← THIS IS YOUR RETURN</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.08em;color:var(--gold-light);margin-bottom:0.5rem;text-align:right;font-weight:600;text-transform:uppercase;">← THIS IS YOUR RETURN</div>
         <div class="infog-fw-item right">
           <div class="infog-fw-dot" style="background:#e8c97a;box-shadow:0 0 8px #e8c97a;"></div>
           <div class="infog-fw-text">EXXE listing target $0.10 — 10× from Tier I entry price of $0.01</div>
@@ -4091,35 +4157,36 @@ footer{
 
     <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
-      <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
+      <p style="font-family:var(--font-body);font-size:1rem;color:var(--text-body);margin-bottom:1rem;line-height:1.75;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
       <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
     </div>
 
   </div>
 </section>
 
+<div class="section-divider"></div>
 <!-- TREASURY TRANSPARENCY -->
-<section id="transparency" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
+<section id="transparency" style="padding:var(--section-py) var(--section-px);">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">On-Chain Verification</span>
     <h2 class="section-title">Treasury Transparency</h2>
     <div class="section-rule"></div>
   </div>
   <div style="max-width:900px;margin:0 auto;">
-    <p style="text-align:center;font-family:'Orbitron',monospace;font-size:clamp(0.85rem,1.3vw,1.05rem);font-weight:300;color:var(--text-1);margin-top:-2rem;margin-bottom:2rem;opacity:0.92;line-height:2;letter-spacing:0.8px;">
+    <p style="text-align:center;font-family:var(--font-body);font-size:1rem;font-weight:400;color:var(--text-body);margin-top:-2rem;margin-bottom:2rem;line-height:1.75;">
       EXXE SPL Token Contract Address and every wallet address is <span style="color:var(--cyan);font-weight:600;">public and verifiable</span> on Solana blockchain.<br>
       All funds movement are instantly and automatically distributed across Liquidity Wallet <span style="color:var(--cyan);font-weight:600;">(75%)</span>, Operational Wallet <span style="color:var(--cyan);font-weight:600;">(15%)</span> and Development Wallet <span style="color:var(--cyan);font-weight:600;">(10%)</span> — <span style="color:var(--green);font-weight:600;">Verified in real-time, and permanently recorded on-chain.</span>
     </p>
     <div style="display:flex;flex-direction:column;gap:1rem;">
 
-      <div class="reveal" style="background:rgba(0,212,255,0.03);border:1px solid var(--border);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+      <div class="reveal" style="background:rgba(0,196,239,0.03);border:1px solid var(--border);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
           <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:2px;color:var(--text-1);margin-bottom:0.4rem;">EXXE SPL TOKEN CONTRACT ADDRESS</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);">Solana Mainnet</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Official EXXE mint address — always verify before buy and trading</div>
+            <div style="font-family:var(--font-body);font-size:0.85rem;font-weight:600;color:var(--text-1);margin-bottom:0.4rem;letter-spacing:0.02em;">EXXE SPL Token — Contract Address</div>
+            <div style="font-family:var(--font-brand);font-size:1rem;color:var(--cyan);">Solana Mainnet</div>
+            <div style="font-size:0.88rem;color:var(--text-body);margin-top:0.3rem;font-family:var(--font-body);">Official EXXE mint address — always verify before buy and trading</div>
           </div>
-          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:var(--font-mono);font-size:0.75rem;color:var(--cyan);text-decoration:none;word-break:break-all;letter-spacing:0.02em;">
             2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u
           </a>
         </div>
@@ -4128,11 +4195,11 @@ footer{
       <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
           <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:2px;color:var(--text-1);margin-bottom:0.4rem;">ANGEL INVESTOR DISTRIBUTION WALLET</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);">825,000,000 EXXE</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Angel Investor Reserved</div>
+            <div style="font-family:var(--font-body);font-size:0.85rem;font-weight:600;color:var(--text-1);margin-bottom:0.4rem;letter-spacing:0.02em;">ANGEL INVESTOR DISTRIBUTION WALLET</div>
+            <div style="font-family:var(--font-brand);font-size:1rem;color:var(--cyan);">825,000,000 EXXE</div>
+            <div style="font-size:0.88rem;color:var(--text-body);margin-top:0.3rem;font-family:var(--font-body);">Angel Investor Reserved</div>
           </div>
-          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
             4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
           </a>
         </div>
@@ -4141,11 +4208,11 @@ footer{
       <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
           <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:3px;color:var(--text-1);margin-bottom:0.4rem;">LIQUIDITY WALLET — 75%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">EXXE/USDC On Orca DEX</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of all angel round funds — locked for Orca DEX listing</div>
+            <div style="font-family:var(--font-body);font-size:0.85rem;font-weight:600;color:var(--text-1);margin-bottom:0.4rem;">LIQUIDITY WALLET — 75%</div>
+            <div style="font-family:var(--font-body);font-size:1rem;font-weight:600;color:var(--green);">EXXE/USDC On Orca DEX</div>
+            <div style="font-size:0.88rem;color:var(--text-body);margin-top:0.3rem;font-family:var(--font-body);">75% of all angel round funds — locked for Orca DEX listing</div>
           </div>
-          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--green);text-decoration:none;word-break:break-all;">
             G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D
           </a>
         </div>
@@ -4154,11 +4221,11 @@ footer{
       <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
           <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:3px;color:var(--text-1);margin-bottom:0.4rem;">OPERATIONAL WALLET — 15%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Operations, Security & Legal</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of all angel round funds — team, marketing, legal</div>
+            <div style="font-family:var(--font-body);font-size:0.85rem;font-weight:600;color:var(--text-1);margin-bottom:0.4rem;">OPERATIONAL WALLET — 15%</div>
+            <div style="font-family:var(--font-body);font-size:1rem;font-weight:600;color:var(--green);">Operations, Security & Legal</div>
+            <div style="font-size:0.88rem;color:var(--text-body);margin-top:0.3rem;font-family:var(--font-body);">15% of all angel round funds — team, marketing, legal</div>
           </div>
-          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--green);text-decoration:none;word-break:break-all;">
             DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF
           </a>
         </div>
@@ -4167,11 +4234,11 @@ footer{
       <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
           <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:3px;color:var(--text-1);margin-bottom:0.4rem;">DEVELOPMENT WALLET — 10%</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Development & Infrastructure</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of all angel round funds — app, smart contract, infrastructure</div>
+            <div style="font-family:var(--font-body);font-size:0.85rem;font-weight:600;color:var(--text-1);margin-bottom:0.4rem;">DEVELOPMENT WALLET — 10%</div>
+            <div style="font-family:var(--font-body);font-size:1rem;font-weight:600;color:var(--green);">Development & Infrastructure</div>
+            <div style="font-size:0.88rem;color:var(--text-body);margin-top:0.3rem;font-family:var(--font-body);">10% of all angel round funds — app, smart contract, infrastructure</div>
           </div>
-          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:var(--font-mono);font-size:0.72rem;color:var(--green);text-decoration:none;word-break:break-all;">
             GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o
           </a>
         </div>
@@ -4182,9 +4249,9 @@ footer{
 </section>
 
 <!-- JOIN ANGEL INVESTOR BUTTON -->
-<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
+<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 var(--section-px) 3rem;text-align:center;">
   <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
-  <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
+  <p style="font-family:var(--font-body);font-size:0.82rem;letter-spacing:0.04em;text-transform:uppercase;margin:0;line-height:1.8;font-weight:500;">
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Minimum $10 USDC</span>
     <span style="color:rgba(255,255,255,0.3);margin:0 6px;">·</span>
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Verified On-Chain</span>
@@ -4193,8 +4260,9 @@ footer{
   </p>
 </div>
 
+<div class="section-divider"></div>
 <!-- COLLATERAL MOBILE MINING -->
-<section id="mining" style="padding:80px 5% 60px;margin-top:-40px;">
+<section id="mining" style="padding:var(--section-py) var(--section-px);background:linear-gradient(180deg,rgba(15,30,52,0.4) 0%,rgba(10,22,40,0.2) 100%);">
   <div class="section-header reveal">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;color:var(--cyan);">The Heart of Exillion</span>
     <h2 class="section-title">mEXXE Collateral Mobile Mining</h2>
@@ -4205,9 +4273,9 @@ footer{
 
     <!-- Large tagline -->
     <div class="reveal" style="text-align:center;margin-bottom:5rem;margin-top:-4.5rem;">
-      <p style="font-family:'Orbitron',monospace;font-size:clamp(1rem,2vw,1.4rem);color:var(--cyan);letter-spacing:3px;line-height:1.8;opacity:0.9;">
+      <p style="font-family:var(--font-display);font-size:clamp(1.1rem,2vw,1.5rem);color:var(--text-2);letter-spacing:0.02em;line-height:1.6;font-weight:400;font-style:italic;">
         Your Time. Your Discipline. Your Responsibility. Your Effort.<br>
-        <span style="color:#00d4ff;font-size:clamp(1.8rem,3.8vw,3.2rem);font-weight:700;letter-spacing:2px;text-shadow:none;opacity:0.9;">These are your Asset</span>
+        <span style="color:var(--gold-light);font-size:clamp(2.2rem,4.5vw,4rem);font-weight:500;font-style:italic;font-family:var(--font-display);">These are your Asset</span>
       </p>
     </div>
 
@@ -4216,21 +4284,21 @@ footer{
 
       <!-- Traditional System -->
       <div style="background:rgba(255,51,102,0.05);border:1px solid rgba(255,51,102,0.2);padding:2rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--red);margin-bottom:1.2rem;opacity:0.8;">TRADITIONAL SYSTEM</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.1em;color:var(--red);margin-bottom:1.2rem;font-weight:600;text-transform:uppercase;">TRADITIONAL SYSTEM</div>
         <div style="display:flex;flex-direction:column;gap:0.8rem;">
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--red);flex-shrink:0;">✗</span> Need property as collateral
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--red);flex-shrink:0;">✗</span> Need credit history
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--red);flex-shrink:0;">✗</span> Banks decide who deserves capital
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--red);flex-shrink:0;">✗</span> Billions excluded from financial system
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--red);flex-shrink:0;">✗</span> Hard work &amp; time not valued as asset
           </div>
         </div>
@@ -4238,26 +4306,26 @@ footer{
 
       <!-- VS -->
       <div class="vs-divider" style="text-align:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:var(--text-3);">VS</div>
+        <div style="font-family:var(--font-display);font-size:2rem;font-weight:400;font-style:italic;color:var(--text-3);">VS</div>
       </div>
 
       <!-- Exillion System -->
       <div style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.2);padding:2rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
-        <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;color:var(--green);margin-bottom:1.2rem;opacity:0.8;">EXILLION FINECOSYSTEM</div>
+        <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.1em;color:var(--green);margin-bottom:1.2rem;font-weight:600;text-transform:uppercase;">EXILLION FINECOSYSTEM</div>
         <div style="display:flex;flex-direction:column;gap:0.8rem;">
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--green);flex-shrink:0;">✓</span> Mine mEXXE with your smartphone
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--green);flex-shrink:0;">✓</span> Time + Discipline = Digital Collateral
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--green);flex-shrink:0;">✓</span> No bank, no credit score needed
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--green);flex-shrink:0;">✓</span> Open to everyone with a smartphone
           </div>
-          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.88rem;font-style:italic;color:var(--text-1);">
+          <div style="display:flex;gap:10px;align-items:flex-start;font-size:0.9rem;color:var(--text-body);font-family:var(--font-body);">
             <span style="color:var(--green);flex-shrink:0;">✓</span> Effort &amp; responsibility are real assets
           </div>
         </div>
@@ -4267,35 +4335,35 @@ footer{
 
     <!-- How it works — 4 steps -->
     <div class="reveal" style="margin-bottom:5rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:3px;color:var(--cyan);text-align:center;margin-bottom:2.5rem;opacity:1;">HOW IT WORKS</div>
+      <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.14em;color:var(--cyan);text-align:center;margin-bottom:2.5rem;font-weight:600;text-transform:uppercase;">HOW IT WORKS</div>
       <div class="mining-steps" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;">
 
         <div style="text-align:center;padding:1.8rem 1.2rem;background:var(--card);border:1px solid var(--border-dim);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);position:relative;">
-          <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.2;line-height:1;margin-bottom:0.8rem;">01</div>
+          <div style="font-family:var(--font-brand);font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.15;line-height:1;margin-bottom:0.8rem;">01</div>
           <div style="font-size:2rem;margin-bottom:0.8rem;">⛏️</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:1.5px;color:var(--text-1);margin-bottom:0.6rem;">Mine mEXXE</div>
-          <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);opacity:0.8;line-height:1.6;">Open the app daily. Mine mEXXE with your smartphone. No hardware needed.</div>
+          <div style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;color:var(--text-1);margin-bottom:0.6rem;">Mine mEXXE</div>
+          <div style="font-size:0.9rem;color:var(--text-body);line-height:1.6;font-family:var(--font-body);">Open the app daily. Mine mEXXE with your smartphone. No hardware needed.</div>
         </div>
 
         <div style="text-align:center;padding:1.8rem 1.2rem;background:var(--card);border:1px solid var(--border-dim);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);">
-          <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.2;line-height:1;margin-bottom:0.8rem;">02</div>
+          <div style="font-family:var(--font-brand);font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.15;line-height:1;margin-bottom:0.8rem;">02</div>
           <div style="font-size:2rem;margin-bottom:0.8rem;">🔒</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:1.5px;color:var(--text-1);margin-bottom:0.6rem;">Lock as Collateral</div>
-          <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);opacity:0.8;line-height:1.6;">Lock your mEXXE as digital collateral. 1 mEXXE = 1 EXXE in value.</div>
+          <div style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;color:var(--text-1);margin-bottom:0.6rem;">Lock as Collateral</div>
+          <div style="font-size:0.9rem;color:var(--text-body);line-height:1.6;font-family:var(--font-body);">Lock your mEXXE as digital collateral. 1 mEXXE = 1 EXXE in value.</div>
         </div>
 
         <div style="text-align:center;padding:1.8rem 1.2rem;background:var(--card);border:1px solid var(--border-dim);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);">
-          <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.2;line-height:1;margin-bottom:0.8rem;">03</div>
+          <div style="font-family:var(--font-brand);font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.15;line-height:1;margin-bottom:0.8rem;">03</div>
           <div style="font-size:2rem;margin-bottom:0.8rem;">💰</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:1.5px;color:var(--text-1);margin-bottom:0.6rem;">Borrow EXXE</div>
-          <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);opacity:0.8;line-height:1.6;">Use mEXXE collateral to borrow EXXE — real capital, no bank required.</div>
+          <div style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;color:var(--text-1);margin-bottom:0.6rem;">Borrow EXXE</div>
+          <div style="font-size:0.9rem;color:var(--text-body);line-height:1.6;font-family:var(--font-body);">Use mEXXE collateral to borrow EXXE — real capital, no bank required.</div>
         </div>
 
         <div style="text-align:center;padding:1.8rem 1.2rem;background:var(--card);border:1px solid var(--border-dim);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);">
-          <div style="font-family:'Orbitron',monospace;font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.2;line-height:1;margin-bottom:0.8rem;">04</div>
+          <div style="font-family:var(--font-brand);font-size:2rem;font-weight:700;color:var(--text-1);opacity:0.15;line-height:1;margin-bottom:0.8rem;">04</div>
           <div style="font-size:2rem;margin-bottom:0.8rem;">📈</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:1.5px;color:var(--text-1);margin-bottom:0.6rem;">Grow &amp; Invest</div>
-          <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);opacity:0.8;line-height:1.6;">Use the capital to invest and grow within the Exillion self-sustaining finecosystem.</div>
+          <div style="font-family:var(--font-body);font-size:0.95rem;font-weight:600;color:var(--text-1);margin-bottom:0.6rem;">Grow &amp; Invest</div>
+          <div style="font-size:0.9rem;color:var(--text-body);line-height:1.6;font-family:var(--font-body);">Use the capital to invest and grow within the Exillion self-sustaining finecosystem.</div>
         </div>
 
       </div>
@@ -4305,36 +4373,36 @@ footer{
     <div class="reveal" style="background:var(--card);border:1px solid var(--border);padding:3rem;text-align:center;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));position:relative;overflow:hidden;margin-top:-2rem;">
 
       <!-- Glow background -->
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(0,212,255,0.04),transparent);pointer-events:none;"></div>
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(0,196,239,0.04),transparent);pointer-events:none;"></div>
 
       <div style="position:relative;z-index:1;">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);padding:6px 18px;margin-bottom:1.5rem;">
           <div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></div>
-          <span style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:3px;color:var(--green);">IN DEVELOPMENT</span>
+          <span style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.1em;font-weight:600;color:var(--green);">IN DEVELOPMENT</span>
         </div>
 
-        <h3 style="font-family:'Orbitron',monospace;font-size:clamp(1.2rem,2.5vw,2rem);font-weight:600;letter-spacing:4px;color:var(--text-1);margin-bottom:0.8rem;">mEXXE Mining App</h3>
+        <h3 style="font-family:var(--font-display);font-size:clamp(1.5rem,2.8vw,2.5rem);font-weight:500;font-style:italic;letter-spacing:0.01em;color:var(--text-1);margin-bottom:0.8rem;">mEXXE Mining App</h3>
 
-        <p style="font-size:0.95rem;font-style:italic;color:var(--text-1);max-width:600px;margin:0 auto 2rem;line-height:1.8;opacity:0.85;">
+        <p style="font-size:1rem;color:var(--text-body);max-width:600px;margin:0 auto 2rem;line-height:1.75;font-family:var(--font-body);">
           The mEXXE Mining App will allow anyone with a smartphone to mine Virtual Collateral Mining Tokens (VCMT) — building their digital collateral through daily discipline and consistent effort. mEXXE cannot be traded on any DEX or CEX, and cannot be transferred — it is redeemable only within the mEXXE Mining App.
         </p>
 
         <div style="display:flex;justify-content:center;gap:3rem;flex-wrap:wrap;margin-bottom:2rem;">
           <div style="text-align:center;">
-            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">6.05 B</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">mEXXE Mining Pool</div>
+            <div style="font-family:var(--font-brand);font-size:1.3rem;font-weight:600;color:var(--cyan);">6.05 B</div>
+            <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.04em;color:var(--text-2);margin-top:4px;font-weight:500;text-transform:uppercase;">mEXXE Mining Pool</div>
           </div>
           <div style="text-align:center;">
-            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">1 : 1</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">mEXXE &nbsp;:&nbsp; EXXE Value</div>
+            <div style="font-family:var(--font-brand);font-size:1.2rem;font-weight:600;color:var(--cyan);\">1 : 1</div>
+            <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.04em;color:var(--text-2);margin-top:4px;font-weight:500;text-transform:uppercase;">mEXXE &nbsp;:&nbsp; EXXE Value</div>
           </div>
           <div style="text-align:center;">
-            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">No</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">Hardware Required</div>
+            <div style="font-family:var(--font-brand);font-size:1.2rem;font-weight:600;color:var(--cyan);\">No</div>
+            <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.04em;color:var(--text-2);margin-top:4px;font-weight:500;text-transform:uppercase;">Hardware Required</div>
           </div>
           <div style="text-align:center;">
-            <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:600;color:var(--cyan);">Yes</div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--text-1);margin-top:4px;">Open to Everyone</div>
+            <div style="font-family:var(--font-brand);font-size:1.2rem;font-weight:600;color:var(--cyan);\">Yes</div>
+            <div style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.04em;color:var(--text-2);margin-top:4px;font-weight:500;text-transform:uppercase;">Open to Everyone</div>
           </div>
         </div>
 
@@ -4358,7 +4426,7 @@ footer{
 
         </div>
 
-        <p style="font-family:'Orbitron',monospace;font-size:1.1rem;letter-spacing:3px;color:var(--cyan);margin-top:1.2rem;margin-bottom:1.5rem;text-shadow:0 0 18px rgba(0,212,255,0.6);">Android &amp; iOS — Coming Soon</p>
+        <p style="font-family:var(--font-body);font-size:1rem;font-weight:500;letter-spacing:0.04em;color:var(--cyan);margin-top:1.2rem;margin-bottom:1.5rem;">Android &amp; iOS — Coming Soon</p>
 
       </div>
     </div>
@@ -4366,8 +4434,9 @@ footer{
   </div>
 </section>
 
+<div class="section-divider"></div>
 <!-- TOKENOMICS -->
-<section id="tokenomics" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
+<section id="tokenomics">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Token Distribution</span>
     <h2 class="section-title">Tokenomics</h2>
@@ -4453,6 +4522,8 @@ footer{
   </div>
 </section>
 
+
+<div class="section-divider"></div>
 <!-- ROADMAP -->
 <section id="roadmap">
   <div class="section-header reveal" style="margin-bottom:2rem;">
@@ -4594,8 +4665,10 @@ footer{
   </div>
 </section>
 
+
+<div class="section-divider"></div>
 <!-- DASHBOARD -->
-<section id="dashboard" style="padding:0px 5% 80px;margin-top:-50px;">
+<section id="dashboard">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Live Metrics</span>
     <h2 class="section-title">Token Dashboard</h2>
@@ -4624,7 +4697,7 @@ footer{
     </div>
   </div>
   <div class="progress-wrap reveal">
-    <div class="progress-label">The Genesis Angel Investor Progress — Tier I &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span> <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE</span></div>
+    <div class="progress-label">The Genesis Angel Investor Progress — Tier I &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span> <span style="font-family:var(--font-body);font-size:0.65rem;font-weight:700;letter-spacing:0.1em;color:rgba(20,241,149,0.7);vertical-align:middle;">LIVE</span></div>
     <div class="prog-item">
       <div class="prog-meta">
         <span>Sold: <span id="rt-exxe-sold">0</span> EXXE</span>
@@ -4670,7 +4743,7 @@ footer{
 </section>
 
 <!-- ANGEL ROUND -->
-<section id="angel" style="padding:0px 5% 80px;">
+<section id="angel">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Angel Round</span>
     <h2 class="section-title">Invest in Exillion</h2>
@@ -4683,7 +4756,7 @@ footer{
         <div class="tier-name">The Genesis Angel Investor</div>
         <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
           <span>$0.01</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+          <span style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:var(--gold);line-height:1;margin-bottom:4px;">per EXXE</span>
         </div>
         <div class="tier-detail">330 M EXXE available<br/>Min $10 — Max $250 USDC</div>
         <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;font-weight:800;">JOIN NOW</span>
@@ -4693,7 +4766,7 @@ footer{
         <div class="tier-name">The Prime Angel Investor</div>
         <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
           <span>$0.025</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+          <span style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:var(--gold);line-height:1;margin-bottom:4px;">per EXXE</span>
         </div>
         <div class="tier-detail">288.75 M EXXE available<br/>Min $25 — Max $500 USDC</div>
         <span class="tier-badge soon">Opens after Tier I</span>
@@ -4703,7 +4776,7 @@ footer{
         <div class="tier-name">The Apex Angel Investor</div>
         <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
           <span>$0.05</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+          <span style="font-family:var(--font-body);font-size:0.72rem;letter-spacing:0.06em;font-weight:500;color:var(--gold);line-height:1;margin-bottom:4px;">per EXXE</span>
         </div>
         <div class="tier-detail">206.25 M EXXE available<br/>Min $50 — Max $1,000 USDC</div>
         <span class="tier-badge soon">Opens after Tier II</span>
@@ -5157,30 +5230,31 @@ function isInsideSolflare() {
 }
 
 async function connectPhantom() {
-  // ── MOBILE: cek apakah sudah di dalam Phantom in-app browser dulu ──
-  // Jika window.phantom sudah ada, berarti kita sudah di dalam Phantom
-  // dan tidak perlu redirect (menghindari redirect loop).
-  if (isMobileBrowser() && !isInsidePhantom()) {
+  // ── MOBILE: no extension → deep link into Phantom in-app browser ──
+  if (isMobileBrowser()) {
     const provider = getPhantomProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
+      // Phantom Universal Link v2 (current as of 2024) — opens site inside Phantom browser
       window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
-  // ── DESKTOP: file:// tidak didukung Phantom extension ──
+  // ── DESKTOP: file:// is not supported by the Phantom extension ──
   if (window.location.protocol === 'file:') {
     alert('⚠️  Phantom cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
+  // ── DESKTOP: cek extension ──
   const provider = getPhantomProvider();
   if (!provider) {
     showWalletHint('phantom');
     return;
   }
 
+  // ── Extension ada → update button state ──
   const pBtn = document.getElementById('phantomBtn');
   if (pBtn) {
     pBtn.disabled = true;
@@ -5190,10 +5264,12 @@ async function connectPhantom() {
   }
 
   try {
-    const resp    = await provider.connect();
+    // provider.connect() → triggers the Phantom popup in Chrome
+    const resp = await provider.connect();
     const address = resp.publicKey.toString();
     setConnected('Phantom', address);
 
+    // Auto disconnect/account-change listeners
     try { provider.on('disconnect', function() { if (connectedWallet === 'Phantom') disconnectWallet(); }); } catch(e){}
     try {
       provider.on('accountChanged', function(pubKey) {
@@ -5203,12 +5279,14 @@ async function connectPhantom() {
     } catch(e){}
 
   } catch(e) {
+    // Restore button
     if (pBtn) {
       pBtn.disabled = false;
       pBtn.style.opacity = '1';
       const nameEl = pBtn.querySelector('.wallet-name');
       if (nameEl) nameEl.textContent = 'Connect Phantom';
     }
+    // 4001 = user menutup popup sendiri, bukan error
     if (e.code !== 4001) {
       alert('Phantom connection failed: ' + (e.message || 'Please try again.'));
     }
@@ -5216,27 +5294,31 @@ async function connectPhantom() {
 }
 
 async function connectSolflare() {
-  // ── MOBILE: cek apakah sudah di dalam Solflare in-app browser dulu ──
-  if (isMobileBrowser() && !isInsideSolflare()) {
+  // ── MOBILE: no extension → deep link into Solflare in-app browser ──
+  if (isMobileBrowser()) {
     const provider = getSolflareProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
+      // Solflare Universal Link (current scheme)
       window.location.href = 'https://solflare.com/ul/browse/' + currentUrl + '?ref=' + currentUrl;
       return;
     }
   }
 
+  // ── DESKTOP: file:// is not supported by the Solflare extension ──
   if (window.location.protocol === 'file:') {
     alert('⚠️  Solflare cannot connect via file://\n\nPlease use a local server or deploy to https://');
     return;
   }
 
+  // ── DESKTOP: cek extension ──
   const provider = getSolflareProvider();
   if (!provider) {
     showWalletHint('solflare');
     return;
   }
 
+  // ── Extension ada → update button state ──
   const sBtn = document.getElementById('solflareBtn');
   if (sBtn) {
     sBtn.disabled = true;
@@ -5246,10 +5328,12 @@ async function connectSolflare() {
   }
 
   try {
+    // provider.connect() → triggers the Solflare popup in Chrome
     await provider.connect();
     const address = provider.publicKey.toString();
     setConnected('Solflare', address);
 
+    // Auto disconnect/account-change listeners
     try { provider.on('disconnect', function() { if (connectedWallet === 'Solflare') disconnectWallet(); }); } catch(e){}
     try {
       provider.on('accountChanged', function() {
@@ -5288,7 +5372,7 @@ function showWalletHint(wallet) {
   banner.id = 'walletHintBanner';
   banner.style.cssText = [
     'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999',
-    'background:#04243d;border:1px solid rgba(0,212,255,0.4)',
+    'background:#04243d;border:1px solid rgba(0,196,239,0.4)',
     'padding:14px 22px;border-radius:4px;display:flex;align-items:center;gap:14px',
     'box-shadow:0 4px 32px rgba(0,0,0,0.6);max-width:480px;width:90%',
     'animation:riseUp 0.35s ease both'
@@ -5297,12 +5381,12 @@ function showWalletHint(wallet) {
   banner.innerHTML = [
     '<span style="font-size:1.6rem">' + emoji + '</span>',
     '<div style="flex:1">',
-      '<div style="font-family:Orbitron,monospace;font-size:0.7rem;letter-spacing:2px;color:#00d4ff;margin-bottom:3px">' + name + ' Not Detected</div>',
+      '<div style="font-family:Orbitron,monospace;font-size:0.7rem;letter-spacing:2px;color:var(--cyan);margin-bottom:3px">' + name + ' Not Detected</div>',
       '<div style="font-family:Orbitron,monospace;font-size:0.6rem;color:#6a8fa8">Install the extension, then click Connect again.</div>',
     '</div>',
     '<a href="' + url + '" target="_blank" style="',
       'font-family:Orbitron,monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;',
-      'color:#000;background:#00d4ff;border:none;padding:8px 16px;cursor:pointer;',
+      'color:#000;background:var(--cyan);border:none;padding:8px 16px;cursor:pointer;',
       'text-decoration:none;white-space:nowrap;border-radius:2px;font-weight:700',
     '">Install</a>',
     '<button onclick="document.getElementById(\'walletHintBanner\').remove()" style="',
@@ -5332,7 +5416,7 @@ function scrollToTierI() {
     var cards = document.querySelectorAll('#angel .tier-card');
     cards.forEach(function(card) {
       card.style.transition = 'box-shadow 0.4s ease';
-      card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.75), 0 0 32px rgba(0,212,255,0.35)';
+      card.style.boxShadow = '0 0 0 2px rgba(0,196,239,0.75), 0 0 32px rgba(0,196,239,0.35)';
     });
     setTimeout(function() {
       cards.forEach(function(card) { card.style.boxShadow = ''; });
@@ -5440,8 +5524,9 @@ async function executeBuy(){
 async function proceedBuy(){
   const _pb = document.getElementById('buyBtn');
   if(!_pb || !_pb.classList.contains('ready')) return;
-  if(_isBuying) return;
-  // Re-validasi amount — DOM bisa dimanipulasi antara checkReady() dan di sini
+  if(_isBuying) return; // double-submit guard
+  // FIX CRITICAL #2: Re-validate amount here — DOM could have been manipulated
+  // between checkReady() and this call. Never trust stale form state for financial tx.
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   if (!usdc || usdc < t.min || usdc > t.max) {
@@ -5452,241 +5537,118 @@ async function proceedBuy(){
     alert('No wallet connected. Please connect your wallet first.');
     return;
   }
-  _isBuying = true;
+  _isBuying = true;     // lock
   const exxe = usdc / t.price;
 
-  const _buyP  = document.getElementById('buyPanel');
+  const _buyP = document.getElementById('buyPanel');
   const _procP = document.getElementById('processingPanel');
-  if (_buyP)  _buyP.style.display  = 'none';
-  if (_procP) _procP.style.display = 'block';
+  if (_buyP) _buyP.style.display='none';
+  if (_procP) _procP.style.display='block';
+  // Step 4 is final — keep step 3 (form review) active until tx completes
 
   try {
-    // ── Step 1: Bangun transaksi split dari Railway backend ──────────
-    await txStep(1, 'active', 'Building USDC split transaction...');
-    const buildRes = await Promise.race([
-      fetch(`${CFG.API}/build-split-tx`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
-    ]);
-    if (!buildRes.ok) throw new Error('Failed to build transaction (server error ' + buildRes.status + ')');
+    // Step 1: Build split transaction from Railway backend
+    await txStep(1,'active','Building USDC split transaction...');
+    const buildRes = await fetch(`${CFG.API}/build-split-tx`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+    });
+    if(!buildRes.ok) throw new Error('Failed to build transaction');
     const { transaction } = await buildRes.json();
-    if (!transaction || typeof transaction !== 'string') {
-      throw new Error('Backend returned invalid transaction data.');
-    }
-    await txStep(1, 'done', 'Transaction prepared ✓');
+    await txStep(1,'done','Transaction prepared ✓');
+    // Step 2: Investor signs & sends USDC split transaction
+    await txStep(2,'active','Please approve in your wallet...');
 
-    // ── Step 2: Wallet sign + send ───────────────────────────────────
-    await txStep(2, 'active', 'Please approve in your wallet...');
-
-    // Deserialise base64 → Uint8Array (raw VersionedTransaction bytes dari backend)
+    // Deserialize base64 → VersionedTransaction (compatible Phantom & Solflare)
     const txBytes = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
 
     let txSignature;
     try {
       if (connectedWallet === 'Phantom') {
-        // ── Phantom: gunakan signAndSendTransaction standar ──────────
-        // API resmi: provider.signAndSendTransaction(transaction)
-        // dimana transaction adalah object dengan serialize() → Uint8Array.
-        // Phantom v0.9+ menerima format ini secara native.
         const provider = getPhantomProvider();
-        if (!provider) throw new Error('Phantom not available');
-
-        // Bungkus raw bytes sebagai VersionedTransaction-compatible object
-        // Phantom menerima object { serialize() } sesuai @solana/web3.js interface
-        const txObj = {
-          serialize: () => txBytes,
-          // Flag untuk memberi tahu Phantom ini adalah VersionedTransaction
-          message: { version: 0 }
-        };
-
-        let result;
-        // Coba metode standar dulu
-        if (typeof provider.signAndSendTransaction === 'function') {
-          result = await provider.signAndSendTransaction(txObj);
-          txSignature = result?.signature || (typeof result === 'string' ? result : null);
-        }
-
-        // Fallback: gunakan signTransaction lalu kirim manual via RPC
-        if (!txSignature) {
-          const signedResult = await provider.signTransaction(txObj);
-          // signedResult bisa berupa object dengan serialize() atau langsung bytes
-          let signedBytes;
-          if (signedResult && typeof signedResult.serialize === 'function') {
-            signedBytes = signedResult.serialize();
-          } else if (signedResult instanceof Uint8Array) {
-            signedBytes = signedResult;
-          } else if (typeof signedResult === 'string') {
-            signedBytes = Uint8Array.from(atob(signedResult), c => c.charCodeAt(0));
-          } else {
-            throw new Error('Phantom signTransaction returned unexpected format');
-          }
-          // Kirim raw bytes ke Solana RPC dengan retry RPC fallback
-          txSignature = await sendRawTransaction(signedBytes);
-        }
-
+        // Phantom: signAndSendTransaction menerima raw bytes via object {message}
+        // Most compatible approach: send as Buffer, let Phantom parse it
+        const result = await provider.request({
+          method: 'signAndSendTransaction',
+          params: { message: btoa(String.fromCharCode(...txBytes)) }
+        }).catch(async () => {
+          // Fallback: use signTransaction then send manually
+          const signedBytes = await provider.request({
+            method: 'signTransaction',
+            params: { message: btoa(String.fromCharCode(...txBytes)) }
+          });
+          // Send raw tx via RPC directly (no @solana/web3.js needed)
+          const rawTxBytes = Uint8Array.from(atob(signedBytes.transaction), c => c.charCodeAt(0));
+          const rpcRes = await fetch('https://api.mainnet-beta.solana.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              jsonrpc: '2.0', id: 1,
+              method: 'sendTransaction',
+              params: [ btoa(String.fromCharCode(...rawTxBytes)), { encoding: 'base64', skipPreflight: false } ]
+            })
+          });
+          const rpcData = await rpcRes.json();
+          if (rpcData.error) throw new Error(rpcData.error.message);
+          const sig = rpcData.result;
+          return { signature: sig };
+        });
+        txSignature = result.signature || result.publicKey;
       } else {
-        // ── Solflare: gunakan signAndSendTransaction standar ─────────
-        // API resmi Solflare menerima object dengan serialize() method
+        // Solflare
         const provider = getSolflareProvider();
         if (!provider) throw new Error('Solflare not available');
-
-        const txObj = { serialize: () => txBytes };
-
-        if (typeof provider.signAndSendTransaction === 'function') {
-          const result = await provider.signAndSendTransaction(txObj);
-          txSignature = result?.signature || (typeof result === 'string' ? result : null);
-        }
-
-        // Fallback Solflare: sign dulu lalu kirim manual
-        if (!txSignature && typeof provider.signTransaction === 'function') {
-          const signedTx = await provider.signTransaction(txObj);
-          let signedBytes;
-          if (signedTx && typeof signedTx.serialize === 'function') {
-            signedBytes = signedTx.serialize();
-          } else if (signedTx instanceof Uint8Array) {
-            signedBytes = signedTx;
-          } else {
-            throw new Error('Solflare signTransaction returned unexpected format');
-          }
-          txSignature = await sendRawTransaction(signedBytes);
-        }
+        // Solflare accepts an object with a serialize() method that returns Uint8Array
+        const result = await provider.signAndSendTransaction({
+          serialize: () => txBytes
+        });
+        txSignature = result.signature;
       }
-
+      // FIX CRITICAL #3: Validate signature before proceeding. An undefined/null
+      // signature would cause the backend to falsely verify or distribute EXXE incorrectly.
+      if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
+        throw new Error('Wallet returned an invalid or empty signature. Please try again.');
+      }
     } catch(signErr) {
-      if (signErr.code === 4001) throw signErr; // user rejected — bukan error teknis
+      if (signErr.code === 4001) throw signErr; // user rejected
       throw new Error('Wallet signing failed: ' + (signErr.message || 'Please try again'));
     }
+    await txStep(2,'done',`USDC split confirmed ✓`);
 
-    // Validasi signature — string base58, minimal 32 karakter
-    if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
-      throw new Error('Wallet returned an invalid or empty signature. Please try again.');
-    }
-    await txStep(2, 'done', 'USDC split confirmed ✓');
+    // Step 3: Verify payment on Railway backend
+    await txStep(3,'active','Verifying on Solana blockchain...');
+    const verifyRes = await fetch(`${CFG.API}/verify-payment`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+    });
+    if(!verifyRes.ok) throw new Error('Payment verification failed');
+    await txStep(3,'done','Payment verified on-chain ✓');
 
-    // ── Step 3: Verifikasi pembayaran di Railway backend ─────────────
-    await txStep(3, 'active', 'Verifying on Solana blockchain...');
+    // Step 4: Backend sends EXXE to investor
+    await txStep(4,'active',`Sending ${exxe.toLocaleString()} EXXE to your wallet...`);
+    const sendRes = await fetch(`${CFG.API}/send-exxe`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
+    });
+    if(!sendRes.ok) throw new Error('Failed to send EXXE');
+    const { signature: exxeTx } = await sendRes.json();
+    await txStep(4,'done',`${exxe.toLocaleString()} EXXE delivered ✓`);
 
-    // Poll konfirmasi on-chain sebelum panggil backend verify
-    // (pastikan transaksi sudah masuk sebelum backend cek)
-    await waitForConfirmation(txSignature);
-
-    const verifyRes = await Promise.race([
-      fetch(`${CFG.API}/verify-payment`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('Verification timeout — please contact support with TX: ' + txSignature)), 45000))
-    ]);
-    if (!verifyRes.ok) throw new Error('Payment verification failed (server error ' + verifyRes.status + '). TX: ' + txSignature);
-    await txStep(3, 'done', 'Payment verified on-chain ✓');
-
-    // ── Step 4: Backend kirim EXXE ke investor ───────────────────────
-    await txStep(4, 'active', `Sending ${exxe.toLocaleString()} EXXE to your wallet...`);
-    const sendRes = await Promise.race([
-      fetch(`${CFG.API}/send-exxe`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('EXXE delivery timeout — contact support with TX: ' + txSignature)), 60000))
-    ]);
-    if (!sendRes.ok) throw new Error('Failed to send EXXE (server error ' + sendRes.status + '). TX: ' + txSignature);
-    const sendData = await sendRes.json();
-    const exxeTx   = sendData?.signature || sendData?.tx || '';
-    await txStep(4, 'done', `${exxe.toLocaleString()} EXXE delivered ✓`);
-
-    showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature);
-    _isBuying = false;
+    showSuccess(usdc, exxe, connectedAddress, exxeTx);
+    _isBuying = false; // BUG FIX #5: unlock after success
 
   } catch(e) {
-    _isBuying = false;
+    _isBuying = false; // BUG FIX #5: unlock on error so user can retry
     const _procP2 = document.getElementById('processingPanel');
     const _buyP2  = document.getElementById('buyPanel');
-    if (_procP2) _procP2.style.display = 'none';
-    if (_buyP2)  _buyP2.style.display  = 'block';
-    if (e.code !== 4001) {
-      alert('Transaction failed: ' + (e.message || 'Please try again.'));
-    }
+    if (_procP2) _procP2.style.display='none';
+    if (_buyP2)  _buyP2.style.display='block';
+    if(e.code !== 4001) alert('Transaction failed: ' + (e.message || 'Please try again.'));
     goStep(2);
   }
-}
-
-// --- Kirim raw transaction bytes ke Solana RPC dengan RPC fallback ---
-async function sendRawTransaction(signedBytes) {
-  const RPC_LIST = [
-    'https://api.mainnet-beta.solana.com',
-    'https://rpc.ankr.com/solana',
-    'https://solana-mainnet.g.alchemy.com/v2/demo',
-  ];
-  const b64 = btoa(String.fromCharCode(...signedBytes));
-  for (let i = 0; i < RPC_LIST.length; i++) {
-    try {
-      const ctrl  = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 12000);
-      const res   = await fetch(RPC_LIST[i], {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          jsonrpc: '2.0', id: 1,
-          method: 'sendTransaction',
-          params: [b64, { encoding: 'base64', skipPreflight: false, maxRetries: 3 }]
-        }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (!res.ok) continue;
-      const data = await res.json();
-      if (data.error) continue; // coba RPC berikutnya
-      if (data.result && typeof data.result === 'string') return data.result;
-    } catch(e) { /* coba RPC berikutnya */ }
-  }
-  throw new Error('All RPC endpoints failed to send transaction. Please try again.');
-}
-
-// --- Poll konfirmasi transaksi sebelum lanjut verify ----------------
-// Cek status 'confirmed' atau 'finalized' dengan timeout 30 detik.
-async function waitForConfirmation(signature) {
-  const RPC = 'https://api.mainnet-beta.solana.com';
-  const maxWait  = 30000; // 30 detik max
-  const interval = 2500;  // cek setiap 2.5 detik
-  const deadline = Date.now() + maxWait;
-
-  while (Date.now() < deadline) {
-    try {
-      const ctrl  = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 8000);
-      const res   = await fetch(RPC, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          jsonrpc: '2.0', id: 1,
-          method: 'getSignatureStatuses',
-          params: [[signature], { searchTransactionHistory: true }]
-        }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (res.ok) {
-        const data     = await res.json();
-        const status   = data?.result?.value?.[0];
-        const conf     = status?.confirmationStatus;
-        const err      = status?.err;
-        if (err) throw new Error('Transaction rejected by Solana: ' + JSON.stringify(err));
-        if (conf === 'confirmed' || conf === 'finalized') return; // sukses
-      }
-    } catch(e) {
-      if (e.message && e.message.startsWith('Transaction rejected')) throw e;
-      // timeout atau RPC error — coba lagi
-    }
-    await new Promise(r => setTimeout(r, interval));
-  }
-  // Timeout habis tapi tidak error fatal — lanjutkan ke verify
-  // (backend akan cek sendiri; tx mungkin sudah confirm tapi lambat)
-  console.warn('[Exillion] waitForConfirmation timeout — proceeding to verify');
 }
 
 async function txStep(n,status,label){
@@ -5694,39 +5656,32 @@ async function txStep(n,status,label){
   const lbl=document.getElementById('tl'+n);
   if(icon){ icon.className='tx-icon '+status; icon.textContent=status==='done'?'✓':status==='active'?'▶':'○'; }
   if(lbl) lbl.textContent=label;
-  // Yield ke event loop untuk memastikan DOM repaint terjadi sebelum async berikutnya.
-  // Tidak butuh setTimeout artificial — microtask yield via Promise.resolve() cukup.
-  await Promise.resolve();
+  // FIX WARNING #4: Reduced artificial delay from 300ms to 80ms.
+  // 4 steps × 300ms = 1.2s unnecessary wait. 80ms is enough for UI to repaint/animate.
+  await sleep(80);
 }
 
 function showSuccess(usdc,exxe,wallet,tx){
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
-  // Tandai semua 3 step yang ada di HTML sebagai selesai.
-  // (Step 4 tidak ada sebagai elemen HTML — goStep(4) adalah no-op yang aman)
+  // FIX CRITICAL #5a: goStep(4) was called but step4 element does not exist in HTML.
+  // Mark all 3 steps as done to reflect completed transaction state.
   for(let i=1;i<=3;i++){
     const el=document.getElementById('step'+i);
     if(el){ el.classList.remove('active'); el.classList.add('done'); }
   }
-  // Pastikan step 4 juga ditandai done jika elemen ada
-  const step4=document.getElementById('step4');
-  if(step4){ step4.classList.remove('active'); step4.classList.add('done'); }
-
-  const short   = wallet.slice(0,6)+'...'+wallet.slice(-6);
-  // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
-  const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
-  const txFull  = tx || '';
-
-  // Gunakan DOM construction untuk mencegah XSS
-  // (data blockchain selalu dianggap untrusted input)
+  const short=wallet.slice(0,6)+'...'+wallet.slice(-6);
+  const txShort=tx.slice(0,22)+'...';
+  // FIX CRITICAL #5b: Use safe DOM construction instead of innerHTML to prevent
+  // any potential XSS. Blockchain data should always be treated as untrusted input.
   const details = document.getElementById('successDetails');
   details.textContent = '';
   const lines = [
-    ['Wallet',    short],
-    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
-    ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
-    ['TX',        txShort],
-    ['Status',    'CONFIRMED ✓'],
+    ['Wallet', short],
+    ['Paid', usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
+    ['Received', exxe.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0}) + ' EXXE'],
+    ['TX', txShort],
+    ['Status', 'CONFIRMED ✓'],
   ];
   lines.forEach(([label, value]) => {
     const row = document.createElement('div');
@@ -5741,8 +5696,7 @@ function showSuccess(usdc,exxe,wallet,tx){
     row.appendChild(val);
     details.appendChild(row);
   });
-  const link = document.getElementById('solscanLink');
-  if (link && txFull) link.href = 'https://solscan.io/tx/' + encodeURIComponent(txFull);
+  document.getElementById('solscanLink').href='https://solscan.io/tx/'+encodeURIComponent(tx);
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -6218,47 +6172,39 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     LIVE INVESTOR COUNT — Solana RPC  v14
-     FIX v14:
-     1. Source data: menggunakan getSignaturesForAddress pada
-        EXXE_MINT token account yang dimiliki ANGEL_DIST_WALLET,
-        sehingga hanya transaksi EXXE (bukan SOL random) yang masuk.
-     2. Full pagination: mengambil semua signature via cursor 'before',
-        tidak lagi dibatasi slice(0,50).
-     3. Filter EXXE_MINT pada setiap transaksi untuk memastikan
-        hanya transfer token EXXE yang dihitung.
-     4. Cache sessionStorage: hasil tersimpan antar refresh tab
-        sehingga counter tidak mulai dari 0 saat halaman dimuat ulang.
-     5. Guard _isFetching mencegah overlapping fetch concurrent.
-     Setiap alamat unik pengirim EXXE = 1 investor nyata.
+     LIVE INVESTOR COUNT — Solana RPC
+     Menghitung jumlah unique investor berdasarkan
+     transaksi pengiriman EXXE ke wallet distribusi angel.
+     Setiap alamat unik = 1 investor nyata.
      Update setiap 60 detik.
      --------------------------------------------------- -->
 <script>
 (function() {
   'use strict';
 
-  // CONFIG — EXXE_MINT dipakai sebagai filter transaksi
-  const EXXE_MINT         = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  // ANGEL_DIST_WALLET: wallet distribusi EXXE — kita monitor transaksi
-  // EXXE yang MASUK ke wallet ini (investor → wallet ini via backend)
-  const ANGEL_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D';
-  const REFRESH_MS        = 60000; // 60 detik
-  const SESSION_KEY       = 'exxe_investor_count_v14';
-  const SESSION_TS_KEY    = 'exxe_investor_ts_v14';
-  const CACHE_TTL_MS      = 55000; // pakai cache jika < 55 detik lalu
+  const EXXE_MINT        = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
+  const ANGEL_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'; // Liquidity 75% wallet — main angel wallet
+  const REFRESH_MS       = 60000; // 60 detik
 
+  // FIX QUALITY #5a: Unified RPC endpoint order — same sequence as funding tracker.
+  // Primary: mainnet-beta → Fallback 1: ankr → Fallback 2: alchemy demo
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-mainnet.g.alchemy.com/v2/demo',
   ];
   let rpcIdx = 0;
-  let _isFetching = false; // guard concurrent fetch
 
-  // --- Helper: fetch dengan AbortController timeout ---
+  // --- Helper: fetch dengan timeout manual (AbortController) ---
+  // FIX: DataCloneError — AbortSignal tidak bisa di-clone via postMessage.
+  // Root cause: Object.assign meng-copy referensi signal ke dalam plain object
+  // yang kemudian bisa ter-serialize di konteks Service Worker / browser extension.
+  // Solusi: buat AbortController lokal, ekstrak hanya field yang dibutuhkan dari
+  // options (method, headers, body), jangan pernah spread signal dari luar.
   function fetchWithTimeout(url, options, ms) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
+    // Build fetch init explicitly — DO NOT spread options (avoids cloning AbortSignal)
     const init = {
       method:  options.method  || 'GET',
       headers: options.headers || {},
@@ -6268,52 +6214,30 @@ function startGoldNetwork(canvasId, isSplash) {
     return fetch(url, init).finally(() => clearTimeout(timer));
   }
 
-  // --- Ambil satu halaman signature untuk sebuah address ---
-  async function fetchSigPage(address, before) {
+  // --- Ambil daftar signature transaksi ke wallet angel ---
+  async function fetchSignatures(wallet, before) {
     const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
-    const opts = { limit: 1000, commitment: 'confirmed' };
-    if (before) opts.before = before;
+    const params = [
+      wallet,
+      { limit: 1000, commitment: 'confirmed' }
+    ];
+    if (before) params[1].before = before;
+
     const res = await fetchWithTimeout(rpc, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         jsonrpc: '2.0', id: 1,
         method: 'getSignaturesForAddress',
-        params: [address, opts]
+        params
       })
     }, 10000);
-    if (!res.ok) throw new Error('RPC HTTP ' + res.status);
+    if (!res.ok) throw new Error('RPC error ' + res.status);
     const data = await res.json();
     return data?.result || [];
   }
 
-  // --- Ambil SEMUA signature dengan full pagination ---
-  // Menggunakan cursor 'before' untuk iterasi mundur ke semua history.
-  // Batas 5000 transaksi (5 halaman × 1000) = cukup untuk seluruh
-  // angel round 330M EXXE (max 330.000 transaksi jika @$10 min).
-  async function fetchAllSignatures(address) {
-    const all = [];
-    let before = null;
-    const MAX_PAGES = 5;
-    for (let page = 0; page < MAX_PAGES; page++) {
-      const sigs = await fetchSigPage(address, before);
-      if (!sigs.length) break;
-      // Filter hanya transaksi sukses
-      const good = sigs.filter(s => !s.err);
-      all.push(...good);
-      // Jika hasil kurang dari 1000, tidak ada halaman berikutnya
-      if (sigs.length < 1000) break;
-      // Set cursor ke signature terakhir untuk halaman berikutnya
-      before = sigs[sigs.length - 1].signature;
-      // Delay kecil antar halaman agar tidak rate-limit
-      await new Promise(r => setTimeout(r, 300));
-    }
-    return all;
-  }
-
-  // --- Ambil detail transaksi batch dan filter hanya transfer EXXE ---
-  // FIX v14: memvalidasi bahwa transaksi benar-benar melibatkan EXXE_MINT.
-  // Ini mencegah SOL transfer biasa atau transaksi lain terhitung sebagai investor.
+  // --- Ambil detail transaksi untuk mengetahui sender ---
   async function fetchTxBatch(signatures) {
     const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
     const senders = new Set();
@@ -6340,40 +6264,22 @@ function startGoldNetwork(canvasId, isSplash) {
           try {
             const tx = r?.result;
             if (!tx) return;
-
-            // FIX v14: validasi transaksi melibatkan EXXE_MINT.
-            // Cek di innerInstructions dan instructions untuk token transfer.
-            const instructions = [
-              ...(tx?.transaction?.message?.instructions || []),
-              ...(tx?.meta?.innerInstructions?.flatMap(ii => ii.instructions) || [])
-            ];
-            const involvesExxe = instructions.some(ix => {
-              if (!ix?.parsed) return false;
-              const info = ix.parsed?.info;
-              // SPL Transfer: mint harus EXXE_MINT
-              return (
-                info?.mint === EXXE_MINT ||
-                info?.source === EXXE_MINT ||
-                info?.destination === EXXE_MINT
-              );
-            });
-            if (!involvesExxe) return; // Bukan transaksi EXXE — lewati
-
-            // Sender = fee payer (accountKeys[0])
+            // Sender = akun pertama dalam accountKeys (fee payer = initiator)
             const accounts = tx?.transaction?.message?.accountKeys;
             if (!accounts || accounts.length === 0) return;
+            // Pastikan ini bukan transaksi dari wallet kita sendiri
             const sender = typeof accounts[0] === 'string'
               ? accounts[0]
               : accounts[0]?.pubkey;
-            // Exclude wallet distribusi sendiri (bukan investor)
             if (sender && sender !== ANGEL_DIST_WALLET) {
               senders.add(sender);
             }
-          } catch(e) { /* abaikan parse error per-tx */ }
+          } catch(e) { /* ignore parse errors */ }
         });
       } catch(e) {
         rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
       }
+      // Kecil delay antar batch agar tidak kena rate limit
       if (i + batchSize < signatures.length) {
         await new Promise(r => setTimeout(r, 200));
       }
@@ -6381,28 +6287,33 @@ function startGoldNetwork(canvasId, isSplash) {
     return senders;
   }
 
-  // --- Animasi counter angka (count-up effect, ease-out cubic) ---
+  // --- Animasi counter angka (count-up effect) ---
   function animateCount(el, from, to, duration) {
     if (!el) return;
     const start = performance.now();
     const diff = to - from;
     function step(now) {
       const elapsed = Math.min(now - start, duration);
-      const ease = 1 - Math.pow(1 - elapsed / duration, 3);
-      el.textContent = Math.round(from + diff * ease).toLocaleString('en-US');
+      const progress = elapsed / duration;
+      // Ease out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(from + diff * ease);
+      el.textContent = current.toLocaleString('en-US');
       if (elapsed < duration) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
 
-  // --- Update semua elemen investor counter di halaman ---
+  // --- Update semua elemen di halaman ---
   let lastCount = 0;
+  // BUG FIX #8: track whether count is exact or estimated
   function updateInvestorUI(count, isEstimate) {
     const ids = ['splash2-investor-count', 'hero-investor-count'];
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
       animateCount(el, lastCount, count, 1200);
+      // Add "~" prefix when estimate, remove when exact
       el.dataset.estimate = isEstimate ? '1' : '0';
       const prefix = el.previousElementSibling;
       if (prefix && prefix.classList.contains('count-prefix')) {
@@ -6410,65 +6321,47 @@ function startGoldNetwork(canvasId, isSplash) {
       }
     });
     lastCount = count;
-    // Simpan ke sessionStorage agar tidak mulai dari 0 saat refresh tab
-    try {
-      sessionStorage.setItem(SESSION_KEY, String(count));
-      sessionStorage.setItem(SESSION_TS_KEY, String(Date.now()));
-    } catch(e) { /* sessionStorage bisa disabled di beberapa browser mode */ }
   }
 
-  // --- Muat cache dari sessionStorage untuk tampil instan ---
-  function loadCachedCount() {
-    try {
-      const ts  = parseInt(sessionStorage.getItem(SESSION_TS_KEY) || '0', 10);
-      const val = parseInt(sessionStorage.getItem(SESSION_KEY)    || '0', 10);
-      if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS * 10) {
-        // Tampilkan cache langsung tanpa animasi (page baru load)
-        const ids = ['splash2-investor-count', 'hero-investor-count'];
-        ids.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.textContent = val.toLocaleString('en-US');
-        });
-        lastCount = val;
-      }
-    } catch(e) {}
-  }
-
-  // --- Fungsi utama: ambil data on-chain dan hitung investor ---
+  // --- Fungsi utama: ambil data dan hitung investor ---
   async function fetchInvestorCount() {
-    if (_isFetching) return; // hindari concurrent fetch
-    _isFetching = true;
     try {
-      // Ambil semua signature dengan full pagination
-      const allSigs = await fetchAllSignatures(ANGEL_DIST_WALLET);
-      if (!allSigs.length) {
+      // Ambil sampai max 200 transaksi terakhir (cukup untuk social proof awal)
+      const sigs = await fetchSignatures(ANGEL_DIST_WALLET, null);
+      if (!sigs.length) {
         updateInvestorUI(0, false);
         return;
       }
 
-      const sigStrings = allSigs.map(s => s.signature);
+      // Ambil hanya signature strings
+      const sigStrings = sigs
+        .filter(s => !s.err) // abaikan transaksi gagal
+        .map(s => s.signature);
 
-      // Proses semua signature — tidak ada lagi slice(0, 50)
-      // Filter EXXE_MINT dilakukan di dalam fetchTxBatch
-      const uniqueSenders = await fetchTxBatch(sigStrings);
+      // Hitung unique senders dari batch pertama (max 50 tx untuk kecepatan)
+      const limited = sigStrings.slice(0, 50);
+      const uniqueSenders = await fetchTxBatch(limited);
+
+      // FIX CRITICAL #4: Removed sqrt-scaling that artificially inflated investor count.
+      // On a financial investment platform, displaying mathematically-estimated investor
+      // numbers (not real data) is a potential regulatory violation. Show only exact count
+      // from real on-chain data. If more than 50 tx exist, note it's from last 50 tx.
+      const totalInvestors = uniqueSenders.size;
+      const isEstimate = sigStrings.length > 50; // true = count is from a sample, not all-time
 
       rpcIdx = 0; // reset ke endpoint utama setelah sukses
-      // isEstimate = false karena sudah memproses semua halaman
-      updateInvestorUI(uniqueSenders.size, false);
+      updateInvestorUI(totalInvestors, isEstimate);
 
     } catch(e) {
       rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
       // Tetap tampilkan angka terakhir yang valid — jangan munculkan 0
-      console.warn('[Exillion Investor Count v14] fetch error:', e);
-    } finally {
-      _isFetching = false;
+      console.warn('[Exillion Investor Count] fetch error:', e);
     }
   }
 
-  // --- Init ---
+  // --- Init: jalankan segera dan jadwalkan refresh ---
   document.addEventListener('DOMContentLoaded', function() {
-    loadCachedCount();       // tampil instan dari cache
-    fetchInvestorCount();    // lalu fetch data segar
+    fetchInvestorCount();
     setInterval(fetchInvestorCount, REFRESH_MS);
   });
 
@@ -6476,207 +6369,130 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     REAL-TIME FUNDING TRACKER — Solana RPC  v14
-     FIX v14: Diganti dari saldo saat ini (getTokenAccountsByOwner)
-     ke cumulative inflow (getSignaturesForAddress + getTransaction).
-     Alasan: saldo bisa turun jika dana dipakai operasional,
-     menyebabkan angka "Total Raised" bisa turun — membingungkan investor.
-     Solusi: jumlah USDC yang pernah MASUK ke ke-3 wallet = total raised.
+     REAL-TIME FUNDING TRACKER — Solana RPC
+     Reads USDC balance directly from blockchain
      --------------------------------------------------- -->
 <script>
 (function() {
-  const USDC_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
-  // Tiga wallet penerima split investor
-  const WALLETS = [
+  // -- Config ------------------------------------------
+  const USDC_MINT     = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  const WALLETS       = [
     'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
     'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
     'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
   ];
+  // FIX QUALITY #5b: Unified RPC endpoint order — same sequence as investor counter.
+  // Primary: mainnet-beta → Fallback 1: ankr → Fallback 2: alchemy demo
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-mainnet.g.alchemy.com/v2/demo',
   ];
-  const TIER1_PRICE   = 0.01;
-  const EXXE_TARGET   = 330000000;
-  const USDC_TARGET   = 20831250;
-  const REFRESH_MS    = 30000;
-  const SESSION_KEY   = 'exxe_funding_total_v14';
-  const SESSION_TS    = 'exxe_funding_ts_v14';
+  const TIER1_PRICE    = 0.01;   // USDC per EXXE
+  const EXXE_TARGET    = 330000000;
+  const USDC_TARGET    = 20831250;
+  const REFRESH_MS     = 30000;  // refresh every 30 seconds
+  let   rpcIndex       = 0;
 
-  let rpcIndex = 0;
-  let _fetchFundingActive = false;
-  // Monotone: angka total raised tidak pernah turun
-  let _highWatermark = 0;
-
-  function fetchWithTimeout(url, body, ms) {
-    const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), ms);
-    return fetch(url, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(body),
-      signal:  ctrl.signal
-    }).finally(() => clearTimeout(timer));
-  }
-
-  // Ambil semua signature untuk sebuah wallet (full pagination, max 5 halaman)
-  async function fetchAllSigsForWallet(wallet) {
-    const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
-    const all = [];
-    let before = null;
-    for (let page = 0; page < 5; page++) {
-      const opts = { limit: 1000, commitment: 'confirmed' };
-      if (before) opts.before = before;
-      const res = await fetchWithTimeout(rpc, {
+  // -- Fetch USDC balance for one wallet ---------------
+  async function getUsdcBalance(wallet) {
+    // FIX: AbortSignal.timeout() juga memicu DataCloneError di beberapa browser/env.
+    // Ganti ke manual AbortController dengan timer — identik secara fungsional,
+    // tapi signal dibuat lokal dan tidak pernah di-clone.
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 8000);
+    try {
+      const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
+      const body = {
         jsonrpc: '2.0', id: 1,
-        method: 'getSignaturesForAddress',
-        params: [wallet, opts]
-      }, 10000);
-      if (!res.ok) break;
+        method: 'getTokenAccountsByOwner',
+        params: [
+          wallet,
+          { mint: USDC_MINT },
+          { encoding: 'jsonParsed' }
+        ]
+      };
+      const res  = await fetch(rpc, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        signal: ctrl.signal
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('RPC HTTP ' + res.status);
       const data = await res.json();
-      const sigs = data?.result || [];
-      const good = sigs.filter(s => !s.err);
-      all.push(...good.map(s => s.signature));
-      if (sigs.length < 1000) break;
-      before = sigs[sigs.length - 1].signature;
-      await new Promise(r => setTimeout(r, 300));
+      const accounts = data?.result?.value || [];
+      if (accounts.length === 0) return 0;
+      const amount = accounts[0]?.account?.data?.parsed?.info?.tokenAmount?.uiAmount || 0;
+      return parseFloat(amount) || 0;
+    } catch(e) {
+      clearTimeout(timer);
+      rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+      return 0;
     }
-    return all;
   }
 
-  // Hitung total USDC yang pernah MASUK ke sebuah wallet
-  // dengan memeriksa setiap transaksi untuk transfer USDC inbound.
-  async function getUsdcInflow(wallet) {
-    const rpc  = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
-    const sigs = await fetchAllSigsForWallet(wallet);
-    if (!sigs.length) return 0;
-
-    let totalInflow = 0;
-    const batchSize = 10;
-
-    for (let i = 0; i < sigs.length; i += batchSize) {
-      const batch = sigs.slice(i, i + batchSize);
-      try {
-        const requests = batch.map((sig, idx) => ({
-          jsonrpc: '2.0', id: idx,
-          method: 'getTransaction',
-          params: [sig, { encoding: 'jsonParsed', maxSupportedTransactionVersion: 0 }]
-        }));
-        const res = await fetchWithTimeout(rpc, requests, 15000);
-        if (!res.ok) continue;
-        const results = await res.json();
-
-        (Array.isArray(results) ? results : [results]).forEach(r => {
-          try {
-            const tx = r?.result;
-            if (!tx) return;
-            // Cari semua inner instruction yang merupakan transfer USDC ke wallet ini
-            const allIx = [
-              ...(tx?.transaction?.message?.instructions || []),
-              ...(tx?.meta?.innerInstructions?.flatMap(ii => ii.instructions) || [])
-            ];
-            allIx.forEach(ix => {
-              if (!ix?.parsed) return;
-              const type = ix.parsed?.type;
-              const info = ix.parsed?.info;
-              if (!info || !type) return;
-              // SPL Transfer: destination = wallet kita, mint = USDC
-              if (
-                (type === 'transfer' || type === 'transferChecked') &&
-                info?.mint === USDC_MINT
-              ) {
-                const dest = info.destination || info.destinationOwner;
-                if (dest === wallet) {
-                  const amt = parseFloat(info.tokenAmount?.uiAmount || info.amount || 0);
-                  // Normalise: jika amount dalam raw (6 desimal USDC)
-                  const uiAmt = amt > 1e6 ? amt / 1e6 : amt;
-                  if (uiAmt > 0) totalInflow += uiAmt;
-                }
-              }
-            });
-          } catch(e) { /* ignore per-tx parse error */ }
-        });
-      } catch(e) {
-        rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
-      }
-      if (i + batchSize < sigs.length) {
-        await new Promise(r => setTimeout(r, 200));
-      }
-    }
-    return totalInflow;
-  }
-
+  // -- Format numbers nicely ---------------------------
   function fmt(n, decimals = 2) {
-    return n.toLocaleString('en-US', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals
-    });
+    return n.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   }
 
+  // -- Update all UI elements --------------------------
   function updateUI(totalUsdc) {
-    // Monotone: tampilkan selalu nilai tertinggi yang pernah tercatat
-    if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
-    else _highWatermark = totalUsdc;
+    const exxeSold   = totalUsdc / TIER1_PRICE;
+    const pctUsdc    = Math.min((totalUsdc  / USDC_TARGET)  * 100, 100);
+    const pctExxe    = Math.min((exxeSold   / EXXE_TARGET)  * 100, 100);
+    const barMin     = 1; // minimum visual width
 
-    const exxeSold = totalUsdc / TIER1_PRICE;
-    const pctUsdc  = Math.min((totalUsdc / USDC_TARGET) * 100, 100);
-    const pctExxe  = Math.min((exxeSold  / EXXE_TARGET) * 100, 100);
+    // Progress bar — EXXE sold
+    const elExxeSold = document.getElementById('rt-exxe-sold');
+    const elExxeBar  = document.getElementById('rt-exxe-bar');
+    if (elExxeSold) elExxeSold.textContent = fmt(exxeSold, 0);
+    if (elExxeBar)  elExxeBar.style.width  = Math.max(pctExxe, barMin) + '%';
 
-    const elExxeSold  = document.getElementById('rt-exxe-sold');
-    const elExxeBar   = document.getElementById('rt-exxe-bar');
+    // Progress bar — USDC raised
     const elUsdcRaised = document.getElementById('rt-usdc-raised');
     const elUsdcBar    = document.getElementById('rt-usdc-bar');
-    const elSplash2   = document.getElementById('splash2-raised');
-
-    if (elExxeSold)   elExxeSold.textContent  = fmt(exxeSold, 0);
-    if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
     if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
-    if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
-    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USDC';
+    if (elUsdcBar)    elUsdcBar.style.width     = Math.max(pctUsdc, barMin) + '%';
 
-    document.querySelectorAll('.rt-live-dot').forEach(function(d) {
+    // Second splash "Total Raised"
+    const elSplash2 = document.getElementById('splash2-raised');
+    if (elSplash2) elSplash2.textContent = '$' + fmt(totalUsdc) + ' USDC';
+
+    // Live indicator pulse when data is fresh
+    const dots = document.querySelectorAll('.rt-live-dot');
+    dots.forEach(function(d) {
       d.style.background = '#14F195';
       setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
     });
-
-    // Simpan ke sessionStorage sebagai cache
-    try {
-      sessionStorage.setItem(SESSION_KEY, String(totalUsdc));
-      sessionStorage.setItem(SESSION_TS,  String(Date.now()));
-    } catch(e) {}
   }
 
-  // Tampilkan cache sesegera mungkin agar UI tidak blank
-  function loadCachedFunding() {
-    try {
-      const val = parseFloat(sessionStorage.getItem(SESSION_KEY) || '0');
-      if (val > 0) {
-        _highWatermark = val;
-        updateUI(val);
-      }
-    } catch(e) {}
-  }
-
+  // -- Main fetch --------------------------------------
+  let _fetchFundingActive = false; // BUG FIX #6: prevent overlapping fetches
   async function fetchFunding() {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
       let total = 0;
       for (let i = 0; i < WALLETS.length; i++) {
-        total += await getUsdcInflow(WALLETS[i]);
+        const bal = await getUsdcBalance(WALLETS[i]);
+        total += bal;
       }
-      rpcIndex = 0;
+      rpcIndex = 0; // reset to first endpoint after success
       updateUI(total);
-    } catch(e) {
+    } catch (e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+      // BUG FIX #6: removed setTimeout(fetchFunding, 5000) here — it created
+      // a second concurrent loop alongside the already-running setInterval.
+      // The setInterval below handles all retries uniformly.
     } finally {
       _fetchFundingActive = false;
     }
   }
 
+  // -- Init --------------------------------------------
   document.addEventListener('DOMContentLoaded', function() {
-    loadCachedFunding();
     fetchFunding();
     setInterval(fetchFunding, REFRESH_MS);
   });
