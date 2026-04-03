@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v18 (Bug Fix: version label, passive wheel listeners, will-change cleanup, disconnectWallet null-guard, fetchWithTimeout body mismatch, duplicate DOMContentLoaded, canvas stop on splash exit, mobile splash overflow, connect-src missing railway endpoint, reduced animation jank) -->
+<!-- Exillion Capital Finecosystem — v19 (Bug Fix: decimal investment amounts allowed — min $10.00 up to $250.00 with 2dp; removed all Math.floor integer enforcement in calcTokens/checkReady/executeBuy/proceedBuy; input step=0.01; balance check and error messages use proper decimal formatting) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -4810,14 +4810,14 @@ footer{
           <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
-              placeholder="Min $10 — Max $250 USDC (whole numbers only)"
-              min="10" max="250" step="1"
+              placeholder="Min $10.00 — Max $250.00 USDC"
+              min="10" max="250" step="0.01"
               oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
           <div class="amount-hints">
             <button class="hint" onclick="setAmount(10)">$10</button>
-            <button class="hint" onclick="setAmount(50)">$50</button>
+            <button class="hint" onclick="setAmount(25)">$25</button>
             <button class="hint" onclick="setAmount(100)">$100</button>
             <button class="hint" onclick="setAmount(250)">MAX $250</button>
           </div>
@@ -4847,7 +4847,7 @@ footer{
           <div class="check-title">Confirm Before Proceeding</div>
           <div class="check-item">
             <input type="checkbox" id="fc1" onchange="checkReady()"/>
-            <label for="fc1">I confirm my investment does not exceed <strong>$250 USDC</strong> (Tier I — The Founding Member maximum per investor).</label>
+            <label for="fc1">I confirm my investment does not exceed <strong>$250.00 USDC</strong> (Tier I — The Founding Member maximum per investor).</label>
           </div>
           <div class="check-item">
             <input type="checkbox" id="fc2" onchange="checkReady()"/>
@@ -4865,7 +4865,7 @@ footer{
 
         <p class="form-note">
           USDC/USDT sent on-chain. EXXE delivered automatically to your connected wallet.
-          All transactions are irreversible. Whole dollar amounts only — Minimum $10 — Maximum $250 per investor.
+          All transactions are irreversible. Minimum $10.00 — Maximum $250.00 per investor.
         </p>
       </div>
 
@@ -5058,10 +5058,10 @@ function selectToken(token) {
   if (cur) cur.textContent = t;
   if (balLbl) balLbl.textContent = t;
   if (inp) {
-    inp.placeholder = 'Min $' + tier().min + ' — Max $' + tier().max + ' ' + t + ' (whole numbers)';
+    inp.placeholder = 'Min $' + tier().min.toFixed(2) + ' — Max $' + tier().max.toFixed(2) + ' ' + t;
     inp.min  = tier().min;
     inp.max  = tier().max;
-    inp.step = '1'; // selalu integer
+    inp.step = '0.01';
   }
   document.getElementById('btnUSDC').style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
   document.getElementById('btnUSDC').style.background = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
@@ -5607,25 +5607,28 @@ function goStep(n){
 }
 
 // --- CALCULATOR ----------------------------------------------
-function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens(); }
+function setAmount(v){
+  const inp = document.getElementById('usdcAmount');
+  if(inp){ inp.value = Number(v).toFixed(2); }
+  calcTokens();
+}
 
 function calcTokens(){
   const t=tier();
   const token = getSelectedToken();
-  // KEPUTUSAN DESAIN v16: Semua input HARUS bilangan bulat (step $1).
-  // Ini menghilangkan SEMUA risiko floating point — EXXE selalu exact integer.
-  // Math.floor(parseFloat) = buang desimal apapun yang user coba ketik.
-  let usdc = Math.floor(parseFloat(document.getElementById('usdcAmount').value)||0);
-  if(usdc > t.max){ usdc = t.max; document.getElementById('usdcAmount').value = t.max; }
-  if(usdc < 0)   { usdc = 0;     document.getElementById('usdcAmount').value = 0; }
+  // v19: Allow up to 2 decimal places (e.g. $10.25, $33.33).
+  // Round to 2dp to avoid floating-point drift, then clamp to min/max.
+  let usdc = Math.round(parseFloat(document.getElementById('usdcAmount').value || 0) * 100) / 100;
+  if(isNaN(usdc)) usdc = 0;
+  if(usdc > t.max){ usdc = t.max; document.getElementById('usdcAmount').value = t.max.toFixed(2); }
+  if(usdc < 0)   { usdc = 0;     document.getElementById('usdcAmount').value = '0'; }
   const box=document.getElementById('calcBox');
   if(usdc >= t.min){
-    // Dengan usdc dan t.price keduanya known values, EXXE selalu exact integer:
-    // Tier1: $10/$0.01=1000, $250/$0.01=25000 — tidak ada floating point issue.
-    const exxe = Math.round(usdc / t.price); // Math.round sebagai safety net
-    const atL  = exxe * CFG.LISTING;
+    // EXXE = usdc / price, rounded to nearest whole token
+    const exxe = Math.round(usdc / t.price);
+    const atL  = Math.round(exxe * CFG.LISTING * 100) / 100;
     box.style.display='flex';
-    document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US') + ' ' + token;
+    document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + token;
     document.getElementById('calcReceive').textContent = exxe.toLocaleString('en-US') + ' EXXE';
     document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + token;
     document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
@@ -5638,17 +5641,18 @@ function checkReady(){
   const f1=document.getElementById('fc1')?.checked;
   const f2=document.getElementById('fc2')?.checked;
   const f3=document.getElementById('fc3')?.checked;
-  // Paksa integer — konsisten dengan calcTokens
-  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value)||0);
+  // v19: allow decimals, round to 2dp
+  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
   const token = getSelectedToken();
   const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
-  const hasEnoughBalance = cachedBal >= t.min;
+  const hasEnoughBalance = cachedBal >= usdc;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
-    const exxe = Math.round(usdc/t.price).toLocaleString('en-US'); // Fix #13b: Math.round
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay $${usdc} ${token} — Receive ${exxe} EXXE`;
+    const exxe = Math.round(usdc/t.price).toLocaleString('en-US');
+    const usdcFmt = usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay $${usdcFmt} ${token} — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
@@ -5681,15 +5685,14 @@ async function executeBuy(){
     return;
   }
 
-  // FIX v15 #4: Check balance before building tx
+  // FIX v15 #4 / v19: Check balance before building tx — allow decimal amounts
   const t = tier();
-  // Integer-only: konsisten dengan calcTokens dan checkReady
-  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value) || 0);
+  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   try {
     const currentBalance = await fetchUsdcBalance(connectedAddress);
     if (currentBalance < t.min) {
       showToast(
-        'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min + ' ' + getSelectedToken() + '.',
+        'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min.toFixed(2) + ' ' + getSelectedToken() + '.',
         'error', 9000
       );
       _isBuying = false;
@@ -5698,8 +5701,9 @@ async function executeBuy(){
     if (currentBalance < usdc) {
       showToast(
         'Insufficient ' + getSelectedToken() + ' balance. You have $' +
-        Math.floor(currentBalance).toLocaleString('en-US') +
-        ' ' + getSelectedToken() + ' but need $' + usdc + ' ' + getSelectedToken() + '.',
+        currentBalance.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) +
+        ' ' + getSelectedToken() + ' but need $' +
+        usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + getSelectedToken() + '.',
         'error', 9000
       );
       _isBuying = false;
@@ -5723,11 +5727,10 @@ async function proceedBuy(){
   if(_isBuying) return;
 
   const t = tier();
-  // Integer-only: Math.floor membuang desimal apapun yang lolos dari input validation.
-  // Ini adalah layer terakhir sanitasi sebelum TX dikirim ke blockchain.
-  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value) || 0);
+  // v19: allow up to 2 decimal places — round to avoid float drift
+  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Please enter a whole number between $' + t.min + ' and $' + t.max + ' ' + getSelectedToken() + '.', 'warn');
+    showToast('Invalid amount. Enter between $' + t.min.toFixed(2) + ' and $' + t.max.toFixed(2) + ' ' + getSelectedToken() + '.', 'warn');
     return;
   }
   // Validasi token whitelist sebelum kirim ke backend
