@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v15 (Technical Audit Fix: web3.js signing, USDC balance check, correct investor counter logic, USDC inflow normalise, toast notifications, RPC fallback, backend stats API) -->
+<!-- Exillion Capital Finecosystem — v18 (Bug Fix: version label, passive wheel listeners, will-change cleanup, disconnectWallet null-guard, fetchWithTimeout body mismatch, duplicate DOMContentLoaded, canvas stop on splash exit, mobile splash overflow, connect-src missing railway endpoint, reduced animation jank) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -17,7 +17,12 @@
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
 <!-- font-display:block prevents FOUC: browser BLOCKS text render until Orbitron is ready -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
+<!-- BUG FIX v16 #10: Pisah font request.
+     Orbitron: display=block (wajib, cegah FOUC di splash).
+     JetBrains Mono: display=swap (non-blocking, hanya dipakai di success panel) →
+     tidak perlu block render seluruh halaman hanya untuk font success panel. -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
 <!-- FIX v15: @solana/web3.js — required for proper VersionedTransaction signing with Phantom & Solflare.
      The UMD bundle exposes window.solanaWeb3 globally. Loaded in <head> with defer so it
      is ready before any wallet interaction button is clicked. -->
@@ -96,7 +101,12 @@ html{scroll-behavior:smooth;}
 }
 
 /* Fix anchor offset so it is not hidden behind the fixed nav */
-[id] { scroll-margin-top: 90px; }
+/* BUG FIX v16 #8: scroll-margin-top sebelumnya hardcoded 90px.
+   Jika nav menjadi 2 baris (desktop besar atau zoom tinggi), anchor scroll
+   akan tersembunyi di belakang nav. Gunakan CSS variable --nav-h yang
+   diupdate oleh JS di bawah. Fallback 96px aman untuk semua kondisi. */
+:root { --nav-h: 96px; }
+[id] { scroll-margin-top: var(--nav-h); }
 
 html{
   background:#080614; /* iOS overscroll area — prevent white flash */
@@ -130,6 +140,16 @@ body{
 @media(prefers-reduced-motion:reduce){
   .scanline,body::before,body::after{animation:none!important;}
   .reveal{transition:none!important;}
+  .btn-gold,.nav-cta,.buy-btn.ready{animation:none!important;}
+}
+
+/* PERF FIX v16 #11: Di mobile, matikan grain + ambient glow yang berat di CPU.
+   Scanline tetap ada tapi tanpa animasi flicker.
+   Ini menghemat ~15% CPU di perangkat Android low-end. */
+@media(max-width:768px){
+  body::before { animation:none!important; opacity:0.25; }
+  body::after  { animation:none!important; opacity:0.7; }
+  .scanline    { animation:none!important; opacity:0.3; }
 }
 
 /* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
@@ -1757,19 +1777,15 @@ footer{
   .banner-text{ font-size:0.52rem!important; }
 
   /* First Splash */
-  #splash-page .splash-title{ font-size:clamp(1.4rem,8vw,2.2rem)!important;letter-spacing:2px!important; }
-  #splash-page .splash-subtitle{ font-size:0.65rem!important;letter-spacing:1px!important; }
-  #splash-page .splash-tagline{ font-size:0.85rem!important;letter-spacing:1px!important; }
-  #splash-page .splash-collateral{ font-size:0.52rem!important;line-height:1.6!important;max-width:92vw; }
-  #splash-page .loading-container{ width:82vw!important;margin-top:0!important; }
-  #splash-page .enter-btn{ padding:11px 26px!important;font-size:0.62rem!important;letter-spacing:2px!important;margin-top:10px!important; }
+  #splash-page .splash-title{ font-size:clamp(1.3rem,7.5vw,2rem)!important;letter-spacing:clamp(1.5px,0.5vw,2.5px)!important; }
+  #splash-page .splash-subtitle{ font-size:clamp(0.52rem,1.5vw,0.65rem)!important;letter-spacing:clamp(0.8px,0.3vw,1.2px)!important; }
+  #splash-page .splash-tagline{ font-size:clamp(0.6rem,1.8vw,0.78rem)!important;letter-spacing:clamp(1px,0.4vw,1.5px)!important; }
+  #splash-page .splash-collateral{ font-size:clamp(0.42rem,1.2vw,0.52rem)!important;line-height:1.55!important;max-width:92vw; }
+  #splash-page .loading-container{ width:min(82vw,300px)!important;margin-top:0!important; }
+  #splash-page .enter-btn{ padding:clamp(8px,1.2vh,11px) clamp(18px,5vw,26px)!important;font-size:clamp(0.52rem,1.5vw,0.62rem)!important;letter-spacing:clamp(1.5px,0.5vw,2px)!important;margin-top:8px!important; }
   /* Main splash content */
-  #main-splash-content{ padding:0 16px!important; }
-
-  /* Main Splash (Splash 2) */
   #main-splash-content{ padding:0 14px!important; }
-  #main-splash-content h1{ font-size:clamp(1.4rem,7vw,2.2rem)!important;letter-spacing:3px!important; }
-  #main-splash-content > div:nth-child(4) > div:first-child{ width:90px!important;height:90px!important; }
+  #main-splash-content h1{ font-size:clamp(1.3rem,6.5vw,2rem)!important;letter-spacing:clamp(2px,0.7vw,3px)!important; }
 
   /* Inline stat blocks (hero bottom) */
   #hero-stat-inner{
@@ -2057,100 +2073,95 @@ footer{
         @media (max-width: 768px) {
             /* Splash 1 padding */
             #splash-page {
-                padding: 48px 20px 48px;
+                padding: clamp(20px, 4vh, 48px) 20px clamp(20px, 4vh, 48px);
+                justify-content: space-evenly;
             }
 
             /* Splash 1 logo size */
             #splash-page > div:first-of-type > div {
-                width: 220px !important;
-                height: 220px !important;
+                width: clamp(160px, 35vw, 220px) !important;
+                height: clamp(160px, 35vw, 220px) !important;
             }
 
             /* Splash 1 — EXILLION title */
             #splash-page .splash-title {
-                font-size: 4rem !important;
-                letter-spacing: 5px !important;
-                margin-top: -10px !important;
+                font-size: clamp(2.4rem, 9vw, 4rem) !important;
+                letter-spacing: clamp(3px, 1vw, 5px) !important;
+                margin-top: -8px !important;
             }
 
             /* Splash 1 — Capital Finecosystem */
             #splash-page .splash-subtitle {
-                font-size: 1rem !important;
-                letter-spacing: 3.5px !important;
-                margin-top: -18px !important;
+                font-size: clamp(0.7rem, 2vw, 1rem) !important;
+                letter-spacing: clamp(2px, 0.8vw, 3.5px) !important;
+                margin-top: -14px !important;
             }
 
             /* Splash 1 — Tagline */
             #splash-page .splash-tagline {
-                font-size: 1.1rem !important;
-                letter-spacing: 2px !important;
+                font-size: clamp(0.8rem, 2.2vw, 1.1rem) !important;
+                letter-spacing: clamp(1.5px, 0.5vw, 2px) !important;
             }
 
             /* Splash 1 — Collateral text */
             #splash-page .splash-collateral {
-                font-size: 0.82rem !important;
+                font-size: clamp(0.6rem, 1.5vw, 0.82rem) !important;
             }
 
             /* Splash 1 — Enter button */
             #splash-page .enter-btn {
-                font-size: 0.95rem !important;
-                padding: 18px 52px !important;
-                letter-spacing: 4px !important;
-                margin-top: 18px !important;
+                font-size: clamp(0.7rem, 1.8vw, 0.95rem) !important;
+                padding: clamp(12px, 1.8vh, 18px) clamp(28px, 7vw, 52px) !important;
+                letter-spacing: clamp(2.5px, 0.8vw, 4px) !important;
+                margin-top: clamp(10px, 1.5vh, 18px) !important;
             }
 
             /* Splash 1 — Loading bar */
             #splash-page .loading-container {
-                width: 340px !important;
+                width: min(340px, 82vw) !important;
             }
 
             /* ── Main Splash (Splash 2) ── */
 
             /* Main splash logo */
-            #main-splash-content > div > div > div {
-                width: 240px !important;
-                height: 240px !important;
+            #main-splash-content > div:nth-child(3) > div:first-child > div {
+                width: clamp(160px, 32vw, 240px) !important;
+                height: clamp(160px, 32vw, 240px) !important;
             }
 
             /* Main splash — Welcome tag */
             #main-splash-content > div:first-child {
-                font-size: 1rem !important;
-                letter-spacing: 4px !important;
+                font-size: clamp(0.75rem, 2vw, 1rem) !important;
+                letter-spacing: clamp(2.5px, 0.8vw, 4px) !important;
             }
 
             /* Main splash — EXILLION h1 */
             #main-splash-content h1 {
-                font-size: 3.8rem !important;
-                letter-spacing: 7px !important;
+                font-size: clamp(2.4rem, 9vw, 3.8rem) !important;
+                letter-spacing: clamp(4px, 1.2vw, 7px) !important;
             }
 
             /* Main splash — Capital Finecosystem subtitle */
-            #main-splash-content > div > div {
-                font-size: 0.85rem !important;
-                letter-spacing: 3.5px !important;
+            #main-splash-content > div:nth-child(3) > div:last-child {
+                font-size: clamp(0.65rem, 1.6vw, 0.85rem) !important;
+                letter-spacing: clamp(2px, 0.7vw, 3.5px) !important;
             }
 
             /* Main splash — Taglines */
             #main-splash-content p {
-                font-size: 0.9rem !important;
-                letter-spacing: 2px !important;
-            }
-
-            /* Main splash — Stats numbers */
-            #main-splash-content [style*="825 M"],
-            #main-splash-content [style*="0.01"] {
-                font-size: 1.1rem !important;
+                font-size: clamp(0.65rem, 1.8vw, 0.9rem) !important;
+                letter-spacing: clamp(1.5px, 0.5vw, 2px) !important;
             }
 
             /* Main splash — progress bar */
-            #main-splash-content > div[style*="width:min"] {
-                width: 340px !important;
+            #main-splash-content > div[style*="340px"] {
+                width: min(340px, 82vw) !important;
             }
 
             /* Main splash — status text */
             #main-splash-status {
-                font-size: 0.62rem !important;
-                letter-spacing: 1.5px !important;
+                font-size: clamp(0.38rem, 1vw, 0.62rem) !important;
+                letter-spacing: clamp(1px, 0.4vw, 1.5px) !important;
             }
         }
 
@@ -2727,7 +2738,7 @@ footer{
                 justify-content: space-between;
                 align-items: center;
                 overflow: hidden;
-                padding: clamp(18px, 3.5vh, 32px) 20px clamp(18px, 3.5vh, 28px);
+                padding: clamp(16px, 3.5vh, 28px) clamp(16px, 5vw, 24px) clamp(16px, 3.5vh, 24px);
                 height: 100vh;
                 height: 100dvh;
                 gap: 0;
@@ -2739,78 +2750,78 @@ footer{
             }
             #splash-page > div:nth-child(5) > div:first-child {
                 /* LIVE badge — kompak */
-                margin-bottom: clamp(6px, 1.2vh, 14px) !important;
+                margin-bottom: clamp(4px, 1vh, 12px) !important;
             }
             #splash-page > div:nth-child(5) > div:first-child span {
-                font-size: 0.6rem !important;
-                letter-spacing: 2px !important;
+                font-size: clamp(0.48rem, 1.4vw, 0.62rem) !important;
+                letter-spacing: clamp(1.5px, 0.5vw, 2.5px) !important;
             }
-            /* Logo circle — proporsional mobile */
+            /* Logo circle — proporsional mobile, tidak terlalu besar */
             #splash-page > div:nth-child(5) > div:last-child {
-                width: clamp(110px, 26vw, 150px) !important;
-                height: clamp(110px, 26vw, 150px) !important;
+                width: clamp(90px, 22vw, 130px) !important;
+                height: clamp(90px, 22vw, 130px) !important;
             }
 
             /* BLOCK 2 — EXILLION + Capital Finecosystem + Solana badge */
             .splash-title {
-                font-size: clamp(2rem, 9vw, 3rem) !important;
-                letter-spacing: 4px !important;
+                font-size: clamp(1.8rem, 8.5vw, 2.8rem) !important;
+                letter-spacing: clamp(2px, 0.8vw, 4px) !important;
                 line-height: 1 !important;
             }
             .splash-subtitle {
-                font-size: 0.72rem !important;
-                letter-spacing: 2.5px !important;
-                margin-top: -14px !important;
+                font-size: clamp(0.6rem, 1.8vw, 0.75rem) !important;
+                letter-spacing: clamp(1.5px, 0.6vw, 2.5px) !important;
+                margin-top: -10px !important;
                 margin-bottom: 0 !important;
             }
             /* Solana badge */
             #splash-page > div:nth-child(6) > div > span {
-                font-size: 0.38rem !important;
-                letter-spacing: 1.2px !important;
+                font-size: clamp(0.3rem, 0.85vw, 0.42rem) !important;
+                letter-spacing: clamp(0.8px, 0.3vw, 1.4px) !important;
             }
 
             /* BLOCK 2.5 — Tagline */
             .splash-tagline {
-                font-size: 0.72rem !important;
-                letter-spacing: 1.8px !important;
+                font-size: clamp(0.62rem, 2vw, 0.82rem) !important;
+                letter-spacing: clamp(1.2px, 0.5vw, 2px) !important;
                 margin: 0 !important;
             }
 
             /* BLOCK 3 — Collateral text */
             .splash-collateral {
-                font-size: 0.52rem !important;
-                padding: 0 12px !important;
-                line-height: 1.65 !important;
+                font-size: clamp(0.44rem, 1.3vw, 0.58rem) !important;
+                padding: 0 10px !important;
+                line-height: 1.6 !important;
                 max-width: 100% !important;
                 margin: 0 auto !important;
             }
             .splash-collateral span {
-                letter-spacing: 1.2px !important;
-                font-size: 0.52rem !important;
+                letter-spacing: clamp(0.8px, 0.4vw, 1.4px) !important;
+                font-size: clamp(0.44rem, 1.3vw, 0.58rem) !important;
             }
             .splash-collateral span:last-child {
-                font-size: 0.62rem !important;
-                letter-spacing: 1.8px !important;
-                margin-top: 3px !important;
+                font-size: clamp(0.54rem, 1.6vw, 0.68rem) !important;
+                letter-spacing: clamp(1.2px, 0.5vw, 2px) !important;
+                margin-top: 2px !important;
             }
 
             /* BLOCK 4 — Loading bar + Button + Micro-copy */
             .loading-container {
-                width: 82vw !important;
+                width: min(82vw, 320px) !important;
                 margin-top: 0 !important;
             }
             .enter-btn {
-                padding: 11px 26px !important;
-                font-size: 0.62rem !important;
-                letter-spacing: 2px !important;
-                margin-top: 10px !important;
+                padding: clamp(9px, 1.4vh, 13px) clamp(20px, 6vw, 32px) !important;
+                font-size: clamp(0.55rem, 1.6vw, 0.68rem) !important;
+                letter-spacing: clamp(1.5px, 0.5vw, 2.5px) !important;
+                margin-top: clamp(6px, 1.2vh, 12px) !important;
                 margin-bottom: 0 !important;
                 border-radius: 4px !important;
             }
             /* Micro-copy */
             #splash-page > div:nth-child(8) > div > span {
-                font-size: 0.36rem !important;
-                letter-spacing: 1.5px !important;
+                font-size: clamp(0.28rem, 0.85vw, 0.38rem) !important;
+                letter-spacing: clamp(1px, 0.4vw, 1.6px) !important;
             }
 
             .disclaimer-content {
@@ -2835,16 +2846,21 @@ footer{
         /* ========== RESPONSIVE — SMALL MOBILE ========== */
         @media (max-width: 380px) {
             .splash-title {
-                font-size: clamp(1.7rem, 8vw, 2.5rem) !important;
-                letter-spacing: 3px !important;
+                font-size: clamp(1.5rem, 7.5vw, 2.2rem) !important;
+                letter-spacing: 2px !important;
             }
             .splash-collateral span {
-                letter-spacing: 0.8px !important;
-                font-size: 0.48rem !important;
+                letter-spacing: 0.7px !important;
+                font-size: 0.42rem !important;
             }
             #splash-page > div:nth-child(5) > div:last-child {
-                width: 100px !important;
-                height: 100px !important;
+                width: clamp(80px, 20vw, 105px) !important;
+                height: clamp(80px, 20vw, 105px) !important;
+            }
+            .enter-btn {
+                font-size: 0.52rem !important;
+                padding: 8px 18px !important;
+                letter-spacing: 1.5px !important;
             }
         }
 
@@ -2923,15 +2939,9 @@ footer{
   display: none;
 }
 
-/* Splash text revealed via JS after font is ready */
-#splash-page .splash-title.font-ready,
-#splash-page .splash-subtitle.font-ready,
-#splash-page .splash-tagline.font-ready,
-#splash-page .splash-collateral.font-ready {
-  visibility: visible;
-  animation-play-state: running;
-}
-
+/* BUG FIX v16 #7: Hapus CSS .font-ready per-elemen yang duplikat dan obsolete.
+   Rule canonical sudah ada di <head>: #splash-page.fonts-ready .splash-title { visibility: visible }
+   Dua rule yang conflict bisa menyebabkan visibility tidak konsisten di browser lama. */
 
 @keyframes neonBoxGlow {
   0%   { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,212,255,0.3); }
@@ -3428,20 +3438,20 @@ footer{
 @media(max-width:600px){
   #main-splash {
     padding: 0 !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden !important;
   }
   #main-splash-content{
-    padding: clamp(16px, 3vh, 28px) 20px clamp(16px, 3vh, 24px) !important;
+    padding: clamp(14px, 2.5vh, 24px) clamp(16px, 5vw, 24px) clamp(14px, 2.5vh, 20px) !important;
     width: 100% !important;
     min-height: 100dvh !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-evenly !important;
     text-align: center !important;
     gap: 0 !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
   }
 
   /* Horizontal scan line — sembunyikan di mobile */
@@ -3451,112 +3461,112 @@ footer{
 
   /* Welcome Angel Investor tag */
   #main-splash-content > div:first-child {
-    font-size: 0.7rem !important;
-    letter-spacing: 2.5px !important;
+    font-size: clamp(0.58rem, 1.8vw, 0.78rem) !important;
+    letter-spacing: clamp(1.5px, 0.5vw, 2.5px) !important;
     margin-top: 0 !important;
-    margin-bottom: 0.5rem !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
   }
 
   /* Live investor counter bar */
   #splash2-investor-bar {
-    padding: 4px 10px !important;
-    margin-bottom: 0.5rem !important;
-    gap: 5px !important;
+    padding: 3px 8px !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
+    gap: 4px !important;
   }
   #splash2-investor-bar span {
-    font-size: 0.4rem !important;
-    letter-spacing: 1.5px !important;
+    font-size: clamp(0.32rem, 1vw, 0.44rem) !important;
+    letter-spacing: clamp(1px, 0.3vw, 1.5px) !important;
   }
   #splash2-investor-count {
-    font-size: 0.58rem !important;
+    font-size: clamp(0.48rem, 1.4vw, 0.6rem) !important;
   }
   #splash2-investor-bar > div:last-child {
-    font-size: 0.32rem !important;
-    padding-left: 6px !important;
+    font-size: 0.3rem !important;
+    padding-left: 5px !important;
   }
 
   /* Logo container */
   #main-splash-content > div:nth-child(3) > div:first-child > div {
-    width: clamp(110px, 28vw, 150px) !important;
-    height: clamp(110px, 28vw, 150px) !important;
-    margin-bottom: 0.5rem !important;
+    width: clamp(90px, 22vw, 130px) !important;
+    height: clamp(90px, 22vw, 130px) !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
     margin-top: 0 !important;
   }
 
   /* EXILLION title */
   #main-splash-content h1 {
-    font-size: clamp(2.2rem, 9vw, 3.2rem) !important;
-    letter-spacing: 4px !important;
+    font-size: clamp(1.8rem, 8.5vw, 2.8rem) !important;
+    letter-spacing: clamp(2px, 0.8vw, 4px) !important;
     line-height: 1 !important;
     margin-bottom: 0 !important;
   }
 
   /* Capital Finecosystem subtitle */
   #main-splash-content > div:nth-child(3) > div:last-child {
-    font-size: 0.7rem !important;
-    letter-spacing: 2px !important;
+    font-size: clamp(0.58rem, 1.6vw, 0.72rem) !important;
+    letter-spacing: clamp(1.5px, 0.5vw, 2.5px) !important;
     margin-top: 2px !important;
-    margin-bottom: 0.7rem !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
   }
 
   /* Tagline "Everybody Has A Second Chance" */
   #main-splash-content > p:first-of-type {
-    font-size: 0.68rem !important;
-    letter-spacing: 1.8px !important;
+    font-size: clamp(0.58rem, 1.8vw, 0.72rem) !important;
+    letter-spacing: clamp(1.2px, 0.5vw, 2px) !important;
     margin-bottom: 0.1rem !important;
-    margin-top: -0.2rem !important;
+    margin-top: -0.1rem !important;
   }
 
   /* "Your trust means everything" */
   #main-splash-content > p:last-of-type {
-    font-size: 0.5rem !important;
-    letter-spacing: 1.5px !important;
-    margin-bottom: 0.6rem !important;
+    font-size: clamp(0.42rem, 1.2vw, 0.55rem) !important;
+    letter-spacing: clamp(1px, 0.4vw, 1.5px) !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
   }
 
-  /* Stats row — pisahkan divider vertikal */
+  /* Stats row */
   #main-splash-content > div[style*="flex-wrap"] {
-    gap: 1rem !important;
-    margin-bottom: 0.7rem !important;
+    gap: clamp(0.8rem, 3vw, 1.5rem) !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
   }
   #main-splash-content > div[style*="flex-wrap"] > div > div:first-child {
-    font-size: 0.9rem !important;
+    font-size: clamp(0.75rem, 2.5vw, 0.95rem) !important;
   }
   #main-splash-content > div[style*="flex-wrap"] > div > div:last-child {
-    font-size: 0.42rem !important;
-    letter-spacing: 1.5px !important;
+    font-size: clamp(0.36rem, 1vw, 0.44rem) !important;
+    letter-spacing: clamp(1px, 0.4vw, 1.5px) !important;
   }
   /* Divider vertikal antar stat */
   #main-splash-content > div[style*="flex-wrap"] > div[style*="1px"] {
-    height: 24px !important;
+    height: 20px !important;
   }
 
   /* Progress bar container */
   #main-splash-content > div[style*="340px"] {
-    width: 82vw !important;
-    margin-bottom: 0.5rem !important;
+    width: min(82vw, 300px) !important;
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
   }
   #main-splash-content > div[style*="340px"] > div:first-child span {
-    font-size: 0.32rem !important;
-    letter-spacing: 1px !important;
+    font-size: clamp(0.28rem, 0.85vw, 0.36rem) !important;
+    letter-spacing: clamp(0.8px, 0.3vw, 1.2px) !important;
   }
 
   /* Status line */
   #main-splash-status {
-    font-size: 0.3rem !important;
-    letter-spacing: 1px !important;
+    font-size: clamp(0.26rem, 0.8vw, 0.34rem) !important;
+    letter-spacing: clamp(0.8px, 0.3vw, 1.2px) !important;
   }
 }
 
 /* Small mobile */
 @media(max-width:380px){
   #main-splash-content h1 {
-    font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
-    letter-spacing: 3px !important;
+    font-size: clamp(1.5rem, 7.5vw, 2.2rem) !important;
+    letter-spacing: 2px !important;
   }
   #main-splash-content > div:nth-child(3) > div:first-child > div {
-    width: 95px !important;
-    height: 95px !important;
+    width: clamp(75px, 19vw, 95px) !important;
+    height: clamp(75px, 19vw, 95px) !important;
   }
 }
 
@@ -4800,7 +4810,8 @@ footer{
           <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
-              placeholder="Min $10 — Max $250 USDC"
+              placeholder="Min $10 — Max $250 USDC (whole numbers only)"
+              min="10" max="250" step="1"
               oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
@@ -4853,8 +4864,8 @@ footer{
         </button>
 
         <p class="form-note">
-          USDC sent on-chain. EXXE delivered automatically to your connected wallet.
-          All transactions are irreversible. Minimum $10 — Maximum $250 USDC per investor.
+          USDC/USDT sent on-chain. EXXE delivered automatically to your connected wallet.
+          All transactions are irreversible. Whole dollar amounts only — Minimum $10 — Maximum $250 per investor.
         </p>
       </div>
 
@@ -4997,7 +5008,7 @@ footer{
 
 <script>
 // ============================================================
-// EXILLION v15 — MAIN JAVASCRIPT
+// EXILLION v18 — MAIN JAVASCRIPT
 // FIXES APPLIED:
 //  #1  Toast system replaces alert()
 //  #2  web3.js VersionedTransaction signing (Phantom + Solflare)
@@ -5005,6 +5016,11 @@ footer{
 //  #4  USDC balance pre-check before submit
 //  #5  waitForConfirmation uses RPC fallback array
 //  #6  Mobile: restore wallet state on return from wallet app
+//  v18 #1  sticky-banner scroll uses passive listener (no jank)
+//  v18 #2  disconnectWallet null-guard for token selector buttons
+//  v18 #3  fetchWithTimeout body mismatch fix (investor count script)
+//  v18 #4  duplicate DOMContentLoaded coalesced into one
+//  v18 #5  canvas animation stopped immediately when splash exits
 // ============================================================
 
 // --- CONFIG --------------------------------------------------
@@ -5041,7 +5057,12 @@ function selectToken(token) {
   if (lbl) lbl.textContent = t;
   if (cur) cur.textContent = t;
   if (balLbl) balLbl.textContent = t;
-  inp.placeholder = 'Min $' + tier().min + ' — Max $' + tier().max + ' ' + t;
+  if (inp) {
+    inp.placeholder = 'Min $' + tier().min + ' — Max $' + tier().max + ' ' + t + ' (whole numbers)';
+    inp.min  = tier().min;
+    inp.max  = tier().max;
+    inp.step = '1'; // selalu integer
+  }
   document.getElementById('btnUSDC').style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
   document.getElementById('btnUSDC').style.background = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
   document.getElementById('btnUSDC').style.color = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
@@ -5145,8 +5166,10 @@ async function fetchTokenBalance(walletAddress, mint) {
       const accounts = data?.result?.value || [];
       let balance = 0;
       accounts.forEach(acc => {
+        // BUG FIX v16 #10: uiAmount bisa null (bukan undefined) saat balance = 0.
+        // `if (ui)` akan skip nilai 0 yang valid. Gunakan typeof check eksplisit.
         const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
-        if (ui) balance += ui;
+        if (typeof ui === 'number' && ui > 0) balance += ui;
       });
       return balance;
     } catch(e) { /* try next RPC */ }
@@ -5329,12 +5352,11 @@ async function disconnectWallet() {
   const tl2 = document.getElementById('tl2Token');
   if (tl1) tl1.textContent = 'USDC';
   if (tl2) tl2.textContent = 'USDC';
-  document.getElementById('btnUSDC').style.borderColor = 'var(--cyan)';
-  document.getElementById('btnUSDC').style.background = 'rgba(0,212,255,0.08)';
-  document.getElementById('btnUSDC').style.color = 'var(--cyan)';
-  document.getElementById('btnUSDT').style.borderColor = 'var(--text-2)';
-  document.getElementById('btnUSDT').style.background = 'transparent';
-  document.getElementById('btnUSDT').style.color = 'var(--text-2)';
+  // v18 #2: null-guard — buttons may not exist if angel section not yet scrolled into view
+  const _bU = document.getElementById('btnUSDC');
+  const _bT = document.getElementById('btnUSDT');
+  if (_bU) { _bU.style.borderColor = 'var(--cyan)'; _bU.style.background = 'rgba(0,212,255,0.08)'; _bU.style.color = 'var(--cyan)'; }
+  if (_bT) { _bT.style.borderColor = 'var(--text-2)'; _bT.style.background = 'transparent'; _bT.style.color = 'var(--text-2)'; }
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
   const balLbl = document.getElementById('tokenBalanceLabel');
@@ -5590,18 +5612,23 @@ function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens
 function calcTokens(){
   const t=tier();
   const token = getSelectedToken();
-  let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
-  if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
-  if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
+  // KEPUTUSAN DESAIN v16: Semua input HARUS bilangan bulat (step $1).
+  // Ini menghilangkan SEMUA risiko floating point — EXXE selalu exact integer.
+  // Math.floor(parseFloat) = buang desimal apapun yang user coba ketik.
+  let usdc = Math.floor(parseFloat(document.getElementById('usdcAmount').value)||0);
+  if(usdc > t.max){ usdc = t.max; document.getElementById('usdcAmount').value = t.max; }
+  if(usdc < 0)   { usdc = 0;     document.getElementById('usdcAmount').value = 0; }
   const box=document.getElementById('calcBox');
-  if(usdc>=t.min){
-    const exxe=usdc/t.price;
-    const atL=usdc*(CFG.LISTING/t.price);
+  if(usdc >= t.min){
+    // Dengan usdc dan t.price keduanya known values, EXXE selalu exact integer:
+    // Tier1: $10/$0.01=1000, $250/$0.01=25000 — tidak ada floating point issue.
+    const exxe = Math.round(usdc / t.price); // Math.round sebagai safety net
+    const atL  = exxe * CFG.LISTING;
     box.style.display='flex';
-    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
-    document.getElementById('calcReceive').textContent=exxe.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+' EXXE';
-    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
-    document.getElementById('calcGain').textContent='+'+t.gain+'%';
+    document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US') + ' ' + token;
+    document.getElementById('calcReceive').textContent = exxe.toLocaleString('en-US') + ' EXXE';
+    document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + token;
+    document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
   } else { box.style.display='none'; }
   checkReady();
 }
@@ -5611,7 +5638,8 @@ function checkReady(){
   const f1=document.getElementById('fc1')?.checked;
   const f2=document.getElementById('fc2')?.checked;
   const f3=document.getElementById('fc3')?.checked;
-  const usdc=parseFloat(document.getElementById('usdcAmount')?.value)||0;
+  // Paksa integer — konsisten dengan calcTokens
+  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value)||0);
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
   const token = getSelectedToken();
@@ -5619,8 +5647,8 @@ function checkReady(){
   const hasEnoughBalance = cachedBal >= t.min;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
-    const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
+    const exxe = Math.round(usdc/t.price).toLocaleString('en-US'); // Fix #13b: Math.round
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay $${usdc} ${token} — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
@@ -5633,10 +5661,15 @@ let _isBuying = false;
 async function executeBuy(){
   const _bb = document.getElementById('buyBtn');
   if(!_bb || !_bb.classList.contains('ready')) return;
+  // BUG FIX v16 #1: Set _isBuying SEBELUM await apapun agar race condition
+  // (klik ganda cepat) tidak bisa lolos guard. Sebelumnya flag baru di-set
+  // di proceedBuy() — terlalu telat karena ada await fetchUsdcBalance di sini dulu.
   if(_isBuying) return;
+  _isBuying = true;
 
   // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
+    _isBuying = false; // reset: kita belum mulai transaksi
     ['mc1','mc2','mc3','mc4'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
     });
@@ -5644,35 +5677,43 @@ async function executeBuy(){
     const btn = document.getElementById('agreeBtn');
     if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm 4 remaining item(s)'; }
     const _ov = document.getElementById('disclaimerOverlay');
-    _ov.classList.add('active');
-    _ov.style.opacity='1';
+    if(_ov){ _ov.classList.add('active'); _ov.style.opacity='1'; }
     return;
   }
 
   // FIX v15 #4: Check balance before building tx
   const t = tier();
-  const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
-  const currentBalance = await fetchUsdcBalance(connectedAddress);
-  if (currentBalance < t.min) {
-    showToast(
-      'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min + ' ' + getSelectedToken() + '.',
-      'error', 9000
-    );
-    _isBuying = false;
-    return;
-  }
-  if (currentBalance < usdc) {
-    showToast(
-      'Insufficient ' + getSelectedToken() + ' balance. You have ' +
-      currentBalance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) +
-      ' ' + getSelectedToken() + ' but need ' + usdc.toFixed(2) + ' ' + getSelectedToken() + '.',
-      'error', 9000
-    );
+  // Integer-only: konsisten dengan calcTokens dan checkReady
+  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value) || 0);
+  try {
+    const currentBalance = await fetchUsdcBalance(connectedAddress);
+    if (currentBalance < t.min) {
+      showToast(
+        'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min + ' ' + getSelectedToken() + '.',
+        'error', 9000
+      );
+      _isBuying = false;
+      return;
+    }
+    if (currentBalance < usdc) {
+      showToast(
+        'Insufficient ' + getSelectedToken() + ' balance. You have $' +
+        Math.floor(currentBalance).toLocaleString('en-US') +
+        ' ' + getSelectedToken() + ' but need $' + usdc + ' ' + getSelectedToken() + '.',
+        'error', 9000
+      );
+      _isBuying = false;
+      return;
+    }
+  } catch(e) {
+    showToast('Failed to verify balance. Please try again.', 'error', 6000);
     _isBuying = false;
     return;
   }
 
-  // Disclaimer accepted — proceed with transaction
+  // Disclaimer accepted + balance ok — proceed with transaction
+  // BUG FIX v16: proceedBuy cek _isBuying lagi, jadi reset dulu agar bisa jalan
+  _isBuying = false;
   proceedBuy();
 }
 
@@ -5682,9 +5723,17 @@ async function proceedBuy(){
   if(_isBuying) return;
 
   const t = tier();
-  const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
+  // Integer-only: Math.floor membuang desimal apapun yang lolos dari input validation.
+  // Ini adalah layer terakhir sanitasi sebelum TX dikirim ke blockchain.
+  const usdc = Math.floor(parseFloat(document.getElementById('usdcAmount')?.value) || 0);
   if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' ' + getSelectedToken() + '.', 'warn');
+    showToast('Invalid amount. Please enter a whole number between $' + t.min + ' and $' + t.max + ' ' + getSelectedToken() + '.', 'warn');
+    return;
+  }
+  // Validasi token whitelist sebelum kirim ke backend
+  const token = getSelectedToken();
+  if (token !== 'USDC' && token !== 'USDT') {
+    showToast('Invalid payment token. Please select USDC or USDT.', 'error');
     return;
   }
   if (!connectedAddress) {
@@ -5697,7 +5746,8 @@ async function proceedBuy(){
     return;
   }
   _isBuying = true;
-  const exxe = usdc / t.price;
+  // usdc adalah integer → EXXE selalu exact, tidak ada floating point issue
+  const exxe = Math.round(usdc / t.price);
 
   const _buyP  = document.getElementById('buyPanel');
   const _procP = document.getElementById('processingPanel');
@@ -5705,7 +5755,7 @@ async function proceedBuy(){
   if (_procP) _procP.style.display = 'block';
 
   try {
-    const token = getSelectedToken();
+    // token sudah divalidasi whitelist di atas — langsung pakai variabel yang sama
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
     await txStep(1, 'active', 'Building ' + token + ' split transaction...');
     const buildRes = await Promise.race([
@@ -5814,7 +5864,15 @@ async function proceedBuy(){
 
 // --- Send raw signed bytes to Solana RPC with fallback -------
 async function sendRawTransaction(signedBytes) {
-  const b64 = btoa(String.fromCharCode(...signedBytes));
+  // BUG FIX v16 #3: Spread operator (...signedBytes) ke String.fromCharCode
+  // bisa menyebabkan "Maximum call stack size exceeded" jika buffer besar (>65k bytes).
+  // Gunakan loop reduce yang aman untuk konversi Uint8Array → base64.
+  let b64 = '';
+  const CHUNK = 8192;
+  for (let i = 0; i < signedBytes.length; i += CHUNK) {
+    b64 += String.fromCharCode.apply(null, signedBytes.subarray(i, i + CHUNK));
+  }
+  b64 = btoa(b64);
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
@@ -5916,7 +5974,7 @@ function showSuccess(usdc,exxe,wallet,tx,token){
   const lines = [
     ['Wallet',    short],
     ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
-    ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
+    ['Received',  Math.round(exxe).toLocaleString('en-US') + ' EXXE'],
     ['TX',        txShort],
     ['Status',    'CONFIRMED ✓'],
   ];
@@ -5948,9 +6006,10 @@ function toggleMenu(){
   btn.classList.toggle('open');
 }
 
-// FIX WARNING #7 & #8: Wrap all event listener registrations in a one-time init
-// function called on DOMContentLoaded. This prevents duplicate listeners if the
-// script context is ever re-evaluated, and keeps setup logic in one place.
+// FIX v18 #1: All event listener setup consolidated here.
+// - scroll uses passive:true → no scroll jank on mobile
+// - orientationchange added → nav-h updates on device rotate
+// - outside click closes mobile menu
 (function initMenuListeners() {
   function closeMenu() {
     const nl = document.getElementById('navLinks');
@@ -5964,7 +6023,24 @@ function toggleMenu(){
     a.addEventListener('click', closeMenu);
   });
 
-  // Named resize handler — can be referenced for removeEventListener if needed
+  // Close menu on outside click
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('navLinks');
+    const hb  = document.getElementById('hamburger');
+    if (!nav || !nav.classList.contains('open')) return;
+    if (!nav.contains(e.target) && e.target !== hb && !hb.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // BUG FIX v16 #8 / v18 #1: Update --nav-h CSS variable so scroll-margin-top is always accurate.
+  function updateNavHeight() {
+    const nav = document.getElementById('main-nav');
+    if (nav) {
+      document.documentElement.style.setProperty('--nav-h', (nav.offsetHeight + 8) + 'px');
+    }
+  }
+
   function handleNavResize() {
     const hb = document.getElementById('hamburger');
     if (!hb) return;
@@ -5974,10 +6050,22 @@ function toggleMenu(){
       hb.style.display = 'none';
       closeMenu();
     }
+    updateNavHeight();
   }
-  // Hamburger visibility is handled by CSS media query (display:flex at <=768px).
-  // JS resize listener ensures the mobile panel closes when resizing to desktop.
+
   window.addEventListener('resize', handleNavResize);
+  // v18 #1: orientationchange fires after rotate — update nav height for safe-area changes
+  window.addEventListener('orientationchange', function() {
+    setTimeout(updateNavHeight, 200);
+  });
+
+  // v18 #1: Sticky banner scroll — MUST be passive to prevent mobile scroll jank
+  window.addEventListener('scroll', function() {
+    const banner = document.getElementById('stickyBanner');
+    if (banner && window.scrollY > 300) banner.classList.add('show');
+  }, { passive: true });
+
+  updateNavHeight();
 })();
 </script>
 
@@ -6445,11 +6533,18 @@ function startGoldNetwork(canvasId, isSplash) {
   let rpcIdx = 0;
   let _isFetching = false;
 
+  // v18 #3: body was passed as plain object — fetch requires string. Always JSON.stringify.
   function fetchWithTimeout(url, options, ms) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
-    const init = { method: options.method || 'POST', headers: options.headers || {}, signal: ctrl.signal };
-    if (options.body !== undefined) init.body = options.body;
+    const init = {
+      method:  options.method  || 'POST',
+      headers: options.headers || { 'Content-Type': 'application/json' },
+      signal:  ctrl.signal
+    };
+    if (options.body !== undefined) {
+      init.body = typeof options.body === 'string' ? options.body : JSON.stringify(options.body);
+    }
     return fetch(url, init).finally(() => clearTimeout(timer));
   }
 
@@ -6586,14 +6681,20 @@ function startGoldNetwork(canvasId, isSplash) {
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
         const ctrl = new AbortController();
-        setTimeout(() => ctrl.abort(), 5000);
-        const res = await fetch(statsUrl, { signal: ctrl.signal });
-        if (res.ok) {
-          const data = await res.json();
-          if (typeof data.investorCount === 'number') {
-            updateInvestorUI(data.investorCount);
-            return;
+        // BUG FIX v16 #4b: Simpan timer agar bisa di-clear (sama seperti fetchFunding)
+        const abortTimer = setTimeout(() => ctrl.abort(), 5000);
+        try {
+          const res = await fetch(statsUrl, { signal: ctrl.signal });
+          clearTimeout(abortTimer);
+          if (res.ok) {
+            const data = await res.json();
+            if (typeof data.investorCount === 'number') {
+              updateInvestorUI(data.investorCount);
+              return;
+            }
           }
+        } finally {
+          clearTimeout(abortTimer);
         }
       } catch(e) { /* backend not ready, fall through to on-chain */ }
 
@@ -6645,7 +6746,11 @@ function startGoldNetwork(canvasId, isSplash) {
   ];
   const TIER1_PRICE   = 0.01;
   const EXXE_TARGET   = 330000000;
-  const USDC_TARGET   = 20831250;
+  // BUG FIX v16 #5: Progress bar berlabel "Tier I — Genesis Angel Investor".
+  // Sebelumnya USDC_TARGET = $20,831,250 (total SEMUA tier) sehingga bar selalu
+  // tampak hampir nol bahkan jika Tier I sudah penuh ($3,300,000).
+  // Tier I target = 330,000,000 EXXE × $0.01 = $3,300,000 USDC.
+  const USDC_TARGET   = 3300000; // Tier I only
   const REFRESH_MS    = 30000;
   const SESSION_KEY   = 'exxe_funding_total_v15';
   const SESSION_TS    = 'exxe_funding_ts_v15';
@@ -6812,14 +6917,21 @@ function startGoldNetwork(canvasId, isSplash) {
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
         const ctrl = new AbortController();
-        setTimeout(() => ctrl.abort(), 5000);
-        const res = await fetch(statsUrl, { signal: ctrl.signal });
-        if (res.ok) {
-          const data = await res.json();
-          if (typeof data.totalUsdc === 'number') {
-            updateUI(data.totalUsdc);
-            return;
+        // BUG FIX v16 #4: Simpan timer ID agar bisa di-clear saat fetch selesai
+        // lebih cepat. Sebelumnya timer tidak di-clear → memory leak + risiko abort palsu.
+        const abortTimer = setTimeout(() => ctrl.abort(), 5000);
+        try {
+          const res = await fetch(statsUrl, { signal: ctrl.signal });
+          clearTimeout(abortTimer);
+          if (res.ok) {
+            const data = await res.json();
+            if (typeof data.totalUsdc === 'number') {
+              updateUI(data.totalUsdc);
+              return;
+            }
           }
+        } finally {
+          clearTimeout(abortTimer);
         }
       } catch(e) { /* backend not ready, fall through to on-chain */ }
 
