@@ -4792,19 +4792,27 @@ footer{
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- FIX v15: USDC Balance display — shown after wallet connect -->
+      <!-- FIX v15: Stablecoin Balance display — shown after wallet connect -->
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
-        <span style="color:var(--text-2);">YOUR USDC BALANCE</span>
+        <span style="color:var(--text-2);" id="usdcBalanceLbl">YOUR USDC BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
+        <!-- Token Selector -->
         <div class="form-field">
-          <label class="field-label">Investment Amount (USDC)</label>
+          <label class="field-label">Select Token</label>
+          <div style="display:flex;gap:10px;margin-bottom:1rem;">
+            <button id="btnUSDC" class="buy-btn" style="flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;" onclick="selectToken('USDC')">USDC</button>
+            <button id="btnUSDT" class="buy-btn" style="flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);" onclick="selectToken('USDT')">USDT</button>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
-              placeholder="Min $10 — Max $250 USDC"
+              placeholder="Min $10 — Max $250"
               oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
-            <span class="field-currency">USDC</span>
+            <span class="field-currency" id="fieldCurrency">USDC</span>
           </div>
           <div class="amount-hints">
             <button class="hint" onclick="setAmount(10)">$10</button>
@@ -5182,12 +5190,10 @@ const CFG = {
     OPERATIONAL: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
     DEVELOPMENT: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
   },
-  // EXXE DISTRIBUTION WALLET - Where backend sends EXXE from
-  // Backend sends EXXE to investor wallet from this address
-  // This wallet needs SOL to pay for EXXE distribution transactions
   EXXE_DIST_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
+  SELECTED_TOKEN: 'USDC',
   TIERS: {
     1: { price:0.01,  min:10,  max:250,  gain:900  },
     2: { price:0.025, min:25,  max:500,  gain:300  },
@@ -5197,6 +5203,8 @@ const CFG = {
 };
 window.CFG = CFG;
 const tier = () => CFG.TIERS[CFG.TIER];
+const getSelectedToken = () => CFG.SELECTED_TOKEN;
+const getSelectedMint = () => CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MINT : CFG.USDC_MINT;
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
 const RPC_LIST = [
@@ -5228,44 +5236,80 @@ function showToast(message, type, duration) {
   toast.querySelector('.toast-close').addEventListener('click', () => clearTimeout(timer));
 }
 
-// ── FIX v15 #3: Fetch USDC balance for connected wallet ──────────
+// ── FIX v15 #3: Fetch stablecoin balance (USDC + USDT) ──────────
 async function fetchUsdcBalance(walletAddress) {
   const bar = document.getElementById('usdcBalanceBar');
   const amt = document.getElementById('usdcBalanceAmt');
+  const lbl = document.getElementById('usdcBalanceLbl');
   if (bar) bar.style.display = 'flex';
   if (amt) amt.textContent = 'Loading...';
+  if (lbl) lbl.textContent = getSelectedToken() + ' BALANCE';
 
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 8000);
-      const res   = await fetch(RPC_LIST[i], {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0', id: 1,
-          method: 'getTokenAccountsByOwner',
-          params: [
-            walletAddress,
-            { mint: CFG.USDC_MINT },
-            { encoding: 'jsonParsed' }
-          ]
+      
+      // Fetch both USDC and USDT in parallel
+      const [usdcRes, usdtRes] = await Promise.all([
+        fetch(RPC_LIST[i], {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0', id: 1,
+            method: 'getTokenAccountsByOwner',
+            params: [
+              walletAddress,
+              { mint: CFG.USDC_MINT },
+              { encoding: 'jsonParsed' }
+            ]
+          }),
+          signal: ctrl.signal
         }),
-        signal: ctrl.signal
-      });
+        fetch(RPC_LIST[i], {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            jsonrpc: '2.0', id: 2,
+            method: 'getTokenAccountsByOwner',
+            params: [
+              walletAddress,
+              { mint: CFG.USDT_MINT },
+              { encoding: 'jsonParsed' }
+            ]
+          }),
+          signal: ctrl.signal
+        })
+      ]);
       clearTimeout(timer);
-      if (!res.ok) continue;
-      const data    = await res.json();
-      const accounts = data?.result?.value || [];
-      let balance = 0;
-      accounts.forEach(acc => {
-        const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
-        if (ui) balance += ui;
-      });
+      
+      let usdcBal = 0, usdtBal = 0;
+      
+      if (usdcRes.ok) {
+        const usdcData = await usdcRes.json();
+        (usdcData?.result?.value || []).forEach(acc => {
+          const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
+          if (ui) usdcBal += ui;
+        });
+      }
+      
+      if (usdtRes.ok) {
+        const usdtData = await usdtRes.json();
+        (usdtData?.result?.value || []).forEach(acc => {
+          const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
+          if (ui) usdtBal += ui;
+        });
+      }
+      
+      const token = getSelectedToken();
+      const balance = token === 'USDT' ? usdtBal : usdcBal;
+      
       if (amt) {
+        const label = token + ' BALANCE';
+        if (lbl) lbl.textContent = label;
         amt.textContent = balance.toLocaleString('en-US', {
           minimumFractionDigits: 2, maximumFractionDigits: 2
-        }) + ' USDC';
+        }) + ' ' + token;
         amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
       }
       return balance;
@@ -5401,6 +5445,7 @@ async function disconnectWallet() {
   disclaimerAccepted = false;
   _isBuying = false;
   _pendingIdempotencyKey = null;
+  CFG.SELECTED_TOKEN = 'USDC';
 
   // Reset buttons
   const pBtn = document.getElementById('phantomBtn');
@@ -5687,11 +5732,49 @@ function goStep(n){
   }
 }
 
+// --- TOKEN SELECTOR ------------------------------------------
+function selectToken(token) {
+  const t = getSelectedToken();
+  const currentAmount = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
+  
+  CFG.SELECTED_TOKEN = token;
+  
+  // Update button styles
+  const btnUSDC = document.getElementById('btnUSDC');
+  const btnUSDT = document.getElementById('btnUSDT');
+  if (token === 'USDC') {
+    if (btnUSDC) btnUSDC.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;';
+    if (btnUSDT) btnUSDT.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);';
+  } else {
+    if (btnUSDT) btnUSDT.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;';
+    if (btnUSDC) btnUSDC.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);';
+  }
+  
+  // Update labels
+  const tokenLabel = document.getElementById('tokenLabel');
+  const fieldCurrency = document.getElementById('fieldCurrency');
+  const calcPay = document.getElementById('calcPay');
+  const calcListing = document.getElementById('calcListing');
+  if (tokenLabel) tokenLabel.textContent = token;
+  if (fieldCurrency) fieldCurrency.textContent = token;
+  if (calcPay && calcPay.textContent !== '—') {
+    const parts = calcPay.textContent.split(' ');
+    calcPay.textContent = currentAmount.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token;
+  }
+  if (calcListing) {
+    calcListing.textContent = '$' + (currentAmount * (CFG.LISTING / tier().price)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token;
+  }
+  
+  // Refresh balance display
+  if (connectedAddress) fetchUsdcBalance(connectedAddress);
+}
+
 // --- CALCULATOR ----------------------------------------------
 function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens(); }
 
 function calcTokens(){
   const t=tier();
+  const token = getSelectedToken();
   let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
   if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
   if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
@@ -5700,10 +5783,9 @@ function calcTokens(){
     const exxe=usdc/t.price;
     const atL=usdc*(CFG.LISTING/t.price);
     box.style.display='flex';
-    // BUG FIX: use consistent locale formatting with explicit fraction digits
-    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
+    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
     document.getElementById('calcReceive').textContent=exxe.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+' EXXE';
-    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
+    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
     document.getElementById('calcGain').textContent='+'+t.gain+'%';
   } else { box.style.display='none'; }
   checkReady();
@@ -5711,6 +5793,7 @@ function calcTokens(){
 
 function checkReady(){
   const t=tier();
+  const token = getSelectedToken();
   const f1=document.getElementById('fc1')?.checked;
   const f2=document.getElementById('fc2')?.checked;
   const f3=document.getElementById('fc3')?.checked;
@@ -5719,14 +5802,12 @@ function checkReady(){
   if(!btn) return;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress){
     btn.classList.add('ready');
-    // FIX QUALITY #7: Use explicit locale + fractionDigits for consistent formatting
-    // across all user locales. Plain .toLocaleString() gives "1,000.0000000001" in some locales.
     const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} USDC — Receive ${exxe} EXXE`;
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
-    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with USDC — Receive EXXE';
+    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with ' + token + ' — Receive EXXE';
   }
 }
 
@@ -5787,9 +5868,10 @@ async function proceedBuy(idempotencyKey){
   if(_isBuying) return;
 
   const t = tier();
+  const token = getSelectedToken();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' USDC.', 'warn');
+    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' ' + token + '.', 'warn');
     return;
   }
   if (!connectedAddress) {
@@ -5809,17 +5891,18 @@ async function proceedBuy(idempotencyKey){
   if (_buyP)  _buyP.style.display  = 'none';
   if (_procP) _procP.style.display = 'block';
 
-  // Build request body with idempotency key
+  // Build request body with idempotency key and token
   const requestBody = {
     investorWallet: connectedAddress,
     usdcAmount: usdc,
     tier: CFG.TIER,
+    token: token,
     idempotencyKey: idempotencyKey
   };
 
   try {
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
-    await txStep(1, 'active', 'Building USDC split transaction...');
+    await txStep(1, 'active', 'Building ' + token + ' split transaction...');
     const buildRes = await Promise.race([
       fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
@@ -5895,13 +5978,13 @@ async function proceedBuy(idempotencyKey){
     if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
       throw new Error('Wallet returned an invalid or empty signature. Please try again.');
     }
-    await txStep(2, 'done', 'USDC split signed ✓');
+    await txStep(2, 'done', token + ' split signed ✓');
 
     // ── Step 3: Wait for on-chain confirmation then verify ────────────
     await txStep(3, 'active', 'Verifying on Solana blockchain...');
     await waitForConfirmation(txSignature);
 
-    // FIX CRITICAL: Pass idempotency key to verify-payment endpoint
+    // FIX CRITICAL: Pass idempotency key and token to verify-payment endpoint
     const verifyRes = await Promise.race([
       fetch(CFG.API + '/verify-payment', {
         method:  'POST',
@@ -5911,6 +5994,7 @@ async function proceedBuy(idempotencyKey){
           investorWallet: connectedAddress, 
           usdcAmount: usdc, 
           tier: CFG.TIER,
+          token: token,
           idempotencyKey: idempotencyKey
         })
       }),
@@ -5927,7 +6011,7 @@ async function proceedBuy(idempotencyKey){
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
     await txStep(4, 'active', 'Sending ' + exxe.toLocaleString('en-US') + ' EXXE to your wallet...');
     
-    // FIX CRITICAL: Pass idempotency key to send-exxe endpoint
+    // FIX CRITICAL: Pass idempotency key and token to send-exxe endpoint
     const sendRes = await Promise.race([
       fetch(CFG.API + '/send-exxe', {
         method:  'POST',
@@ -5936,6 +6020,7 @@ async function proceedBuy(idempotencyKey){
           investorWallet: connectedAddress, 
           usdcAmount: usdc, 
           tier: CFG.TIER, 
+          token: token,
           txSignature,
           idempotencyKey: idempotencyKey
         })
@@ -6065,6 +6150,7 @@ function showSuccess(usdc,exxe,wallet,tx){
   // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
   const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
   const txFull  = tx || '';
+  const token = getSelectedToken();
 
   // Gunakan DOM construction untuk mencegah XSS
   // (data blockchain selalu dianggap untrusted input)
@@ -6072,7 +6158,7 @@ function showSuccess(usdc,exxe,wallet,tx){
   details.textContent = '';
   const lines = [
     ['Wallet',    short],
-    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
+    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token],
     ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
     ['TX',        txShort],
     ['Status',    'CONFIRMED ✓'],
