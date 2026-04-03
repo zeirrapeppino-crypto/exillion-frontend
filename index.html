@@ -5654,15 +5654,16 @@ async function executeBuy(){
     return;
   }
 
-  // FIX v15 #4: Check USDC balance before building tx
+  // FIX v15 #4: Check balance before building tx
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   const currentBalance = await fetchUsdcBalance(connectedAddress);
-  if (currentBalance === 0) {
+  if (!currentBalance || currentBalance <= 0) {
     showToast(
-      'Your ' + getSelectedToken() + ' balance is 0. Please deposit ' + getSelectedToken() + ' first.',
+      'Your ' + getSelectedToken() + ' balance is insufficient. Please deposit ' + getSelectedToken() + ' first.',
       'error', 9000
     );
+    _isBuying = false;
     return;
   }
   if (currentBalance < usdc) {
@@ -5672,6 +5673,7 @@ async function executeBuy(){
       ' ' + getSelectedToken() + ' but need ' + usdc.toFixed(2) + ' ' + getSelectedToken() + '.',
       'error', 9000
     );
+    _isBuying = false;
     return;
   }
 
