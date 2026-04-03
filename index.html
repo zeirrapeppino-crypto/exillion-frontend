@@ -5304,6 +5304,10 @@ async function fetchUsdcBalance(walletAddress) {
       const token = getSelectedToken();
       const balance = token === 'USDT' ? usdtBal : usdcBal;
       
+      // Cache both balances
+      _cachedBalance.USDC = usdcBal;
+      _cachedBalance.USDT = usdtBal;
+      
       if (amt) {
         const label = token + ' BALANCE';
         if (lbl) lbl.textContent = label;
@@ -5732,12 +5736,21 @@ function goStep(n){
   }
 }
 
+// --- BALANCE STORAGE ----------------------------------------
+let _cachedBalance = { USDC: 0, USDT: 0 };
+
 // --- TOKEN SELECTOR ------------------------------------------
 function selectToken(token) {
-  const t = getSelectedToken();
   const currentAmount = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   
   CFG.SELECTED_TOKEN = token;
+  
+  // Check if current amount exceeds new token's balance
+  const newBalance = _cachedBalance[token] || 0;
+  if (currentAmount > newBalance && newBalance > 0) {
+    document.getElementById('usdcAmount').value = '';
+    showToast('Insufficient ' + token + ' balance. Max: ' + newBalance.toFixed(2), 'warn', 6000);
+  }
   
   // Update button styles
   const btnUSDC = document.getElementById('btnUSDC');
@@ -5753,31 +5766,44 @@ function selectToken(token) {
   // Update labels
   const tokenLabel = document.getElementById('tokenLabel');
   const fieldCurrency = document.getElementById('fieldCurrency');
-  const calcPay = document.getElementById('calcPay');
-  const calcListing = document.getElementById('calcListing');
   if (tokenLabel) tokenLabel.textContent = token;
   if (fieldCurrency) fieldCurrency.textContent = token;
-  if (calcPay && calcPay.textContent !== '—') {
-    const parts = calcPay.textContent.split(' ');
-    calcPay.textContent = currentAmount.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token;
-  }
-  if (calcListing) {
-    calcListing.textContent = '$' + (currentAmount * (CFG.LISTING / tier().price)).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token;
-  }
   
   // Refresh balance display
   if (connectedAddress) fetchUsdcBalance(connectedAddress);
+  
+  // Recalculate with new token
+  calcTokens();
 }
 
 // --- CALCULATOR ----------------------------------------------
-function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens(); }
+function setAmount(v){ 
+  const token = getSelectedToken();
+  const balance = _cachedBalance[token] || 0;
+  
+  if (balance < v) {
+    showToast('Insufficient ' + token + ' balance. You have ' + balance.toFixed(2) + ' ' + token + ' but need ' + v + ' ' + token + '.', 'error', 8000);
+    document.getElementById('usdcAmount').value = '';
+    calcTokens();
+    return;
+  }
+  
+  document.getElementById('usdcAmount').value=v; 
+  calcTokens(); 
+}
 
 function calcTokens(){
   const t=tier();
   const token = getSelectedToken();
+  const balance = _cachedBalance[token] || 0;
   let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
   if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
   if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
+  if(usdc>balance && balance>0){ 
+    document.getElementById('usdcAmount').value=''; 
+    showToast('Insufficient ' + token + ' balance. Max: ' + balance.toFixed(2), 'warn', 6000);
+    usdc=0; 
+  }
   const box=document.getElementById('calcBox');
   if(usdc>=t.min){
     const exxe=usdc/t.price;
@@ -5794,13 +5820,17 @@ function calcTokens(){
 function checkReady(){
   const t=tier();
   const token = getSelectedToken();
+  const balance = _cachedBalance[token] || 0;
   const f1=document.getElementById('fc1')?.checked;
   const f2=document.getElementById('fc2')?.checked;
   const f3=document.getElementById('fc3')?.checked;
   const usdc=parseFloat(document.getElementById('usdcAmount')?.value)||0;
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
-  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress){
+  
+  const hasBalance = balance >= usdc;
+  
+  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasBalance){
     btn.classList.add('ready');
     const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
     const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
