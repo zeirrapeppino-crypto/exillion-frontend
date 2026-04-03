@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v19 (Bug Fix: decimal investment amounts allowed — min $10.00 up to $250.00 with 2dp; removed all Math.floor integer enforcement in calcTokens/checkReady/executeBuy/proceedBuy; input step=0.01; balance check and error messages use proper decimal formatting) -->
+<!-- Exillion Capital Finecosystem — v22 (Splash 1: tombol JOIN naik, micro-copy No KYC dipindah ke bawah tombol merapat) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -2087,14 +2087,16 @@ footer{
             #splash-page .splash-title {
                 font-size: clamp(2.4rem, 9vw, 4rem) !important;
                 letter-spacing: clamp(3px, 1vw, 5px) !important;
-                margin-top: -8px !important;
+                margin-top: 0 !important;
+                margin-bottom: 4px !important;
             }
 
             /* Splash 1 — Capital Finecosystem */
             #splash-page .splash-subtitle {
                 font-size: clamp(0.7rem, 2vw, 1rem) !important;
                 letter-spacing: clamp(2px, 0.8vw, 3.5px) !important;
-                margin-top: -14px !important;
+                margin-top: 4px !important;
+                margin-bottom: 0 !important;
             }
 
             /* Splash 1 — Tagline */
@@ -2242,7 +2244,7 @@ footer{
                        goldSweep 9s ease-in-out infinite,
                        titleGoldGlow 5s ease-in-out infinite;
             position: relative;
-            margin-top: -10px;
+            margin-top: 0;
             margin-bottom: 0;
         }
 
@@ -2271,7 +2273,7 @@ footer{
             color: #c9a84c;
             -webkit-text-fill-color: #c9a84c;
             animation: splashSlideUp 1.2s ease-out 0.28s both;
-            margin-top: -18px;
+            margin-top: 4px;
             margin-bottom: 0;
             letter-spacing: clamp(3px, 0.8vw, 5px);
             text-transform: uppercase;
@@ -2411,12 +2413,12 @@ footer{
             100% { width: 100%; }
         }
 
-        /* Enter Button — Gold Fill Premium */
+        /* Enter Button — Solana Gradient */
         .enter-btn {
             font-family:'Orbitron', monospace;
             margin-top: clamp(12px, 2vh, 22px);
             padding: clamp(14px, 1.8vh, 20px) clamp(36px, 8vw, 64px);
-            background: linear-gradient(135deg, #e8c97a 0%, #c17f13 40%, #f5d060 70%, #c17f13 100%);
+            background: linear-gradient(135deg, #9945FF 0%, #6a1fff 35%, #00d4ff 65%, #14F195 100%);
             background-size: 200% 200%;
             border: none;
             border-radius: 5px;
@@ -2431,11 +2433,17 @@ footer{
             overflow: hidden;
             transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease, background-position 0.4s ease;
             box-shadow:
-                0 0 28px rgba(232,201,122,0.55),
-                0 0 60px rgba(193,127,19,0.35),
+                0 0 22px rgba(153,69,255,0.65),
+                0 0 50px rgba(0,212,255,0.35),
+                0 0 80px rgba(20,241,149,0.2),
                 0 4px 20px rgba(0,0,0,0.4);
-            animation: goldBtnShift 4s ease-in-out infinite;
+            animation: solanaBtnShift 4s ease-in-out infinite;
             -webkit-tap-highlight-color: transparent;
+        }
+        @keyframes solanaBtnShift {
+            0%   { background-position: 0% 50%; box-shadow: 0 0 22px rgba(153,69,255,0.65), 0 0 50px rgba(0,212,255,0.3), 0 4px 20px rgba(0,0,0,0.4); }
+            50%  { background-position: 100% 50%; box-shadow: 0 0 32px rgba(0,212,255,0.8), 0 0 65px rgba(20,241,149,0.45), 0 4px 24px rgba(0,0,0,0.4); }
+            100% { background-position: 0% 50%; box-shadow: 0 0 22px rgba(153,69,255,0.65), 0 0 50px rgba(0,212,255,0.3), 0 4px 20px rgba(0,0,0,0.4); }
         }
         /* BUG FIX #9 & #10: goldBtnShift and goldSunlight keyframes removed here —
            they are already defined in the global <style> block above.
@@ -2487,10 +2495,11 @@ footer{
         .enter-btn:hover {
             transform: scale(1.05) translateY(-2px);
             box-shadow:
-                0 0 55px rgba(232,201,122,0.9),
-                0 0 100px rgba(193,127,19,0.6),
+                0 0 40px rgba(153,69,255,0.9),
+                0 0 80px rgba(0,212,255,0.6),
+                0 0 120px rgba(20,241,149,0.35),
                 0 8px 30px rgba(0,0,0,0.5);
-            letter-spacing: 6px;
+            letter-spacing: clamp(4px, 1vw, 7px);
         }
         .enter-btn:active {
             transform: scale(0.97);
@@ -2767,11 +2776,13 @@ footer{
                 font-size: clamp(1.8rem, 8.5vw, 2.8rem) !important;
                 letter-spacing: clamp(2px, 0.8vw, 4px) !important;
                 line-height: 1 !important;
+                margin-top: 0 !important;
+                margin-bottom: 4px !important;
             }
             .splash-subtitle {
                 font-size: clamp(0.6rem, 1.8vw, 0.75rem) !important;
                 letter-spacing: clamp(1.5px, 0.6vw, 2.5px) !important;
-                margin-top: -10px !important;
+                margin-top: 4px !important;
                 margin-bottom: 0 !important;
             }
             /* Solana badge */
@@ -2785,6 +2796,8 @@ footer{
                 font-size: clamp(0.62rem, 2vw, 0.82rem) !important;
                 letter-spacing: clamp(1.2px, 0.5vw, 2px) !important;
                 margin: 0 !important;
+                text-align: center !important;
+                width: 100% !important;
             }
 
             /* BLOCK 3 — Collateral text */
@@ -3093,9 +3106,9 @@ footer{
         <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
 
           <!-- LIVE · LIMITED ACCESS · OPEN — lebih besar, proporsional dengan logo -->
-          <div style="display:flex;align-items:center;gap:9px;margin-bottom:clamp(10px,2vh,20px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
-            <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 10px #14F195,0 0 22px rgba(20,241,149,0.6);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.58rem,1.1vw,0.75rem);font-weight:700;letter-spacing:3px;color:#14F195;text-transform:uppercase;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:clamp(8px,1.6vh,16px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
+            <div style="width:5px;height:5px;border-radius:50%;background:#00d4ff;box-shadow:0 0 6px #00d4ff,0 0 14px rgba(0,212,255,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.8vw,0.55rem);font-weight:400;letter-spacing:3.5px;color:#00d4ff;text-transform:uppercase;opacity:0.85;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; OPEN</span>
           </div>
 
           <!-- LOGO -->
@@ -3108,10 +3121,10 @@ footer{
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
             <!-- Capital Finecosystem — spacing diperketat -->
-            <p class="splash-subtitle" style="margin-top:-20px;margin-bottom:0px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
+            <p class="splash-subtitle" style="margin-top:4px;margin-bottom:0px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
             <!-- Solana Badge — rapat di bawah Capital Finecosystem -->
-            <div style="display:flex;align-items:center;margin-top:0px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:1.6px;font-weight:500;color:#00d4ff;white-space:nowrap;opacity:0.75;">
+            <div style="display:flex;align-items:center;margin-top:2px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:1.8px;font-weight:700;color:#00d4ff;white-space:nowrap;opacity:0.9;">
                     Solana Blockchain &nbsp;·&nbsp; SPL Token &nbsp;·&nbsp; Verified On-Chain
                 </span>
             </div>
@@ -3122,11 +3135,11 @@ footer{
             <p class="splash-tagline" style="margin:0;">innovative Financial Engineering</p>
         </div>
 
-        <!-- BLOCK 3: Collateral text — DIPERKECIL -->
-        <div class="splash-collateral" style="z-index:10;font-size:clamp(0.50rem,1.05vw,0.68rem);line-height:1.75;">
+        <!-- BLOCK 3: Collateral text -->
+        <div class="splash-collateral" style="z-index:10;font-size:clamp(0.50rem,1.05vw,0.68rem);line-height:1.75;margin-top:-6px;">
             <span style="letter-spacing:1.5px;">Your Time. Your Discipline.</span>
             <span style="letter-spacing:1.5px;">Your Responsibility. Your Effort.</span>
-            <span style="font-size:clamp(0.62rem,1.3vw,0.82rem);letter-spacing:2px;margin-top:5px;">These are your Asset</span>
+            <span style="font-size:clamp(0.62rem,1.3vw,0.82rem);letter-spacing:2px;margin-top:3px;">These are your Asset</span>
         </div>
 
         <!-- BLOCK 4: Loading bar + Enter button + Micro-copy -->
@@ -3136,14 +3149,14 @@ footer{
                     <div class="loading-progress"></div>
                 </div>
             </div>
-            <!-- Tombol DIPERKECIL: padding & font lebih kecil -->
+            <!-- Tombol naik — margin-top dikurangi -->
             <button class="enter-btn" id="enter-btn" onclick="enterSite()"
-              style="margin-top:clamp(8px,1.4vh,16px);padding:clamp(10px,1.3vh,15px) clamp(24px,5.5vw,48px);font-size:clamp(0.62rem,1.4vw,0.82rem);letter-spacing:clamp(2px,0.6vw,3.5px);">
+              style="margin-top:clamp(6px,1vh,10px);padding:clamp(10px,1.3vh,15px) clamp(24px,5.5vw,48px);font-size:clamp(0.62rem,1.4vw,0.82rem);letter-spacing:clamp(2px,0.6vw,3.5px);">
               <span class="enter-btn-text">JOIN ANGEL INVESTOR ROUND</span>
             </button>
-            <!-- Micro-copy -->
-            <div style="margin-top:8px;animation:splashSlideUp 1.2s ease-out 1.0s both;opacity:0.7;">
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:2px;color:rgba(200,220,255,0.65);text-transform:uppercase;">
+            <!-- Micro-copy — di bawah tombol, merapat -->
+            <div style="margin-top:clamp(4px,0.6vh,7px);animation:splashSlideUp 1.2s ease-out 1.0s both;">
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.32rem,0.68vw,0.44rem);letter-spacing:2.5px;color:#00d4ff;text-transform:uppercase;opacity:0.9;text-shadow:0 0 10px rgba(0,212,255,0.4);">
                     No KYC &nbsp;·&nbsp; Connect Wallet &nbsp;·&nbsp; Transparency On-Chain
                 </span>
             </div>
