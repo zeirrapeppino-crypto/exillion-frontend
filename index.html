@@ -5152,24 +5152,21 @@ footer{
  * WALLET ADDRESSES (Pastikan sesuai dengan backend)
  * ════════════════════════════════════════════════════════════════════════════
  * 
- * INVESTOR_TREASURY: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr'
- *   - Wallet pertama yang menerima USDC/USDT dari investor
- *   - Tidak di-split di sini
- * 
- * EXXE_DIST_WALLET: 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'
+ * EXXE_DIST_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr'
  *   - Backend mengirim EXXE dari wallet ini ke investor
  *   - Investor joined dihitung dari TX keluar wallet ini
+ *   - Butuh SOL untuk kirim EXXE ke investor
  * 
  * LIQUIDITY_WALLET: 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'
- *   - 75% dari investasi
+ *   - 75% dari investasi (langsung dari investor TX split)
  *   - Untuk liquidity pool
  * 
  * OPERATIONAL_WALLET: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF'
- *   - 15% dari investasi
+ *   - 15% dari investasi (langsung dari investor TX split)
  *   - Untuk operations
  * 
  * DEVELOPMENT_WALLET: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o'
- *   - 10% dari investasi
+ *   - 10% dari investasi (langsung dari investor TX split)
  *   - Untuk development
  * 
  * ============================================================================
@@ -5178,19 +5175,17 @@ footer{
 // --- CONFIG --------------------------------------------------
 const CFG = {
   EXXE_MINT: '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u',
-  USDC_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
-  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB', // ⚠️ CHANGE to USDT mint if different
+  USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   WALLETS: {
     LIQUIDITY:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
     OPERATIONAL: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
     DEVELOPMENT: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
   },
-  // INVESTOR TREASURY WALLET - Where investors send USDC/USDT
-  // This is where ALL investor funds arrive first
-  INVESTOR_TREASURY: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   // EXXE DISTRIBUTION WALLET - Where backend sends EXXE from
   // Backend sends EXXE to investor wallet from this address
-  EXXE_DIST_WALLET: 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
+  // This wallet needs SOL to pay for EXXE distribution transactions
+  EXXE_DIST_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
   TIERS: {
@@ -5200,6 +5195,7 @@ const CFG = {
   },
   LISTING: 0.10,
 };
+window.CFG = CFG;
 const tier = () => CFG.TIERS[CFG.TIER];
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
@@ -6572,18 +6568,18 @@ function startGoldNetwork(canvasId, isSplash) {
 
 <!-- ---------------------------------------------------
      LIVE INVESTOR COUNT — Solana RPC  v15 FINAL
-     
+      
      HOW IT WORKS:
      ============
      Monitor EXXE_DIST_WALLET untuk semua transaction KELUAR
      (transaction di mana wallet ini mengirim EXXE ke investor).
      
      Setiap unique wallet address yang MENERIMA EXXE = 1 investor
-     
+      
      Data Source:
      - Primary: Backend API /api/stats (lebih akurat)
      - Fallback: On-chain RPC call
-     
+      
      Wallet Addresses (from CFG):
      - EXXE_DIST_WALLET = Wallet yang mengirim EXXE ke investor
      --------------------------------------------------- -->
@@ -6591,10 +6587,8 @@ function startGoldNetwork(canvasId, isSplash) {
 (function() {
   'use strict';
 
-  const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  
-  // Wallet dari mana backend mengirim EXXE ke investor
-   const EXXE_DIST_WALLET = '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr';
+  const EXXE_MINT         = window.CFG.EXXE_MINT;
+  const EXXE_DIST_WALLET  = window.CFG.EXXE_DIST_WALLET;
 
   const REFRESH_MS    = 60000;
   const SESSION_KEY   = 'exxe_investor_count_v15';
@@ -6787,46 +6781,41 @@ function startGoldNetwork(canvasId, isSplash) {
 
 <!-- ---------------------------------------------------
      REAL-TIME FUNDING TRACKER — Solana RPC  v15 FINAL
-      
+       
      HOW IT WORKS:
      ============
      Monitor Treasury wallet untuk semua USDC/USDT yang masuk.
      Treasury adalah wallet PERTAMA yang terima investasi.
      Backend split dari Treasury ke 3 wallets setelahnya.
-      
+       
      Total Raised = Sum semua amount yang masuk ke Treasury
-      
+       
      Data Source:
      - Primary: Backend API /api/stats (lebih akurat)
      - Fallback: On-chain RPC call
-      
+       
      Wallet Address:
      - TREASURY = Wallet pertama yang terima investasi (before split)
      - LIQUIDITY   = 75% dari investasi (after split)
      - OPERATIONAL = 15% dari investasi (after split)
      - DEVELOPMENT = 10% dari investasi (after split)
-     --------------------------------------------------- -->
+      --------------------------------------------------- -->
 <script>
 (function() {
-  const USDC_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
-  const USDT_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  const USDC_MINT  = window.CFG.USDC_MINT;
+  const USDT_MINT  = window.CFG.USDT_MINT;
   
-  // Treasury wallet - receives ALL investor funds BEFORE split
-  // Backend should split from Treasury → 3 wallets after receiving
-  const TREASURY_WALLET = 'PLACEHOLDER_TREASURY_WALLET_ADDRESS';
-  
-  // 3 wallets yang menerima USDC/USDT setelah split (for reference)
   const WALLETS = {
-    LIQUIDITY:   { address: 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', pct: 0.75 },
-    OPERATIONAL: { address: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', pct: 0.15 },
-    DEVELOPMENT: { address: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', pct: 0.10 }
+    LIQUIDITY:   { address: window.CFG.WALLETS.LIQUIDITY,   pct: 0.75 },
+    OPERATIONAL: { address: window.CFG.WALLETS.OPERATIONAL, pct: 0.15 },
+    DEVELOPMENT: { address: window.CFG.WALLETS.DEVELOPMENT, pct: 0.10 }
   };
   
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
   ];
-  const TIER1_PRICE   = 0.01;
+  const TIER1_PRICE   = window.CFG.TIERS[1].price;
   const EXXE_TARGET   = 330000000;
   const USDC_TARGET   = 20831250;
   const REFRESH_MS    = 30000;
@@ -6947,12 +6936,32 @@ function startGoldNetwork(canvasId, isSplash) {
     }
     return totalInflow;
   }
-  
+   
   async function getTotalRaisedFromChain() {
-    // Monitor Treasury wallet for total raised
-    // Treasury receives ALL investor funds before split
-    const total = await getUsdcInflow(TREASURY_WALLET);
-    return Math.round(total * 100) / 100;
+    // Calculate total from all 3 split wallets
+    // Each wallet receives a percentage of the total investment
+    // We divide each by its percentage to get the actual total
+    
+    const walletList = Object.values(WALLETS);
+    const totals = [];
+    
+    for (const walletInfo of walletList) {
+      const inflow = await getUsdcInflow(walletInfo.address);
+      if (inflow > 0) {
+        const total = inflow / walletInfo.pct;
+        totals.push(total);
+      }
+    }
+    
+    if (totals.length === 0) return 0;
+    
+    // Take the median of all calculations for accuracy
+    totals.sort((a, b) => a - b);
+    const median = totals.length % 2 === 0
+      ? (totals[totals.length / 2 - 1] + totals[totals.length / 2]) / 2
+      : totals[Math.floor(totals.length / 2)];
+    
+    return Math.round(median * 100) / 100;
   }
 
   function fmt(n, decimals) {
