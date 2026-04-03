@@ -6,7 +6,7 @@
 <!-- FIX QUALITY #6: Content Security Policy — critical for a financial site handling
      crypto transactions. Prevents XSS attacks that could steal wallet addresses or
      manipulate transaction amounts. Adjust connect-src if backend URL changes. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
 <!-- font-display:block prevents FOUC: browser BLOCKS text render until Orbitron is ready -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <!-- FIX v15: @solana/web3.js — required for proper VersionedTransaction signing with Phantom & Solflare.
      The UMD bundle exposes window.solanaWeb3 globally. Loaded in <head> with defer so it
      is ready before any wallet interaction button is clicked. -->
@@ -63,63 +63,30 @@ body {
 
   
 /* -------------------------------------------
-   DESIGN SYSTEM — EXILLION PROFESSIONAL FINANCIAL
+   DESIGN SYSTEM — EXILLION NAVY BLUE FUTURISTIC
    ------------------------------------------- */
 :root{
-  /* Core Colors */
   --void:        #010b18;
   --deep:        #021525;
   --surface:     #031d30;
   --card:        #04243d;
   --card-hover:  #052e4f;
-  
-  /* Gold - Premium Financial */
   --gold:        #cc7d07;
   --gold-light:  #e8c97a;
   --gold-dim:    #7a5e2a;
   --gold-glow:   rgba(204,125,7,0.15);
   --gold-subtle: rgba(204,125,7,0.06);
-  
-  /* Accent */
   --cyan:        #00d4ff;
   --cyan-dim:    rgba(0,212,255,0.12);
-  
-  /* Text - Better Contrast */
-  --text-1:      #f0f6ff;
-  --text-2:      #8ab4cc;
-  --text-3:      #4a7a9c;
-  
-  /* Borders */
-  --border:      rgba(0,212,255,0.15);
-  --border-dim:  rgba(0,212,255,0.06);
-  --border-gold: rgba(204,125,7,0.25);
-  
-  /* Status */
+  --text-1:      #e8f4ff;
+  --text-2:      #6a8fa8;
+  --text-3:      #2a4a63;
+  --border:      rgba(0,212,255,0.18);
+  --border-dim:  rgba(0,212,255,0.07);
   --green:       #00e5a0;
-  --green-dim:   rgba(0,229,160,0.15);
   --red:         #ff3366;
-  --red-dim:     rgba(255,51,102,0.15);
-  
-  /* Solana */
   --solana-purple:#9945FF;
   --solana-green: #14F195;
-  
-  /* Spacing Scale */
-  --space-xs:  0.5rem;
-  --space-sm:  1rem;
-  --space-md:  1.5rem;
-  --space-lg:  2rem;
-  --space-xl:  3rem;
-  --space-2xl: 5rem;
-  
-  /* Section Padding */
-  --section-py: clamp(3rem, 8vw, 6rem);
-  --section-px: clamp(1rem, 5vw, 8%);
-  
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -139,7 +106,6 @@ html{scroll-behavior:smooth;}
 
 html{
   background:#080614; /* iOS overscroll area — prevent white flash */
-  overflow-x:hidden;
 }
 
 body{
@@ -147,35 +113,11 @@ body{
   color:var(--text-1);
   font-family:'Orbitron',monospace;
   overflow-x:hidden;
-  overflow-y:auto; /* FIX: Use auto instead of scroll for better mobile */
+  overflow-y:scroll; /* always reserve scrollbar space so nav does not shift */
   font-size:16px;
   line-height:1.7;
   -webkit-tap-highlight-color:transparent;
   -webkit-text-size-adjust:100%;
-  min-height:100vh;
-  min-height:100dvh; /* iOS dynamic viewport */
-}
-
-/* Mobile-specific fixes */
-@media screen and (max-width:768px){
-  body{
-    overflow-y:auto !important;
-    -webkit-overflow-scrolling:touch;
-  }
-  html{
-    overflow-x:hidden;
-    overflow-y:auto;
-  }
-  /* Prevent horizontal scroll on all mobile */
-  *{
-    max-width:100vw;
-    box-sizing:border-box;
-  }
-  section{
-    overflow-x:hidden;
-    padding: var(--section-py) var(--section-px);
-    position: relative;
-  }
 }
 
 /* SCAN LINE EFFECT — v6: single animation, GPU-composited */
@@ -184,7 +126,6 @@ body{
   background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,0.018) 3px,rgba(0,212,255,0.018) 4px);
   pointer-events:none;z-index:0;
   will-change:opacity;
-  transform:translateZ(0);
   animation:scanFlicker 11s ease-in-out infinite;
   opacity:0.5;
 }
@@ -194,6 +135,7 @@ body{
 @media(prefers-reduced-motion:reduce){
   .scanline,body::before,body::after{animation:none!important;}
   .reveal{transition:none!important;}
+  .btn-gold,.btn-gold::before,.nav-cta::before{animation:none!important;}
 }
 
 /* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
@@ -204,7 +146,6 @@ body::before{
   background-size:256px 256px;
   pointer-events:none;z-index:0;
   will-change:opacity;
-  transform:translateZ(0);
   animation:grainBreath 8s ease-in-out infinite alternate;
   opacity:0.45;
 }
@@ -224,7 +165,6 @@ body::after{
     radial-gradient(ellipse 30% 30% at 50% 50%, rgba(153,69,255,0.04) 0%, transparent 60%);
   pointer-events:none;z-index:0;
   will-change:opacity;
-  transform:translateZ(0);
   animation:ambientBreathe 14s ease-in-out infinite alternate;
 }
 @keyframes ambientBreathe{
@@ -234,94 +174,78 @@ body::after{
 
 
 
-/* --- NAVIGATION — PROFESSIONAL FINANCIAL */
+/* --- NAVIGATION --------------------------- */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
+  height:auto;
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px var(--section-px);
-  background:rgba(1,11,24,0.95);
-  backdrop-filter:blur(20px) saturate(1.2);
-  border-bottom:1px solid var(--border-dim);
-  box-shadow:0 2px 20px rgba(0,0,20,0.5);
+  padding:16px 5%;
+  padding-left:max(5%, env(safe-area-inset-left));
+  padding-right:max(5%, env(safe-area-inset-right));
+  background:rgba(1,11,24,0.94);
+  backdrop-filter:blur(28px) saturate(1.2);
+  border-bottom:1px solid rgba(0,212,255,0.22);
+  box-shadow:0 1px 0 rgba(0,212,255,0.06), 0 4px 32px rgba(0,0,20,0.4);
   will-change:transform;
   transform:translateZ(0);
 }
 
 .nav-brand{
-  display:flex;align-items:center;gap:10px;
+  display:flex;align-items:center;gap:8px;
   text-decoration:none;
 }
 
+
 .nav-brand-text{
   display:flex;flex-direction:column;
-  gap:2px;
+  gap:0;
 }
 
 .nav-name{
   font-family:'Orbitron',monospace;
-  font-size:1rem;
-  font-weight:700;
-  letter-spacing:2px;
+  font-size:0.95rem;
+  font-weight:600;
+  letter-spacing:1px;
   color:var(--gold);
   line-height:1;
 }
 
 .nav-sub{
   font-family:'Orbitron',monospace;
-  font-size:0.5rem;
-  font-weight:500;
-  letter-spacing:2px;
-  color:var(--text-2);
+  font-size:0.55rem;
+  font-weight:600;
+  letter-spacing:1.5px;
+  color:var(--gold);
+  margin-top:1px;
 }
 
 .nav-links{
-  display:flex;align-items:center;gap:2rem;
+  display:flex;align-items:center;gap:2.5rem;
 }
 
 .nav-links a{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.95rem;
-  font-weight:500;
-  letter-spacing:1px;
+  font-family:'Orbitron',monospace;
+  font-size:0.75rem;
+  letter-spacing:2.5px;
   text-transform:uppercase;
   color:var(--text-2);
   text-decoration:none;
   transition:color 0.2s;
-  padding:8px 0;
-  position:relative;
 }
-
-.nav-links a::after{
-  content:'';
-  position:absolute;
-  bottom:0;
-  left:0;
-  width:0;
-  height:2px;
-  background:var(--gold);
-  transition:width 0.3s ease;
-}
-
-.nav-links a:hover{
-  color:var(--gold-light);
-}
-
-.nav-links a:hover::after{
-  width:100%;
-}
+.nav-links a:hover{color:var(--cyan);}
 
 .nav-cta{
   font-family:'Orbitron',monospace;
-  font-size:0.6rem;
+  font-size:0.75rem;
   font-weight:700;
-  letter-spacing:2px;
+  letter-spacing:2.5px;
   text-transform:uppercase;
   color:#ffffff!important;
-  background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-light) 100%)!important;
+  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%)!important;
   background-size:200% 200%!important;
-  padding:12px 28px;
+  padding:10px 24px;
   border:none!important;
-  border-radius:var(--radius-md);
+  border-radius:2px;
   transition:all 0.3s ease!important;
   text-decoration:none!important;
   position:relative;
@@ -329,8 +253,8 @@ nav{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  box-shadow:0 4px 20px rgba(204,125,7,0.4), 0 2px 10px rgba(0,0,0,0.3);
-}
+  box-shadow:0 0 18px rgba(232,201,122,0.45),0 0 40px rgba(193,127,19,0.25);
+  animation:goldBtnShift 4s ease-in-out infinite;
   -webkit-text-fill-color:#ffffff!important;
   text-shadow:0 1px 3px rgba(0,0,0,0.35);
 }
@@ -411,95 +335,109 @@ nav{
 }
 .btn-outline:hover{border-color:var(--cyan);background:rgba(0,212,255,0.06);box-shadow:0 0 20px rgba(0,212,255,0.15);}
 
-/* --- HERO — PROFESSIONAL FINANCIAL */
+/* --- HERO --------------------------------- */
 #hero{
   min-height:100vh;
-  min-height:100dvh;
   display:flex;align-items:center;justify-content:center;
   flex-direction:column;
   text-align:center;
-  padding:100px var(--section-px) var(--section-py);
-  background: 
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(204,125,7,0.08) 0%, transparent 50%),
-    linear-gradient(180deg, var(--void) 0%, var(--deep) 100%);
+  padding:100px 5% 80px;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,66,255,0.12) 0%, transparent 70%);
 }
 
 .hero-eyebrow{
-  font-family:'Rajdhani',sans-serif;
-  font-size:1rem;
-  font-weight:500;
-  letter-spacing:4px;
-  color:var(--gold);
-  text-transform:uppercase;
-  margin-bottom:1.5rem;
-  display:flex;align-items:center;justify-content:center;gap:12px;
+  font-family:'Orbitron',monospace;
+  font-size:0.88rem;
+  letter-spacing:2px;
+  color:var(--cyan);
+  opacity:0.7;
+  text-transform:none;
+  margin-bottom:2rem;
+  display:flex;align-items:center;gap:8px;
   animation:riseUp 0.8s ease both;
 }
 .hero-eyebrow::before,.hero-eyebrow::after{
-  content:'';
-  width:40px;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold));
+  content:none;
 }
-.hero-eyebrow::after{
-  background:linear-gradient(90deg,var(--gold),transparent);
-}
+
 
 .hero-title{
   font-family:'Orbitron',monospace;
-  font-size:clamp(2.5rem, 6vw, 5rem);
+  font-size:clamp(2.8rem, 7vw, 6rem);
   font-weight:700;
-  letter-spacing:8px;
-  line-height:1.1;
+  letter-spacing:11px;
+  line-height:1;
   background:linear-gradient(
-    135deg,
-    #c17f13 0%,
-    #e8c97a 25%,
-    #ffd700 50%,
-    #e8c97a 75%,
-    #c17f13 100%
+    90deg,
+    #4a2800 0%,
+    #7a4a10 8%,
+    #c17f13 18%,
+    #e8c97a 28%,
+    #ffd700 38%,
+    #ffe55c 45%,
+    #fff1a0 50%,
+    #ffe55c 55%,
+    #ffd700 62%,
+    #e8c97a 72%,
+    #c17f13 82%,
+    #7a4a10 92%,
+    #4a2800 100%
   );
-  background-size:200% 200%;
+  background-size:250% 100%;
   -webkit-background-clip:text;
   background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:riseUp 0.8s 0.2s ease both;
-  text-shadow:0 0 60px rgba(204,125,7,0.3);
+  animation:riseUp 0.8s 0.2s ease both, goldSweepMain 9s ease-in-out infinite, titleGoldGlowMain 6s ease-in-out infinite alternate;
 }
 
 .hero-ticker{
   font-family:'Orbitron',monospace;
-  font-size:clamp(1.2rem, 2vw, 1.5rem);
-  font-weight:400;
-  letter-spacing:4px;
-  color:var(--gold-light);
-  margin-top:1rem;
-  animation:riseUp 0.8s 0.3s ease both;
+  font-size:1.3rem;
+  letter-spacing:3px;
+  background:linear-gradient(
+    90deg,
+    #0d1b4b 0%,
+    #c17f13 18%,
+    #e8c97a 32%,
+    #ffd700 45%,
+    #fff5cc 50%,
+    #ffd700 55%,
+    #e8c97a 68%,
+    #c17f13 82%,
+    #7a4a10 100%
+  );
+  background-size:250% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-top:0rem;
+  animation:riseUp 0.8s 0.3s ease both, goldSweepMain 11s ease-in-out infinite;
 }
+.hero-ticker span{}
 
 .hero-tagline{
-  font-family:'Rajdhani',sans-serif;
-  font-size:clamp(1.1rem,2vw,1.4rem);
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1rem,2.2vw,1.45rem);
   font-weight:400;
-  letter-spacing:2px;
-  color:var(--text-2);
-  margin-top:1.5rem;
-  max-width:600px;
-  line-height:1.6;
+  letter-spacing:3.9px;
+  color:var(--cyan);
+  margin-top:1rem;
+  opacity:0.8;
   animation:riseUp 0.8s 0.4s ease both;
 }
 
 .hero-desc{
-  font-family:'Rajdhani',sans-serif;
-  max-width:800px;
-  font-size:1.2rem;
+  font-family:'Orbitron',monospace;
+  max-width:1100px;
+  font-size:1.1rem;
   font-weight:400;
-  color:var(--text-2);
-  line-height:1.8;
-  margin:2rem auto;
+  color:var(--text-1);
+  line-height:1.7;
+  margin:1.5rem auto 1.5rem;
+  font-style:normal;
   text-align:center;
   animation:riseUp 0.8s 0.5s ease both;
-  padding:0;
+  padding:0 2rem;
 }
 
 .hero-actions{
@@ -510,85 +448,59 @@ nav{
 /* STATS */
 .hero-stats{
   display:flex;justify-content:center;flex-wrap:wrap;
-  margin-top:3rem;width:100%;
-  background:var(--surface);
-  border-radius:var(--radius-lg);
-  border:1px solid var(--border-dim);
-  overflow:hidden;
+  border-top:1px solid var(--border-dim);
+  border-bottom:1px solid var(--border-dim);
+  margin-top:4rem;width:100%;
   animation:riseUp 0.8s 0.7s ease both;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .stat{
-  padding:24px 32px;
+  padding:22px 36px;
+  border-right:1px solid var(--border-dim);
   text-align:center;
   flex:1;
-  min-width:140px;
-  background:transparent;
-  position:relative;
+  min-width:120px;
+  white-space:nowrap;
 }
-.stat:not(:last-child)::after{
-  content:'';
-  position:absolute;
-  right:0;
-  top:20%;
-  height:60%;
-  width:1px;
-  background:var(--border-dim);
-}
+.stat:last-child{border-right:none;}
 .stat-val{
   font-family:'Orbitron',monospace;
-  font-size:1.6rem;
-  font-weight:700;
-  color:var(--gold);
+  font-size:1.4rem;font-weight:600;
+  color:var(--cyan);
   line-height:1;
-  margin-bottom:8px;
+  text-shadow:0 0 16px rgba(0,212,255,0.4);
 }
 .stat-lbl{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.85rem;
-  font-weight:500;
-  letter-spacing:1px;
-  color:var(--text-2);
-  text-transform:uppercase;
+  font-family:'Orbitron',monospace;
+  font-size:0.5rem;letter-spacing:2px;
+  color:var(--text-1);
+  margin-top:6px;text-transform:uppercase;
 }
 
-/* --- SECTION HEADER — PROFESSIONAL FINANCIAL ----------------------- */
-.section-header{
-  text-align:center;
-  margin-bottom: var(--space-xl);
-}
+/* --- SECTION HEADER ----------------------- */
+.section-header{text-align:center;margin-bottom:5rem;}
 .section-tag{
   font-family:'Orbitron',monospace;
-  font-size:0.7rem;
-  letter-spacing:3px;
-  color:var(--gold);
-  opacity:0.9;
-  display:block;
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
+  font-size:0.8rem;letter-spacing:4px;
+  color:var(--cyan);
+  opacity:0.7;
+  display:block;margin-bottom:1rem;
 }
 .section-title{
   font-family:'Orbitron',monospace;
-  font-size:clamp(1.5rem,3vw,2.5rem);
-  font-weight:600;
-  letter-spacing:3px;
+  font-size:clamp(1.6rem,3vw,2.8rem);
+  font-weight:600;letter-spacing:4px;
   color:var(--text-1);
-  line-height:1.2;
-}
-.section-desc{
-  font-family:'Rajdhani',sans-serif;
-  font-size:clamp(1rem,1.5vw,1.15rem);
-  color:var(--text-2);
-  max-width:700px;
-  margin:1rem auto 0;
-  line-height:1.7;
 }
 .section-rule{
-  width:60px;
-  height:3px;
-  background:linear-gradient(90deg,var(--gold),var(--gold-light));
-  margin:1.5rem auto 0;
-  border-radius:2px;
-  box-shadow:0 0 12px rgba(204,125,7,0.4);
+  width:48px;
+  height:2px;
+  background:linear-gradient(90deg,var(--cyan),#0066ff);
+  margin:1.2rem auto 0;
+  opacity:1;
+  box-shadow:0 0 10px rgba(0,212,255,0.4), 0 0 20px rgba(0,212,255,0.2);
+  animation:ruleGlow 3s ease-in-out infinite alternate;
 }
 @keyframes ruleGlow{
   from{box-shadow:0 0 8px rgba(0,212,255,0.35), 0 0 16px rgba(0,212,255,0.15);}
@@ -598,6 +510,16 @@ nav{
   0%   { background-position: 150% 0%; }
   50%  { background-position: -150% 0%; }
   100% { background-position: 150% 0%; }
+}
+@keyframes goldSunlight{
+  0%   { left:-80%; opacity:0; }
+  15%  { opacity:1; }
+  50%  { left:120%; opacity:0.8; }
+  100% { left:120%; opacity:0; }
+}
+@keyframes goldBtnShift{
+  0%,100% { background-position:0% 50%; }
+  50%     { background-position:100% 50%; }
 }
 @keyframes titleGoldGlowMain{
   0%  {filter:drop-shadow(0 0 6px rgba(255,215,0,0.5)) drop-shadow(0 0 14px rgba(204,125,7,0.3));}
@@ -791,40 +713,20 @@ blockquote.centerquote{
   font-size:0.7rem;color:var(--green);
 }
 
-/* --- ANGEL ROUND — PROFESSIONAL FINANCIAL */
-#angel{
-  padding: var(--section-py) var(--section-px);
-  background: linear-gradient(180deg, var(--deep) 0%, var(--void) 100%);
-}
+/* --- ANGEL ROUND -------------------------- */
+#angel{padding:110px 5%;}
 
-.angel-wrapper{max-width:1000px;margin:0 auto;}
+.angel-wrapper{max-width:900px;margin:0 auto;}
 
 .tier-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1.5rem;
-  margin-bottom: var(--space-lg);
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:1.2rem;margin-bottom:0.8rem;
 }
 
 .tier-card{
-  padding: var(--space-lg);
-  background: linear-gradient(145deg, var(--card) 0%, var(--surface) 100%);
+  padding:1.8rem 1.5rem;
+  background:var(--card);
   border:1px solid var(--border-dim);
-  border-radius: var(--radius-lg);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.tier-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-}
   text-align:center;
   position:relative;
   transition:all 0.3s;
@@ -1054,103 +956,72 @@ blockquote.centerquote{
   box-shadow:0 0 10px rgba(255,51,102,0.15);
 }
 
-/* BUY PANEL — PROFESSIONAL FINANCIAL */
+/* BUY PANEL */
 #buyPanel{display:none;}
 
-.form-field{margin-bottom:1.5rem;}
+.form-field{margin-bottom:1.2rem;}
 .field-label{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.9rem;
-  font-weight:500;
-  letter-spacing:1px;
-  color:var(--gold);
-  display:block;
-  margin-bottom:8px;
-  text-transform:uppercase;
+  font-family:'Orbitron',monospace;
+  font-size:0.55rem;letter-spacing:3px;
+  color:var(--cyan);
+  opacity:0.7;
+  display:block;margin-bottom:6px;
 }
 .amount-wrap{position:relative;}
 .field-input{
   width:100%;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius-md);
+  background:rgba(5,6,8,0.8);
+  border:1px solid var(--border-dim);
   color:var(--text-1);
-  padding:14px 16px;
+  padding:12px 16px;
   font-family:'Orbitron',monospace;
-  font-size:1.1rem;
+  font-size:1rem;
   outline:none;
-  transition:all 0.2s;
+  transition:border-color 0.2s;
 }
-.field-input:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px var(--gold-glow);
-}
-.field-input::placeholder{color:var(--text-3);}
+.field-input:focus{border-color:rgba(0,212,255,0.5);box-shadow:0 0 12px rgba(0,212,255,0.08);}
+.field-input::placeholder{color:var(--text-3);font-style:italic;}
 .field-currency{
-  position:absolute;right:16px;top:50%;transform:translateY(-50%);
-  font-family:'Orbitron',monospace;
-  font-size:0.8rem;
-  font-weight:600;
-  color:var(--gold);
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-family:'Orbitron',monospace;font-size:0.65rem;color:var(--text-1);
 }
 
-.amount-hints{
-  display:flex;gap:0.75rem;
-  margin-top:0.75rem;
-  flex-wrap:wrap;
-}
+.amount-hints{display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;}
 .hint{
-  background:transparent;
-  border:1px solid var(--border);
-  border-radius:var(--radius-sm);
-  color:var(--text-2);
-  padding:8px 16px;
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.9rem;
-  font-weight:500;
-  cursor:pointer;
-  transition:all 0.2s;
+  background:transparent;border:1px solid var(--border-dim);
+  color:var(--text-1);padding:4px 12px;
+  font-family:'Orbitron',monospace;font-size:0.6rem;
+  cursor:pointer;transition:all 0.2s;
 }
-.hint:hover{
-  border-color:var(--gold);
-  color:var(--gold-light);
-  background:var(--gold-glow);
-}
+.hint:hover{border-color:rgba(0,212,255,0.5);color:var(--cyan);}
 
 .live-calc{
-  background:var(--surface);
+  background:rgba(0,212,255,0.03);
   border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:1.5rem;
-  margin:1.5rem 0;
+  padding:1.2rem 1.5rem;
+  margin:1rem 0;
   display:none;
   flex-direction:column;
-  gap:0.75rem;
+  gap:0.5rem;
 }
 .calc-row{display:flex;justify-content:space-between;align-items:center;}
 .calc-lbl{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.9rem;
-  font-weight:500;
-  color:var(--text-2);
-}
-.calc-amt{
-  font-family:'Orbitron',monospace;
-  font-size:1rem;
-  font-weight:600;
+  font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:2px;
   color:var(--text-1);
 }
-.calc-amt.gold{color:var(--gold);font-size:1.2rem;font-weight:700;}
+.calc-amt{
+  font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:500;
+  color:var(--text-1);
+}
+.calc-amt.gold{color:var(--gold);font-size:1.1rem;}
 .calc-amt.green{color:var(--green);}
-.calc-divider{height:1px;background:var(--border-dim);margin:0.5rem 0;}
+.calc-divider{height:1px;background:var(--border-dim);margin:0.3rem 0;}
 
 /* CHECKS */
 .checks{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:1.5rem;
-  margin:1.5rem 0;
+  border:1px solid rgba(0,212,255,0.12);
+  padding:1.2rem 1.4rem;
+  margin:1.2rem 0;
   background:rgba(0,212,255,0.02);
 }
 .check-title{
@@ -1164,47 +1035,45 @@ blockquote.centerquote{
 .check-item:last-child{margin-bottom:0;}
 .check-item input{accent-color:var(--cyan);margin-top:3px;flex-shrink:0;}
 .check-item label{font-size:0.82rem;font-style:italic;color:var(--text-1);cursor:pointer;}
-.check-item label strong{color:var(--gold);font-style:normal;}
+.check-item label strong{color:var(--cyan);font-style:normal;}
 
 .buy-btn{
-  width:100%;
-  margin-top:1.5rem;
-  background:var(--surface);
-  border:2px solid var(--border);
-  border-radius:var(--radius-lg);
-  color:var(--text-3);
-  padding:18px 24px;
-  font-family:'Orbitron',monospace;
-  font-size:0.75rem;
-  letter-spacing:2px;
+  width:100%;margin-top:1.2rem;
+  background:rgba(0,30,60,0.8);
+  border:1px solid rgba(0,212,255,0.15);
+  color:rgba(0,212,255,0.3);
+  padding:16px;
+  font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:2.5px;
   cursor:not-allowed;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
   transition:all 0.3s;
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
 }
 .buy-btn.ready{
-  background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-light) 100%);
+  background:linear-gradient(135deg,#e8c97a 0%,#c17f13 40%,#f5d060 70%,#c17f13 100%);
   background-size:200% 200%;
   color:#ffffff;
   -webkit-text-fill-color:#ffffff;
-  text-shadow:0 2px 4px rgba(0,0,0,0.3);
+  text-shadow:0 1px 3px rgba(0,0,0,0.35);
   cursor:pointer;
   border:none;
-  box-shadow:0 4px 20px rgba(204,125,7,0.4), 0 2px 10px rgba(0,0,0,0.2);
+  box-shadow:0 0 28px rgba(232,201,122,0.55),0 0 60px rgba(193,127,19,0.35),0 4px 20px rgba(0,0,0,0.4);
+  animation:goldBtnShift 4s ease-in-out infinite;
+  font-weight:700;
 }
 .buy-btn.ready::before{
   content:'';
   position:absolute;
   top:-20%;left:-80%;
   width:55%;height:140%;
-  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.2) 40%,rgba(255,255,255,0.6) 50%,rgba(255,255,255,0.2) 60%,transparent 80%);
+  background:linear-gradient(105deg,transparent 20%,rgba(255,255,255,0.18) 40%,rgba(255,255,255,0.55) 50%,rgba(255,255,255,0.18) 60%,transparent 80%);
   animation:goldSunlight 3.5s ease-in-out infinite;
   pointer-events:none;
 }
 .buy-btn.ready:hover{
-  background:linear-gradient(135deg,var(--gold-light) 0%,var(--gold) 50%,var(--gold-light) 100%);
+  background:linear-gradient(135deg,#ffe58a 0%,#e8a020 40%,#ffd060 70%,#e8a020 100%);
   transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(204,125,7,0.5), 0 4px 15px rgba(0,0,0,0.3);
+  box-shadow:0 0 55px rgba(232,201,122,0.9),0 0 100px rgba(193,127,19,0.6),0 8px 30px rgba(0,0,0,0.5);
 }
 
 .form-note{
@@ -1318,57 +1187,30 @@ blockquote.centerquote{
   line-height:1.75;
 }
 
-/* --- DASHBOARD — PROFESSIONAL FINANCIAL LOOK */
-#dashboard{
-  padding: 120px var(--section-px) var(--section-py);
-  background: linear-gradient(180deg, var(--void) 0%, var(--deep) 100%);
-}
+/* --- DASHBOARD ---------------------------- */
+#dashboard{padding:110px 5%;}
 
 .dash-cards{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1.5rem;
-  max-width:1200px;
-  margin:0 auto var(--space-xl);
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1rem;max-width:1080px;margin:0 auto 2.5rem;
 }
 .dash-card{
-  padding: var(--space-lg);
-  background: linear-gradient(145deg, var(--card) 0%, var(--surface) 100%);
+  padding:1.5rem;
+  background:var(--card);
   border:1px solid var(--border-dim);
-  border-radius: var(--radius-lg);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%);
+  transition:border-color 0.2s;
 }
-.dash-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background: linear-gradient(90deg, var(--gold), var(--gold-light));
-}
-.dash-card:hover{
-  border-color: var(--border-gold);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 20px var(--gold-glow);
-  transform: translateY(-2px);
-}
+.dash-card:hover{border-color:var(--border);box-shadow:0 0 20px rgba(0,212,255,0.06);}
 .dash-metric{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.85rem;
-  font-weight:500;
-  letter-spacing:1px;
-  color:var(--text-2);
-  margin-bottom:0.75rem;
-  text-transform: uppercase;
+  font-family:'Orbitron',monospace;
+  font-size:0.55rem;letter-spacing:3px;
+  color:var(--text-1);margin-bottom:0.5rem;
 }
 .dash-val{
   font-family:'Orbitron',monospace;
-  font-size:1.5rem;
-  font-weight:700;
+  font-size:1.2rem;font-weight:600;
   color:var(--text-1);
-  line-height:1;
 }
 .dash-note{
   font-family:'Orbitron',monospace;
@@ -1502,83 +1344,55 @@ blockquote.centerquote{
   box-shadow:none;
 }
 
-/* --- FOOTER — PROFESSIONAL FINANCIAL */
+/* --- FOOTER ------------------------------- */
 footer{
-  padding: var(--space-2xl) var(--section-px) var(--space-lg);
+  padding:40px 5% 30px;
   border-top:1px solid var(--border-dim);
   position:relative;z-index:1;
-  background: var(--deep);
 }
 
 .footer-top{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr 1fr 1fr;
-  gap:3rem;
-  margin-bottom: var(--space-xl);
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:3rem;margin-bottom:3rem;
 }
 
 .footer-brand{}
-.footer-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;}
+.footer-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
 .footer-name{
-  font-family:'Orbitron',monospace;
-  font-size:1rem;
-  font-weight:700;
-  letter-spacing:2px;
-  color:var(--gold);
+  font-family:'Orbitron',monospace;font-size:1rem;font-weight:600;
+  letter-spacing:3px;color:var(--gold);
 }
 .footer-brand p{
-  font-family:'Rajdhani',sans-serif;
-  font-size:1.05rem;
-  color:var(--text-2);
-  line-height:1.8;
-  max-width:320px;
+  font-size:0.88rem;
+  color:var(--text-1);line-height:1.7;
+  max-width:280px;
 }
 
 .footer-col h5{
-  font-family:'Orbitron',monospace;
-  font-size:0.75rem;
-  font-weight:600;
-  letter-spacing:2px;
-  color:var(--gold);
-  text-transform:uppercase;
-  margin-bottom:1.5rem;
+  font-family:'Orbitron',monospace;font-size:0.85rem;letter-spacing:3px;
+  color:var(--cyan);text-shadow:0 0 10px rgba(0,212,255,0.35);margin-bottom:1.2rem;
 }
-.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.8rem;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
 .footer-col ul a{
-  font-family:'Rajdhani',sans-serif;
-  font-size:1rem;
-  color:var(--text-2);
-  text-decoration:none;
-  transition: all 0.2s;
-  display:inline-block;
+  font-size:0.88rem;
+  color:var(--text-1);text-decoration:none;transition:color 0.2s;
 }
-.footer-col ul a:hover{
-  color:var(--gold-light);
-  transform: translateX(4px);
-}
+.footer-col ul a:hover{color:var(--cyan);}
 
 .footer-bottom{
   display:flex;justify-content:space-between;align-items:center;
-  padding-top:2rem;
-  border-top:1px solid var(--border-dim);
+  padding-top:1.5rem;border-top:1px solid var(--border-dim);
   flex-wrap:wrap;gap:1rem;
 }
-.footer-copy{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.9rem;
-  color:var(--text-2);
-}
+.footer-copy{font-size:0.78rem;color:var(--text-1);}
 .footer-chain{
-  font-family:'Rajdhani',sans-serif;
-  font-size:0.8rem;
-  letter-spacing:1px;
-  color:var(--text-2);
-  display:flex;align-items:center;gap:8px;
+  font-family:'Orbitron',monospace;font-size:0.75rem;
+  letter-spacing:2px;color:var(--text-1);
+  display:flex;align-items:center;gap:6px;
 }
 .chain-pulse{
-  width:8px;height:8px;border-radius:50%;
+  width:6px;height:6px;border-radius:50%;
   background:var(--green);
-  box-shadow:0 0 8px var(--green);
   animation:pulse 2s infinite;
 }
 
@@ -1689,7 +1503,7 @@ footer{
 }
 .sticky-banner.show{transform:translateY(0);}
 .banner-text{
-  font-family:'Orbitron',monospace;font-size:0.58rem;
+  font-family:'Orbitron',monospace;font-size:0.75rem;
   color:var(--text-1);letter-spacing:1px;line-height:1.5;
 }
 .banner-text em{color:var(--cyan);opacity:0.8;font-style:normal;}
@@ -1875,29 +1689,34 @@ footer{
   .stat-lbl{ font-size:0.48rem;letter-spacing:1px; }
 
   /* Sections */
-  .section-title{ font-size:1.4rem!important;letter-spacing:1px!important; }
-  .section-tag{ font-size:0.65rem!important; }
-  .section-desc{ font-size:1rem!important; }
-  
-  /* Hero */
-  .hero-desc{ font-size:1rem!important; }
-  
-  /* Stats */
-  .stat{ padding:16px 20px;min-width:100px; }
-  .stat-val{ font-size:1.2rem; }
-  .stat-lbl{ font-size:0.75rem; }
+  .section-title{ font-size:1.3rem!important;letter-spacing:2px!important; }
+  .section-tag{ font-size:0.7rem!important; }
+  #vision,#mining,#tokenomics,#roadmap,#whitepaper,
+  #dashboard,#angel,#transparency{ padding:50px 4%!important; }
+
+  /* Mining */
+  #mining .vs-grid{ grid-template-columns:1fr!important; }
+  #mining .vs-divider{ display:none!important; }
+  #mining .mining-steps{ grid-template-columns:1fr!important; }
+
+  /* Tokenomics */
+  .donut-ring{ width:200px;height:200px; }
+  .donut-wrap{ max-width:360px;margin:0 auto; }
+
+  /* Roadmap */
+  .rm-title{ font-size:0.85rem; }
+  .rm-tasks li{ font-size:0.78rem; }
 
   /* Dashboard */
-  .dash-cards{ grid-template-columns:repeat(2,1fr)!important;gap:1rem; }
-  .dash-val{ font-size:1.2rem; }
-  .dash-metric{ font-size:0.8rem; }
+  .dash-val{ font-size:1rem; }
+  .dash-metric{ font-size:0.48rem;letter-spacing:2px; }
 
   /* Angel Round */
-  .buy-form{ padding:1.5rem !important; }
-  .buy-form-title{ font-size:0.8rem;letter-spacing:1px; }
-  .tier-card{ padding:1.5rem !important; }
-  .tier-price{ font-size:1.5rem!important; }
-  .field-input{ font-size:1rem!important;padding:14px 16px!important; }
+  .buy-form{ padding:1.2rem 1rem!important; }
+  .buy-form-title{ font-size:0.75rem;letter-spacing:2px; }
+  .tier-card{ padding:1.2rem 0.9rem!important; }
+  .tier-price{ font-size:1.4rem!important; }
+  .field-input{ font-size:0.82rem!important;padding:10px 12px!important; }
   .buy-btn{ font-size:0.62rem!important;letter-spacing:1px!important; }
 
   /* Wallet buttons */
@@ -1912,7 +1731,7 @@ footer{
 
   /* Buy steps */
   .buy-steps{ gap:0;margin-bottom:1.5rem; }
-  .bstep-num{ width:22px;height:22px;font-size:0.58rem; }
+  .bstep-num{ width:22px;height:22px;font-size:0.75rem; }
   .bstep-lbl{ font-size:0.38rem;letter-spacing:1px; }
   .step-line{ max-width:28px; }
 
@@ -1939,10 +1758,6 @@ footer{
   .footer-name{ font-size:0.85rem; }
   .footer-copy{ font-size:0.7rem!important; }
   .footer-chain{ font-size:0.52rem!important; }
-  
-  /* Trust badges mobile */
-  .footer-brand div[style*="gap:12px"]{ gap:8px!important; }
-  .footer-brand div[style*="gap:12px"] span{ font-size:0.62rem!important; }
 
   /* Modal */
   .modal-box{ padding:1.2rem 1rem!important;margin:0 0.5rem!important; }
@@ -2045,30 +1860,25 @@ footer{
 
   /* Footer bottom */
   .footer-bottom{ flex-direction:column!important;text-align:center; }
-  
-  /* FIX: Hero mobile */
-  #hero{
-    min-height:auto;
-    padding:80px 4% 40px;
-    overflow:hidden;
-  }
-  
-  /* FIX: Nav mobile */
-  nav{
-    padding:12px 4%;
-  }
 }
 
 /* --- SMALL MOBILE 360px ------------------- */
 @media(max-width:360px){
-  .hero-title{ font-size:clamp(1.8rem,8vw,2.5rem)!important;letter-spacing:2px!important; }
-  .stat{ min-width:100px;padding:14px 12px; }
-  .stat-val{ font-size:1.1rem; }
-  .nav-cta{ padding:10px 16px;font-size:0.55rem; }
+  .hero-title{ font-size:clamp(1.5rem,6vw,2.8rem)!important;letter-spacing:3px!important; }
+  .stat{ min-width:88px;padding:12px 10px; }
+  .stat-val{ font-size:0.9rem; }
+  .nav-cta{ padding:8px 14px;font-size:0.65rem; }
   .dash-cards{ grid-template-columns:1fr!important; }
-  .dash-card{ padding:1.5rem; }
-  .wallet-btn .wallet-name{ font-size:0.7rem; }
-  .hero-desc{ font-size:0.95rem!important;line-height:1.6; }
+  .dash-card{ padding:1.2rem; }
+  .wallet-btn .wallet-name{ font-size:0.62rem; }
+  .rm-title{ font-size:0.78rem;letter-spacing:0.5px; }
+  .rm-tasks li{ font-size:0.72rem; }
+  .wp-grid{grid-template-columns:1fr!important;}
+  .wp-card{ padding:1.4rem 1.2rem; }
+  .wp-num{ font-size:1.2rem; }
+  .wp-title{ font-size:0.7rem; }
+  .wp-hook{ font-size:0.82rem; }
+  .wp-text{ font-size:0.75rem; }
 }
 
 
@@ -2259,18 +2069,9 @@ footer{
 
         /* ── MOBILE SPLASH — match desktop proportions exactly ── */
         @media (max-width: 768px) {
-            /* FIX: Splash page must use dvh for mobile browsers with address bar */
+            /* Splash 1 padding */
             #splash-page {
-                height: 100dvh;
-                min-height: -webkit-fill-available;
-                padding: 20px 16px;
-                overflow: hidden;
-            }
-            
-            /* Also fix body on mobile */
-            body, html {
-                overflow-x: hidden;
-                overflow-y: auto;
+                padding: 48px 20px 48px;
             }
 
             /* Splash 1 logo size */
@@ -3371,8 +3172,6 @@ footer{
     <a href="#roadmap">Roadmap</a>
     <a href="#whitepaper">Whitepaper</a>
     <a href="#dashboard">Dashboard</a>
-    <a href="terms.html" target="_blank">Terms</a>
-    <a href="privacy.html" target="_blank">Privacy</a>
     <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
@@ -4209,7 +4008,7 @@ footer{
   }
   .infog-pillar-label{
     font-family:'Orbitron',monospace;
-    font-size:0.58rem;letter-spacing:2px;
+    font-size:0.75rem;letter-spacing:2px;
     color:var(--text-1);margin-bottom:0.6rem;
     text-transform:uppercase;
   }
@@ -4561,7 +4360,7 @@ footer{
       <div style="position:relative;z-index:1;">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);padding:6px 18px;margin-bottom:1.5rem;">
           <div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></div>
-          <span style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:3px;color:var(--green);">IN DEVELOPMENT</span>
+          <span style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:var(--green);">IN DEVELOPMENT</span>
         </div>
 
         <h3 style="font-family:'Orbitron',monospace;font-size:clamp(1.2rem,2.5vw,2rem);font-weight:600;letter-spacing:4px;color:var(--text-1);margin-bottom:0.8rem;">mEXXE Mining App</h3>
@@ -5001,27 +4800,19 @@ footer{
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- FIX v15: Stablecoin Balance display — shown after wallet connect -->
+      <!-- FIX v15: USDC Balance display — shown after wallet connect -->
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
-        <span style="color:var(--text-2);" id="usdcBalanceLbl">YOUR USDC BALANCE</span>
+        <span style="color:var(--text-2);">YOUR USDC BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
-        <!-- Token Selector -->
         <div class="form-field">
-          <label class="field-label">Select Token</label>
-          <div style="display:flex;gap:10px;margin-bottom:1rem;">
-            <button id="btnUSDC" class="buy-btn" style="flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;" onclick="selectToken('USDC')">USDC</button>
-            <button id="btnUSDT" class="buy-btn" style="flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);" onclick="selectToken('USDT')">USDT</button>
-          </div>
-        </div>
-        <div class="form-field">
-          <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
+          <label class="field-label">Investment Amount (USDC)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
-              placeholder="Min $10 — Max $250"
+              placeholder="Min $10 — Max $250 USDC"
               oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
-            <span class="field-currency" id="fieldCurrency">USDC</span>
+            <span class="field-currency">USDC</span>
           </div>
           <div class="amount-hints">
             <button class="hint" onclick="setAmount(10)">$10</button>
@@ -5113,17 +4904,6 @@ footer{
         <span class="footer-name">EXILLION Capital Finecosystem</span>
       </div>
       <p>Everybody Has A Second Chance — An innovative financial system through Collateral Mobile Mining mEXXE (VCMT) as collateral for everyone who needs EXXE for The Capital.</p>
-      <div style="display:flex;gap:12px;margin-top:1rem;flex-wrap:wrap;align-items:center;">
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);">
-          <span style="font-size:1rem;">🔒</span> SSL Secured
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);">
-          <span style="font-size:1rem;">✅</span> Smart Contract Verified
-        </span>
-        <span style="display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--text-2);">
-          <span style="font-size:1rem;">📧</span> support@exillioneer.com
-        </span>
-      </div>
     </div>
     <div class="footer-col">
       <h5>Protocol</h5>
@@ -5152,15 +4932,6 @@ footer{
         <li><a href="#">Twitter / X</a></li>
         <li><a href="#">Discord</a></li>
         <li><a href="#">Medium</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Legal</h5>
-      <ul>
-        <li><a href="terms.html" target="_blank">Terms of Service</a></li>
-        <li><a href="privacy.html" target="_blank">Privacy Policy</a></li>
-        <li><a href="contact.html" target="_blank">Contact Us</a></li>
-        <li><a href="disclaimer.html" target="_blank">Risk Disclaimer</a></li>
       </ul>
     </div>
   </div>
@@ -5235,194 +5006,28 @@ footer{
 </div>
 
 <script>
-/**
- * ============================================================================
- * EXILLION v15 — COMPLETE SYSTEM FLOW DOCUMENTATION
- * ============================================================================
- * 
- * ════════════════════════════════════════════════════════════════════════════
- * INVESTOR PURCHASE FLOW (Step by Step)
- * ════════════════════════════════════════════════════════════════════════════
- * 
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 1: INVESTOR KLIK "PAY WITH USDC"                                  │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ User enters amount (e.g., $100 USDC)                                    │
- * │ User checks 3 confirmation boxes                                        │
- * │ User clicks "Pay with USDC — Receive EXXE" button                      │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 2: DISCLAIMER MODAL (jika belum accept)                          │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Modal muncul dengan 4 risk acknowledgments                               │
- * │ User HARUS centang semua 4 checkbox                                   │
- * │ User klik "I Understand — Proceed"                                     │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 3: USDC BALANCE CHECK                                            │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend fetch USDC balance investor via RPC                           │
- * │ Jika balance < amount → error toast, stop                            │
- * │ Jika cukup → lanjut                                                   │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 4: BUILD SPLIT TRANSACTION                                       │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend POST /build-split-tx ke backend:                            │
- * │ { investorWallet, usdcAmount, tier, idempotencyKey }                  │
- * │                                                                          │
- * │ Backend:                                                              │
- * │ 1. Generate transaction untuk transfer USDC ke INVESTOR_TREASURY       │
- * │ 2. Return base64 transaction string                                   │
- * │ 3. Return expectedAmount & expectedDestination untuk verifikasi        │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 5: WALLET SIGNATURE                                              │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend deserialize transaction → VersionedTransaction                │
- * │ Frontend verify transaction parameters (amount, destination)          │
- * │ User approve di Phantom/Solflare popup                                │
- * │ Wallet return transaction signature                                    │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 6: SEND TRANSACTION TO SOLANA                                    │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend send raw transaction via RPC (dengan fallback)               │
- * │ Tunggu confirmation (polling dengan 35s timeout)                       │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 7: VERIFY PAYMENT                                                │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend POST /verify-payment:                                       │
- * │ { txSignature, investorWallet, usdcAmount, tier, idempotencyKey }    │
- * │                                                                          │
- * │ Backend:                                                              │
- * │ 1. Verify transaction exists on-chain                                   │
- * │ 2. Verify amount matches expected                                     │
- * │ 3. Check idempotencyKey untuk prevent duplicate                      │
- * │ 4. Split USDC: 75% → Liquidity, 15% → Operational, 10% → Dev         │
- * │ 5. Return { success: true }                                           │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 8: SEND EXXE TO INVESTOR                                         │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Frontend POST /send-exxe:                                             │
- * │ { investorWallet, usdcAmount, tier, txSignature, idempotencyKey }   │
- * │                                                                          │
- * │ Backend:                                                              │
- * │ 1. Calculate EXXE amount: usdcAmount / tierPrice                     │
- * │ 2. Send EXXE dari EXXE_DIST_WALLET ke investorWallet                 │
- * │ 3. Return { success: true, signature: exxeTxSignature }              │
- * └────────────────────────────┬──────────────────────────────────────────┘
- *                              │
- *                              ▼
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ STEP 9: SUCCESS                                                       │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │ Tampilkan success panel dengan:                                       │
- * │ - Wallet address investor                                              │
- * │ - USDC yang dibayar                                                  │
- * │ - EXXE yang diterima                                                  │
- * │ - Transaction signature (link ke Solscan)                             │
- * └─────────────────────────────────────────────────────────────────────────┘
- * 
- * ════════════════════════════════════════════════════════════════════════════
- * COUNTER LOGIC (Bagaimana Investor Joined & Total Raised dihitung)
- * ════════════════════════════════════════════════════════════════════════════
- * 
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ 💰 TOTAL RAISED COUNTER                                              │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │                                                                          │
- * │ Monitor: INVESTOR_TREASURY wallet                                      │
- * │ Command: getSignaturesForAddress (semua TX masuk)                     │
- * │                                                                          │
- * │ Logic:                                                                  │
- * │ 1. Fetch semua transaction signatures ke wallet ini                    │
- * │ 2. Untuk setiap TX, parse instructions                                │
- * │ 3. Filter: info.mint === USDC_MINT DAN destination === treasury      │
- * │ 4. Sum amount: totalInflow += info.tokenAmount.uiAmount            │
- * │                                                                          │
- * │ Result: Total USDC yang diterima investor treasury                    │
- * │                                                                          │
- * │ ⚠️  HANYA monitor INVESTOR_TREASURY - JANGAN wallet lain!            │
- * │ ⚠️  Karena split internal akan cause double counting                 │
- * └─────────────────────────────────────────────────────────────────────────┘
- * 
- * ┌─────────────────────────────────────────────────────────────────────────┐
- * │ 👥 INVESTOR JOINED COUNTER                                            │
- * │ ─────────────────────────────────────────────────────────────────────── │
- * │                                                                          │
- * │ Monitor: EXXE_DIST_WALLET (backend sender)                            │
- * │ Command: getSignaturesForAddress (semua TX keluar)                     │
- * │                                                                          │
- * │ Logic:                                                                  │
- * │ 1. Fetch semua transaction signatures dari wallet ini                   │
- * │ 2. Untuk setiap TX, parse instructions                               │
- * │ 3. Filter: info.mint === EXXE_MINT                                   │
- * │ 4. Ambil destinationOwner (wallet investor)                           │
- * │ 5. Simpan dalam Set untuk unique addresses                            │
- * │                                                                          │
- * │ Result: Jumlah unique investor wallets yang terima EXXE                │
- * │                                                                          │
- * │ Contoh:                                                                │
- * │ - Wallet A terima EXXE → count = 1                                    │
- * │ - Wallet B terima EXXE → count = 2                                    │
- * │ - Wallet A invest LAGI → count = 2 (sama address)                     │
- * └─────────────────────────────────────────────────────────────────────────┘
- * 
- * ════════════════════════════════════════════════════════════════════════════
- * WALLET ADDRESSES (Pastikan sesuai dengan backend)
- * ════════════════════════════════════════════════════════════════════════════
- * 
- * EXXE_DIST_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr'
- *   - Backend mengirim EXXE dari wallet ini ke investor
- *   - Investor joined dihitung dari TX keluar wallet ini
- *   - Butuh SOL untuk kirim EXXE ke investor
- * 
- * LIQUIDITY_WALLET: 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'
- *   - 75% dari investasi (langsung dari investor TX split)
- *   - Untuk liquidity pool
- * 
- * OPERATIONAL_WALLET: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF'
- *   - 15% dari investasi (langsung dari investor TX split)
- *   - Untuk operations
- * 
- * DEVELOPMENT_WALLET: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o'
- *   - 10% dari investasi (langsung dari investor TX split)
- *   - Untuk development
- * 
- * ============================================================================
- */
+// ============================================================
+// EXILLION v15 — MAIN JAVASCRIPT
+// FIXES APPLIED:
+//  #1  Toast system replaces alert()
+//  #2  web3.js VersionedTransaction signing (Phantom + Solflare)
+//  #3  USDC balance fetch + display after wallet connect
+//  #4  USDC balance pre-check before submit
+//  #5  waitForConfirmation uses RPC fallback array
+//  #6  Mobile: restore wallet state on return from wallet app
+// ============================================================
 
 // --- CONFIG --------------------------------------------------
 const CFG = {
   EXXE_MINT: '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u',
-  USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+  USDC_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   WALLETS: {
     LIQUIDITY:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
     OPERATIONAL: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
     DEVELOPMENT: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
   },
-  EXXE_DIST_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
-  SELECTED_TOKEN: 'USDC',
   TIERS: {
     1: { price:0.01,  min:10,  max:250,  gain:900  },
     2: { price:0.025, min:25,  max:500,  gain:300  },
@@ -5430,10 +5035,7 @@ const CFG = {
   },
   LISTING: 0.10,
 };
-window.CFG = CFG;
 const tier = () => CFG.TIERS[CFG.TIER];
-const getSelectedToken = () => CFG.SELECTED_TOKEN;
-const getSelectedMint = () => CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MINT : CFG.USDC_MINT;
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
 const RPC_LIST = [
@@ -5465,84 +5067,44 @@ function showToast(message, type, duration) {
   toast.querySelector('.toast-close').addEventListener('click', () => clearTimeout(timer));
 }
 
-// ── FIX v15 #3: Fetch stablecoin balance (USDC + USDT) ──────────
+// ── FIX v15 #3: Fetch USDC balance for connected wallet ──────────
 async function fetchUsdcBalance(walletAddress) {
   const bar = document.getElementById('usdcBalanceBar');
   const amt = document.getElementById('usdcBalanceAmt');
-  const lbl = document.getElementById('usdcBalanceLbl');
   if (bar) bar.style.display = 'flex';
   if (amt) amt.textContent = 'Loading...';
-  if (lbl) lbl.textContent = getSelectedToken() + ' BALANCE';
 
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 8000);
-      
-      // Fetch both USDC and USDT in parallel
-      const [usdcRes, usdtRes] = await Promise.all([
-        fetch(RPC_LIST[i], {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0', id: 1,
-            method: 'getTokenAccountsByOwner',
-            params: [
-              walletAddress,
-              { mint: CFG.USDC_MINT },
-              { encoding: 'jsonParsed' }
-            ]
-          }),
-          signal: ctrl.signal
+      const res   = await fetch(RPC_LIST[i], {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0', id: 1,
+          method: 'getTokenAccountsByOwner',
+          params: [
+            walletAddress,
+            { mint: CFG.USDC_MINT },
+            { encoding: 'jsonParsed' }
+          ]
         }),
-        fetch(RPC_LIST[i], {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            jsonrpc: '2.0', id: 2,
-            method: 'getTokenAccountsByOwner',
-            params: [
-              walletAddress,
-              { mint: CFG.USDT_MINT },
-              { encoding: 'jsonParsed' }
-            ]
-          }),
-          signal: ctrl.signal
-        })
-      ]);
+        signal: ctrl.signal
+      });
       clearTimeout(timer);
-      
-      let usdcBal = 0, usdtBal = 0;
-      
-      if (usdcRes.ok) {
-        const usdcData = await usdcRes.json();
-        (usdcData?.result?.value || []).forEach(acc => {
-          const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
-          if (ui) usdcBal += ui;
-        });
-      }
-      
-      if (usdtRes.ok) {
-        const usdtData = await usdtRes.json();
-        (usdtData?.result?.value || []).forEach(acc => {
-          const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
-          if (ui) usdtBal += ui;
-        });
-      }
-      
-      const token = getSelectedToken();
-      const balance = token === 'USDT' ? usdtBal : usdcBal;
-      
-      // Cache both balances
-      _cachedBalance.USDC = usdcBal;
-      _cachedBalance.USDT = usdtBal;
-      
+      if (!res.ok) continue;
+      const data    = await res.json();
+      const accounts = data?.result?.value || [];
+      let balance = 0;
+      accounts.forEach(acc => {
+        const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
+        if (ui) balance += ui;
+      });
       if (amt) {
-        const label = token + ' BALANCE';
-        if (lbl) lbl.textContent = label;
         amt.textContent = balance.toLocaleString('en-US', {
           minimumFractionDigits: 2, maximumFractionDigits: 2
-        }) + ' ' + token;
+        }) + ' USDC';
         amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
       }
       return balance;
@@ -5672,13 +5234,13 @@ async function disconnectWallet() {
     }
   } catch(e) { /* ignore disconnect errors */ }
 
-  // Reset ALL state
+  // Reset state
   connectedWallet  = null;
   connectedAddress = null;
+  // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
+  // is shown again for each new connection/transaction session. This ensures the user
+  // always re-acknowledges risks before a new transaction, not just once per page load.
   disclaimerAccepted = false;
-  _isBuying = false;
-  _pendingIdempotencyKey = null;
-  CFG.SELECTED_TOKEN = 'USDC';
 
   // Reset buttons
   const pBtn = document.getElementById('phantomBtn');
@@ -5965,82 +5527,23 @@ function goStep(n){
   }
 }
 
-// --- BALANCE STORAGE ----------------------------------------
-let _cachedBalance = { USDC: 0, USDT: 0 };
-
-// --- TOKEN SELECTOR ------------------------------------------
-function selectToken(token) {
-  const currentAmount = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
-  
-  CFG.SELECTED_TOKEN = token;
-  
-  // Check if current amount exceeds new token's balance
-  const newBalance = _cachedBalance[token] || 0;
-  if (currentAmount > newBalance && newBalance > 0) {
-    document.getElementById('usdcAmount').value = '';
-    showToast('Insufficient ' + token + ' balance. Max: ' + newBalance.toFixed(2), 'warn', 6000);
-  }
-  
-  // Update button styles
-  const btnUSDC = document.getElementById('btnUSDC');
-  const btnUSDT = document.getElementById('btnUSDT');
-  if (token === 'USDC') {
-    if (btnUSDC) btnUSDC.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;';
-    if (btnUSDT) btnUSDT.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);';
-  } else {
-    if (btnUSDT) btnUSDT.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;';
-    if (btnUSDC) btnUSDC.style.cssText = 'flex:1;padding:12px;font-size:0.7rem;letter-spacing:1px;background:linear-gradient(135deg,#2a2a2a 0%,#1a1a1a 100%);';
-  }
-  
-  // Update labels
-  const tokenLabel = document.getElementById('tokenLabel');
-  const fieldCurrency = document.getElementById('fieldCurrency');
-  if (tokenLabel) tokenLabel.textContent = token;
-  if (fieldCurrency) fieldCurrency.textContent = token;
-  
-  // Refresh balance display
-  if (connectedAddress) fetchUsdcBalance(connectedAddress);
-  
-  // Recalculate with new token
-  calcTokens();
-}
-
 // --- CALCULATOR ----------------------------------------------
-function setAmount(v){ 
-  const token = getSelectedToken();
-  const balance = _cachedBalance[token] || 0;
-  
-  if (balance < v) {
-    showToast('Insufficient ' + token + ' balance. You have ' + balance.toFixed(2) + ' ' + token + ' but need ' + v + ' ' + token + '.', 'error', 8000);
-    document.getElementById('usdcAmount').value = '';
-    calcTokens();
-    return;
-  }
-  
-  document.getElementById('usdcAmount').value=v; 
-  calcTokens(); 
-}
+function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens(); }
 
 function calcTokens(){
   const t=tier();
-  const token = getSelectedToken();
-  const balance = _cachedBalance[token] || 0;
   let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
   if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
   if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
-  if(usdc>balance && balance>0){ 
-    document.getElementById('usdcAmount').value=''; 
-    showToast('Insufficient ' + token + ' balance. Max: ' + balance.toFixed(2), 'warn', 6000);
-    usdc=0; 
-  }
   const box=document.getElementById('calcBox');
   if(usdc>=t.min){
     const exxe=usdc/t.price;
     const atL=usdc*(CFG.LISTING/t.price);
     box.style.display='flex';
-    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
+    // BUG FIX: use consistent locale formatting with explicit fraction digits
+    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
     document.getElementById('calcReceive').textContent=exxe.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+' EXXE';
-    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
+    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
     document.getElementById('calcGain').textContent='+'+t.gain+'%';
   } else { box.style.display='none'; }
   checkReady();
@@ -6048,32 +5551,27 @@ function calcTokens(){
 
 function checkReady(){
   const t=tier();
-  const token = getSelectedToken();
-  const balance = _cachedBalance[token] || 0;
   const f1=document.getElementById('fc1')?.checked;
   const f2=document.getElementById('fc2')?.checked;
   const f3=document.getElementById('fc3')?.checked;
   const usdc=parseFloat(document.getElementById('usdcAmount')?.value)||0;
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
-  
-  const hasBalance = balance >= usdc;
-  
-  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasBalance){
+  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress){
     btn.classList.add('ready');
+    // FIX QUALITY #7: Use explicit locale + fractionDigits for consistent formatting
+    // across all user locales. Plain .toLocaleString() gives "1,000.0000000001" in some locales.
     const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} USDC — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
-    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with ' + token + ' — Receive EXXE';
+    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with USDC — Receive EXXE';
   }
 }
 
 // --- EXECUTE BUY — Cek disclaimer + USDC balance dulu --------
 let _isBuying = false;
-let _pendingIdempotencyKey = null;
-
 async function executeBuy(){
   const _bb = document.getElementById('buyBtn');
   if(!_bb || !_bb.classList.contains('ready')) return;
@@ -6093,44 +5591,35 @@ async function executeBuy(){
     return;
   }
 
-  // Generate idempotency key to prevent duplicate transactions
-  _pendingIdempotencyKey = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substr(2);
-
+  // FIX v15 #4: Check USDC balance before building tx
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
-  
-  // FIX CRITICAL: Check USDC balance AND build transaction atomically
-  // This prevents race conditions where balance changes between check and tx
-  try {
-    const currentBalance = await fetchUsdcBalance(connectedAddress);
-    if (currentBalance < usdc) {
-      showToast(
-        'Insufficient USDC balance. You have ' +
-        currentBalance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) +
-        ' USDC but need ' + usdc.toFixed(2) + ' USDC.',
-        'error', 9000
-      );
-      return;
-    }
-  } catch(e) {
-    showToast('Unable to verify USDC balance. Please try again.', 'error', 7000);
+  // FIX v16: gunakan nama token yang dipilih (USDC atau USDT)
+  const _selectedToken = getSelectedToken();
+  const currentBalance = await fetchUsdcBalance(connectedAddress);
+  if (currentBalance < usdc) {
+    showToast(
+      'Insufficient ' + _selectedToken + ' balance. You have ' +
+      currentBalance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) +
+      ' ' + _selectedToken + ' but need ' + usdc.toFixed(2) + ' ' + _selectedToken + '.',
+      'error', 9000
+    );
     return;
   }
 
   // Disclaimer accepted — proceed with transaction
-  proceedBuy(_pendingIdempotencyKey);
+  proceedBuy();
 }
 
-async function proceedBuy(idempotencyKey){
+async function proceedBuy(){
   const _pb = document.getElementById('buyBtn');
   if(!_pb || !_pb.classList.contains('ready')) return;
   if(_isBuying) return;
 
   const t = tier();
-  const token = getSelectedToken();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' ' + token + '.', 'warn');
+    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' USDC.', 'warn');
     return;
   }
   if (!connectedAddress) {
@@ -6150,39 +5639,22 @@ async function proceedBuy(idempotencyKey){
   if (_buyP)  _buyP.style.display  = 'none';
   if (_procP) _procP.style.display = 'block';
 
-  // Build request body with idempotency key and token
-  const requestBody = {
-    investorWallet: connectedAddress,
-    usdcAmount: usdc,
-    tier: CFG.TIER,
-    token: token,
-    idempotencyKey: idempotencyKey
-  };
-
   try {
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
-    await txStep(1, 'active', 'Building ' + token + ' split transaction...');
+    await txStep(1, 'active', 'Building USDC split transaction...');
     const buildRes = await Promise.race([
       fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(requestBody)
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
     ]);
     if (!buildRes.ok) throw new Error('Failed to build transaction (server error ' + buildRes.status + ')');
-    const buildData = await buildRes.json();
-    const { transaction, expectedAmount, expectedDestination } = buildData;
-    
+    const { transaction } = await buildRes.json();
     if (!transaction || typeof transaction !== 'string') {
       throw new Error('Backend returned invalid transaction data.');
     }
-    
-    // FIX CRITICAL: Verify transaction parameters BEFORE signing
-    if (expectedAmount && Math.abs(parseFloat(expectedAmount) - usdc) > 0.01) {
-      throw new Error('Transaction amount mismatch. Please refresh and try again.');
-    }
-    
     await txStep(1, 'done', 'Transaction prepared ✓');
 
     // ── Step 2: Deserialise → VersionedTransaction → Wallet sign & send ──
@@ -6192,17 +5664,6 @@ async function proceedBuy(idempotencyKey){
     // using @solana/web3.js — this is what Phantom & Solflare actually expect.
     const txBytes     = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
     const versionedTx = window.solanaWeb3.VersionedTransaction.deserialize(txBytes);
-
-    // FIX CRITICAL: Parse and verify transaction contents before signing
-    // Check that the transaction transfers to expected destinations
-    const txMsg = versionedTx.message;
-    const instructions = txMsg.compiledInstructions || txMsg.instructions || [];
-    let hasValidDestination = false;
-    
-    // Verify transaction has reasonable instructions (not empty)
-    if (instructions.length === 0) {
-      throw new Error('Invalid transaction: no instructions found.');
-    }
 
     let txSignature;
     try {
@@ -6237,72 +5698,43 @@ async function proceedBuy(idempotencyKey){
     if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
       throw new Error('Wallet returned an invalid or empty signature. Please try again.');
     }
-    await txStep(2, 'done', token + ' split signed ✓');
+    await txStep(2, 'done', 'USDC split signed ✓');
 
     // ── Step 3: Wait for on-chain confirmation then verify ────────────
     await txStep(3, 'active', 'Verifying on Solana blockchain...');
     await waitForConfirmation(txSignature);
 
-    // FIX CRITICAL: Pass idempotency key and token to verify-payment endpoint
     const verifyRes = await Promise.race([
       fetch(CFG.API + '/verify-payment', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ 
-          txSignature, 
-          investorWallet: connectedAddress, 
-          usdcAmount: usdc, 
-          tier: CFG.TIER,
-          token: token,
-          idempotencyKey: idempotencyKey
-        })
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Verification timeout — contact support. TX: ' + txSignature)), 45000))
     ]);
     if (!verifyRes.ok) throw new Error('Payment verification failed (server ' + verifyRes.status + '). TX: ' + txSignature);
-    
-    const verifyData = await verifyRes.json();
-    if (!verifyData.success) {
-      throw new Error(verifyData.error || 'Payment verification failed');
-    }
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
     await txStep(4, 'active', 'Sending ' + exxe.toLocaleString('en-US') + ' EXXE to your wallet...');
-    
-    // FIX CRITICAL: Pass idempotency key and token to send-exxe endpoint
     const sendRes = await Promise.race([
       fetch(CFG.API + '/send-exxe', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ 
-          investorWallet: connectedAddress, 
-          usdcAmount: usdc, 
-          tier: CFG.TIER, 
-          token: token,
-          txSignature,
-          idempotencyKey: idempotencyKey
-        })
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('EXXE delivery timeout — contact support. TX: ' + txSignature)), 60000))
     ]);
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
     const exxeTx   = sendData?.signature || sendData?.tx || '';
-    
-    if (!sendData.success && !sendData.exxeDelivered) {
-      throw new Error(sendData.error || 'EXXE delivery failed. Please contact support.');
-    }
-    
     await txStep(4, 'done', exxe.toLocaleString('en-US') + ' EXXE delivered ✓');
 
     showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature);
     _isBuying = false;
-    _pendingIdempotencyKey = null;
 
   } catch(e) {
     _isBuying = false;
-    _pendingIdempotencyKey = null;
     const _procP2 = document.getElementById('processingPanel');
     const _buyP2  = document.getElementById('buyPanel');
     if (_procP2) _procP2.style.display = 'none';
@@ -6316,7 +5748,13 @@ async function proceedBuy(idempotencyKey){
 
 // --- Send raw signed bytes to Solana RPC with fallback -------
 async function sendRawTransaction(signedBytes) {
-  const b64 = btoa(String.fromCharCode(...signedBytes));
+  // FIX v16: chunked btoa — hindari stack overflow pada TX besar
+  let b64 = '';
+  const chunk = 8192;
+  for (let i = 0; i < signedBytes.length; i += chunk) {
+    b64 += String.fromCharCode(...signedBytes.subarray(i, i + chunk));
+  }
+  b64 = btoa(b64);
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
@@ -6409,7 +5847,6 @@ function showSuccess(usdc,exxe,wallet,tx){
   // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
   const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
   const txFull  = tx || '';
-  const token = getSelectedToken();
 
   // Gunakan DOM construction untuk mencegah XSS
   // (data blockchain selalu dianggap untrusted input)
@@ -6417,7 +5854,7 @@ function showSuccess(usdc,exxe,wallet,tx){
   details.textContent = '';
   const lines = [
     ['Wallet',    short],
-    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + token],
+    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
     ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
     ['TX',        txShort],
     ['Status',    'CONFIRMED ✓'],
@@ -6450,10 +5887,9 @@ function toggleMenu(){
   btn.classList.toggle('open');
 }
 
-// FIX WARNING #7 & #8: Wrap all event listener registrations in a one-time init
-// function called on DOMContentLoaded. This prevents duplicate listeners if the
-// script context is ever re-evaluated, and keeps setup logic in one place.
-(function initMenuListeners() {
+// FIX v16: initMenuListeners harus di dalam DOMContentLoaded agar DOM sudah siap
+// sebelum querySelectorAll('#navLinks a') dipanggil.
+document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   function closeMenu() {
     const nl = document.getElementById('navLinks');
     const hb = document.getElementById('hamburger');
@@ -6480,7 +5916,7 @@ function toggleMenu(){
   // Hamburger visibility is handled by CSS media query (display:flex at <=768px).
   // JS resize listener ensures the mobile panel closes when resizing to desktop.
   window.addEventListener('resize', handleNavResize);
-})();
+});
 </script>
 
 </div><!-- /#main-content-inner -->
@@ -6912,34 +6348,34 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     LIVE INVESTOR COUNT — Solana RPC  v15 FINAL
-      
-     HOW IT WORKS:
-     ============
-     Monitor EXXE_DIST_WALLET untuk semua transaction KELUAR
-     (transaction di mana wallet ini mengirim EXXE ke investor).
-     
-     Setiap unique wallet address yang MENERIMA EXXE = 1 investor
-      
-     Data Source:
-     - Primary: Backend API /api/stats (lebih akurat)
-     - Fallback: On-chain RPC call
-      
-     Wallet Addresses (from CFG):
-     - EXXE_DIST_WALLET = Wallet yang mengirim EXXE ke investor
+     LIVE INVESTOR COUNT — Solana RPC  v15
+     FIX v15:
+     1. ANGEL_DIST_WALLET is now the wallet that SENDS EXXE to investors.
+        We count unique DESTINATION wallets (investors), not senders.
+     2. involvesExxe check fixed: only check info.mint === EXXE_MINT.
+        Removed incorrect info.source/info.destination === EXXE_MINT checks.
+     3. Uses shared RPC_LIST from main script (no Alchemy demo endpoint).
+     4. Cache TTL standardised to 5 minutes.
+     5. Falls back to backend /api/stats if available.
      --------------------------------------------------- -->
 <script>
 (function() {
   'use strict';
 
-  const EXXE_MINT         = window.CFG.EXXE_MINT;
-  const EXXE_DIST_WALLET  = window.CFG.EXXE_DIST_WALLET;
+  // CONFIG
+  // EXXE_MINT: used to filter only real EXXE transfer transactions
+  const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
+  // FIX v15: This must be the HOT WALLET used by the Railway backend to SEND EXXE.
+  // We count unique destination wallets (investors who received EXXE from this wallet).
+  // ⚠️  REPLACE THIS with your actual backend distribution wallet address.
+  const EXXE_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'; // REPLACE with backend sender wallet
 
   const REFRESH_MS    = 60000;
   const SESSION_KEY   = 'exxe_investor_count_v15';
   const SESSION_TS    = 'exxe_investor_ts_v15';
-  const CACHE_TTL_MS  = 300000;
+  const CACHE_TTL_MS  = 300000; // 5 minutes
 
+  // FIX v15: Use same RPC list as main script (no Alchemy demo)
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
@@ -6981,6 +6417,8 @@ function startGoldNetwork(canvasId, isSplash) {
     return all;
   }
 
+  // FIX v15: Count unique DESTINATION wallets — these are the investors.
+  // The distribution wallet sends EXXE out; each unique recipient = 1 investor.
   async function fetchTxBatch(signatures) {
     const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
     const investors = new Set();
@@ -7015,20 +6453,18 @@ function startGoldNetwork(canvasId, isSplash) {
               const info = ix.parsed?.info;
               const type = ix.parsed?.type;
               if (!info) return;
-              
+              // FIX v15: Only check info.mint — source/destination are token accounts, not mints
               if (info.mint !== EXXE_MINT) return;
-              
+              // This is an EXXE transfer — get the destination (the investor's wallet)
               if (type === 'transfer' || type === 'transferChecked') {
-                const investorWallet = info.destinationOwner || info.destination;
-                
-                if (investorWallet && 
-                    investorWallet !== EXXE_DIST_WALLET &&
-                    investorWallet.length === 44) {
-                  investors.add(investorWallet);
+                const dest = info.destinationOwner || info.destination;
+                // Exclude the distribution wallet itself (not an investor)
+                if (dest && dest !== EXXE_DIST_WALLET) {
+                  investors.add(dest);
                 }
               }
             });
-          } catch(e) { }
+          } catch(e) { /* ignore per-tx parse error */ }
         });
       } catch(e) {
         rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
@@ -7084,7 +6520,7 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_isFetching) return;
     _isFetching = true;
     try {
-      // PRIMARY: Backend API
+      // Try backend /api/stats first (fast single call)
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
         const ctrl = new AbortController();
@@ -7097,20 +6533,18 @@ function startGoldNetwork(canvasId, isSplash) {
             return;
           }
         }
-      } catch(e) { }
+      } catch(e) { /* backend not ready, fall through to on-chain */ }
 
-      // FALLBACK: On-chain
+      // Fallback: count on-chain
       const allSigs  = await fetchAllSignatures(EXXE_DIST_WALLET);
       if (!allSigs.length) { updateInvestorUI(0); return; }
-      
       const sigStrings = allSigs.map(s => s.signature);
       const investors  = await fetchTxBatch(sigStrings);
       rpcIdx = 0;
-      
       updateInvestorUI(investors.size);
-      
     } catch(e) {
       rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+      console.warn('[Exillion v15 Investor Count] fetch error:', e);
     } finally {
       _isFetching = false;
     }
@@ -7125,48 +6559,34 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     REAL-TIME FUNDING TRACKER — Solana RPC  v15 FINAL
-       
-     HOW IT WORKS:
-     ============
-     Monitor Treasury wallet untuk semua USDC/USDT yang masuk.
-     Treasury adalah wallet PERTAMA yang terima investasi.
-     Backend split dari Treasury ke 3 wallets setelahnya.
-       
-     Total Raised = Sum semua amount yang masuk ke Treasury
-       
-     Data Source:
-     - Primary: Backend API /api/stats (lebih akurat)
-     - Fallback: On-chain RPC call
-       
-     Wallet Address:
-     - TREASURY = Wallet pertama yang terima investasi (before split)
-     - LIQUIDITY   = 75% dari investasi (after split)
-     - OPERATIONAL = 15% dari investasi (after split)
-     - DEVELOPMENT = 10% dari investasi (after split)
-      --------------------------------------------------- -->
+     REAL-TIME FUNDING TRACKER — Solana RPC  v15
+     FIX v15:
+     1. Normalise USDC amount fixed: use tokenAmount.uiAmount when
+        available, fallback to raw amount / 1,000,000 (USDC = 6 decimals).
+        Old threshold of > 1e6 was wrong and would miscalculate all amounts.
+     2. Removed Alchemy demo endpoint (severe rate limiting).
+     3. Tries backend /api/stats first for a fast single-call update.
+     --------------------------------------------------- -->
 <script>
 (function() {
-  const USDC_MINT  = window.CFG.USDC_MINT;
-  const USDT_MINT  = window.CFG.USDT_MINT;
-  
-  const WALLETS = {
-    LIQUIDITY:   { address: window.CFG.WALLETS.LIQUIDITY,   pct: 0.75 },
-    OPERATIONAL: { address: window.CFG.WALLETS.OPERATIONAL, pct: 0.15 },
-    DEVELOPMENT: { address: window.CFG.WALLETS.DEVELOPMENT, pct: 0.10 }
-  };
-  
+  const USDC_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  const WALLETS = [
+    'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
+    'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
+    'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
+  ];
+  // FIX v15: Removed Alchemy demo — rate limited too aggressively
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
   ];
-  const TIER1_PRICE   = window.CFG.TIERS[1].price;
+  const TIER1_PRICE   = 0.01;
   const EXXE_TARGET   = 330000000;
   const USDC_TARGET   = 20831250;
   const REFRESH_MS    = 30000;
   const SESSION_KEY   = 'exxe_funding_total_v15';
   const SESSION_TS    = 'exxe_funding_ts_v15';
-  const CACHE_TTL_MS  = 300000;
+  const CACHE_TTL_MS  = 300000; // 5 minutes
 
   let rpcIndex = 0;
   let _fetchFundingActive = false;
@@ -7216,7 +6636,6 @@ function startGoldNetwork(canvasId, isSplash) {
 
     let totalInflow = 0;
     const batchSize = 10;
-    const seenTxs = new Set();
 
     for (let i = 0; i < sigs.length; i += batchSize) {
       const batch = sigs.slice(i, i + batchSize);
@@ -7234,11 +6653,6 @@ function startGoldNetwork(canvasId, isSplash) {
           try {
             const tx = r?.result;
             if (!tx) return;
-            
-            const txSig = tx?.transaction?.signatures?.[0];
-            if (txSig && seenTxs.has(txSig)) return;
-            if (txSig) seenTxs.add(txSig);
-            
             const allIx = [
               ...(tx?.transaction?.message?.instructions || []),
               ...(tx?.meta?.innerInstructions?.flatMap(ii => ii.instructions) || [])
@@ -7248,25 +6662,20 @@ function startGoldNetwork(canvasId, isSplash) {
               const type = ix.parsed?.type;
               const info = ix.parsed?.info;
               if (!info || !type) return;
-              
-              const isStablecoin = (info?.mint === USDC_MINT || info?.mint === USDT_MINT);
-              
               if (
                 (type === 'transfer' || type === 'transferChecked') &&
-                isStablecoin
+                info?.mint === USDC_MINT
               ) {
                 const dest = info.destination || info.destinationOwner;
                 if (dest === wallet) {
-                  let uiAmt;
-                  if (info.tokenAmount?.uiAmount !== undefined && info.tokenAmount?.uiAmount !== null) {
-                    uiAmt = parseFloat(info.tokenAmount.uiAmount);
-                  } else {
-                    uiAmt = parseFloat(info.amount || 0) / 1_000_000;
-                  }
-                  
-                  if (!isNaN(uiAmt) && uiAmt > 0 && uiAmt <= 1000) {
-                    totalInflow += uiAmt;
-                  }
+                  // FIX v15: Correct USDC amount normalisation.
+                  // tokenAmount.uiAmount is already human-readable (e.g. 10.5 for $10.50).
+                  // info.amount is raw lamports (e.g. 10500000 for $10.50).
+                  // Old code threshold > 1e6 was WRONG — a $10 transfer = 10000000 raw units,
+                  // which is > 1e6 so it would always divide — but threshold should be 1e6 not > 1e6.
+                  const uiAmt = info.tokenAmount?.uiAmount
+                    ?? (parseFloat(info.amount || 0) / 1_000_000);
+                  if (uiAmt > 0 && uiAmt < 1_000_000) totalInflow += uiAmt; // sanity cap
                 }
               }
             });
@@ -7281,33 +6690,6 @@ function startGoldNetwork(canvasId, isSplash) {
     }
     return totalInflow;
   }
-   
-  async function getTotalRaisedFromChain() {
-    // Calculate total from all 3 split wallets
-    // Each wallet receives a percentage of the total investment
-    // We divide each by its percentage to get the actual total
-    
-    const walletList = Object.values(WALLETS);
-    const totals = [];
-    
-    for (const walletInfo of walletList) {
-      const inflow = await getUsdcInflow(walletInfo.address);
-      if (inflow > 0) {
-        const total = inflow / walletInfo.pct;
-        totals.push(total);
-      }
-    }
-    
-    if (totals.length === 0) return 0;
-    
-    // Take the median of all calculations for accuracy
-    totals.sort((a, b) => a - b);
-    const median = totals.length % 2 === 0
-      ? (totals[totals.length / 2 - 1] + totals[totals.length / 2]) / 2
-      : totals[Math.floor(totals.length / 2)];
-    
-    return Math.round(median * 100) / 100;
-  }
 
   function fmt(n, decimals) {
     decimals = decimals === undefined ? 2 : decimals;
@@ -7318,11 +6700,8 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   function updateUI(totalUsdc) {
-    if (totalUsdc < _highWatermark) {
-      totalUsdc = _highWatermark;
-    } else {
-      _highWatermark = totalUsdc;
-    }
+    if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
+    else _highWatermark = totalUsdc;
 
     const exxeSold = totalUsdc / TIER1_PRICE;
     const pctUsdc  = Math.min((totalUsdc / USDC_TARGET) * 100, 100);
@@ -7366,7 +6745,7 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
-      // PRIMARY: Backend API
+      // Try backend /api/stats first (fast path)
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
         const ctrl = new AbortController();
@@ -7375,24 +6754,19 @@ function startGoldNetwork(canvasId, isSplash) {
         if (res.ok) {
           const data = await res.json();
           if (typeof data.totalUsdc === 'number') {
-            if (data.totalUsdc > _highWatermark) {
-              _highWatermark = data.totalUsdc;
-            }
             updateUI(data.totalUsdc);
             return;
           }
         }
-      } catch(e) { }
+      } catch(e) { /* backend not ready, fall through to on-chain */ }
 
-      // FALLBACK: On-chain - monitor all 3 split wallets
-      const total = await getTotalRaisedFromChain();
-      rpcIndex = 0;
-      
-      if (total > _highWatermark) {
-        _highWatermark = total;
+      // Fallback: sum USDC inflows from all 3 wallets on-chain
+      let total = 0;
+      for (let i = 0; i < WALLETS.length; i++) {
+        total += await getUsdcInflow(WALLETS[i]);
       }
+      rpcIndex = 0;
       updateUI(total);
-      
     } catch(e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
     } finally {
