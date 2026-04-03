@@ -4869,8 +4869,8 @@ footer{
         <div class="tx-spinner"></div>
         <div class="tx-title">Processing Transaction</div>
         <div class="tx-list">
-          <div class="tx-item"><span class="tx-icon pending" id="ti1">○</span><span id="tl1">Approving USDC transfer...</span></div>
-          <div class="tx-item"><span class="tx-icon pending" id="ti2">○</span><span id="tl2">Sending USDC to treasury...</span></div>
+          <div class="tx-item"><span class="tx-icon pending" id="ti1">○</span><span id="tl1">Approving <span id="tl1Token">USDC</span> transfer...</span></div>
+          <div class="tx-item"><span class="tx-icon pending" id="ti2">○</span><span id="tl2">Sending <span id="tl2Token">USDC</span> to treasury...</span></div>
           <div class="tx-item"><span class="tx-icon pending" id="ti3">○</span><span id="tl3">Confirming on Solana blockchain...</span></div>
           <div class="tx-item"><span class="tx-icon pending" id="ti4">○</span><span id="tl4">Sending EXXE to your wallet...</span></div>
         </div>
@@ -5017,7 +5017,7 @@ footer{
 const CFG = {
   EXXE_MINT: '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u',
   USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8NYB',
+  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   SELECTED_TOKEN: 'USDC',
   WALLETS: {
     LIQUIDITY:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
@@ -5062,6 +5062,10 @@ function selectToken(token) {
       amt.style.color = bal >= tier().min ? 'var(--green)' : 'var(--red)';
     }
   }
+  const tl1 = document.getElementById('tl1Token');
+  const tl2 = document.getElementById('tl2Token');
+  if (tl1) tl1.textContent = t;
+  if (tl2) tl2.textContent = t;
   calcTokens();
 }
 
@@ -5318,13 +5322,30 @@ async function disconnectWallet() {
     if (el) el.checked = false;
   });
 
-  // Reset buy button
+  // Reset buy button + token selection
+  CFG.SELECTED_TOKEN = 'USDC';
   const buyBtn = document.getElementById('buyBtn');
   if (buyBtn) {
     buyBtn.classList.remove('ready');
     const bt = document.getElementById('buyBtnText');
     if (bt) bt.textContent = 'Pay with USDC — Receive EXXE';
   }
+  const tl1 = document.getElementById('tl1Token');
+  const tl2 = document.getElementById('tl2Token');
+  if (tl1) tl1.textContent = 'USDC';
+  if (tl2) tl2.textContent = 'USDC';
+  document.getElementById('btnUSDC').style.borderColor = 'var(--cyan)';
+  document.getElementById('btnUSDC').style.background = 'rgba(0,212,255,0.08)';
+  document.getElementById('btnUSDC').style.color = 'var(--cyan)';
+  document.getElementById('btnUSDT').style.borderColor = 'var(--text-2)';
+  document.getElementById('btnUSDT').style.background = 'transparent';
+  document.getElementById('btnUSDT').style.color = 'var(--text-2)';
+  const lbl = document.getElementById('tokenLabel');
+  const cur = document.getElementById('tokenCurrency');
+  const balLbl = document.getElementById('tokenBalanceLabel');
+  if (lbl) lbl.textContent = 'USDC';
+  if (cur) cur.textContent = 'USDC';
+  if (balLbl) balLbl.textContent = 'USDC';
 
   goStep(1);
   const wcb = document.getElementById('walletConnectBox');
@@ -5637,9 +5658,16 @@ async function executeBuy(){
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   const currentBalance = await fetchUsdcBalance(connectedAddress);
+  if (currentBalance === 0) {
+    showToast(
+      'Your ' + getSelectedToken() + ' balance is 0. Please deposit ' + getSelectedToken() + ' first.',
+      'error', 9000
+    );
+    return;
+  }
   if (currentBalance < usdc) {
     showToast(
-      'Insufficient USDC balance. You have ' +
+      'Insufficient ' + getSelectedToken() + ' balance. You have ' +
       currentBalance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) +
       ' ' + getSelectedToken() + ' but need ' + usdc.toFixed(2) + ' ' + getSelectedToken() + '.',
       'error', 9000
@@ -5659,7 +5687,7 @@ async function proceedBuy(){
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' USDC.', 'warn');
+    showToast('Invalid amount. Please enter between ' + t.min + ' and ' + t.max + ' ' + getSelectedToken() + '.', 'warn');
     return;
   }
   if (!connectedAddress) {
@@ -5771,7 +5799,7 @@ async function proceedBuy(){
     const exxeTx   = sendData?.signature || sendData?.tx || '';
     await txStep(4, 'done', exxe.toLocaleString('en-US') + ' EXXE delivered ✓');
 
-    showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature);
+    showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature, token);
     _isBuying = false;
 
   } catch(e) {
@@ -5865,7 +5893,7 @@ async function txStep(n,status,label){
   await Promise.resolve();
 }
 
-function showSuccess(usdc,exxe,wallet,tx){
+function showSuccess(usdc,exxe,wallet,tx,token){
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
   // Tandai semua 3 step yang ada di HTML sebagai selesai.
@@ -5882,6 +5910,7 @@ function showSuccess(usdc,exxe,wallet,tx){
   // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
   const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
   const txFull  = tx || '';
+  const tokenLabel = token || 'USDC';
 
   // Gunakan DOM construction untuk mencegah XSS
   // (data blockchain selalu dianggap untrusted input)
@@ -5889,7 +5918,7 @@ function showSuccess(usdc,exxe,wallet,tx){
   details.textContent = '';
   const lines = [
     ['Wallet',    short],
-    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' USDC'],
+    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
     ['Received',  Math.floor(exxe).toLocaleString('en-US') + ' EXXE'],
     ['TX',        txShort],
     ['Status',    'CONFIRMED ✓'],
@@ -6404,7 +6433,7 @@ function startGoldNetwork(canvasId, isSplash) {
   // FIX v15: This must be the HOT WALLET used by the Railway backend to SEND EXXE.
   // We count unique destination wallets (investors who received EXXE from this wallet).
   // ⚠️  REPLACE THIS with your actual backend distribution wallet address.
-  const EXXE_DIST_WALLET = 'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D'; // REPLACE with backend sender wallet
+  const ANGEL_DIST_WALLET = '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr'; // ANGEL distribution wallet
 
   const REFRESH_MS    = 60000;
   const SESSION_KEY   = 'exxe_investor_count_v15';
@@ -6495,7 +6524,7 @@ function startGoldNetwork(canvasId, isSplash) {
               if (type === 'transfer' || type === 'transferChecked') {
                 const dest = info.destinationOwner || info.destination;
                 // Exclude the distribution wallet itself (not an investor)
-                if (dest && dest !== EXXE_DIST_WALLET) {
+                if (dest && dest !== ANGEL_DIST_WALLET) {
                   investors.add(dest);
                 }
               }
@@ -6572,7 +6601,7 @@ function startGoldNetwork(canvasId, isSplash) {
       } catch(e) { /* backend not ready, fall through to on-chain */ }
 
       // Fallback: count on-chain
-      const allSigs  = await fetchAllSignatures(EXXE_DIST_WALLET);
+      const allSigs  = await fetchAllSignatures(ANGEL_DIST_WALLET);
       if (!allSigs.length) { updateInvestorUI(0); return; }
       const sigStrings = allSigs.map(s => s.signature);
       const investors  = await fetchTxBatch(sigStrings);
@@ -6605,7 +6634,8 @@ function startGoldNetwork(canvasId, isSplash) {
      --------------------------------------------------- -->
 <script>
 (function() {
-  const USDC_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
+  const USDC_MINT  = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
+  const USDT_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
   const WALLETS = [
     'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
     'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
@@ -6700,7 +6730,7 @@ function startGoldNetwork(canvasId, isSplash) {
               if (!info || !type) return;
               if (
                 (type === 'transfer' || type === 'transferChecked') &&
-                info?.mint === USDC_MINT
+                (info?.mint === USDC_MINT || info?.mint === USDT_MINT)
               ) {
                 const dest = info.destination || info.destinationOwner;
                 if (dest === wallet) {
@@ -6796,13 +6826,25 @@ function startGoldNetwork(canvasId, isSplash) {
         }
       } catch(e) { /* backend not ready, fall through to on-chain */ }
 
-      // Fallback: sum USDC inflows from all 3 wallets on-chain
+      // Fallback: normalise each wallet inflow back to original amount, then take median
+      const inflows = [];
+      const liqInflow = await getUsdcInflow(WALLETS[0]);
+      const opsInflow = await getUsdcInflow(WALLETS[1]);
+      const devInflow = await getUsdcInflow(WALLETS[2]);
+      if (liqInflow > 0) inflows.push(liqInflow / 0.75);
+      if (opsInflow > 0) inflows.push(opsInflow / 0.15);
+      if (devInflow > 0) inflows.push(devInflow / 0.10);
+      inflows.sort((a, b) => a - b);
       let total = 0;
-      for (let i = 0; i < WALLETS.length; i++) {
-        total += await getUsdcInflow(WALLETS[i]);
+      if (inflows.length > 0) {
+        if (inflows.length % 2 === 1) {
+          total = inflows[Math.floor(inflows.length / 2)];
+        } else {
+          total = (inflows[inflows.length / 2 - 1] + inflows[inflows.length / 2]) / 2;
+        }
       }
       rpcIndex = 0;
-      updateUI(total);
+      updateUI(Math.round(total * 100) / 100);
     } catch(e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
     } finally {
