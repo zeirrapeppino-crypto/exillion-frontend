@@ -5116,6 +5116,7 @@ async function fetchUsdcBalance(walletAddress) {
     }) + ' ' + token;
     amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
   }
+  checkReady();
   return balance;
 }
 
@@ -5613,17 +5614,17 @@ function checkReady(){
   const usdc=parseFloat(document.getElementById('usdcAmount')?.value)||0;
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
-  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress){
+  const token = getSelectedToken();
+  const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  const hasEnoughBalance = cachedBal >= t.min;
+  if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
-    // FIX QUALITY #7: Use explicit locale + fractionDigits for consistent formatting
-    // across all user locales. Plain .toLocaleString() gives "1,000.0000000001" in some locales.
     const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
-    const token = getSelectedToken();
     const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
-    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with '+getSelectedToken()+' — Receive EXXE';
+    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with '+token+' — Receive EXXE';
   }
 }
 
@@ -5652,9 +5653,9 @@ async function executeBuy(){
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
   const currentBalance = await fetchUsdcBalance(connectedAddress);
-  if (!currentBalance || currentBalance <= 0) {
+  if (currentBalance < t.min) {
     showToast(
-      'Your ' + getSelectedToken() + ' balance is insufficient. Please deposit ' + getSelectedToken() + ' first.',
+      'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min + ' ' + getSelectedToken() + '.',
       'error', 9000
     );
     _isBuying = false;
