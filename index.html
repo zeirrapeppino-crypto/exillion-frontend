@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
 <!-- font-display:block prevents FOUC: browser BLOCKS text render until Orbitron is ready -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=block" rel="stylesheet"/>
 <!-- FIX v15: @solana/web3.js — required for proper VersionedTransaction signing with Phantom & Solflare.
      The UMD bundle exposes window.solanaWeb3 globally. Loaded in <head> with defer so it
      is ready before any wallet interaction button is clicked. -->
@@ -126,6 +126,7 @@ body{
   background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,0.018) 3px,rgba(0,212,255,0.018) 4px);
   pointer-events:none;z-index:0;
   will-change:opacity;
+  transform:translateZ(0);
   animation:scanFlicker 11s ease-in-out infinite;
   opacity:0.5;
 }
@@ -135,7 +136,6 @@ body{
 @media(prefers-reduced-motion:reduce){
   .scanline,body::before,body::after{animation:none!important;}
   .reveal{transition:none!important;}
-  .btn-gold,.btn-gold::before,.nav-cta::before{animation:none!important;}
 }
 
 /* FILM GRAIN — v6: statis + slow drift, no rapid steps() — CPU-friendly */
@@ -146,6 +146,7 @@ body::before{
   background-size:256px 256px;
   pointer-events:none;z-index:0;
   will-change:opacity;
+  transform:translateZ(0);
   animation:grainBreath 8s ease-in-out infinite alternate;
   opacity:0.45;
 }
@@ -165,6 +166,7 @@ body::after{
     radial-gradient(ellipse 30% 30% at 50% 50%, rgba(153,69,255,0.04) 0%, transparent 60%);
   pointer-events:none;z-index:0;
   will-change:opacity;
+  transform:translateZ(0);
   animation:ambientBreathe 14s ease-in-out infinite alternate;
 }
 @keyframes ambientBreathe{
@@ -225,7 +227,7 @@ nav{
 
 .nav-links a{
   font-family:'Orbitron',monospace;
-  font-size:0.75rem;
+  font-size:0.58rem;
   letter-spacing:2.5px;
   text-transform:uppercase;
   color:var(--text-2);
@@ -236,7 +238,7 @@ nav{
 
 .nav-cta{
   font-family:'Orbitron',monospace;
-  font-size:0.75rem;
+  font-size:0.58rem;
   font-weight:700;
   letter-spacing:2.5px;
   text-transform:uppercase;
@@ -510,16 +512,6 @@ nav{
   0%   { background-position: 150% 0%; }
   50%  { background-position: -150% 0%; }
   100% { background-position: 150% 0%; }
-}
-@keyframes goldSunlight{
-  0%   { left:-80%; opacity:0; }
-  15%  { opacity:1; }
-  50%  { left:120%; opacity:0.8; }
-  100% { left:120%; opacity:0; }
-}
-@keyframes goldBtnShift{
-  0%,100% { background-position:0% 50%; }
-  50%     { background-position:100% 50%; }
 }
 @keyframes titleGoldGlowMain{
   0%  {filter:drop-shadow(0 0 6px rgba(255,215,0,0.5)) drop-shadow(0 0 14px rgba(204,125,7,0.3));}
@@ -1386,7 +1378,7 @@ footer{
 }
 .footer-copy{font-size:0.78rem;color:var(--text-1);}
 .footer-chain{
-  font-family:'Orbitron',monospace;font-size:0.75rem;
+  font-family:'Orbitron',monospace;font-size:0.58rem;
   letter-spacing:2px;color:var(--text-1);
   display:flex;align-items:center;gap:6px;
 }
@@ -1503,7 +1495,7 @@ footer{
 }
 .sticky-banner.show{transform:translateY(0);}
 .banner-text{
-  font-family:'Orbitron',monospace;font-size:0.75rem;
+  font-family:'Orbitron',monospace;font-size:0.58rem;
   color:var(--text-1);letter-spacing:1px;line-height:1.5;
 }
 .banner-text em{color:var(--cyan);opacity:0.8;font-style:normal;}
@@ -1731,7 +1723,7 @@ footer{
 
   /* Buy steps */
   .buy-steps{ gap:0;margin-bottom:1.5rem; }
-  .bstep-num{ width:22px;height:22px;font-size:0.75rem; }
+  .bstep-num{ width:22px;height:22px;font-size:0.58rem; }
   .bstep-lbl{ font-size:0.38rem;letter-spacing:1px; }
   .step-line{ max-width:28px; }
 
@@ -4008,7 +4000,7 @@ footer{
   }
   .infog-pillar-label{
     font-family:'Orbitron',monospace;
-    font-size:0.75rem;letter-spacing:2px;
+    font-size:0.58rem;letter-spacing:2px;
     color:var(--text-1);margin-bottom:0.6rem;
     text-transform:uppercase;
   }
@@ -4360,7 +4352,7 @@ footer{
       <div style="position:relative;z-index:1;">
         <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.25);padding:6px 18px;margin-bottom:1.5rem;">
           <div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;"></div>
-          <span style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:3px;color:var(--green);">IN DEVELOPMENT</span>
+          <span style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:3px;color:var(--green);">IN DEVELOPMENT</span>
         </div>
 
         <h3 style="font-family:'Orbitron',monospace;font-size:clamp(1.2rem,2.5vw,2rem);font-weight:600;letter-spacing:4px;color:var(--text-1);margin-bottom:0.8rem;">mEXXE Mining App</h3>
@@ -4800,19 +4792,23 @@ footer{
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- FIX v15: USDC Balance display — shown after wallet connect -->
+      <!-- FIX v15: Token Balance display — shown after wallet connect -->
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
-        <span style="color:var(--text-2);">YOUR USDC BALANCE</span>
+        <span style="color:var(--text-2);">YOUR <span id="tokenBalanceLabel">USDC</span> BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
+        <div style="display:flex;gap:10px;margin-bottom:1rem;">
+          <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--cyan);background:rgba(0,212,255,0.08);color:var(--cyan);cursor:pointer;border-radius:4px;">USDC</button>
+          <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;">USDT</button>
+        </div>
         <div class="form-field">
-          <label class="field-label">Investment Amount (USDC)</label>
+          <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
               placeholder="Min $10 — Max $250 USDC"
               oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
-            <span class="field-currency">USDC</span>
+            <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
           <div class="amount-hints">
             <button class="hint" onclick="setAmount(10)">$10</button>
@@ -5020,7 +5016,9 @@ footer{
 // --- CONFIG --------------------------------------------------
 const CFG = {
   EXXE_MINT: '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u',
-  USDC_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+  USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+  USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8NYB',
+  SELECTED_TOKEN: 'USDC',
   WALLETS: {
     LIQUIDITY:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
     OPERATIONAL: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
@@ -5036,6 +5034,36 @@ const CFG = {
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
+
+function getSelectedToken() { return CFG.SELECTED_TOKEN; }
+function getSelectedMint() { return CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MINT : CFG.USDC_MINT; }
+function selectToken(token) {
+  CFG.SELECTED_TOKEN = token;
+  const t = getSelectedToken();
+  const lbl = document.getElementById('tokenLabel');
+  const cur = document.getElementById('tokenCurrency');
+  const balLbl = document.getElementById('tokenBalanceLabel');
+  const inp = document.getElementById('usdcAmount');
+  if (lbl) lbl.textContent = t;
+  if (cur) cur.textContent = t;
+  if (balLbl) balLbl.textContent = t;
+  inp.placeholder = 'Min $' + tier().min + ' — Max $' + tier().max + ' ' + t;
+  document.getElementById('btnUSDC').style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
+  document.getElementById('btnUSDC').style.background = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
+  document.getElementById('btnUSDC').style.color = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
+  document.getElementById('btnUSDT').style.borderColor = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+  document.getElementById('btnUSDT').style.background = t === 'USDT' ? 'rgba(0,212,255,0.08)' : 'transparent';
+  document.getElementById('btnUSDT').style.color = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+  if (connectedAddress) {
+    const bal = t === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+    const amt = document.getElementById('usdcBalanceAmt');
+    if (amt) {
+      amt.textContent = bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + t;
+      amt.style.color = bal >= tier().min ? 'var(--green)' : 'var(--red)';
+    }
+  }
+  calcTokens();
+}
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
 const RPC_LIST = [
@@ -5067,13 +5095,33 @@ function showToast(message, type, duration) {
   toast.querySelector('.toast-close').addEventListener('click', () => clearTimeout(timer));
 }
 
-// ── FIX v15 #3: Fetch USDC balance for connected wallet ──────────
+// ── FIX v15 #3: Fetch USDC + USDT balances for connected wallet ──
+var cachedUsdcBalance = 0;
+var cachedUsdtBalance = 0;
+
 async function fetchUsdcBalance(walletAddress) {
   const bar = document.getElementById('usdcBalanceBar');
   const amt = document.getElementById('usdcBalanceAmt');
   if (bar) bar.style.display = 'flex';
   if (amt) amt.textContent = 'Loading...';
 
+  const token = CFG.SELECTED_TOKEN;
+  const usdcFut = fetchTokenBalance(walletAddress, CFG.USDC_MINT);
+  const usdtFut = fetchTokenBalance(walletAddress, CFG.USDT_MINT);
+  const [usdc, usdt] = await Promise.all([usdcFut, usdtFut]);
+  cachedUsdcBalance = usdc;
+  cachedUsdtBalance = usdt;
+  const balance = token === 'USDT' ? usdt : usdc;
+  if (amt) {
+    amt.textContent = balance.toLocaleString('en-US', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    }) + ' ' + token;
+    amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
+  }
+  return balance;
+}
+
+async function fetchTokenBalance(walletAddress, mint) {
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
@@ -5086,7 +5134,7 @@ async function fetchUsdcBalance(walletAddress) {
           method: 'getTokenAccountsByOwner',
           params: [
             walletAddress,
-            { mint: CFG.USDC_MINT },
+            { mint: mint },
             { encoding: 'jsonParsed' }
           ]
         }),
@@ -5094,23 +5142,16 @@ async function fetchUsdcBalance(walletAddress) {
       });
       clearTimeout(timer);
       if (!res.ok) continue;
-      const data    = await res.json();
+      const data     = await res.json();
       const accounts = data?.result?.value || [];
       let balance = 0;
       accounts.forEach(acc => {
         const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
         if (ui) balance += ui;
       });
-      if (amt) {
-        amt.textContent = balance.toLocaleString('en-US', {
-          minimumFractionDigits: 2, maximumFractionDigits: 2
-        }) + ' USDC';
-        amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
-      }
       return balance;
     } catch(e) { /* try next RPC */ }
   }
-  if (amt) { amt.textContent = 'Unable to fetch'; amt.style.color = 'var(--text-2)'; }
   return 0;
 }
 
@@ -5532,6 +5573,7 @@ function setAmount(v){ document.getElementById('usdcAmount').value=v; calcTokens
 
 function calcTokens(){
   const t=tier();
+  const token = getSelectedToken();
   let usdc=parseFloat(document.getElementById('usdcAmount').value)||0;
   if(usdc>t.max){ document.getElementById('usdcAmount').value=t.max; usdc=t.max; }
   if(usdc<0){ document.getElementById('usdcAmount').value=0; usdc=0; }
@@ -5540,10 +5582,9 @@ function calcTokens(){
     const exxe=usdc/t.price;
     const atL=usdc*(CFG.LISTING/t.price);
     box.style.display='flex';
-    // BUG FIX: use consistent locale formatting with explicit fraction digits
-    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
+    document.getElementById('calcPay').textContent=usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
     document.getElementById('calcReceive').textContent=exxe.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+' EXXE';
-    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' USDC';
+    document.getElementById('calcListing').textContent='$'+atL.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})+' '+token;
     document.getElementById('calcGain').textContent='+'+t.gain+'%';
   } else { box.style.display='none'; }
   checkReady();
@@ -5562,11 +5603,12 @@ function checkReady(){
     // FIX QUALITY #7: Use explicit locale + fractionDigits for consistent formatting
     // across all user locales. Plain .toLocaleString() gives "1,000.0000000001" in some locales.
     const exxe = Math.floor(usdc/t.price).toLocaleString('en-US');
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} USDC — Receive ${exxe} EXXE`;
+    const token = getSelectedToken();
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay ${usdc} ${token} — Receive ${exxe} EXXE`;
     goStep(3);
   } else {
     btn.classList.remove('ready');
-    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with USDC — Receive EXXE';
+    const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with '+getSelectedToken()+' — Receive EXXE';
   }
 }
 
@@ -5594,14 +5636,12 @@ async function executeBuy(){
   // FIX v15 #4: Check USDC balance before building tx
   const t = tier();
   const usdc = parseFloat(document.getElementById('usdcAmount')?.value) || 0;
-  // FIX v16: gunakan nama token yang dipilih (USDC atau USDT)
-  const _selectedToken = getSelectedToken();
   const currentBalance = await fetchUsdcBalance(connectedAddress);
   if (currentBalance < usdc) {
     showToast(
-      'Insufficient ' + _selectedToken + ' balance. You have ' +
+      'Insufficient USDC balance. You have ' +
       currentBalance.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) +
-      ' ' + _selectedToken + ' but need ' + usdc.toFixed(2) + ' ' + _selectedToken + '.',
+      ' ' + getSelectedToken() + ' but need ' + usdc.toFixed(2) + ' ' + getSelectedToken() + '.',
       'error', 9000
     );
     return;
@@ -5640,13 +5680,14 @@ async function proceedBuy(){
   if (_procP) _procP.style.display = 'block';
 
   try {
+    const token = getSelectedToken();
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
-    await txStep(1, 'active', 'Building USDC split transaction...');
+    await txStep(1, 'active', 'Building ' + token + ' split transaction...');
     const buildRes = await Promise.race([
       fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
     ]);
@@ -5698,7 +5739,7 @@ async function proceedBuy(){
     if (!txSignature || typeof txSignature !== 'string' || txSignature.length < 20) {
       throw new Error('Wallet returned an invalid or empty signature. Please try again.');
     }
-    await txStep(2, 'done', 'USDC split signed ✓');
+    await txStep(2, 'done', token + ' split signed ✓');
 
     // ── Step 3: Wait for on-chain confirmation then verify ────────────
     await txStep(3, 'active', 'Verifying on Solana blockchain...');
@@ -5708,7 +5749,7 @@ async function proceedBuy(){
       fetch(CFG.API + '/verify-payment', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER })
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Verification timeout — contact support. TX: ' + txSignature)), 45000))
     ]);
@@ -5721,7 +5762,7 @@ async function proceedBuy(){
       fetch(CFG.API + '/send-exxe', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature })
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature, token })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('EXXE delivery timeout — contact support. TX: ' + txSignature)), 60000))
     ]);
@@ -5748,13 +5789,7 @@ async function proceedBuy(){
 
 // --- Send raw signed bytes to Solana RPC with fallback -------
 async function sendRawTransaction(signedBytes) {
-  // FIX v16: chunked btoa — hindari stack overflow pada TX besar
-  let b64 = '';
-  const chunk = 8192;
-  for (let i = 0; i < signedBytes.length; i += chunk) {
-    b64 += String.fromCharCode(...signedBytes.subarray(i, i + chunk));
-  }
-  b64 = btoa(b64);
+  const b64 = btoa(String.fromCharCode(...signedBytes));
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
@@ -5887,9 +5922,10 @@ function toggleMenu(){
   btn.classList.toggle('open');
 }
 
-// FIX v16: initMenuListeners harus di dalam DOMContentLoaded agar DOM sudah siap
-// sebelum querySelectorAll('#navLinks a') dipanggil.
-document.addEventListener('DOMContentLoaded', function initMenuListeners() {
+// FIX WARNING #7 & #8: Wrap all event listener registrations in a one-time init
+// function called on DOMContentLoaded. This prevents duplicate listeners if the
+// script context is ever re-evaluated, and keeps setup logic in one place.
+(function initMenuListeners() {
   function closeMenu() {
     const nl = document.getElementById('navLinks');
     const hb = document.getElementById('hamburger');
@@ -5916,7 +5952,7 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   // Hamburger visibility is handled by CSS media query (display:flex at <=768px).
   // JS resize listener ensures the mobile panel closes when resizing to desktop.
   window.addEventListener('resize', handleNavResize);
-});
+})();
 </script>
 
 </div><!-- /#main-content-inner -->
