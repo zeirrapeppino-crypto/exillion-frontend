@@ -1,5 +1,14 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v24 (v23 + Security Fixes: showToast XSS-safe DOM, proceedBuy amount sanitization, actualAmount from backend on-chain verify, waitForConfirmation timeout handler, fetchFunding visibilitychange pause, .reveal filter:blur removed for mobile perf) -->
+<!-- Exillion Capital Finecosystem — v26 (v25 + Bug Fixes:
+     BUG-1 KRITIS : Double-guard _isBuying di proceedBuy dihapus — transaksi sekarang berjalan
+     BUG-2        : Null-guard di selectToken() — cegah TypeError crash sebelum elemen render
+     BUG-3        : Deep link Phantom & Solflare diupdate ke /ul/v1/browse/ (format 2024+)
+     BUG-4        : inputmode=decimal + autocomplete=off — keyboard mobile lebih bersih
+     BUG-5        : overscroll-behavior:contain di modal + body overflow lock saat modal buka
+     BUG-6        : calcListing & calcPay selalu sinkron dengan token USDC/USDT yang dipilih
+     BUG-7        : RPC_LIST tambah publicnode.com sebagai fallback ke-3 saat Solana congested
+     BUG-8        : Debounce 150ms pada input amount — cegah lag di HP low-end Android
+) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -1517,6 +1526,7 @@ footer{
   display:none;
   align-items:center;justify-content:center;
   padding:20px;
+  overscroll-behavior:contain; /* FIX v26 BUG-5: cegah background scroll saat overlay aktif di iOS */
 }
 .modal-overlay.active{
   display:flex;
@@ -1532,6 +1542,8 @@ footer{
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
   padding:2.5rem;
   max-height:90vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch; /* FIX v26 BUG-5: smooth scroll iOS */
+  overscroll-behavior:contain; /* cegah scroll bubble ke background */
   position:relative;
 }
 .modal-box::before{
@@ -4932,7 +4944,8 @@ footer{
             <input type="number" class="field-input" id="usdcAmount"
               placeholder="Min $10.00 — Max $250.00 USDC"
               min="10" max="250" step="0.01"
-              oninput="calcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
+              inputmode="decimal" autocomplete="off"
+              oninput="debouncedCalcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
           <div class="amount-hints">
@@ -5183,12 +5196,19 @@ function selectToken(token) {
     inp.max  = tier().max;
     inp.step = '0.01';
   }
-  document.getElementById('btnUSDC').style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
-  document.getElementById('btnUSDC').style.background = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
-  document.getElementById('btnUSDC').style.color = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
-  document.getElementById('btnUSDT').style.borderColor = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
-  document.getElementById('btnUSDT').style.background = t === 'USDT' ? 'rgba(0,212,255,0.08)' : 'transparent';
-  document.getElementById('btnUSDT').style.color = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+  // FIX v26 BUG-2: Null-guard — elemen mungkin belum ada saat dipanggil di mobile
+  const _bU = document.getElementById('btnUSDC');
+  const _bT = document.getElementById('btnUSDT');
+  if (_bU) {
+    _bU.style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
+    _bU.style.background  = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
+    _bU.style.color       = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
+  }
+  if (_bT) {
+    _bT.style.borderColor = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+    _bT.style.background  = t === 'USDT' ? 'rgba(0,212,255,0.08)' : 'transparent';
+    _bT.style.color       = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+  }
   if (connectedAddress) {
     const bal = t === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
     const amt = document.getElementById('usdcBalanceAmt');
@@ -5205,10 +5225,20 @@ function selectToken(token) {
 }
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
+// FIX v26 BUG-7: Tambah endpoint ke-3 sebagai fallback extra saat Solana congested
 const RPC_LIST = [
   'https://api.mainnet-beta.solana.com',
   'https://rpc.ankr.com/solana',
+  'https://solana-rpc.publicnode.com',
 ];
+
+// FIX v26 BUG-8: Debounce calcTokens 150ms — cegah input lag di HP low-end
+// Setiap keystroke tidak langsung trigger DOM query + kalkulasi penuh
+let _calcDebounceTimer = null;
+function debouncedCalcTokens() {
+  clearTimeout(_calcDebounceTimer);
+  _calcDebounceTimer = setTimeout(calcTokens, 150);
+}
 
 // ── FIX v15 #1 / v24: Toast notification system — XSS-safe via DOM ──
 // v24 FIX: Ganti innerHTML dengan DOM construction — textContent tidak
@@ -5355,7 +5385,12 @@ function acceptDisclaimer(){
   disclaimerAccepted = true;
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
-  setTimeout(()=>{ overlay.classList.remove('active'); overlay.style.opacity=''; overlay.style.transition=''; },300);
+  setTimeout(()=>{
+    overlay.classList.remove('active');
+    overlay.style.opacity='';
+    overlay.style.transition='';
+    document.body.style.overflow=''; // FIX v26 BUG-5: restore scroll
+  },300);
   setTimeout(()=>{ const _sb=document.getElementById('stickyBanner'); if(_sb) _sb.classList.add('show'); },500);
   // FIX CRITICAL #1: Removed auto-trigger of proceedBuy(). Blockchain transactions
   // must ONLY be initiated by an explicit user click — never auto-fired after modal close.
@@ -5366,7 +5401,12 @@ function declineDisclaimer(){
   if (overlay) {
     overlay.style.opacity='0';
     overlay.style.transition='opacity 0.3s';
-    setTimeout(()=>{ overlay.classList.remove('active'); overlay.style.opacity=''; overlay.style.transition=''; },300);
+    setTimeout(()=>{
+      overlay.classList.remove('active');
+      overlay.style.opacity='';
+      overlay.style.transition='';
+      document.body.style.overflow=''; // FIX v26 BUG-5: restore scroll
+    },300);
   }
 }
 
@@ -5531,7 +5571,8 @@ async function connectPhantom() {
     const provider = getPhantomProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = 'https://phantom.app/ul/browse/' + currentUrl + '?ref=' + currentUrl;
+      // FIX v26 BUG-3: Format deep link Phantom v1 (2024+) — format /ul/browse/ sudah deprecated
+      window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
       return;
     }
   }
@@ -5594,7 +5635,8 @@ async function connectSolflare() {
     const provider = getSolflareProvider();
     if (!provider) {
       const currentUrl = encodeURIComponent(window.location.href);
-      window.location.href = 'https://solflare.com/ul/browse/' + currentUrl + '?ref=' + currentUrl;
+      // FIX v26 BUG-3: Format deep link Solflare v1 (2024+)
+      window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
       return;
     }
   }
@@ -5761,10 +5803,12 @@ function calcTokens(){
     // EXXE = usdc / price, rounded to nearest whole token
     const exxe = Math.round(usdc / t.price);
     const atL  = Math.round(exxe * CFG.LISTING * 100) / 100;
+    // FIX v26 BUG-6: Ambil token di sini (bukan dari luar) agar selalu sinkron
+    const currentToken = getSelectedToken();
     box.style.display='flex';
-    document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + token;
+    document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
     document.getElementById('calcReceive').textContent = exxe.toLocaleString('en-US') + ' EXXE';
-    document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + token;
+    document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
     document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
   } else { box.style.display='none'; }
   checkReady();
@@ -5815,7 +5859,11 @@ async function executeBuy(){
     const btn = document.getElementById('agreeBtn');
     if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm 4 remaining item(s)'; }
     const _ov = document.getElementById('disclaimerOverlay');
-    if(_ov){ _ov.classList.add('active'); _ov.style.opacity='1'; }
+    if(_ov){
+      _ov.classList.add('active');
+      _ov.style.opacity='1';
+      document.body.style.overflow='hidden'; // FIX v26 BUG-5: lock scroll iOS
+    }
     return;
   }
 
@@ -5858,7 +5906,6 @@ async function executeBuy(){
 async function proceedBuy(){
   const _pb = document.getElementById('buyBtn');
   if(!_pb || !_pb.classList.contains('ready')) return;
-  if(_isBuying) return;
 
   const t = tier();
   // v24 FIX #2: Sanitasi ketat — tolak NaN, Infinity, negatif, non-finite
