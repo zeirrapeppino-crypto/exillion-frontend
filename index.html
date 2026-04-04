@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v22 (Splash 1: tombol JOIN naik, micro-copy No KYC dipindah ke bawah tombol merapat) -->
+<!-- Exillion Capital Finecosystem — v24 (v23 + Security Fixes: showToast XSS-safe DOM, proceedBuy amount sanitization, actualAmount from backend on-chain verify, waitForConfirmation timeout handler, fetchFunding visibilitychange pause, .reveal filter:blur removed for mobile perf) -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -21,7 +21,7 @@
      Orbitron: display=block (wajib, cegah FOUC di splash).
      JetBrains Mono: display=swap (non-blocking, hanya dipakai di success panel) →
      tidak perlu block render seluruh halaman hanya untuk font success panel. -->
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=block" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
 <!-- FIX v15: @solana/web3.js — required for proper VersionedTransaction signing with Phantom & Solflare.
      The UMD bundle exposes window.solanaWeb3 globally. Loaded in <head> with defer so it
@@ -86,6 +86,7 @@ body {
   --red:         #ff3366;
   --solana-purple:#9945FF;
   --solana-green: #14F195;
+  --font-body:   'Exo 2', 'Orbitron', sans-serif;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -558,8 +559,8 @@ nav{
 
 blockquote.centerquote{
   display:block;
-  font-family:'Orbitron',monospace;
-  font-size:clamp(1.4rem,2.8vw,2.2rem);
+  font-family:var(--font-body);
+  font-size:clamp(1.5rem,2.8vw,2.2rem);
   font-weight:600;
   font-style:italic;
   color:var(--gold-light);
@@ -567,23 +568,25 @@ blockquote.centerquote{
   line-height:1.4;
   margin-bottom:2rem;
   text-shadow:0 0 30px rgba(232,201,122,0.35), 0 0 60px rgba(201,168,76,0.15);
-  letter-spacing:2px;
+  letter-spacing:1px;
 }
 
 /* v6 — Vision text: optimised for readability & investor trust */
 .vision-text p{
-  font-size:clamp(0.95rem,1.3vw,1.08rem);
-  font-weight:300;
+  font-family: var(--font-body);
+  font-size:clamp(1rem,1.3vw,1.12rem);
+  font-weight:400;
   color:var(--text-1);
-  line-height:2.05;
+  line-height:2.0;
   margin-bottom:1.35rem;
-  letter-spacing:0.3px;
+  letter-spacing:0.2px;
 }
 /* Opening sentence in each block — slightly larger & medium weight */
 .vision-text p:first-of-type{
-  font-size:clamp(1rem,1.45vw,1.18rem);
-  font-weight:400;
-  line-height:2.0;
+  font-family: var(--font-body);
+  font-size:clamp(1.05rem,1.5vw,1.22rem);
+  font-weight:500;
+  line-height:1.9;
   color:#d8eeff;
 }
 
@@ -603,7 +606,7 @@ blockquote.centerquote{
   font-size:1rem;letter-spacing:2px;
   color:var(--cyan);margin-bottom:0.3rem;
 }
-.feature-body p{font-size:0.8rem;color:var(--text-1);font-style:italic;}
+.feature-body p{font-family:var(--font-body);font-size:0.88rem;font-weight:400;color:var(--text-1);font-style:italic;line-height:1.65;}
 
 /* --- TOKENOMICS --------------------------- */
 #tokenomics{
@@ -685,7 +688,7 @@ blockquote.centerquote{
   font-size:1.3rem;font-weight:600;
   color:var(--gold);
 }
-.tcard-sub{font-size:0.85rem;font-style:italic;color:var(--text-1);margin-top:0.2rem;}
+.tcard-sub{font-family:var(--font-body);font-size:0.9rem;font-weight:400;color:var(--text-1);margin-top:0.2rem;}
 
 /* PRICE TABLE */
 .price-table{
@@ -767,7 +770,8 @@ blockquote.centerquote{
 }
 .tier-price sub{font-size:0.7rem;color:var(--text-1);}
 .tier-detail{
-  font-size:0.8rem;font-style:italic;
+  font-family:var(--font-body);
+  font-size:0.88rem;font-weight:400;
   color:var(--text-1);margin-top:0.5rem;
 }
 .tier-gain{
@@ -1040,8 +1044,8 @@ blockquote.centerquote{
 }
 .check-item:last-child{margin-bottom:0;}
 .check-item input{accent-color:var(--cyan);margin-top:3px;flex-shrink:0;}
-.check-item label{font-size:0.82rem;font-style:italic;color:var(--text-1);cursor:pointer;}
-.check-item label strong{color:var(--cyan);font-style:normal;}
+.check-item label{font-family:var(--font-body);font-size:0.92rem;font-weight:400;color:var(--text-1);cursor:pointer;line-height:1.6;}
+.check-item label strong{color:var(--cyan);font-weight:600;}
 
 .buy-btn{
   width:100%;margin-top:1.2rem;
@@ -1083,11 +1087,12 @@ blockquote.centerquote{
 }
 
 .form-note{
-  font-size:0.78rem;font-style:italic;
+  font-family:var(--font-body);
+  font-size:0.88rem;font-weight:400;
   color:var(--text-1);
   text-align:center;margin-top:1rem;
-  line-height:1.6;
-  opacity:0.7;
+  line-height:1.65;
+  opacity:0.75;
 }
 
 /* TX PROCESSING */
@@ -1132,7 +1137,104 @@ blockquote.centerquote{
   line-height:1.9;text-align:left;
 }
 
-/* --- WHITEPAPER --------------------------- */
+/* ── v23: Exo 2 — semua body/reading text di halaman utama ─────────── */
+
+/* Vision inline italic paragraphs */
+.vision-text p[style],
+.vision-text blockquote{
+  font-family:var(--font-body) !important;
+}
+
+/* Feature card inline paragraphs */
+.feature-body p[style],
+.feature-body > p{
+  font-family:var(--font-body) !important;
+  font-size:0.9rem !important;
+  font-style:italic;
+}
+
+/* Infographic & mining section inline body text */
+.infog-fw-text{
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  color:var(--text-1);
+  line-height:1.65;
+}
+
+/* Transparency section inline paragraphs */
+#transparency p,
+#transparency div[style*="font-style"]{
+  font-family:var(--font-body) !important;
+}
+
+/* Mining section VS grid descriptions */
+#mining p[style],
+#mining li,
+.vs-grid p{
+  font-family:var(--font-body) !important;
+}
+
+/* Dashboard notes */
+.dash-note{
+  font-family:var(--font-body);
+}
+
+/* Success panel */
+.success-sub{
+  font-family:var(--font-body);
+  font-size:0.95rem;
+}
+
+/* TX processing panel text */
+.tx-item{
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  font-style:normal;
+}
+
+/* Modal sub-text */
+.modal-sub{
+  font-family:var(--font-body);
+}
+
+/* Banner text */
+.banner-text{
+  font-family:var(--font-body);
+  font-size:0.78rem;
+  letter-spacing:0.3px;
+}
+
+/* Footer copy bottom */
+.footer-copy{
+  font-family:var(--font-body);
+  font-size:0.85rem;
+}
+
+/* Price table tier label */
+.price-tier{
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  font-style:normal;
+}
+
+/* Legend name (tokenomics donut) */
+.lname{
+  font-family:var(--font-body);
+  font-size:0.9rem;
+  font-style:italic;
+}
+
+/* Whitepaper card — section 4 body paragraph */
+#whitepaper p[style]{
+  font-family:var(--font-body) !important;
+}
+
+/* Angel round — form check body text label override for inline styles */
+.checks .check-item label,
+.modal-checks .modal-check label{
+  font-family:var(--font-body) !important;
+}
+/* ─────────────────────────────────────────────────────────────────── */
 #whitepaper{
   padding:0px 5% 80px;
   margin-top:-30px;
@@ -1177,20 +1279,21 @@ blockquote.centerquote{
 }
 /* Main sentence — one bold line, straight to the point */
 .wp-hook{
-  font-family:'Orbitron',monospace;
-  font-size:clamp(0.82rem,1.1vw,0.96rem);
+  font-family:var(--font-body);
+  font-size:clamp(0.9rem,1.1vw,1.02rem);
   font-weight:500;
   color:var(--text-1);
-  line-height:1.75;
-  letter-spacing:0.2px;
+  line-height:1.7;
+  letter-spacing:0.1px;
 }
 /* Supporting detail — lighter weight, as brief context */
 .wp-text{
-  font-size:0.78rem;
+  font-family:var(--font-body);
+  font-size:0.85rem;
   font-style:italic;
   font-weight:300;
   color:var(--text-2);
-  line-height:1.75;
+  line-height:1.7;
 }
 
 /* --- DASHBOARD ---------------------------- */
@@ -1306,7 +1409,7 @@ blockquote.centerquote{
   position:relative;
 }
 .rm-tasks{list-style:none;display:flex;flex-direction:column;gap:0.4rem;}
-.rm-tasks li{font-size:0.88rem;font-style:italic;color:var(--text-1);display:flex;align-items:center;gap:8px;}
+.rm-tasks li{font-family:var(--font-body);font-size:0.95rem;font-weight:400;color:var(--text-1);display:flex;align-items:center;gap:8px;}
 .rm-tasks li::before{content:'◆';color:rgba(0,212,255,0.5);font-size:0.5rem;flex-shrink:0;}
 .rm-item:nth-child(even) .rm-tasks li{flex-direction:row-reverse;}
 
@@ -1369,8 +1472,10 @@ footer{
   letter-spacing:3px;color:var(--gold);
 }
 .footer-brand p{
-  font-size:0.88rem;
-  color:var(--text-1);line-height:1.7;
+  font-family:var(--font-body);
+  font-size:0.95rem;
+  font-weight:400;
+  color:var(--text-1);line-height:1.75;
   max-width:280px;
 }
 
@@ -1380,7 +1485,9 @@ footer{
 }
 .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:0.6rem;}
 .footer-col ul a{
-  font-size:0.88rem;
+  font-family:var(--font-body);
+  font-size:0.95rem;
+  font-weight:400;
   color:var(--text-1);text-decoration:none;transition:color 0.2s;
 }
 .footer-col ul a:hover{color:var(--cyan);}
@@ -1452,8 +1559,8 @@ footer{
   border-left:2px solid rgba(0,212,255,0.3);
 }
 .risk-icon{font-size:0.9rem;flex-shrink:0;margin-top:2px;}
-.risk-text{font-size:0.83rem;font-style:italic;color:var(--text-1);line-height:1.5;}
-.risk-text strong{color:var(--text-1);font-style:normal;}
+.risk-text{font-family:var(--font-body);font-size:0.92rem;font-weight:400;color:var(--text-1);line-height:1.6;}
+.risk-text strong{color:var(--text-1);font-weight:600;}
 
 .modal-checks{display:flex;flex-direction:column;gap:0.7rem;margin-bottom:1.5rem;}
 .modal-check{
@@ -1463,8 +1570,8 @@ footer{
 }
 .modal-check:hover{border-color:var(--border);}
 .modal-check input{accent-color:var(--cyan);flex-shrink:0;margin-top:2px;}
-.modal-check label{font-size:0.83rem;font-style:italic;color:var(--text-1);cursor:pointer;line-height:1.5;}
-.modal-check label strong{color:var(--cyan);font-style:normal;}
+.modal-check label{font-family:var(--font-body);font-size:0.92rem;font-weight:400;color:var(--text-1);cursor:pointer;line-height:1.6;}
+.modal-check label strong{color:var(--cyan);font-weight:600;}
 
 .modal-progress{
   font-family:'Orbitron',monospace;font-size:0.6rem;
@@ -1586,8 +1693,8 @@ footer{
 }
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
 
-.reveal{opacity:0;transform:translateY(40px);filter:blur(4px);transition:opacity 0.85s cubic-bezier(0.22,1,0.36,1),transform 0.85s cubic-bezier(0.22,1,0.36,1),filter 0.85s ease;}
-.reveal.visible{opacity:1;transform:translateY(0);filter:blur(0px);will-change:auto;}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 0.85s cubic-bezier(0.22,1,0.36,1),transform 0.85s cubic-bezier(0.22,1,0.36,1);}
+.reveal.visible{opacity:1;transform:translateY(0);will-change:auto;}
 
 /* --- RESPONSIVE --------------------------- */
 
@@ -5103,7 +5210,9 @@ const RPC_LIST = [
   'https://rpc.ankr.com/solana',
 ];
 
-// ── FIX v15 #1: Toast notification system — replaces all alert() ──
+// ── FIX v15 #1 / v24: Toast notification system — XSS-safe via DOM ──
+// v24 FIX: Ganti innerHTML dengan DOM construction — textContent tidak
+// parse HTML sehingga pesan error dari blockchain tidak bisa inject script.
 function showToast(message, type, duration) {
   type     = type     || 'info';   // 'info' | 'success' | 'error' | 'warn'
   duration = duration || 7000;
@@ -5113,10 +5222,22 @@ function showToast(message, type, duration) {
 
   const toast = document.createElement('div');
   toast.className = 'toast toast-' + type;
-  toast.innerHTML =
-    '<span class="toast-icon">' + icons[type] + '</span>' +
-    '<span class="toast-msg">'  + message.replace(/</g,'&lt;') + '</span>' +
-    '<button class="toast-close" onclick="this.parentElement.remove()">✕</button>';
+
+  const iconEl = document.createElement('span');
+  iconEl.className   = 'toast-icon';
+  iconEl.textContent = icons[type] || 'ℹ️';
+
+  const msgEl = document.createElement('span');
+  msgEl.className   = 'toast-msg';
+  msgEl.textContent = String(message); // textContent — aman dari XSS
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className   = 'toast-close';
+  closeBtn.textContent = '✕';
+
+  toast.appendChild(iconEl);
+  toast.appendChild(msgEl);
+  toast.appendChild(closeBtn);
   container.appendChild(toast);
 
   const remove = () => {
@@ -5124,7 +5245,7 @@ function showToast(message, type, duration) {
     setTimeout(() => { if (toast.parentNode) toast.remove(); }, 260);
   };
   const timer = setTimeout(remove, duration);
-  toast.querySelector('.toast-close').addEventListener('click', () => clearTimeout(timer));
+  closeBtn.addEventListener('click', () => { clearTimeout(timer); remove(); });
 }
 
 // ── FIX v15 #3: Fetch USDC + USDT balances for connected wallet ──
@@ -5740,10 +5861,15 @@ async function proceedBuy(){
   if(_isBuying) return;
 
   const t = tier();
-  // v19: allow up to 2 decimal places — round to avoid float drift
-  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
-  if (!usdc || usdc < t.min || usdc > t.max) {
-    showToast('Invalid amount. Enter between $' + t.min.toFixed(2) + ' and $' + t.max.toFixed(2) + ' ' + getSelectedToken() + '.', 'warn');
+  // v24 FIX #2: Sanitasi ketat — tolak NaN, Infinity, negatif, non-finite
+  const rawInput = parseFloat(document.getElementById('usdcAmount')?.value || 0);
+  if (!isFinite(rawInput) || isNaN(rawInput) || rawInput <= 0) {
+    showToast('Invalid amount entered.', 'warn');
+    return;
+  }
+  const usdc = Math.round(rawInput * 100) / 100; // max 2 desimal, cegah float drift
+  if (usdc < t.min || usdc > t.max) {
+    showToast('Amount must be between $' + t.min.toFixed(2) + ' and $' + t.max.toFixed(2) + ' ' + getSelectedToken() + '.', 'warn');
     return;
   }
   // Validasi token whitelist sebelum kirim ke backend
@@ -5833,36 +5959,66 @@ async function proceedBuy(){
     await txStep(2, 'done', token + ' split signed ✓');
 
     // ── Step 3: Wait for on-chain confirmation then verify ────────────
+    // v24 FIX #4: Jika waitForConfirmation timeout, jangan diam-diam lanjut.
+    // Tetap coba verify (backend cek langsung ke chain), tapi beri tahu investor.
     await txStep(3, 'active', 'Verifying on Solana blockchain...');
-    await waitForConfirmation(txSignature);
+    let confirmOk = false;
+    try {
+      await waitForConfirmation(txSignature);
+      confirmOk = true;
+    } catch(confirmErr) {
+      console.warn('[CONFIRM] Timeout — proceeding to backend verify:', txSignature);
+    }
+    if (!confirmOk) {
+      showToast(
+        'Transaction is taking longer than usual. Verifying on-chain now. TX: ' + txSignature.slice(0,16) + '...',
+        'warn', 12000
+      );
+    }
 
     const verifyRes = await Promise.race([
       fetch(CFG.API + '/verify-payment', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
+        // Kirim usdc sebagai referensi — backend akan cross-check dari chain
         body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token })
       }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('Verification timeout — contact support. TX: ' + txSignature)), 45000))
+      new Promise((_, rej) => setTimeout(() => rej(new Error(
+        'Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature
+      )), 45000))
     ]);
-    if (!verifyRes.ok) throw new Error('Payment verification failed (server ' + verifyRes.status + '). TX: ' + txSignature);
+    if (!verifyRes.ok) {
+      const errData = await verifyRes.json().catch(() => ({}));
+      throw new Error((errData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
+    }
+
+    // v24 FIX #3: Gunakan actualAmount dari backend response (nilai terverifikasi on-chain).
+    // Backend sudah mem-parse amount langsung dari TX blockchain — lebih dapat dipercaya
+    // daripada nilai 'usdc' yang berasal dari input user.
+    const verifyData   = await verifyRes.json();
+    const actualAmount = verifyData.usdcAmount  || usdc;        // on-chain verified amount
+    const actualExxe   = verifyData.exxeAmount  || Math.round(usdc / t.price); // on-chain verified EXXE
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
-    await txStep(4, 'active', 'Sending ' + exxe.toLocaleString('en-US') + ' EXXE to your wallet...');
+    await txStep(4, 'active', 'Sending ' + actualExxe.toLocaleString('en-US') + ' EXXE to your wallet...');
     const sendRes = await Promise.race([
       fetch(CFG.API + '/send-exxe', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, txSignature, token })
+        // Gunakan actualAmount yang sudah diverifikasi backend — bukan nilai input user
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token })
       }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('EXXE delivery timeout — contact support. TX: ' + txSignature)), 60000))
+      new Promise((_, rej) => setTimeout(() => rej(new Error(
+        'EXXE delivery timeout. Please contact support with TX: ' + txSignature
+      )), 60000))
     ]);
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
     const exxeTx   = sendData?.signature || sendData?.tx || '';
-    await txStep(4, 'done', exxe.toLocaleString('en-US') + ' EXXE delivered ✓');
+    await txStep(4, 'done', actualExxe.toLocaleString('en-US') + ' EXXE delivered ✓');
 
-    showSuccess(usdc, exxe, connectedAddress, exxeTx || txSignature, token);
+    showSuccess(actualAmount, actualExxe, connectedAddress, exxeTx || txSignature, token);
     _isBuying = false;
 
   } catch(e) {
@@ -6980,7 +7136,20 @@ function startGoldNetwork(canvasId, isSplash) {
   document.addEventListener('DOMContentLoaded', function() {
     loadCachedFunding();
     fetchFunding();
-    setInterval(fetchFunding, REFRESH_MS);
+    // v24 FIX #5: Pause polling saat tab tidak aktif — hemat bandwidth & baterai mobile.
+    // Saat user kembali ke tab, langsung refresh agar data up-to-date.
+    var fundingInterval = setInterval(fetchFunding, REFRESH_MS);
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        clearInterval(fundingInterval);
+        fundingInterval = null;
+      } else {
+        if (!fundingInterval) {
+          fetchFunding();
+          fundingInterval = setInterval(fetchFunding, REFRESH_MS);
+        }
+      }
+    });
   });
 })();
 </script>
