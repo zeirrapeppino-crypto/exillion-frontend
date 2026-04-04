@@ -1,5 +1,15 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v27 (v26 + Bug Fixes:
+<!-- Exillion Capital Finecosystem — v30 (v29 + Bug Fixes):
+     FIX v30 #1   : sendData.success===false sekarang reset processingPanel sebelum throw
+                    — cegah spinner abadi saat EXXE delivery gagal (HTTP 200 tapi success:false)
+     FIX v30 #2   : disconnectWallet() kini juga hide processingPanel + successPanel
+                    — cegah spinner/success tampil setelah user disconnect di tengah transaksi
+                    — _isBuying direset di disconnectWallet agar form tidak terkunci
+     FIX v30 #3   : Investor-count IIFE + Funding-tracker IIFE: RPC_ENDPOINTS tambah
+                    publicnode.com sebagai fallback ke-3 — sinkron dengan RPC_LIST utama
+                    dan backend v25 (sebelumnya hanya 2 endpoint, counter bisa stuck)
+  ──────────────────────────────────────────────────────────────
+  Riwayat sebelumnya (v27–v29):
      BUG-1 KRITIS : Double-guard _isBuying di proceedBuy dihapus — transaksi sekarang berjalan
      BUG-2        : Null-guard di selectToken() — cegah TypeError crash sebelum elemen render
      BUG-3        : Deep link Phantom & Solflare diupdate ke /ul/v1/browse/ (format 2024+)
@@ -8,16 +18,24 @@
      BUG-6        : calcListing & calcPay selalu sinkron dengan token USDC/USDT yang dipilih
      BUG-7        : RPC_LIST tambah publicnode.com sebagai fallback ke-3 saat Solana congested
      BUG-8        : Debounce 150ms pada input amount — cegah lag di HP low-end Android
-) v27 FIXES (sinkron backend v24):
-     FIX v27 #1   : _idempKey dipindah ke scope proceedBuy (bukan dalam try) — idempotency aman saat retry
-     FIX v27 #2   : placeholder input direset di disconnectWallet — tidak lagi tampil unit token lama
-     FIX v27 #3   : calcListing tampilkan "USD" bukan "USDC/USDT" — listing value adalah proyeksi USD
-     FIX v27 #4   : visibilitychange auto-resume wallet setelah deep link mobile — tidak perlu klik lagi
-     FIX v27 #5   : walletHintBanner arahkan ke App Store/Play Store di mobile (bukan Chrome Web Store)
+     FIX v27 #1   : _idempKey dipindah ke scope proceedBuy — idempotency aman saat retry
+     FIX v27 #2   : placeholder input direset di disconnectWallet
+     FIX v27 #3   : calcListing tampilkan "USD" bukan "USDC/USDT"
+     FIX v27 #4   : visibilitychange auto-resume wallet setelah deep link mobile
+     FIX v27 #5   : walletHintBanner arahkan ke App Store/Play Store di mobile
      FIX v27 #6   : Escape key tutup modal disclaimer + restore body overflow
-     FIX v27 #7   : Validasi format alamat Solana (base58 regex) di client sebelum kirim ke backend
-     FIX v27 #8   : _isConnecting flag + finally block cegah concurrent wallet connect calls
-     FIX v27 CSP  : connect-src tambah publicnode.com — RPC fallback ke-3 tidak lagi diblokir browser
+     FIX v27 #7   : Validasi format alamat Solana (base58 regex) di client
+     FIX v27 #8   : _isConnecting flag + finally block cegah concurrent wallet connect
+     FIX v27 CSP  : connect-src tambah publicnode.com
+     FIX v29 MOB-2: Flag _isConnecting terpisah per wallet (Phantom/Solflare)
+     FIX v29 MOB-3: _isBuying selalu direset via finally block
+     FIX v29 MOB-4: getPhantomProvider() & getSolflareProvider() dipanggil sekali, di-cache
+     FIX v29 MOB-5: Handle semua return format signAndSendTransaction lintas versi wallet
+     FIX v29 MOB-7: visibilitychange cek connectedAddress juga, bukan hanya connectedWallet
+     FIX v29 MOB-8: sessionStorage intent ditulis sebelum deep link redirect
+     FIX v29 MOB-10: skipPreflight:true di sendRawTransaction
+     FIX v29 MOB-11: waitForConfirmation timeout 40s, interval 3500ms
+     FIX v29 MOB-12: AbortController pada /verify-payment dan /send-exxe fetch
 -->
 <html lang="en">
 <head>
@@ -5513,6 +5531,14 @@ async function disconnectWallet() {
   // FIX v15: also hide balance bar
   const bb = document.getElementById('usdcBalanceBar');
   if (bb) bb.style.display = 'none';
+  // FIX v30 #2: Reset processingPanel & successPanel saat disconnect —
+  // mencegah spinner/success tetap tampil jika user disconnect di tengah transaksi
+  const pp = document.getElementById('processingPanel');
+  if (pp) pp.style.display = 'none';
+  const sp = document.getElementById('successPanel');
+  if (sp) sp.style.display = 'none';
+  // Reset _isBuying agar form tidak terkunci setelah disconnect paksa
+  _isBuying = false;
 
   // Reset form
   const inp = document.getElementById('usdcAmount');
@@ -5579,59 +5605,76 @@ function isInsideSolflare() {
 // Jika wallet sudah connected tapi state belum diset (user tidak klik lagi),
 // visibilitychange akan auto-detect dan restore session.
 document.addEventListener('visibilitychange', function _mobileWalletResume() {
-  if (document.hidden || connectedWallet) return; // skip jika tab tersembunyi atau sudah connected
+  if (document.hidden) return;
   if (!isMobileBrowser()) return;
-  // Cek Phantom
-  const p = getPhantomProvider();
-  if (p && p.isConnected && p.publicKey) {
-    setConnected('Phantom', p.publicKey.toString());
-    return;
+  // FIX v29 MOB-7: Cek connectedAddress (bukan hanya connectedWallet) — state bisa partial.
+  // Juga handle kasus connectedWallet=null tapi wallet sebenarnya sudah connect di app.
+  if (connectedWallet && connectedAddress) return; // sudah fully connected
+
+  // Ambil intent dari sessionStorage — ditulis saat deep link redirect
+  let intent = null;
+  try { intent = sessionStorage.getItem('_exxe_wallet_intent'); } catch(e) {}
+
+  // Cek Phantom (prioritaskan jika intent === 'phantom' atau tidak ada intent)
+  if (!intent || intent === 'phantom') {
+    const p = getPhantomProvider();
+    if (p && p.isConnected && p.publicKey) {
+      try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
+      setConnected('Phantom', p.publicKey.toString());
+      return;
+    }
   }
   // Cek Solflare
-  const s = getSolflareProvider();
-  if (s && s.isConnected && s.publicKey) {
-    setConnected('Solflare', s.publicKey.toString());
+  if (!intent || intent === 'solflare') {
+    const s = getSolflareProvider();
+    if (s && s.isConnected && s.publicKey) {
+      try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
+      setConnected('Solflare', s.publicKey.toString());
+    }
   }
 });
 
 // FIX v27 #8: Rate-limit koneksi wallet — cegah spam klik yang memicu
 // multiple provider.connect() calls secara paralel.
-let _isConnecting = false;
+// FIX v29 MOB-2: Flag terpisah per wallet — satu flag shared menyebabkan
+// Solflare terblokir permanent jika Phantom gagal dengan flag masih true di mobile.
+let _isConnectingPhantom  = false;
+let _isConnectingSolflare = false;
 
 async function connectPhantom() {
-  if (_isConnecting) return; // FIX v27 #8: cegah multiple concurrent connect calls
-  _isConnecting = true;
+  if (_isConnectingPhantom) return;
+  _isConnectingPhantom = true;
 
-  // FIX v15 #6: If already connected (user returned from wallet app), restore state
-  const existingProvider = getPhantomProvider();
-  if (existingProvider && existingProvider.isConnected && existingProvider.publicKey) {
-    setConnected('Phantom', existingProvider.publicKey.toString());
-    _isConnecting = false;
+  // FIX v29 MOB-4: Panggil getPhantomProvider() SEKALI dan cache ke var lokal.
+  // Di mobile, window.phantom bisa berubah antara panggilan. 3x panggilan sebelumnya
+  // membuka celah race condition di browser yang lambat meload wallet extension.
+  const provider = getPhantomProvider();
+
+  if (provider && provider.isConnected && provider.publicKey) {
+    setConnected('Phantom', provider.publicKey.toString());
+    _isConnectingPhantom = false;
     return;
   }
 
-  // MOBILE: redirect to Phantom in-app browser if not already inside it
-  if (isMobileBrowser() && !isInsidePhantom()) {
-    const provider = getPhantomProvider();
-    if (!provider) {
-      const currentUrl = encodeURIComponent(window.location.href);
-      // FIX v26 BUG-3: Format deep link Phantom v1 (2024+) — format /ul/browse/ sudah deprecated
-      window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
-      _isConnecting = false;
-      return;
-    }
+  // MOBILE tanpa provider: redirect ke Phantom in-app browser
+  if (isMobileBrowser() && !provider) {
+    // FIX v29 MOB-8: Simpan intent agar visibilitychange bisa auto-resume setelah kembali
+    try { sessionStorage.setItem('_exxe_wallet_intent', 'phantom'); } catch(e) {}
+    const currentUrl = encodeURIComponent(window.location.href);
+    window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
+    _isConnectingPhantom = false;
+    return;
   }
 
   if (window.location.protocol === 'file:') {
     showToast('Phantom cannot connect via file://. Please deploy to https://', 'warn');
-    _isConnecting = false;
+    _isConnectingPhantom = false;
     return;
   }
 
-  const provider = getPhantomProvider();
   if (!provider) {
     showWalletHint('phantom');
-    _isConnecting = false;
+    _isConnectingPhantom = false;
     return;
   }
 
@@ -5667,44 +5710,40 @@ async function connectPhantom() {
       showToast('Phantom connection failed: ' + (e.message || 'Please try again.'), 'error');
     }
   } finally {
-    _isConnecting = false; // FIX v27 #8: reset guard apapun hasilnya
+    _isConnectingPhantom = false; // FIX v29 MOB-2
   }
 }
 
 async function connectSolflare() {
-  if (_isConnecting) return; // FIX v27 #8: cegah multiple concurrent connect calls
-  _isConnecting = true;
+  if (_isConnectingSolflare) return; // FIX v29 MOB-2
+  _isConnectingSolflare = true;
 
-  // FIX v15 #6: If already connected (user returned from wallet app), restore state
-  const existingProvider = getSolflareProvider();
-  if (existingProvider && existingProvider.isConnected && existingProvider.publicKey) {
-    setConnected('Solflare', existingProvider.publicKey.toString());
-    _isConnecting = false;
+  // FIX v29 MOB-4: Panggil getSolflareProvider() SEKALI dan cache.
+  const provider = getSolflareProvider();
+
+  if (provider && provider.isConnected && provider.publicKey) {
+    setConnected('Solflare', provider.publicKey.toString());
+    _isConnectingSolflare = false;
     return;
   }
 
-  // MOBILE: redirect to Solflare in-app browser if not already inside it
-  if (isMobileBrowser() && !isInsideSolflare()) {
-    const provider = getSolflareProvider();
-    if (!provider) {
-      const currentUrl = encodeURIComponent(window.location.href);
-      // FIX v26 BUG-3: Format deep link Solflare v1 (2024+)
-      window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
-      _isConnecting = false;
-      return;
-    }
+  if (isMobileBrowser() && !provider) {
+    try { sessionStorage.setItem('_exxe_wallet_intent', 'solflare'); } catch(e) {}
+    const currentUrl = encodeURIComponent(window.location.href);
+    window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
+    _isConnectingSolflare = false;
+    return;
   }
 
   if (window.location.protocol === 'file:') {
     showToast('Solflare cannot connect via file://. Please deploy to https://', 'warn');
-    _isConnecting = false;
+    _isConnectingSolflare = false;
     return;
   }
 
-  const provider = getSolflareProvider();
   if (!provider) {
     showWalletHint('solflare');
-    _isConnecting = false;
+    _isConnectingSolflare = false;
     return;
   }
 
@@ -5740,7 +5779,7 @@ async function connectSolflare() {
       showToast('Solflare connection failed: ' + (e.message || 'Please try again.'), 'error');
     }
   } finally {
-    _isConnecting = false; // FIX v27 #8: reset guard apapun hasilnya
+    _isConnectingSolflare = false; // FIX v29 MOB-2
   }
 }
 
@@ -6082,9 +6121,19 @@ async function proceedBuy(){
         if (!provider) throw new Error('Phantom not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          txSignature = result?.signature || (typeof result === 'string' ? result : null);
+          // FIX v29 MOB-5: Handle semua Phantom return format lintas versi:
+          // v0.9+: string langsung, v1.x: {signature:'...'}, v2+: {publicKey,signature}
+          txSignature = (typeof result === 'string' ? result : null)
+            || result?.signature
+            || result?.tx
+            || result?.txid
+            || null;
         }
         if (!txSignature) {
+          // Fallback: sign dulu, lalu broadcast manual via RPC
+          if (typeof provider.signTransaction !== 'function') {
+            throw new Error('Wallet does not support transaction signing. Please update Phantom.');
+          }
           const signedTx = await provider.signTransaction(versionedTx);
           txSignature = await sendRawTransaction(signedTx.serialize());
         }
@@ -6093,7 +6142,13 @@ async function proceedBuy(){
         if (!provider) throw new Error('Solflare not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          txSignature = result?.signature || (typeof result === 'string' ? result : null);
+          // FIX v29 MOB-5: Handle semua Solflare return format lintas versi:
+          // Mobile v1: {signature:'...'}, Desktop v2: string, legacy: {tx:'...'}, {txid:'...'}
+          txSignature = (typeof result === 'string' ? result : null)
+            || result?.signature
+            || result?.tx
+            || result?.txid
+            || null;
         }
         if (!txSignature && typeof provider.signTransaction === 'function') {
           const signedTx = await provider.signTransaction(versionedTx);
@@ -6128,17 +6183,22 @@ async function proceedBuy(){
       );
     }
 
-    const verifyRes = await Promise.race([
-      fetch(CFG.API + '/verify-payment', {
+    // FIX v29 MOB-12: AbortController agar fetch benar-benar dibatalkan saat timeout
+    const _verifyCtrl   = new AbortController();
+    const _verifyTimer  = setTimeout(() => _verifyCtrl.abort(), 45000);
+    let verifyRes;
+    try {
+      verifyRes = await fetch(CFG.API + '/verify-payment', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Kirim usdc sebagai referensi — backend akan cross-check dari chain
-        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error(
-        'Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature
-      )), 45000))
-    ]);
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey }),
+        signal:  _verifyCtrl.signal,
+      });
+    } catch(_ve) {
+      clearTimeout(_verifyTimer);
+      if (_ve.name === 'AbortError') throw new Error('Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature);
+      throw _ve;
+    } finally { clearTimeout(_verifyTimer); }
     // FIX v25 BUG-4: Parse response SEKALI — ReadableStream hanya bisa dibaca satu kali.
     // Dulu: json() dipanggil 2x (satu di error branch, satu lagi setelah).
     const verifyData = await verifyRes.json().catch(() => ({}));
@@ -6151,21 +6211,31 @@ async function proceedBuy(){
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
     await txStep(4, 'active', 'Sending ' + actualExxe.toLocaleString('en-US') + ' EXXE to your wallet...');
-    const sendRes = await Promise.race([
-      fetch(CFG.API + '/send-exxe', {
+    // FIX v29 MOB-12: AbortController untuk /send-exxe
+    const _sendCtrl  = new AbortController();
+    const _sendTimer = setTimeout(() => _sendCtrl.abort(), 60000);
+    let sendRes;
+    try {
+      sendRes = await fetch(CFG.API + '/send-exxe', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Gunakan actualAmount yang sudah diverifikasi backend — bukan nilai input user
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token, idempotencyKey: _idempKey })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error(
-        'EXXE delivery timeout. Please contact support with TX: ' + txSignature
-      )), 60000))
-    ]);
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token, idempotencyKey: _idempKey }),
+        signal:  _sendCtrl.signal,
+      });
+    } catch(_se) {
+      clearTimeout(_sendTimer);
+      if (_se.name === 'AbortError') throw new Error('EXXE delivery timeout. Please contact support with TX: ' + txSignature);
+      throw _se;
+    } finally { clearTimeout(_sendTimer); }
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
     // FIX v25 BUG-6: Cek success flag di response body — HTTP 200 belum tentu berhasil
     if (sendData.success === false) {
+      // FIX v30 #1: Reset panels sebelum throw — cegah spinner abadi saat EXXE delivery gagal
+      const _pp = document.getElementById('processingPanel');
+      const _bp = document.getElementById('buyPanel');
+      if (_pp) _pp.style.display = 'none';
+      if (_bp) _bp.style.display = 'block';
       throw new Error((sendData.error || 'EXXE delivery failed — contact support') + '. TX: ' + txSignature);
     }
     const exxeTx   = sendData?.signature || sendData?.tx || '';
@@ -6175,7 +6245,6 @@ async function proceedBuy(){
     _isBuying = false;
 
   } catch(e) {
-    _isBuying = false;
     const _procP2 = document.getElementById('processingPanel');
     const _buyP2  = document.getElementById('buyPanel');
     if (_procP2) _procP2.style.display = 'none';
@@ -6184,6 +6253,10 @@ async function proceedBuy(){
       showToast('Transaction failed: ' + (e.message || 'Please try again.'), 'error', 10000);
     }
     goStep(2);
+  } finally {
+    // FIX v29 MOB-3: ALWAYS reset _isBuying via finally.
+    // Tanpa ini, exception antara _isBuying=true dan try{} menyebabkan form terkunci permanen.
+    _isBuying = false;
   }
 }
 
@@ -6208,7 +6281,8 @@ async function sendRawTransaction(signedBytes) {
         body:    JSON.stringify({
           jsonrpc: '2.0', id: 1,
           method: 'sendTransaction',
-          params: [b64, { encoding: 'base64', skipPreflight: false, maxRetries: 3 }]
+          // FIX v29 MOB-10: skipPreflight:true — preflight sering false-reject TX valid di Solana congested
+          params: [b64, { encoding: 'base64', skipPreflight: true, maxRetries: 5 }]
         }),
         signal: ctrl.signal
       });
@@ -6224,8 +6298,8 @@ async function sendRawTransaction(signedBytes) {
 
 // FIX v15 #5: waitForConfirmation uses full RPC_LIST fallback, not single hardcoded RPC
 async function waitForConfirmation(signature) {
-  const maxWait  = 35000;
-  const interval = 2500;
+  const maxWait  = 40000; // FIX v29 MOB-11: lebih lama untuk koneksi mobile lambat
+  const interval = 3500;  // FIX v29 MOB-11: 3500ms (dari 2500) — hemat battery, kurangi RPC calls
   const deadline = Date.now() + maxWait;
   let rpcIdx = 0;
 
@@ -6863,9 +6937,11 @@ function startGoldNetwork(canvasId, isSplash) {
   const CACHE_TTL_MS  = 300000; // 5 minutes
 
   // FIX v15: Use same RPC list as main script (no Alchemy demo)
+  // FIX v30 #3: Tambah publicnode.com — sinkron dengan RPC_LIST utama dan backend v25
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
+    'https://solana-rpc.publicnode.com',
   ];
   let rpcIdx = 0;
   let _isFetching = false;
@@ -7077,9 +7153,11 @@ function startGoldNetwork(canvasId, isSplash) {
     'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
   ];
   // FIX v15: Removed Alchemy demo — rate limited too aggressively
+  // FIX v30 #3: Tambah publicnode.com — sinkron dengan RPC_LIST utama dan backend v25
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
+    'https://solana-rpc.publicnode.com',
   ];
   const TIER1_PRICE   = 0.01;
   const EXXE_TARGET   = 330000000;
