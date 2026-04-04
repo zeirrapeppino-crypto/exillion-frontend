@@ -5850,8 +5850,8 @@ async function executeBuy(){
   }
 
   // Disclaimer accepted + balance ok — proceed with transaction
-  // BUG FIX v16: proceedBuy cek _isBuying lagi, jadi reset dulu agar bisa jalan
-  _isBuying = false;
+  // FIX v25 BUG-1: jangan reset _isBuying sebelum proceedBuy.
+  // proceedBuy mengecek _isBuying lagi di awal, jadi flag harus tetap true.
   proceedBuy();
 }
 
@@ -5900,11 +5900,16 @@ async function proceedBuy(){
     // token sudah divalidasi whitelist di atas — langsung pakai variabel yang sama
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
     await txStep(1, 'active', 'Building ' + token + ' split transaction...');
+    // FIX v25 BUG-2: Generate idempotencyKey sekali di awal, kirim ke semua 3 endpoint
+    const _idempKey = (typeof crypto !== 'undefined' && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Date.now().toString(36) + Math.random().toString(36).slice(2);
+
     const buildRes = await Promise.race([
       fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token })
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
     ]);
@@ -5920,8 +5925,15 @@ async function proceedBuy(){
 
     // FIX v15 #2: Deserialise base64 bytes into real VersionedTransaction
     // using @solana/web3.js — this is what Phantom & Solflare actually expect.
-    const txBytes     = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
-    const versionedTx = window.solanaWeb3.VersionedTransaction.deserialize(txBytes);
+    // FIX v25 BUG-7: Bungkus atob+deserialize — base64 invalid atau TX corrupt
+    // akan throw DOMException yang membingungkan jika tidak ditangkap di sini.
+    let txBytes, versionedTx;
+    try {
+      txBytes     = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
+      versionedTx = window.solanaWeb3.VersionedTransaction.deserialize(txBytes);
+    } catch(deserErr) {
+      throw new Error('Invalid transaction data from server. Please try again.');
+    }
 
     let txSignature;
     try {
@@ -5981,21 +5993,18 @@ async function proceedBuy(){
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         // Kirim usdc sebagai referensi — backend akan cross-check dari chain
-        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token })
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error(
         'Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature
       )), 45000))
     ]);
+    // FIX v25 BUG-4: Parse response SEKALI — ReadableStream hanya bisa dibaca satu kali.
+    // Dulu: json() dipanggil 2x (satu di error branch, satu lagi setelah).
+    const verifyData = await verifyRes.json().catch(() => ({}));
     if (!verifyRes.ok) {
-      const errData = await verifyRes.json().catch(() => ({}));
-      throw new Error((errData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
+      throw new Error((verifyData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
     }
-
-    // v24 FIX #3: Gunakan actualAmount dari backend response (nilai terverifikasi on-chain).
-    // Backend sudah mem-parse amount langsung dari TX blockchain — lebih dapat dipercaya
-    // daripada nilai 'usdc' yang berasal dari input user.
-    const verifyData   = await verifyRes.json();
     const actualAmount = verifyData.usdcAmount  || usdc;        // on-chain verified amount
     const actualExxe   = verifyData.exxeAmount  || Math.round(usdc / t.price); // on-chain verified EXXE
     await txStep(3, 'done', 'Payment verified on-chain ✓');
@@ -6007,7 +6016,7 @@ async function proceedBuy(){
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         // Gunakan actualAmount yang sudah diverifikasi backend — bukan nilai input user
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token })
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token, idempotencyKey: _idempKey })
       }),
       new Promise((_, rej) => setTimeout(() => rej(new Error(
         'EXXE delivery timeout. Please contact support with TX: ' + txSignature
@@ -6015,6 +6024,10 @@ async function proceedBuy(){
     ]);
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
+    // FIX v25 BUG-6: Cek success flag di response body — HTTP 200 belum tentu berhasil
+    if (sendData.success === false) {
+      throw new Error((sendData.error || 'EXXE delivery failed — contact support') + '. TX: ' + txSignature);
+    }
     const exxeTx   = sendData?.signature || sendData?.tx || '';
     await txStep(4, 'done', actualExxe.toLocaleString('en-US') + ' EXXE delivered ✓');
 
@@ -6106,8 +6119,9 @@ async function waitForConfirmation(signature) {
     }
     await new Promise(r => setTimeout(r, interval));
   }
-  // Timeout — proceed anyway; backend will verify independently
-  console.warn('[Exillion v15] waitForConfirmation timeout — proceeding to verify');
+  // FIX v25 BUG-3: Throw agar catch di proceedBuy bisa detect timeout
+  // Backend akan verifikasi langsung ke chain — investor tetap aman
+  throw new Error('waitForConfirmation timeout');
 }
 
 async function txStep(n,status,label){
@@ -6182,7 +6196,7 @@ function toggleMenu(){
 // - scroll uses passive:true → no scroll jank on mobile
 // - orientationchange added → nav-h updates on device rotate
 // - outside click closes mobile menu
-(function initMenuListeners() {
+document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   function closeMenu() {
     const nl = document.getElementById('navLinks');
     const hb = document.getElementById('hamburger');
@@ -6238,7 +6252,7 @@ function toggleMenu(){
   }, { passive: true });
 
   updateNavHeight();
-})();
+});
 </script>
 
 </div><!-- /#main-content-inner -->
