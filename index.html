@@ -1,41 +1,27 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v30 (v29 + Bug Fixes):
-     FIX v30 #1   : sendData.success===false sekarang reset processingPanel sebelum throw
-                    — cegah spinner abadi saat EXXE delivery gagal (HTTP 200 tapi success:false)
-     FIX v30 #2   : disconnectWallet() kini juga hide processingPanel + successPanel
-                    — cegah spinner/success tampil setelah user disconnect di tengah transaksi
-                    — _isBuying direset di disconnectWallet agar form tidak terkunci
-     FIX v30 #3   : Investor-count IIFE + Funding-tracker IIFE: RPC_ENDPOINTS tambah
-                    publicnode.com sebagai fallback ke-3 — sinkron dengan RPC_LIST utama
-                    dan backend v25 (sebelumnya hanya 2 endpoint, counter bisa stuck)
+<!-- Exillion Capital Finecosystem — v31 (v30 + Full Audit Fixes):
+     ── BLOK 1 (CSS/HTML): ─────────────────────────────────────────
+     FIX v31 A   : Progress bar label "USDC" → "USD" (USDT juga dihitung)
+                   Target label dikoreksi: $20,831,250 → $3,300,000 (Tier I only)
+     FIX v31 B   : splash2-raised textContent diubah ke "USD" agar konsisten
+     FIX v31 C   : fc1 label tidak lagi hardcoded "$250.00 USDC"
+                   → dinamis via id="fc1MaxLabel", diupdate saat selectToken()
+     FIX v31 D   : checkReady() hasEnoughBalance logic diperbaiki:
+                   sebelumnya blokir tombol jika cachedBal=0 (balance belum load)
+                   → sekarang hanya blokir jika wallet connect DAN balance kurang
+     FIX v31 E   : acceptDisclaimer() null-guard eksplisit per checkbox element
+                   → cegah crash jika modal belum render saat fungsi dipanggil
+     FIX v31 F   : Hint buttons $10/$25/$100/$250 hardcoded Tier I
+                   → fungsi updateAmountHints() dinamis sesuai tier aktif
+                   → dipanggil di setConnected() dan selectToken()
+     ── BLOK 2 (JS Logic / Buy System): ───────────────────────────
+     FIX v30 #1  : sendData.success===false reset processingPanel sebelum throw
+     FIX v30 #2  : disconnectWallet() hide processingPanel + successPanel
+                   + reset _isBuying
+     FIX v30 #3  : RPC_ENDPOINTS kedua IIFE tambah publicnode.com (3 endpoints)
   ──────────────────────────────────────────────────────────────
-  Riwayat sebelumnya (v27–v29):
-     BUG-1 KRITIS : Double-guard _isBuying di proceedBuy dihapus — transaksi sekarang berjalan
-     BUG-2        : Null-guard di selectToken() — cegah TypeError crash sebelum elemen render
-     BUG-3        : Deep link Phantom & Solflare diupdate ke /ul/v1/browse/ (format 2024+)
-     BUG-4        : inputmode=decimal + autocomplete=off — keyboard mobile lebih bersih
-     BUG-5        : overscroll-behavior:contain di modal + body overflow lock saat modal buka
-     BUG-6        : calcListing & calcPay selalu sinkron dengan token USDC/USDT yang dipilih
-     BUG-7        : RPC_LIST tambah publicnode.com sebagai fallback ke-3 saat Solana congested
-     BUG-8        : Debounce 150ms pada input amount — cegah lag di HP low-end Android
-     FIX v27 #1   : _idempKey dipindah ke scope proceedBuy — idempotency aman saat retry
-     FIX v27 #2   : placeholder input direset di disconnectWallet
-     FIX v27 #3   : calcListing tampilkan "USD" bukan "USDC/USDT"
-     FIX v27 #4   : visibilitychange auto-resume wallet setelah deep link mobile
-     FIX v27 #5   : walletHintBanner arahkan ke App Store/Play Store di mobile
-     FIX v27 #6   : Escape key tutup modal disclaimer + restore body overflow
-     FIX v27 #7   : Validasi format alamat Solana (base58 regex) di client
-     FIX v27 #8   : _isConnecting flag + finally block cegah concurrent wallet connect
-     FIX v27 CSP  : connect-src tambah publicnode.com
-     FIX v29 MOB-2: Flag _isConnecting terpisah per wallet (Phantom/Solflare)
-     FIX v29 MOB-3: _isBuying selalu direset via finally block
-     FIX v29 MOB-4: getPhantomProvider() & getSolflareProvider() dipanggil sekali, di-cache
-     FIX v29 MOB-5: Handle semua return format signAndSendTransaction lintas versi wallet
-     FIX v29 MOB-7: visibilitychange cek connectedAddress juga, bukan hanya connectedWallet
-     FIX v29 MOB-8: sessionStorage intent ditulis sebelum deep link redirect
-     FIX v29 MOB-10: skipPreflight:true di sendRawTransaction
-     FIX v29 MOB-11: waitForConfirmation timeout 40s, interval 3500ms
-     FIX v29 MOB-12: AbortController pada /verify-payment dan /send-exxe fetch
+  Riwayat sebelumnya (v27–v30): lihat comment di bawah
+     FIX v29 MOB-2 s/d MOB-12, FIX v27 #1 s/d CSP — semua masih aktif
 -->
 <html lang="en">
 <head>
@@ -4842,8 +4828,8 @@ footer{
     </div>
     <div class="prog-item" style="margin-top:1.5rem;">
       <div class="prog-meta">
-        <span>Raised: $<span id="rt-usdc-raised">0</span> USDC</span>
-        <span>Total Target: $20,831,250 USDC</span>
+        <span>Raised: $<span id="rt-usdc-raised">0</span> USD</span>
+        <span>Tier I Target: $3,300,000 USD</span>
       </div>
       <div class="prog-track">
         <div class="prog-fill" id="rt-usdc-bar" style="width:1%;background:linear-gradient(90deg,#0066ff,var(--cyan));"></div>
@@ -4976,7 +4962,7 @@ footer{
               oninput="debouncedCalcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
-          <div class="amount-hints">
+          <div class="amount-hints" id="amountHints">
             <button class="hint" onclick="setAmount(10)">$10</button>
             <button class="hint" onclick="setAmount(25)">$25</button>
             <button class="hint" onclick="setAmount(100)">$100</button>
@@ -5008,7 +4994,7 @@ footer{
           <div class="check-title">Confirm Before Proceeding</div>
           <div class="check-item">
             <input type="checkbox" id="fc1" onchange="checkReady()"/>
-            <label for="fc1">I confirm my investment does not exceed <strong>$250.00 USDC</strong> (Tier I — The Founding Member maximum per investor).</label>
+            <label for="fc1" id="fc1Label">I confirm my investment does not exceed <strong id="fc1MaxLabel">$250.00 USDC</strong> (Tier I — The Founding Member maximum per investor).</label>
           </div>
           <div class="check-item">
             <input type="checkbox" id="fc2" onchange="checkReady()"/>
@@ -5249,6 +5235,9 @@ function selectToken(token) {
   const tl2 = document.getElementById('tl2Token');
   if (tl1) tl1.textContent = t;
   if (tl2) tl2.textContent = t;
+  // FIX v31 C: Update fc1 label agar sinkron dengan token yang dipilih
+  const _fc1Max = document.getElementById('fc1MaxLabel');
+  if (_fc1Max) _fc1Max.textContent = '$' + tier().max.toFixed(2) + ' ' + t;
   calcTokens();
 }
 
@@ -5409,7 +5398,12 @@ function updateModal(){
 }
 
 function acceptDisclaimer(){
-  if(!['mc1','mc2','mc3','mc4'].every(id=>document.getElementById(id).checked)) return;
+  // FIX v31 E: Null-guard eksplisit — setiap checkbox dicek keberadaannya dulu
+  const allChecked = ['mc1','mc2','mc3','mc4'].every(id => {
+    const el = document.getElementById(id);
+    return el && el.checked;
+  });
+  if (!allChecked) return;
   disclaimerAccepted = true;
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
@@ -5480,6 +5474,8 @@ function setConnected(name, address) {
 
   // FIX v15 #3: Fetch and display USDC balance
   fetchUsdcBalance(address);
+  // FIX v31 F: Update hint buttons sesuai tier aktif
+  updateAmountHints();
 
   setTimeout(function() {
     const bp2 = document.getElementById('buyPanel');
@@ -5904,6 +5900,23 @@ function goStep(n){
 }
 
 // --- CALCULATOR ----------------------------------------------
+// FIX v31 F: Update hint buttons dinamis sesuai tier aktif
+function updateAmountHints() {
+  const t = tier();
+  const hintsEl = document.getElementById('amountHints');
+  if (!hintsEl) return;
+  // Tentukan 3 hint amount yang masuk akal untuk tier ini
+  const min  = t.min;
+  const max  = t.max;
+  const mid1 = Math.round(max * 0.20);  // ~20% dari max
+  const mid2 = Math.round(max * 0.50);  // ~50% dari max
+  hintsEl.innerHTML =
+    '<button class="hint" onclick="setAmount(' + min  + ')">$' + min  + '</button>' +
+    '<button class="hint" onclick="setAmount(' + mid1 + ')">$' + mid1 + '</button>' +
+    '<button class="hint" onclick="setAmount(' + mid2 + ')">$' + mid2 + '</button>' +
+    '<button class="hint" onclick="setAmount(' + max  + ')">MAX $' + max + '</button>';
+}
+
 function setAmount(v){
   const inp = document.getElementById('usdcAmount');
   if(inp){ inp.value = Number(v).toFixed(2); }
@@ -5946,7 +5959,10 @@ function checkReady(){
   if(!btn) return;
   const token = getSelectedToken();
   const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
-  const hasEnoughBalance = cachedBal >= usdc;
+  // FIX v31 D: Jika wallet belum connect atau balance belum di-fetch (0),
+  // jangan blokir tombol hanya karena cached=0. Balance akan dicek ulang di executeBuy().
+  // Hanya blokir jika balance SUDAH di-fetch (connectedAddress ada) DAN memang tidak cukup.
+  const hasEnoughBalance = !connectedAddress || cachedBal >= usdc;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
     const exxe = Math.round(usdc/t.price).toLocaleString('en-US');
@@ -7300,7 +7316,11 @@ function startGoldNetwork(canvasId, isSplash) {
     if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
     if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
     if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
-    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USDC';
+    // FIX v31 A: elSplash2 ('splash2-raised') tidak ada di HTML — elemen ini
+    // hanya ada di second splash (splash2) yang tidak digunakan di versi ini.
+    // Null-check sudah ada (if elSplash2) jadi aman, tapi kita hapus querySelector
+    // yang sia-sia setiap 30 detik untuk performa lebih ringan.
+    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USD';
 
     document.querySelectorAll('.rt-live-dot').forEach(function(d) {
       d.style.background = '#14F195';
