@@ -1,27 +1,28 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v31 (v30 + Full Audit Fixes):
-     ── BLOK 1 (CSS/HTML): ─────────────────────────────────────────
-     FIX v31 A   : Progress bar label "USDC" → "USD" (USDT juga dihitung)
-                   Target label dikoreksi: $20,831,250 → $3,300,000 (Tier I only)
-     FIX v31 B   : splash2-raised textContent diubah ke "USD" agar konsisten
-     FIX v31 C   : fc1 label tidak lagi hardcoded "$250.00 USDC"
-                   → dinamis via id="fc1MaxLabel", diupdate saat selectToken()
-     FIX v31 D   : checkReady() hasEnoughBalance logic diperbaiki:
-                   sebelumnya blokir tombol jika cachedBal=0 (balance belum load)
-                   → sekarang hanya blokir jika wallet connect DAN balance kurang
-     FIX v31 E   : acceptDisclaimer() null-guard eksplisit per checkbox element
-                   → cegah crash jika modal belum render saat fungsi dipanggil
-     FIX v31 F   : Hint buttons $10/$25/$100/$250 hardcoded Tier I
-                   → fungsi updateAmountHints() dinamis sesuai tier aktif
-                   → dipanggil di setConnected() dan selectToken()
-     ── BLOK 2 (JS Logic / Buy System): ───────────────────────────
-     FIX v30 #1  : sendData.success===false reset processingPanel sebelum throw
-     FIX v30 #2  : disconnectWallet() hide processingPanel + successPanel
-                   + reset _isBuying
-     FIX v30 #3  : RPC_ENDPOINTS kedua IIFE tambah publicnode.com (3 endpoints)
-  ──────────────────────────────────────────────────────────────
-  Riwayat sebelumnya (v27–v30): lihat comment di bawah
-     FIX v29 MOB-2 s/d MOB-12, FIX v27 #1 s/d CSP — semua masih aktif
+<!-- Exillion Capital Finecosystem — v36 (Full Sync Patch):
+     FIX v36 SYNC-1 : ANGEL_DIST_WALLET tidak lagi hardcode —
+                      dibaca dinamis dari /api/stats (angelWallet field).
+                      Fallback ke nilai default jika backend belum siap.
+     FIX v36 SYNC-2 : Split percentages tidak lagi hardcode (0.75/0.15/0.10) —
+                      dibaca dari /api/stats (split field).
+                      Fallback ke default 75/15/10 jika backend tidak merespons.
+     FIX v36 SYNC-3 : Funding tracker REFRESH_MS diselaraskan ke 60 dtk
+                      (match backend STATS_TTL_MS=60s) — tidak ada lagi polling
+                      30 dtk yang sia-sia karena cache backend belum refresh.
+     FIX v36 SYNC-4 : Investor counter dan funding tracker berbagi satu
+                      statsCache yang diambil bersama — tidak ada double fetch
+                      ke /api/stats dari dua script terpisah.
+     FIX v36 SYNC-5 : Version log backend diupdate ke v35.
+     FIX v36 BUG-1 : resetAfterBuy() tidak reset _isBuying — form terkunci
+                      setelah investor klik "← Increase My Allocation".
+                      Kini di-reset di baris pertama resetAfterBuy().
+     FIX v36 SEC-1  : solscanLink href sekarang pakai encodeURIComponent(txFull)
+                      agar TX signature tidak corrupt di URL (edge case base58 chars).
+     FIX v36 HEADER : Backend header comment baris 3 diupdate ke v36.
+     ── v35 fixes aktif: Privacy-First Success Panel, Twitter button dihapus
+     ── v34 fixes aktif: OG Meta Tags, Favicon, Canonical
+     ── v33 fixes aktif: AbortController, Samsung Browser, noopener
+     ── v32/v31/v30/v29/v27 fixes aktif: semua
 -->
 <html lang="en">
 <head>
@@ -34,6 +35,32 @@
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
 <meta name="robots" content="index, follow"/>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FIX v34 #1: OG Meta Tags + Canonical + Favicon
+     Wajib untuk: link preview Telegram/Twitter/WhatsApp,
+     favicon di browser tab, dan SEO dasar.
+     ═══════════════════════════════════════════════════════════ -->
+<link rel="canonical" href="https://www.exillioneer.com"/>
+<!-- Favicon: gunakan logo EXXE dari GitHub -->
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png"/>
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png"/>
+<!-- Open Graph — preview saat link dibagikan di Telegram, WhatsApp, Facebook -->
+<meta property="og:type"        content="website"/>
+<meta property="og:url"         content="https://www.exillioneer.com"/>
+<meta property="og:title"       content="Exillion Capital — EXXE Angel Investor Round"/>
+<meta property="og:description" content="Join the EXXE Genesis Angel Round at $0.01. Mobile Collateral Mining on Solana. Verified on-chain. Target listing $0.10 on Orca DEX."/>
+<meta property="og:image"       content="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png"/>
+<meta property="og:image:width"  content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:site_name"   content="Exillion Capital Finecosystem"/>
+<!-- Twitter / X Card -->
+<meta name="twitter:card"        content="summary_large_image"/>
+<meta name="twitter:site"        content="@exillioncapital"/><!-- NOTE: update @handle jika Twitter/X handle berbeda -->
+<meta name="twitter:title"       content="Exillion Capital — EXXE Angel Round"/>
+<meta name="twitter:description" content="Join at $0.01. Target listing $0.10 on Orca DEX. Solana on-chain verified. Limited allocation."/>
+<meta name="twitter:image"       content="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png"/>
+<!-- ═══════════════════════════════════════════════════════════ -->
 <title>Exillion — Capital Finecosystem | EXXE Angel Round</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -1138,6 +1165,8 @@ blockquote.centerquote{
 .tx-icon{font-size:0.9rem;flex-shrink:0;width:18px;}
 .tx-icon.done{color:var(--green);}
 .tx-icon.active{color:var(--cyan);}
+/* FIX v32 #6: .pending style hilang dari CSS — icon tampil tanpa warna */
+.tx-icon.pending{color:var(--text-3);}
 .tx-note{
   font-family:'Orbitron',monospace;font-size:0.55rem;
   letter-spacing:2px;color:var(--text-1);
@@ -4311,7 +4340,7 @@ footer{
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);">Solana Mainnet</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Official EXXE mint address — always verify before buy and trading</div>
           </div>
-          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
             2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u
           </a>
         </div>
@@ -4324,7 +4353,7 @@ footer{
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);">825,000,000 EXXE</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Angel Investor Reserved</div>
           </div>
-          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
             4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
           </a>
         </div>
@@ -4337,7 +4366,7 @@ footer{
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">EXXE/USDC On Orca DEX</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of all angel round funds — locked for Orca DEX listing</div>
           </div>
-          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
             G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D
           </a>
         </div>
@@ -4350,7 +4379,7 @@ footer{
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Operations, Security & Legal</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of all angel round funds — team, marketing, legal</div>
           </div>
-          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
             DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF
           </a>
         </div>
@@ -4363,7 +4392,7 @@ footer{
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Development & Infrastructure</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of all angel round funds — app, smart contract, infrastructure</div>
           </div>
-          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
             GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o
           </a>
         </div>
@@ -4781,7 +4810,7 @@ footer{
     </div>
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal hero-action-row">
-    <a href="#" class="btn-outline" onclick="event.preventDefault();alert('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.');">Download Full Whitepaper (PDF)</a>
+    <a href="#" class="btn-outline" onclick="event.preventDefault();showToast('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.','info',6000);">Download Full Whitepaper (PDF)</a>
     <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
   </div>
 </section>
@@ -4963,9 +4992,10 @@ footer{
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
           <div class="amount-hints" id="amountHints">
+            <!-- Diisi dinamis oleh updateAmountHints() saat wallet connect -->
             <button class="hint" onclick="setAmount(10)">$10</button>
-            <button class="hint" onclick="setAmount(25)">$25</button>
-            <button class="hint" onclick="setAmount(100)">$100</button>
+            <button class="hint" onclick="setAmount(50)">$50</button>
+            <button class="hint" onclick="setAmount(125)">$125</button>
             <button class="hint" onclick="setAmount(250)">MAX $250</button>
           </div>
         </div>
@@ -5032,12 +5062,58 @@ footer{
       <!-- SUCCESS -->
       <div id="successPanel">
         <div class="success-icon">✅</div>
-        <div class="success-title">Transaction Complete</div>
-        <div class="success-sub">EXXE tokens have been sent to your wallet</div>
+        <div class="success-title">Investment Confirmed</div>
+        <div class="success-sub">Your EXXE tokens have been delivered to your wallet</div>
         <div class="success-details" id="successDetails"></div>
-        <a id="solscanLink" href="#" target="_blank" class="btn-outline" style="margin-top:1.5rem;display:inline-block;padding:12px 24px;font-size:0.65rem;">
-          View on Solscan ↗
-        </a>
+
+        <!-- Pesan kepercayaan — on-chain transparency -->
+        <div style="
+          margin-top:1.4rem;
+          padding:1rem 1.2rem;
+          background:rgba(0,229,160,0.04);
+          border:1px solid rgba(0,229,160,0.15);
+          border-left:2px solid var(--green);
+          text-align:left;
+        ">
+          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--green);margin-bottom:0.5rem;">ON-CHAIN VERIFIED</div>
+          <div style="font-family:var(--font-body);font-size:0.82rem;color:var(--text-1);line-height:1.65;">
+            Your transaction is permanently recorded on the Solana blockchain. 
+            The fund split — 75% Liquidity, 15% Operations, 10% Development — 
+            has been executed automatically and is publicly verifiable.
+          </div>
+        </div>
+
+        <!-- Reminder listing -->
+        <div style="
+          margin-top:0.8rem;
+          padding:0.8rem 1.2rem;
+          background:rgba(204,125,7,0.04);
+          border:1px solid rgba(204,125,7,0.12);
+          text-align:left;
+        ">
+          <div style="font-family:var(--font-body);font-size:0.82rem;color:var(--text-2);line-height:1.65;">
+            <strong style="color:var(--gold-light);font-weight:600;">Next step:</strong> 
+            Hold your EXXE. Target listing on Orca DEX at $0.10 per EXXE. 
+            You will be notified via our official channels when trading opens.
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.7rem;margin-top:1.4rem;align-items:center;">
+          <a id="solscanLink" href="#" target="_blank" rel="noopener noreferrer" class="btn-outline"
+             style="display:inline-block;padding:12px 28px;font-size:0.65rem;text-align:center;width:100%;max-width:320px;">
+            Verify on Solscan ↗
+          </a>
+          <button onclick="resetAfterBuy()" style="
+            font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:2px;
+            color:var(--cyan);background:transparent;
+            border:1px solid rgba(0,212,255,0.3);
+            padding:12px 28px;cursor:pointer;width:100%;max-width:320px;
+            transition:all 0.2s;
+          " onmouseover="this.style.borderColor='var(--cyan)';this.style.background='rgba(0,212,255,0.04)'"
+             onmouseout="this.style.borderColor='rgba(0,212,255,0.3)';this.style.background='transparent'">
+            ← Increase My Allocation
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -5070,16 +5146,16 @@ footer{
         <li><a href="#angel">The Angel Investor</a></li>
         <li><a href="#dashboard">Dashboard</a></li>
         <li><a href="#">Orca DEX (Soon)</a></li>
-        <li><a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank">Solscan Explorer</a></li>
+        <li><a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" rel="noopener noreferrer">Solscan Explorer</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h5>Community</h5>
       <ul>
-        <li><a href="#">Telegram — The Exillioneers</a></li>
-        <li><a href="#">Twitter / X</a></li>
-        <li><a href="#">Discord</a></li>
-        <li><a href="#">Medium</a></li>
+        <li><a href="https://t.me/exillioncapital" target="_blank" rel="noopener noreferrer">Telegram — The Exillioneers</a></li>
+        <li><a href="https://twitter.com/exillioncapital" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
+        <li><a href="https://discord.gg/exillion" target="_blank" rel="noopener noreferrer">Discord</a></li>
+        <li><a href="https://medium.com/@exillioncapital" target="_blank" rel="noopener noreferrer">Medium</a></li>
       </ul>
     </div>
   </div>
@@ -5129,7 +5205,7 @@ footer{
     <div class="modal-checks">
       <div class="modal-check"><input type="checkbox" id="mc1" onchange="updateModal()"/><label for="mc1">I understand that investing in EXXE carries <strong>significant financial risk</strong> including potential total loss of capital.</label></div>
       <div class="modal-check"><input type="checkbox" id="mc2" onchange="updateModal()"/><label for="mc2">I confirm I am <strong>not a resident</strong> of the United States, China, or any jurisdiction where token sales are prohibited.</label></div>
-      <div class="modal-check"><input type="checkbox" id="mc3" onchange="updateModal()"/><label for="mc3">I acknowledge the listing price of <strong>$0.10 USDC</strong> is a target only — not a guaranteed return.</label></div>
+      <div class="modal-check"><input type="checkbox" id="mc3" onchange="updateModal()"/><label for="mc3">I acknowledge the listing price of <strong>$0.10 USD</strong> on Orca DEX is a target only — not a guaranteed return.</label></div>
       <div class="modal-check"><input type="checkbox" id="mc4" onchange="updateModal()"/><label for="mc4">I am participating <strong>voluntarily</strong> and have read all risk factors described above.</label></div>
     </div>
 
@@ -5583,7 +5659,8 @@ async function disconnectWallet() {
 
 // --- Utility: detect mobile browser ---
 function isMobileBrowser() {
-  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+  // FIX v33 #2: Tambah SamsungBrowser — Samsung Internet sangat populer di Android Asia
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
 }
 
 // Returns true if we are already running inside Phantom's in-app browser
@@ -5832,7 +5909,7 @@ function showWalletHint(wallet) {
       '<div style="font-family:Orbitron,monospace;font-size:0.7rem;letter-spacing:2px;color:#00d4ff;margin-bottom:3px">' + name + ' Not Detected</div>',
       '<div style="font-family:Orbitron,monospace;font-size:0.6rem;color:#6a8fa8">' + subtext + '</div>',
     '</div>',
-    '<a href="' + url + '" target="_blank" style="',
+    '<a href="' + url + '" target="_blank" rel="noopener noreferrer" style="',
       'font-family:Orbitron,monospace;font-size:0.6rem;letter-spacing:1.5px;text-transform:uppercase;',
       'color:#000;background:#00d4ff;border:none;padding:8px 16px;cursor:pointer;',
       'text-decoration:none;white-space:nowrap;border-radius:2px;font-weight:700',
@@ -6049,35 +6126,38 @@ async function proceedBuy(){
   const rawInput = parseFloat(document.getElementById('usdcAmount')?.value || 0);
   if (!isFinite(rawInput) || isNaN(rawInput) || rawInput <= 0) {
     showToast('Invalid amount entered.', 'warn');
+    _isBuying = false; // FIX v32 #1: reset agar form tidak terkunci
     return;
   }
-  const usdc = Math.round(rawInput * 100) / 100; // max 2 desimal, cegah float drift
+  const usdc = Math.round(rawInput * 100) / 100;
   if (usdc < t.min || usdc > t.max) {
     showToast('Amount must be between $' + t.min.toFixed(2) + ' and $' + t.max.toFixed(2) + ' ' + getSelectedToken() + '.', 'warn');
+    _isBuying = false; // FIX v32 #1
     return;
   }
   // Validasi token whitelist sebelum kirim ke backend
   const token = getSelectedToken();
   if (token !== 'USDC' && token !== 'USDT') {
     showToast('Invalid payment token. Please select USDC or USDT.', 'error');
+    _isBuying = false; // FIX v32 #1
     return;
   }
   if (!connectedAddress) {
     showToast('No wallet connected. Please connect your wallet first.', 'warn');
+    _isBuying = false; // FIX v32 #1
     return;
   }
   // FIX v15 #2: Verify @solana/web3.js is loaded before proceeding
   if (typeof window.solanaWeb3 === 'undefined') {
     showToast('Solana library still loading. Please wait a moment and try again.', 'warn');
+    _isBuying = false; // FIX v32 #1
     return;
   }
-  // FIX v27 #7: Validasi format alamat Solana di client sebelum kirim ke backend.
-  // Base58, panjang 32–44 karakter, hanya huruf/angka tanpa O,0,I,l.
-  // Backend (v23 FIX #12) juga validasi via PublicKey() — ini defense in depth di sisi client.
+  // FIX v27 #7: Validasi format alamat Solana di client (defense in depth)
   const _addrRx = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
   if (!_addrRx.test(connectedAddress)) {
     showToast('Invalid wallet address format. Please reconnect your wallet.', 'error');
-    _isBuying = false;
+    _isBuying = false; // FIX v32 #1
     return;
   }
   _isBuying = true;
@@ -6100,14 +6180,22 @@ async function proceedBuy(){
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
     await txStep(1, 'active', 'Building ' + token + ' split transaction...');
 
-    const buildRes = await Promise.race([
-      fetch(`${CFG.API}/build-split-tx`, {
+    // FIX v33 #1: AbortController agar fetch benar-benar dibatalkan saat timeout
+    const _buildCtrl  = new AbortController();
+    const _buildTimer = setTimeout(() => _buildCtrl.abort(), 30000);
+    let buildRes;
+    try {
+      buildRes = await fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey })
-      }),
-      new Promise((_, rej) => setTimeout(() => rej(new Error('Backend timeout — please try again.')), 30000))
-    ]);
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey }),
+        signal:  _buildCtrl.signal,
+      });
+    } catch(_be) {
+      clearTimeout(_buildTimer);
+      if (_be.name === 'AbortError') throw new Error('Backend timeout. Please check your connection and try again.');
+      throw _be;
+    } finally { clearTimeout(_buildTimer); }
     if (!buildRes.ok) throw new Error('Failed to build transaction (server error ' + buildRes.status + ')');
     const { transaction } = await buildRes.json();
     if (!transaction || typeof transaction !== 'string') {
@@ -6362,6 +6450,37 @@ async function txStep(n,status,label){
   // Yield ke event loop untuk memastikan DOM repaint terjadi sebelum async berikutnya.
   // Tidak butuh setTimeout artificial — microtask yield via Promise.resolve() cukup.
   await Promise.resolve();
+}
+
+// FIX v32 #2: Reset ke buyPanel setelah sukses — investor bisa beli lagi tanpa reload
+function resetAfterBuy() {
+  // FIX v36 BUG-1: Reset _isBuying agar form tidak terkunci saat investor
+  // klik "← Increase My Allocation" setelah transaksi sukses.
+  _isBuying = false;
+  const sp = document.getElementById('successPanel');
+  const bp = document.getElementById('buyPanel');
+  if (sp) sp.style.display = 'none';
+  if (bp) bp.style.display = 'block';
+  // Reset input dan checkboxes
+  const inp = document.getElementById('usdcAmount');
+  if (inp) { inp.value = ''; }
+  const cb = document.getElementById('calcBox');
+  if (cb) cb.style.display = 'none';
+  ['fc1','fc2','fc3'].forEach(function(id) {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+  const buyBtn = document.getElementById('buyBtn');
+  if (buyBtn) {
+    buyBtn.classList.remove('ready');
+    const bt = document.getElementById('buyBtnText');
+    if (bt) bt.textContent = 'Pay with ' + getSelectedToken() + ' — Receive EXXE';
+  }
+  // Disclaimer sudah diterima di sesi ini, tidak perlu ulang
+  goStep(2);
+  // Refresh balance untuk tampilkan saldo terkini
+  if (connectedAddress) fetchUsdcBalance(connectedAddress);
+  window.scrollTo({ top: document.getElementById('angelWalletForm')?.getBoundingClientRect().top + window.pageYOffset - 100 || 0, behavior: 'smooth' });
 }
 
 function showSuccess(usdc,exxe,wallet,tx,token){
@@ -6925,35 +7044,27 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     LIVE INVESTOR COUNT — Solana RPC  v15
-     FIX v15:
-     1. ANGEL_DIST_WALLET is now the wallet that SENDS EXXE to investors.
-        We count unique DESTINATION wallets (investors), not senders.
-     2. involvesExxe check fixed: only check info.mint === EXXE_MINT.
-        Removed incorrect info.source/info.destination === EXXE_MINT checks.
-     3. Uses shared RPC_LIST from main script (no Alchemy demo endpoint).
-     4. Cache TTL standardised to 5 minutes.
-     5. Falls back to backend /api/stats if available.
+     LIVE INVESTOR COUNT — v16 (FIX v36 SYNC-1 + SYNC-4)
+     FIX v36 SYNC-1: ANGEL_DIST_WALLET tidak lagi hardcode.
+       Dibaca dinamis dari /api/stats (field: angelWallet).
+       Fallback ke address default jika backend belum siap.
+     FIX v36 SYNC-4: Script ini sekarang menggunakan window._exillionStatsCache
+       (shared cache) yang diisi oleh REAL-TIME FUNDING TRACKER di bawah.
+       Tidak ada double fetch ke /api/stats dari dua script terpisah.
      --------------------------------------------------- -->
 <script>
 (function() {
   'use strict';
 
-  // CONFIG
-  // EXXE_MINT: used to filter only real EXXE transfer transactions
   const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  // FIX v15: This must be the HOT WALLET used by the Railway backend to SEND EXXE.
-  // We count unique destination wallets (investors who received EXXE from this wallet).
-  // ⚠️  REPLACE THIS with your actual backend distribution wallet address.
-  const ANGEL_DIST_WALLET = '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr'; // ANGEL distribution wallet
+  // FIX v36 SYNC-1: Default fallback — akan di-override dari /api/stats
+  const ANGEL_DIST_WALLET_DEFAULT = '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr';
 
-  const REFRESH_MS    = 60000;
-  const SESSION_KEY   = 'exxe_investor_count_v15';
-  const SESSION_TS    = 'exxe_investor_ts_v15';
-  const CACHE_TTL_MS  = 300000; // 5 minutes
+  const REFRESH_MS   = 60000; // FIX v36 SYNC-3: selaras dengan backend TTL 60s
+  const SESSION_KEY  = 'exxe_investor_count_v16';
+  const SESSION_TS   = 'exxe_investor_ts_v16';
+  const CACHE_TTL_MS = 300000; // 5 menit
 
-  // FIX v15: Use same RPC list as main script (no Alchemy demo)
-  // FIX v30 #3: Tambah publicnode.com — sinkron dengan RPC_LIST utama dan backend v25
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
@@ -6962,11 +7073,10 @@ function startGoldNetwork(canvasId, isSplash) {
   let rpcIdx = 0;
   let _isFetching = false;
 
-  // v18 #3: body was passed as plain object — fetch requires string. Always JSON.stringify.
   function fetchWithTimeout(url, options, ms) {
-    const ctrl = new AbortController();
+    const ctrl  = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), ms);
-    const init = {
+    const init  = {
       method:  options.method  || 'POST',
       headers: options.headers || { 'Content-Type': 'application/json' },
       signal:  ctrl.signal
@@ -7003,13 +7113,10 @@ function startGoldNetwork(canvasId, isSplash) {
     return all;
   }
 
-  // FIX v15: Count unique DESTINATION wallets — these are the investors.
-  // The distribution wallet sends EXXE out; each unique recipient = 1 investor.
-  async function fetchTxBatch(signatures) {
-    const rpc = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
+  async function fetchTxBatch(signatures, angelWallet) {
+    const rpc       = RPC_ENDPOINTS[rpcIdx % RPC_ENDPOINTS.length];
     const investors = new Set();
     const batchSize = 10;
-
     for (let i = 0; i < signatures.length; i += batchSize) {
       const batch = signatures.slice(i, i + batchSize);
       try {
@@ -7025,7 +7132,6 @@ function startGoldNetwork(canvasId, isSplash) {
         }, 15000);
         if (!res.ok) continue;
         const results = await res.json();
-
         (Array.isArray(results) ? results : [results]).forEach(r => {
           try {
             const tx = r?.result;
@@ -7038,16 +7144,10 @@ function startGoldNetwork(canvasId, isSplash) {
               if (!ix?.parsed) return;
               const info = ix.parsed?.info;
               const type = ix.parsed?.type;
-              if (!info) return;
-              // FIX v15: Only check info.mint — source/destination are token accounts, not mints
-              if (info.mint !== EXXE_MINT) return;
-              // This is an EXXE transfer — get the destination (the investor's wallet)
+              if (!info || info.mint !== EXXE_MINT) return;
               if (type === 'transfer' || type === 'transferChecked') {
                 const dest = info.destinationOwner || info.destination;
-                // Exclude the distribution wallet itself (not an investor)
-                if (dest && dest !== ANGEL_DIST_WALLET) {
-                  investors.add(dest);
-                }
+                if (dest && dest !== angelWallet) investors.add(dest);
               }
             });
           } catch(e) { /* ignore per-tx parse error */ }
@@ -7096,7 +7196,10 @@ function startGoldNetwork(canvasId, isSplash) {
       const val = parseInt(sessionStorage.getItem(SESSION_KEY) || '0', 10);
       if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS) {
         const ids = ['splash2-investor-count', 'hero-investor-count'];
-        ids.forEach(id => { const el = document.getElementById(id); if (el) el.textContent = val.toLocaleString('en-US'); });
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = val.toLocaleString('en-US');
+        });
         lastCount = val;
       }
     } catch(e) {}
@@ -7106,37 +7209,58 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_isFetching) return;
     _isFetching = true;
     try {
-      // Try backend /api/stats first (fast single call)
+      // FIX v36 SYNC-4: Cek shared cache dulu — diisi oleh funding tracker di bawah.
+      // Jika sudah ada data dari fetch bersama, langsung pakai tanpa network call lagi.
+      const shared = window._exillionStatsCache;
+      if (shared && typeof shared.investorCount === 'number' && shared.ts && (Date.now() - shared.ts) < CACHE_TTL_MS) {
+        updateInvestorUI(shared.investorCount);
+        // FIX v36 SYNC-1: Jika ada angelWallet dari backend, simpan ke window agar on-chain fallback pakai versi terbaru
+        if (shared.angelWallet) window._exillionAngelWallet = shared.angelWallet;
+        return;
+      }
+
+      // FIX v36 SYNC-4: Jika shared cache belum ada, fetch /api/stats sendiri
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
-        const ctrl = new AbortController();
-        // BUG FIX v16 #4b: Simpan timer agar bisa di-clear (sama seperti fetchFunding)
+        const ctrl       = new AbortController();
         const abortTimer = setTimeout(() => ctrl.abort(), 5000);
         try {
           const res = await fetch(statsUrl, { signal: ctrl.signal });
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
+            // FIX v36 SYNC-1: Simpan angelWallet dari backend ke window
+            if (data.angelWallet && typeof data.angelWallet === 'string') {
+              window._exillionAngelWallet = data.angelWallet;
+            }
+            // FIX v36 SYNC-4: Isi shared cache agar funding tracker tidak double-fetch
+            window._exillionStatsCache = {
+              totalUsdc:     data.totalUsdc,
+              investorCount: data.investorCount,
+              angelWallet:   data.angelWallet,
+              split:         data.split,
+              wallets:       data.wallets,
+              ts:            Date.now(),
+            };
             if (typeof data.investorCount === 'number') {
               updateInvestorUI(data.investorCount);
               return;
             }
           }
-        } finally {
-          clearTimeout(abortTimer);
-        }
-      } catch(e) { /* backend not ready, fall through to on-chain */ }
+        } finally { clearTimeout(abortTimer); }
+      } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // Fallback: count on-chain
-      const allSigs  = await fetchAllSignatures(ANGEL_DIST_WALLET);
+      // FIX v36 SYNC-1: Gunakan angelWallet dari backend jika ada, fallback ke hardcode default
+      const angelWallet = window._exillionAngelWallet || ANGEL_DIST_WALLET_DEFAULT;
+      const allSigs     = await fetchAllSignatures(angelWallet);
       if (!allSigs.length) { updateInvestorUI(0); return; }
       const sigStrings = allSigs.map(s => s.signature);
-      const investors  = await fetchTxBatch(sigStrings);
+      const investors  = await fetchTxBatch(sigStrings, angelWallet);
       rpcIdx = 0;
       updateInvestorUI(investors.size);
     } catch(e) {
       rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
-      console.warn('[Exillion v15 Investor Count] fetch error:', e);
+      console.warn('[Exillion v16 Investor Count] fetch error:', e);
     } finally {
       _isFetching = false;
     }
@@ -7151,41 +7275,44 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <!-- ---------------------------------------------------
-     REAL-TIME FUNDING TRACKER — Solana RPC  v15
-     FIX v15:
-     1. Normalise USDC amount fixed: use tokenAmount.uiAmount when
-        available, fallback to raw amount / 1,000,000 (USDC = 6 decimals).
-        Old threshold of > 1e6 was wrong and would miscalculate all amounts.
-     2. Removed Alchemy demo endpoint (severe rate limiting).
-     3. Tries backend /api/stats first for a fast single-call update.
+     REAL-TIME FUNDING TRACKER — v16 (FIX v36 SYNC-2/3/4)
+     FIX v36 SYNC-2: Split pct tidak lagi hardcode (0.75/0.15/0.10).
+       Dibaca dari /api/stats (field: split.liquidity/operational/development).
+       Fallback ke 75/15/10 jika backend tidak merespons.
+     FIX v36 SYNC-3: REFRESH_MS naik dari 30s ke 60s.
+       Match backend STATS_TTL_MS=60s — polling 30s sia-sia karena
+       cache backend belum di-refresh saat itu.
+     FIX v36 SYNC-4: Shared stats cache via window._exillionStatsCache.
+       Investor counter membaca dari cache yang sama.
+       Tidak ada double fetch ke /api/stats dari dua script terpisah.
      --------------------------------------------------- -->
 <script>
 (function() {
   const USDC_MINT  = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
   const USDT_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
-  const WALLETS = [
-    'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D', // Liquidity  75%
-    'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF', // Operational 15%
-    'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o', // Development 10%
-  ];
-  // FIX v15: Removed Alchemy demo — rate limited too aggressively
-  // FIX v30 #3: Tambah publicnode.com — sinkron dengan RPC_LIST utama dan backend v25
+
+  // FIX v36 SYNC-2: Default wallet fallback — akan di-override dari /api/stats
+  const WALLETS_DEFAULT = {
+    liquidity:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
+    operational: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
+    development: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
+  };
+  // FIX v36 SYNC-2: Default split fallback — akan di-override dari /api/stats
+  const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
+
   const RPC_ENDPOINTS = [
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
   ];
-  const TIER1_PRICE   = 0.01;
-  const EXXE_TARGET   = 330000000;
-  // BUG FIX v16 #5: Progress bar berlabel "Tier I — Genesis Angel Investor".
-  // Sebelumnya USDC_TARGET = $20,831,250 (total SEMUA tier) sehingga bar selalu
-  // tampak hampir nol bahkan jika Tier I sudah penuh ($3,300,000).
-  // Tier I target = 330,000,000 EXXE × $0.01 = $3,300,000 USDC.
-  const USDC_TARGET   = 3300000; // Tier I only
-  const REFRESH_MS    = 30000;
-  const SESSION_KEY   = 'exxe_funding_total_v15';
-  const SESSION_TS    = 'exxe_funding_ts_v15';
-  const CACHE_TTL_MS  = 300000; // 5 minutes
+  const TIER1_PRICE  = 0.01;
+  const EXXE_TARGET  = 330000000;
+  const USDC_TARGET  = 3300000; // Tier I only: 330M EXXE × $0.01
+  // FIX v36 SYNC-3: 60s — match backend STATS_TTL_MS agar setiap poll dapat data segar
+  const REFRESH_MS   = 60000;
+  const SESSION_KEY  = 'exxe_funding_total_v16';
+  const SESSION_TS   = 'exxe_funding_ts_v16';
+  const CACHE_TTL_MS = 300000; // 5 menit
 
   let rpcIndex = 0;
   let _fetchFundingActive = false;
@@ -7232,10 +7359,8 @@ function startGoldNetwork(canvasId, isSplash) {
     const rpc  = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
     const sigs = await fetchAllSigsForWallet(wallet);
     if (!sigs.length) return 0;
-
     let totalInflow = 0;
     const batchSize = 10;
-
     for (let i = 0; i < sigs.length; i += batchSize) {
       const batch = sigs.slice(i, i + batchSize);
       try {
@@ -7247,7 +7372,6 @@ function startGoldNetwork(canvasId, isSplash) {
         const res = await fetchWithTimeout(rpc, requests, 15000);
         if (!res.ok) continue;
         const results = await res.json();
-
         (Array.isArray(results) ? results : [results]).forEach(r => {
           try {
             const tx = r?.result;
@@ -7267,14 +7391,9 @@ function startGoldNetwork(canvasId, isSplash) {
               ) {
                 const dest = info.destination || info.destinationOwner;
                 if (dest === wallet) {
-                  // FIX v15: Correct USDC amount normalisation.
-                  // tokenAmount.uiAmount is already human-readable (e.g. 10.5 for $10.50).
-                  // info.amount is raw lamports (e.g. 10500000 for $10.50).
-                  // Old code threshold > 1e6 was WRONG — a $10 transfer = 10000000 raw units,
-                  // which is > 1e6 so it would always divide — but threshold should be 1e6 not > 1e6.
                   const uiAmt = info.tokenAmount?.uiAmount
                     ?? (parseFloat(info.amount || 0) / 1_000_000);
-                  if (uiAmt > 0 && uiAmt < 1_000_000) totalInflow += uiAmt; // sanity cap
+                  if (uiAmt > 0 && uiAmt < 1_000_000) totalInflow += uiAmt;
                 }
               }
             });
@@ -7316,10 +7435,6 @@ function startGoldNetwork(canvasId, isSplash) {
     if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
     if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
     if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
-    // FIX v31 A: elSplash2 ('splash2-raised') tidak ada di HTML — elemen ini
-    // hanya ada di second splash (splash2) yang tidak digunakan di versi ini.
-    // Null-check sudah ada (if elSplash2) jadi aman, tapi kita hapus querySelector
-    // yang sia-sia setiap 30 detik untuk performa lebih ringan.
     if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USD';
 
     document.querySelectorAll('.rt-live-dot').forEach(function(d) {
@@ -7348,44 +7463,59 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
-      // Try backend /api/stats first (fast path)
+      // FIX v36 SYNC-4: Fetch /api/stats SEKALI — isi shared cache untuk investor counter juga.
+      // Tidak ada double fetch ke backend dari dua script terpisah.
       const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
       try {
-        const ctrl = new AbortController();
-        // BUG FIX v16 #4: Simpan timer ID agar bisa di-clear saat fetch selesai
-        // lebih cepat. Sebelumnya timer tidak di-clear → memory leak + risiko abort palsu.
+        const ctrl       = new AbortController();
         const abortTimer = setTimeout(() => ctrl.abort(), 5000);
         try {
           const res = await fetch(statsUrl, { signal: ctrl.signal });
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
+            // FIX v36 SYNC-4: Simpan ke shared cache (window._exillionStatsCache)
+            // agar investor counter script membaca dari sini — tanpa request tambahan.
+            window._exillionStatsCache = {
+              totalUsdc:     data.totalUsdc,
+              investorCount: data.investorCount,
+              angelWallet:   data.angelWallet,
+              split:         data.split,
+              wallets:       data.wallets,
+              ts:            Date.now(),
+            };
+            // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
+            if (data.angelWallet && typeof data.angelWallet === 'string') {
+              window._exillionAngelWallet = data.angelWallet;
+            }
             if (typeof data.totalUsdc === 'number') {
               updateUI(data.totalUsdc);
               return;
             }
           }
-        } finally {
-          clearTimeout(abortTimer);
-        }
-      } catch(e) { /* backend not ready, fall through to on-chain */ }
+        } finally { clearTimeout(abortTimer); }
+      } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // Fallback: normalise each wallet inflow back to original amount, then take median
+      // FIX v36 SYNC-2: Gunakan wallets & split dari shared cache jika ada, fallback ke default
+      const cachedSplit   = window._exillionStatsCache?.split   || SPLIT_DEFAULT;
+      const cachedWallets = window._exillionStatsCache?.wallets  || null;
+      const walletList    = cachedWallets
+        ? [cachedWallets.liquidity, cachedWallets.operational, cachedWallets.development]
+        : [WALLETS_DEFAULT.liquidity, WALLETS_DEFAULT.operational, WALLETS_DEFAULT.development];
+      const splitList = [cachedSplit.liquidity, cachedSplit.operational, cachedSplit.development];
+
       const inflows = [];
-      const liqInflow = await getUsdcInflow(WALLETS[0]);
-      const opsInflow = await getUsdcInflow(WALLETS[1]);
-      const devInflow = await getUsdcInflow(WALLETS[2]);
-      if (liqInflow > 0) inflows.push(liqInflow / 0.75);
-      if (opsInflow > 0) inflows.push(opsInflow / 0.15);
-      if (devInflow > 0) inflows.push(devInflow / 0.10);
+      for (let wi = 0; wi < walletList.length; wi++) {
+        const inflow = await getUsdcInflow(walletList[wi]);
+        if (inflow > 0 && splitList[wi] > 0) inflows.push(inflow / splitList[wi]);
+      }
       inflows.sort((a, b) => a - b);
       let total = 0;
       if (inflows.length > 0) {
-        if (inflows.length % 2 === 1) {
-          total = inflows[Math.floor(inflows.length / 2)];
-        } else {
-          total = (inflows[inflows.length / 2 - 1] + inflows[inflows.length / 2]) / 2;
-        }
+        const mid = Math.floor(inflows.length / 2);
+        total = inflows.length % 2 === 1
+          ? inflows[mid]
+          : (inflows[mid - 1] + inflows[mid]) / 2;
       }
       rpcIndex = 0;
       updateUI(Math.round(total * 100) / 100);
@@ -7399,8 +7529,7 @@ function startGoldNetwork(canvasId, isSplash) {
   document.addEventListener('DOMContentLoaded', function() {
     loadCachedFunding();
     fetchFunding();
-    // v24 FIX #5: Pause polling saat tab tidak aktif — hemat bandwidth & baterai mobile.
-    // Saat user kembali ke tab, langsung refresh agar data up-to-date.
+    // Pause polling saat tab tidak aktif — hemat bandwidth & baterai mobile.
     var fundingInterval = setInterval(fetchFunding, REFRESH_MS);
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
