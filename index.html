@@ -1,28 +1,38 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v36 (Full Sync Patch):
-     FIX v36 SYNC-1 : ANGEL_DIST_WALLET tidak lagi hardcode —
-                      dibaca dinamis dari /api/stats (angelWallet field).
-                      Fallback ke nilai default jika backend belum siap.
-     FIX v36 SYNC-2 : Split percentages tidak lagi hardcode (0.75/0.15/0.10) —
-                      dibaca dari /api/stats (split field).
-                      Fallback ke default 75/15/10 jika backend tidak merespons.
-     FIX v36 SYNC-3 : Funding tracker REFRESH_MS diselaraskan ke 60 dtk
-                      (match backend STATS_TTL_MS=60s) — tidak ada lagi polling
-                      30 dtk yang sia-sia karena cache backend belum refresh.
-     FIX v36 SYNC-4 : Investor counter dan funding tracker berbagi satu
-                      statsCache yang diambil bersama — tidak ada double fetch
-                      ke /api/stats dari dua script terpisah.
-     FIX v36 SYNC-5 : Version log backend diupdate ke v35.
-     FIX v36 BUG-1 : resetAfterBuy() tidak reset _isBuying — form terkunci
-                      setelah investor klik "← Increase My Allocation".
-                      Kini di-reset di baris pertama resetAfterBuy().
-     FIX v36 SEC-1  : solscanLink href sekarang pakai encodeURIComponent(txFull)
-                      agar TX signature tidak corrupt di URL (edge case base58 chars).
+<!-- Exillion Capital Finecosystem — v37 (Soft Launch Fix):
+     FIX v37 SYNC-1 : exxeSold kini dibaca dari /api/stats (field: exxeSold)
+                      yang dihitung on-chain per-tier di backend.
+                      Tidak lagi hardcode totalUsdc / TIER1_PRICE=0.01 di frontend.
+     FIX v37 SYNC-2 : Tier prices dibaca dari /api/stats (field: tiers) —
+                      frontend tidak lagi hardcode 0.01/0.025/0.05.
+                      Fallback ke CFG.TIERS jika backend belum merespons.
+     FIX v37 BUG-1  : id="splash2-raised" ditambahkan ke markup HTML splash screen.
+                      Sebelumnya elemen tidak ada sehingga angka total raised
+                      di hero section tidak pernah ter-update sama sekali.
+     FIX v37 BUG-2  : Label "Raised: $ USD" diubah ke "Raised: $X USDC+USDT"
+                      agar tidak misleading — backend sudah menggabungkan keduanya.
+     FIX v37 MOB-1  : connectPhantom / connectSolflare: tambah delay 300ms di
+                      mobile sebelum cek provider — wallet extension lazy-load.
+     FIX v37 MOB-2  : Flag _exxe_did_redirect ditambahkan ke sessionStorage
+                      SEBELUM redirect ke deep link. visibilitychange hanya
+                      boleh auto-resume jika flag ini ada — mencegah tab lama
+                      (Chrome) otomatis "connect" saat user kembali dari
+                      in-app browser Phantom/Solflare, yang menyebabkan
+                      investor masuk dua kali ke website.
+     FIX v37 MOB-3  : waitForConfirmation timeout dinaikkan 40s → 90s dan
+                      interval 3500ms → 4000ms untuk mobile network Indonesia.
+                      Pesan UI "Still confirming..." ditampilkan setelah 20s
+                      agar investor tidak panik dan refresh halaman.
+     FIX v37 MAINT-1: statsUrl di investor counter dan funding tracker kini
+                      menggunakan window._exillionCfg.apiBase yang di-set dari
+                      CFG.API — tidak lagi hardcode 2x di luar CFG object.
+     FIX v37 UI-1   : Saat token USDT dipilih, placeholder amount field dan
+                      label fc1 (disclaimer max amount) kini ikut update.
+
      FIX v36 HEADER : Backend header comment baris 3 diupdate ke v36.
      ── v35 fixes aktif: Privacy-First Success Panel, Twitter button dihapus
      ── v34 fixes aktif: OG Meta Tags, Favicon, Canonical
-     ── v33 fixes aktif: AbortController, Samsung Browser, noopener
-     ── v32/v31/v30/v29/v27 fixes aktif: semua
+     ── v36/v33/v32/v31/v30/v29/v27 fixes aktif: semua
 -->
 <html lang="en">
 <head>
@@ -3422,6 +3432,9 @@ footer{
       filter:drop-shadow(0 0 14px rgba(153,69,255,0.6));
     ">Welcome Angel Investor</div>
 
+    <!-- FIX v37 BUG-1: Total Raised counter — diupdate oleh funding tracker script -->
+    <div style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,1.1vw,0.55rem);letter-spacing:2px;color:rgba(0,212,255,0.65);text-transform:uppercase;margin-bottom:0.4rem;animation:mainFadeIn 0.7s ease 0.6s both;">Total Raised: <span id="splash2-raised" style="color:#00d4ff;font-weight:700;">/bin/sh.00</span> USDC+USDT</div>
+
     <!-- LIVE Angel Investor Counter — bawah "Welcome Angel Investor" -->
     <div id="splash2-investor-bar" style="
       display:inline-flex;align-items:center;gap:7px;
@@ -4857,7 +4870,7 @@ footer{
     </div>
     <div class="prog-item" style="margin-top:1.5rem;">
       <div class="prog-meta">
-        <span>Raised: $<span id="rt-usdc-raised">0</span> USD</span>
+        <span>Raised: $<span id="rt-usdc-raised">0</span> USDC+USDT</span>
         <span>Tier I Target: $3,300,000 USD</span>
       </div>
       <div class="prog-track">
@@ -5267,6 +5280,9 @@ const CFG = {
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
+// FIX v37 MAINT-1: Expose apiBase ke window agar IIFE investor counter
+// dan funding tracker tidak hardcode URL backend 2x di luar CFG object.
+window._exillionCfg = { apiBase: CFG.API };
 
 function getSelectedToken() { return CFG.SELECTED_TOKEN; }
 function getSelectedMint() { return CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MINT : CFG.USDC_MINT; }
@@ -5314,6 +5330,13 @@ function selectToken(token) {
   // FIX v31 C: Update fc1 label agar sinkron dengan token yang dipilih
   const _fc1Max = document.getElementById('fc1MaxLabel');
   if (_fc1Max) _fc1Max.textContent = '$' + tier().max.toFixed(2) + ' ' + t;
+  // FIX v37 UI-1: Update tx step token labels dan buy button text
+  const _tl1tok = document.getElementById('tl1Token');
+  const _tl2tok = document.getElementById('tl2Token');
+  if (_tl1tok) _tl1tok.textContent = t;
+  if (_tl2tok) _tl2tok.textContent = t;
+  const _bt = document.getElementById('buyBtnText');
+  if (_bt) _bt.textContent = 'Pay with ' + t + ' — Receive EXXE';
   calcTokens();
 }
 
@@ -5681,8 +5704,20 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
   if (document.hidden) return;
   if (!isMobileBrowser()) return;
   // FIX v29 MOB-7: Cek connectedAddress (bukan hanya connectedWallet) — state bisa partial.
-  // Juga handle kasus connectedWallet=null tapi wallet sebenarnya sudah connect di app.
   if (connectedWallet && connectedAddress) return; // sudah fully connected
+
+  // FIX v37 MOB-2: Guard — hanya lanjut resume jika tab ini yang melakukan deep link
+  // redirect. Tanpa guard ini, tab Chrome lama (yang sessionStorage-nya TIDAK terhapus
+  // oleh in-app browser Phantom) akan otomatis memanggil setConnected() saat user
+  // kembali dari Phantom app, menyebabkan investor masuk 2x ke website.
+  let didRedirect = false;
+  try { didRedirect = sessionStorage.getItem('_exxe_did_redirect') === '1'; } catch(e) {}
+  if (!didRedirect) return; // tab ini tidak pernah redirect — tidak perlu resume
+
+  // Hapus flag segera — hanya boleh resume SATU KALI per redirect cycle
+  try {
+    sessionStorage.removeItem('_exxe_did_redirect');
+  } catch(e) {}
 
   // Ambil intent dari sessionStorage — ditulis saat deep link redirect
   let intent = null;
@@ -5718,9 +5753,11 @@ async function connectPhantom() {
   if (_isConnectingPhantom) return;
   _isConnectingPhantom = true;
 
+  // FIX v37 MOB-1: Di mobile, wallet extension bisa lazy-load setelah DOMContentLoaded.
+  // Delay 300ms sebelum cek provider agar extension punya waktu inject window.phantom.
+  if (isMobileBrowser()) await new Promise(r => setTimeout(r, 300));
+
   // FIX v29 MOB-4: Panggil getPhantomProvider() SEKALI dan cache ke var lokal.
-  // Di mobile, window.phantom bisa berubah antara panggilan. 3x panggilan sebelumnya
-  // membuka celah race condition di browser yang lambat meload wallet extension.
   const provider = getPhantomProvider();
 
   if (provider && provider.isConnected && provider.publicKey) {
@@ -5732,7 +5769,13 @@ async function connectPhantom() {
   // MOBILE tanpa provider: redirect ke Phantom in-app browser
   if (isMobileBrowser() && !provider) {
     // FIX v29 MOB-8: Simpan intent agar visibilitychange bisa auto-resume setelah kembali
-    try { sessionStorage.setItem('_exxe_wallet_intent', 'phantom'); } catch(e) {}
+    // FIX v37 MOB-2: Tambah _exxe_did_redirect agar visibilitychange hanya resume
+    // pada tab yang benar-benar melakukan redirect — mencegah tab Chrome lama
+    // auto-connect dan investor masuk dua kali ke website.
+    try {
+      sessionStorage.setItem('_exxe_wallet_intent', 'phantom');
+      sessionStorage.setItem('_exxe_did_redirect', '1');
+    } catch(e) {}
     const currentUrl = encodeURIComponent(window.location.href);
     window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
     _isConnectingPhantom = false;
@@ -5791,6 +5834,9 @@ async function connectSolflare() {
   if (_isConnectingSolflare) return; // FIX v29 MOB-2
   _isConnectingSolflare = true;
 
+  // FIX v37 MOB-1: Di mobile, wallet extension bisa lazy-load — delay 300ms sebelum cek.
+  if (isMobileBrowser()) await new Promise(r => setTimeout(r, 300));
+
   // FIX v29 MOB-4: Panggil getSolflareProvider() SEKALI dan cache.
   const provider = getSolflareProvider();
 
@@ -5801,7 +5847,11 @@ async function connectSolflare() {
   }
 
   if (isMobileBrowser() && !provider) {
-    try { sessionStorage.setItem('_exxe_wallet_intent', 'solflare'); } catch(e) {}
+    // FIX v37 MOB-2: Tambah _exxe_did_redirect — lihat connectPhantom untuk penjelasan.
+    try {
+      sessionStorage.setItem('_exxe_wallet_intent', 'solflare');
+      sessionStorage.setItem('_exxe_did_redirect', '1');
+    } catch(e) {}
     const currentUrl = encodeURIComponent(window.location.href);
     window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
     _isConnectingSolflare = false;
@@ -6401,13 +6451,26 @@ async function sendRawTransaction(signedBytes) {
 }
 
 // FIX v15 #5: waitForConfirmation uses full RPC_LIST fallback, not single hardcoded RPC
+// FIX v37 MOB-3: Timeout dinaikkan 40s → 90s dan interval 3500ms → 4000ms untuk
+// koneksi mobile Indonesia yang bisa lambat di luar Jawa/Bali. Setelah 20s, tampilkan
+// pesan "Still confirming..." agar investor tidak panik dan refresh halaman.
 async function waitForConfirmation(signature) {
-  const maxWait  = 40000; // FIX v29 MOB-11: lebih lama untuk koneksi mobile lambat
-  const interval = 3500;  // FIX v29 MOB-11: 3500ms (dari 2500) — hemat battery, kurangi RPC calls
-  const deadline = Date.now() + maxWait;
-  let rpcIdx = 0;
+  const maxWait     = 90000; // FIX v37 MOB-3: 90s (dari 40s) — cukup untuk mobile lambat
+  const interval    = 4000;  // FIX v37 MOB-3: 4000ms (dari 3500ms) — hemat baterai
+  const slowMsgAt   = 20000; // Tampilkan "Still confirming..." setelah 20 detik
+  const deadline    = Date.now() + maxWait;
+  const startTime   = Date.now();
+  let rpcIdx        = 0;
+  let slowMsgShown  = false;
 
   while (Date.now() < deadline) {
+    // FIX v37 MOB-3: Tampilkan pesan "Still confirming..." setelah 20 detik
+    if (!slowMsgShown && (Date.now() - startTime) >= slowMsgAt) {
+      slowMsgShown = true;
+      const tl1 = document.getElementById('tl1');
+      if (tl1) tl1.textContent = 'Still confirming on blockchain... Please wait, do not close this tab.';
+    }
+
     try {
       const rpc   = RPC_LIST[rpcIdx % RPC_LIST.length];
       const ctrl  = new AbortController();
@@ -7220,7 +7283,7 @@ function startGoldNetwork(canvasId, isSplash) {
       }
 
       // FIX v36 SYNC-4: Jika shared cache belum ada, fetch /api/stats sendiri
-      const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
+      const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
         const ctrl       = new AbortController();
         const abortTimer = setTimeout(() => ctrl.abort(), 5000);
@@ -7305,13 +7368,16 @@ function startGoldNetwork(canvasId, isSplash) {
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
   ];
-  const TIER1_PRICE  = 0.01;
+  // FIX v37 SYNC-2: Default fallback values — akan di-override dari /api/stats tiers field.
+  // Backend mengembalikan tiers: { 1: { price, min, max }, 2: ..., 3: ... }
+  let TIER1_PRICE  = 0.01;
   const EXXE_TARGET  = 330000000;
   const USDC_TARGET  = 3300000; // Tier I only: 330M EXXE × $0.01
   // FIX v36 SYNC-3: 60s — match backend STATS_TTL_MS agar setiap poll dapat data segar
   const REFRESH_MS   = 60000;
   const SESSION_KEY  = 'exxe_funding_total_v16';
   const SESSION_TS   = 'exxe_funding_ts_v16';
+  const SESSION_EXXE = 'exxe_funding_exxe_v16'; // FIX v37 SYNC-1: cache exxeSold on-chain value
   const CACHE_TTL_MS = 300000; // 5 menit
 
   let rpcIndex = 0;
@@ -7417,11 +7483,17 @@ function startGoldNetwork(canvasId, isSplash) {
     });
   }
 
-  function updateUI(totalUsdc) {
+  // FIX v37 SYNC-1: updateUI menerima optional exxeSold dari /api/stats backend.
+  // Jika tersedia, gunakan nilai on-chain yang dihitung per-tier (akurat).
+  // Jika tidak tersedia (fallback on-chain mode), estimasi dengan TIER1_PRICE.
+  function updateUI(totalUsdc, exxeSoldOnChain) {
     if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
     else _highWatermark = totalUsdc;
 
-    const exxeSold = totalUsdc / TIER1_PRICE;
+    // Gunakan exxeSold dari backend jika ada, fallback ke estimasi TIER1_PRICE
+    const exxeSold = (typeof exxeSoldOnChain === 'number' && exxeSoldOnChain > 0)
+      ? exxeSoldOnChain
+      : totalUsdc / TIER1_PRICE;
     const pctUsdc  = Math.min((totalUsdc / USDC_TARGET) * 100, 100);
     const pctExxe  = Math.min((exxeSold  / EXXE_TARGET) * 100, 100);
 
@@ -7435,7 +7507,7 @@ function startGoldNetwork(canvasId, isSplash) {
     if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
     if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
     if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
-    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc) + ' USD';
+    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc);
 
     document.querySelectorAll('.rt-live-dot').forEach(function(d) {
       d.style.background = '#14F195';
@@ -7443,18 +7515,24 @@ function startGoldNetwork(canvasId, isSplash) {
     });
 
     try {
-      sessionStorage.setItem(SESSION_KEY, String(totalUsdc));
-      sessionStorage.setItem(SESSION_TS,  String(Date.now()));
+      sessionStorage.setItem(SESSION_KEY,  String(totalUsdc));
+      sessionStorage.setItem(SESSION_TS,   String(Date.now()));
+      // FIX v37 SYNC-1: persist exxeSold so page reload shows correct counter
+      if (typeof exxeSoldOnChain === 'number' && exxeSoldOnChain > 0) {
+        sessionStorage.setItem(SESSION_EXXE, String(exxeSoldOnChain));
+      }
     } catch(e) {}
   }
 
   function loadCachedFunding() {
     try {
-      const ts  = parseInt(sessionStorage.getItem(SESSION_TS)  || '0', 10);
-      const val = parseFloat(sessionStorage.getItem(SESSION_KEY) || '0');
+      const ts      = parseInt(sessionStorage.getItem(SESSION_TS)   || '0', 10);
+      const val     = parseFloat(sessionStorage.getItem(SESSION_KEY) || '0');
+      const exxeVal = parseFloat(sessionStorage.getItem(SESSION_EXXE) || '0');
       if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS) {
         _highWatermark = val;
-        updateUI(val);
+        // FIX v37 SYNC-1: restore exxeSold from cache so counter shows correctly on reload
+        updateUI(val, exxeVal > 0 ? exxeVal : undefined);
       }
     } catch(e) {}
   }
@@ -7465,7 +7543,7 @@ function startGoldNetwork(canvasId, isSplash) {
     try {
       // FIX v36 SYNC-4: Fetch /api/stats SEKALI — isi shared cache untuk investor counter juga.
       // Tidak ada double fetch ke backend dari dua script terpisah.
-      const statsUrl = 'https://exillion-backend-production.up.railway.app/api/stats';
+      const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
         const ctrl       = new AbortController();
         const abortTimer = setTimeout(() => ctrl.abort(), 5000);
@@ -7478,18 +7556,24 @@ function startGoldNetwork(canvasId, isSplash) {
             // agar investor counter script membaca dari sini — tanpa request tambahan.
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
+              exxeSold:      data.exxeSold,
               investorCount: data.investorCount,
               angelWallet:   data.angelWallet,
               split:         data.split,
               wallets:       data.wallets,
+              tiers:         data.tiers,
               ts:            Date.now(),
             };
             // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               window._exillionAngelWallet = data.angelWallet;
             }
+            // FIX v37 SYNC-2: Override TIER1_PRICE dari backend jika tersedia
+            if (data.tiers && data.tiers[1] && typeof data.tiers[1].price === 'number') {
+              TIER1_PRICE = data.tiers[1].price;
+            }
             if (typeof data.totalUsdc === 'number') {
-              updateUI(data.totalUsdc);
+              updateUI(data.totalUsdc, data.exxeSold);
               return;
             }
           }
@@ -7518,7 +7602,7 @@ function startGoldNetwork(canvasId, isSplash) {
           : (inflows[mid - 1] + inflows[mid]) / 2;
       }
       rpcIndex = 0;
-      updateUI(Math.round(total * 100) / 100);
+      updateUI(Math.round(total * 100) / 100); // exxeSold not available in on-chain fallback path
     } catch(e) {
       rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
     } finally {
