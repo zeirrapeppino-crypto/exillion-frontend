@@ -6,9 +6,21 @@
      FIX v37 SYNC-2 : Tier prices dibaca dari /api/stats (field: tiers) —
                       frontend tidak lagi hardcode 0.01/0.025/0.05.
                       Fallback ke CFG.TIERS jika backend belum merespons.
-     FIX v37 BUG-1  : id="splash2-raised" ditambahkan ke markup HTML splash screen.
-                      Sebelumnya elemen tidak ada sehingga angka total raised
-                      di hero section tidak pernah ter-update sama sekali.
+     FIX v38 REVERT-1: id="splash2-raised" DIHAPUS dari halaman ke-2 Main Splash.
+     FIX v39 MOB-BUY-1: scrollToTierI() di mobile sekarang menutup nav menu dulu,
+                      lalu scroll ke tier section — bukan ke Solscan explorer.
+     FIX v39 MOB-BUY-2: JOIN NOW di tier card → scroll ke wallet connect + highlight.
+     FIX v39 MOB-BUY-3: Tombol CTA utama (hero, nav, section) di mobile langsung
+                      scroll ke section harga tier, lalu ke wallet connect.
+     FIX v39 MOB-BUY-4: Mobile floating sticky bar "Invest Now" muncul setelah
+                      user scroll melewati hero — shortcut langsung ke wallet.
+     FIX v39 MOB-BUY-5: Disconnect button selalu tampil di mobile sama seperti
+                      desktop — tidak tersembunyi oleh CSS mobile.
+     FIX v39 MOB-BUY-6: Mobile in-app browser (Phantom/Solflare) langsung
+                      connect tanpa redirect keluar — provider sudah inject.
+                      Total Raised tidak disetujui tampil di splash screen.
+                      Hanya boleh tampil di halaman utama (hero section).
+                      Catatan permanen ditambahkan di HTML agar tidak terulang.
      FIX v37 BUG-2  : Label "Raised: $ USD" diubah ke "Raised: $X USDC+USDT"
                       agar tidak misleading — backend sudah menggabungkan keduanya.
      FIX v37 MOB-1  : connectPhantom / connectSolflare: tambah delay 300ms di
@@ -1838,6 +1850,79 @@ footer{
   .footer-brand{ grid-column:1/-1; }
 }
 
+/* ── FIX v39 MOB-BUY-4: Mobile sticky invest bar ── */
+#mob-invest-bar {
+  display: none; /* hidden by default, shown by JS on mobile only */
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 12px 16px 14px;
+  background: rgba(1,11,24,0.97);
+  border-top: 1px solid rgba(201,168,76,0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.6);
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
+}
+#mob-invest-bar.visible {
+  transform: translateY(0);
+}
+#mob-invest-bar-btn {
+  display: block;
+  width: 100%;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #000;
+  background: linear-gradient(90deg, #c97d07 0%, #e8a020 35%, #f5d060 50%, #e8a020 65%, #c97d07 100%);
+  background-size: 200% auto;
+  border: none;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  clip-path: polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px);
+  animation: goldSweepMain 5s linear infinite;
+}
+#mob-invest-bar-wallet {
+  display: none; /* shown when connected */
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+#mob-invest-bar-wallet-info {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  color: var(--green);
+}
+#mob-invest-bar-disconnect {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 1.5px;
+  color: rgba(255,51,102,0.7);
+  background: transparent;
+  border: 1px solid rgba(255,51,102,0.25);
+  padding: 5px 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+#mob-invest-bar-buy {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  color: #000;
+  background: linear-gradient(90deg, #c97d07, #e8a020, #f5d060, #e8a020, #c97d07);
+  background-size: 200% auto;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  flex: 1;
+  animation: goldSweepMain 5s linear infinite;
+}
+
 /* --- MOBILE 480px ------------------------- */
 @media(max-width:480px){
 
@@ -1906,6 +1991,17 @@ footer{
   .wallet-btn .wallet-name{ font-size:0.68rem;letter-spacing:1.5px; }
   .wallet-btn .wallet-sub{ font-size:0.44rem;letter-spacing:1.5px; }
   .wallet-btn .wallet-icon{ font-size:1.2rem; }
+
+  /* FIX v39 MOB-BUY-5: Wallet status + disconnect selalu tampil di mobile */
+  .wallet-status{ flex-wrap:wrap; gap:8px; }
+  .ws-disconnect{
+    font-size:0.55rem!important;
+    padding:6px 14px!important;
+    border-color:rgba(255,51,102,0.4)!important;
+    color:rgba(255,51,102,0.8)!important;
+    min-height:32px;
+  }
+  .ws-left{ font-size:0.58rem; }
 
   /* Buy steps */
   .buy-steps{ gap:0;margin-bottom:1.5rem; }
@@ -3353,7 +3449,7 @@ footer{
     <a href="#roadmap">Roadmap</a>
     <a href="#whitepaper">Whitepaper</a>
     <a href="#dashboard">Dashboard</a>
-    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
+    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
     <span></span><span></span><span></span>
@@ -3432,8 +3528,23 @@ footer{
       filter:drop-shadow(0 0 14px rgba(153,69,255,0.6));
     ">Welcome Angel Investor</div>
 
-    <!-- FIX v37 BUG-1: Total Raised counter — diupdate oleh funding tracker script -->
-    <div style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,1.1vw,0.55rem);letter-spacing:2px;color:rgba(0,212,255,0.65);text-transform:uppercase;margin-bottom:0.4rem;animation:mainFadeIn 0.7s ease 0.6s both;">Total Raised: <span id="splash2-raised" style="color:#00d4ff;font-weight:700;">/bin/sh.00</span> USDC+USDT</div>
+    <!-- ================================================================
+         CATATAN PENTING — JANGAN HAPUS KOMENTAR INI
+         ================================================================
+         Total Raised TIDAK BOLEH ditampilkan di halaman ini
+         (Main Splash / halaman ke-2 loading screen).
+
+         Total Raised HANYA boleh tampil di halaman UTAMA (hero section)
+         yaitu di elemen:
+           id="rt-usdc-raised"  → progress bar section invest
+           id="rt-exxe-sold"   → progress bar EXXE sold
+
+         Elemen id="splash2-raised" sudah DIHAPUS dari sini (v38)
+         karena TIDAK DISETUJUI oleh tim untuk tampil di splash screen.
+
+         JANGAN tambahkan kembali elemen apapun bertema "Total Raised"
+         atau "splash2-raised" di dalam blok splash screen / halaman ke-2 ini.
+         ================================================================ -->
 
     <!-- LIVE Angel Investor Counter — bawah "Welcome Angel Investor" -->
     <div id="splash2-investor-bar" style="
@@ -3960,7 +4071,7 @@ footer{
     </div>
 
     <!-- CTA Button -->
-    <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();"
+    <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();"
       style="font-size:clamp(0.85rem,1.5vw,1rem);padding:18px 48px;letter-spacing:3px;">
       Join Angel Investor Round
     </a>
@@ -4326,7 +4437,7 @@ footer{
     <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
-      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
+      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
     </div>
 
   </div>
@@ -4417,7 +4528,7 @@ footer{
 
 <!-- JOIN ANGEL INVESTOR BUTTON -->
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
-  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierI();">Join Angel Investor Round</a>
+  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
   <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Minimum $10 USDC</span>
     <span style="color:rgba(255,255,255,0.3);margin:0 6px;">·</span>
@@ -4824,7 +4935,7 @@ footer{
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal hero-action-row">
     <a href="#" class="btn-outline" onclick="event.preventDefault();showToast('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.','info',6000);">Download Full Whitepaper (PDF)</a>
-    <a href="#angel" onclick="event.preventDefault();scrollToTierI();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
+    <a href="#angel" onclick="event.preventDefault();scrollToTierThenWallet();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
   </div>
 </section>
 
@@ -5580,6 +5691,11 @@ function setConnected(name, address) {
     const bp2 = document.getElementById('buyPanel');
     if (bp2) bp2.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 300);
+
+  // FIX v39 MOB-BUY-4: Update sticky mobile bar state
+  if (typeof window._updateMobileBar === 'function') {
+    window._updateMobileBar(name, address);
+  }
 }
 
 async function disconnectWallet() {
@@ -5592,7 +5708,12 @@ async function disconnectWallet() {
       const s = getSolflareProvider();
       if (s) await s.disconnect();
     }
-  } catch(e) { /* ignore disconnect errors */ }
+  } catch(e) { /* ignore disconnect errors */ 
+  // FIX v39 MOB-BUY-4: Reset sticky mobile bar
+  if (typeof window._updateMobileBar === 'function') {
+    window._updateMobileBar(null, null);
+  }
+}
 
   // Reset state
   connectedWallet  = null;
@@ -5766,6 +5887,23 @@ async function connectPhantom() {
     return;
   }
 
+  // FIX v39 MOB-BUY-6: Jika sudah di dalam Phantom in-app browser,
+  // provider sudah inject — tidak perlu redirect keluar sama sekali.
+  // Langsung connect dari sini.
+  if (isMobileBrowser() && isInsidePhantom() && !provider) {
+    // Tunggu sebentar dan coba lagi — kadang provider belum siap saat DOMContentLoaded
+    await new Promise(r => setTimeout(r, 500));
+    const retryProvider = getPhantomProvider();
+    if (retryProvider) {
+      try {
+        const resp = await retryProvider.connect();
+        setConnected('Phantom', resp.publicKey.toString());
+      } catch(e) { /* user reject */ }
+    }
+    _isConnectingPhantom = false;
+    return;
+  }
+
   // MOBILE tanpa provider: redirect ke Phantom in-app browser
   if (isMobileBrowser() && !provider) {
     // FIX v29 MOB-8: Simpan intent agar visibilitychange bisa auto-resume setelah kembali
@@ -5842,6 +5980,21 @@ async function connectSolflare() {
 
   if (provider && provider.isConnected && provider.publicKey) {
     setConnected('Solflare', provider.publicKey.toString());
+    _isConnectingSolflare = false;
+    return;
+  }
+
+  // FIX v39 MOB-BUY-6: Jika sudah di dalam Solflare in-app browser,
+  // provider sudah inject — tidak perlu redirect keluar.
+  if (isMobileBrowser() && isInsideSolflare() && !provider) {
+    await new Promise(r => setTimeout(r, 500));
+    const retryProvider = getSolflareProvider();
+    if (retryProvider) {
+      try {
+        await retryProvider.connect();
+        setConnected('Solflare', retryProvider.publicKey.toString());
+      } catch(e) { /* user reject */ }
+    }
     _isConnectingSolflare = false;
     return;
   }
@@ -5978,7 +6131,14 @@ function showWalletHint(wallet) {
 
 // "Join The Angel Investor" → scroll to Tier I, fully visible from the top
 function scrollToTierI() {
-  // Precise scroll to tier-grid (Tier I, Tier II, Tier III cards)
+  // FIX v39 MOB-BUY-1: Tutup mobile nav menu dulu jika sedang terbuka
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks && navLinks.classList.contains('open')) {
+    navLinks.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
+  }
+  // Scroll ke tier-grid (Tier I, Tier II, Tier III cards)
   var tierGrid = document.querySelector('#angel .tier-grid');
   var fallback = document.getElementById('angel');
   var el = tierGrid || fallback;
@@ -5986,7 +6146,7 @@ function scrollToTierI() {
   var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 24 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Briefly highlight all tier cards
+  // Highlight tier cards
   setTimeout(function() {
     var cards = document.querySelectorAll('#angel .tier-card');
     cards.forEach(function(card) {
@@ -6000,19 +6160,84 @@ function scrollToTierI() {
 }
 
 // "BUY NOW" → precise scroll to the Angel Investor Wallet box
+// FIX v39 MOB-BUY-3: Fungsi khusus mobile — scroll ke tier dulu, lalu ke wallet.
+// Dipanggil oleh semua tombol CTA "Join Angel Investor Round".
+// Di desktop: sama seperti scrollToTierI biasa (tier cards visible langsung).
+// Di mobile: tier cards muncul dulu (user lihat harga), lalu 1.2s kemudian
+//            scroll ke wallet connect agar flow terasa natural.
+function scrollToTierThenWallet() {
+  // Tutup nav menu jika terbuka
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks && navLinks.classList.contains('open')) {
+    navLinks.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
+  }
+
+  // Scroll ke tier grid
+  var tierGrid = document.querySelector('#angel .tier-grid');
+  var fallback = document.getElementById('angel');
+  var el = tierGrid || fallback;
+  if (!el) return;
+  var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 24 : 90;
+  var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+
+  // Highlight tier cards
+  setTimeout(function() {
+    var cards = document.querySelectorAll('#angel .tier-card');
+    cards.forEach(function(card) {
+      card.style.transition = 'box-shadow 0.4s ease';
+      card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.75), 0 0 32px rgba(0,212,255,0.35)';
+    });
+    setTimeout(function() {
+      cards.forEach(function(card) { card.style.boxShadow = ''; });
+    }, 1800);
+  }, 400);
+
+  // Di mobile: lanjut scroll ke wallet setelah user sempat lihat harga
+  if (isMobileBrowser()) {
+    setTimeout(function() {
+      scrollToWallet();
+    }, 1400);
+  }
+}
+
 function scrollToWallet() {
+  // FIX v39 MOB-BUY-2: Tutup mobile nav menu jika terbuka
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks && navLinks.classList.contains('open')) {
+    navLinks.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
+  }
+
   var el = document.getElementById('angelWalletForm');
   if (!el) el = document.getElementById('walletConnectBox');
   if (!el) return;
   var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 16 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight the wallet box
+
+  // Highlight wallet box
   setTimeout(function() {
     el.style.transition = 'box-shadow 0.4s ease';
     el.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.9), 0 0 50px rgba(201,168,76,0.3)';
     setTimeout(function() { el.style.boxShadow = ''; }, 2200);
   }, 650);
+
+  // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
+  // langsung auto-connect tanpa perlu user tap tombol lagi.
+  // Provider sudah inject — tidak perlu redirect keluar.
+  if (!connectedWallet) {
+    setTimeout(function() {
+      if (isInsidePhantom() && !connectedWallet) {
+        connectPhantom();
+      } else if (isInsideSolflare() && !connectedWallet) {
+        connectSolflare();
+      }
+    }, 800);
+  }
 }
 
 // --- STEPS ---------------------------------------------------
@@ -7501,6 +7726,7 @@ function startGoldNetwork(canvasId, isSplash) {
     const elExxeBar    = document.getElementById('rt-exxe-bar');
     const elUsdcRaised = document.getElementById('rt-usdc-raised');
     const elUsdcBar    = document.getElementById('rt-usdc-bar');
+    // FIX v38 REVERT-1: splash2-raised dihapus dari splash screen — elemen tidak ada, getElementById returns null (aman)
     const elSplash2    = document.getElementById('splash2-raised');
 
     if (elExxeSold)   elExxeSold.textContent  = fmt(exxeSold, 0);
@@ -7629,6 +7855,112 @@ function startGoldNetwork(canvasId, isSplash) {
   });
 })();
 </script>
+
+<script>
+// ── FIX v39 MOB-BUY-4/5/6: Mobile purchase system ─────────────────────────
+(function() {
+  'use strict';
+
+  // ── Sticky invest bar logic ──
+  function initMobileInvestBar() {
+    if (!isMobileBrowser()) return; // desktop: tidak perlu bar ini
+
+    var bar     = document.getElementById('mob-invest-bar');
+    var heroEl  = document.getElementById('hero');
+    if (!bar || !heroEl) return;
+
+    bar.style.display = 'block';
+
+    // Tampilkan bar setelah user scroll melewati hero
+    var shown = false;
+    function onScroll() {
+      var heroBottom = heroEl.getBoundingClientRect().bottom;
+      if (!shown && heroBottom < 0) {
+        shown = true;
+        bar.classList.add('visible');
+      } else if (shown && heroBottom > 60) {
+        shown = false;
+        bar.classList.remove('visible');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Sembunyikan bar saat sudah di angel section (form visible)
+    var angelEl = document.getElementById('angel');
+    function onScrollAngel() {
+      if (!angelEl) return;
+      var rect = angelEl.getBoundingClientRect();
+      // Jika angel section sedang di viewport — sembunyikan bar
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        bar.classList.remove('visible');
+        shown = false;
+      }
+    }
+    window.addEventListener('scroll', onScrollAngel, { passive: true });
+  }
+
+  // ── Update sticky bar saat wallet connect/disconnect ──
+  function updateMobileBar(walletName, address) {
+    var bar        = document.getElementById('mob-invest-bar');
+    if (!bar) return;
+    var btnEl      = document.getElementById('mob-invest-bar-btn');
+    var walletDiv  = document.getElementById('mob-invest-bar-wallet');
+    var infoEl     = document.getElementById('mob-invest-bar-wallet-info');
+
+    if (walletName && address) {
+      // Connected state
+      var short = address.slice(0,4) + '...' + address.slice(-4);
+      if (btnEl)    btnEl.style.display    = 'none';
+      if (walletDiv) walletDiv.style.display = 'flex';
+      if (infoEl)   infoEl.textContent     = walletName + ': ' + short;
+    } else {
+      // Disconnected state
+      if (btnEl)    btnEl.style.display    = 'block';
+      if (walletDiv) walletDiv.style.display = 'none';
+    }
+  }
+
+  // Expose update function ke scope global agar setConnected / disconnectWallet bisa panggil
+  window._updateMobileBar = updateMobileBar;
+
+  // Init saat DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    initMobileInvestBar();
+
+    // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
+    // dan belum connect, auto-connect setelah page load 1.5 detik.
+    // Provider sudah inject oleh in-app browser — tidak perlu deep link keluar.
+    if (isMobileBrowser()) {
+      setTimeout(function() {
+        if (typeof connectedWallet !== 'undefined' && connectedWallet) return; // sudah connect
+        if (isInsidePhantom()) {
+          console.log('[MOB] Inside Phantom in-app browser — auto-connecting...');
+          connectPhantom();
+        } else if (isInsideSolflare()) {
+          console.log('[MOB] Inside Solflare in-app browser — auto-connecting...');
+          connectSolflare();
+        }
+      }, 1500);
+    }
+  });
+})();
+</script>
+
+<!-- ── FIX v39 MOB-BUY-4: Mobile sticky invest bar ── -->
+<!-- Muncul setelah user scroll melewati hero di mobile. -->
+<!-- Tersembunyi di desktop via JS (hanya init di isMobileBrowser). -->
+<div id="mob-invest-bar">
+  <!-- State 1: belum connect — tampilkan tombol Invest Now -->
+  <button id="mob-invest-bar-btn" onclick="scrollToTierThenWallet()">
+    Invest Now — Join Angel Round
+  </button>
+  <!-- State 2: sudah connect — tampilkan info wallet + disconnect + buy -->
+  <div id="mob-invest-bar-wallet">
+    <div id="mob-invest-bar-wallet-info">Connected</div>
+    <button id="mob-invest-bar-buy" onclick="scrollToWallet()">Buy EXXE</button>
+    <button id="mob-invest-bar-disconnect" onclick="disconnectWallet()">✕ Disconnect</button>
+  </div>
+</div>
 
 </body>
 </html>
