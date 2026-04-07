@@ -1,50 +1,21 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v37 (Soft Launch Fix):
-     FIX v37 SYNC-1 : exxeSold kini dibaca dari /api/stats (field: exxeSold)
-                      yang dihitung on-chain per-tier di backend.
-                      Tidak lagi hardcode totalUsdc / TIER1_PRICE=0.01 di frontend.
-     FIX v37 SYNC-2 : Tier prices dibaca dari /api/stats (field: tiers) —
-                      frontend tidak lagi hardcode 0.01/0.025/0.05.
-                      Fallback ke CFG.TIERS jika backend belum merespons.
-     FIX v38 REVERT-1: id="splash2-raised" DIHAPUS dari halaman ke-2 Main Splash.
-     FIX v39 MOB-BUY-1: scrollToTierI() di mobile sekarang menutup nav menu dulu,
-                      lalu scroll ke tier section — bukan ke Solscan explorer.
-     FIX v39 MOB-BUY-2: JOIN NOW di tier card → scroll ke wallet connect + highlight.
-     FIX v39 MOB-BUY-3: Tombol CTA utama (hero, nav, section) di mobile langsung
-                      scroll ke section harga tier, lalu ke wallet connect.
-     FIX v39 MOB-BUY-4: Mobile floating sticky bar "Invest Now" muncul setelah
-                      user scroll melewati hero — shortcut langsung ke wallet.
-     FIX v39 MOB-BUY-5: Disconnect button selalu tampil di mobile sama seperti
-                      desktop — tidak tersembunyi oleh CSS mobile.
-     FIX v39 MOB-BUY-6: Mobile in-app browser (Phantom/Solflare) langsung
-                      connect tanpa redirect keluar — provider sudah inject.
-                      Total Raised tidak disetujui tampil di splash screen.
-                      Hanya boleh tampil di halaman utama (hero section).
-                      Catatan permanen ditambahkan di HTML agar tidak terulang.
-     FIX v37 BUG-2  : Label "Raised: $ USD" diubah ke "Raised: $X USDC+USDT"
-                      agar tidak misleading — backend sudah menggabungkan keduanya.
-     FIX v37 MOB-1  : connectPhantom / connectSolflare: tambah delay 300ms di
-                      mobile sebelum cek provider — wallet extension lazy-load.
-     FIX v37 MOB-2  : Flag _exxe_did_redirect ditambahkan ke sessionStorage
-                      SEBELUM redirect ke deep link. visibilitychange hanya
-                      boleh auto-resume jika flag ini ada — mencegah tab lama
-                      (Chrome) otomatis "connect" saat user kembali dari
-                      in-app browser Phantom/Solflare, yang menyebabkan
-                      investor masuk dua kali ke website.
-     FIX v37 MOB-3  : waitForConfirmation timeout dinaikkan 40s → 90s dan
-                      interval 3500ms → 4000ms untuk mobile network Indonesia.
-                      Pesan UI "Still confirming..." ditampilkan setelah 20s
-                      agar investor tidak panik dan refresh halaman.
-     FIX v37 MAINT-1: statsUrl di investor counter dan funding tracker kini
-                      menggunakan window._exillionCfg.apiBase yang di-set dari
-                      CFG.API — tidak lagi hardcode 2x di luar CFG object.
-     FIX v37 UI-1   : Saat token USDT dipilih, placeholder amount field dan
-                      label fc1 (disclaimer max amount) kini ikut update.
-
-     FIX v36 HEADER : Backend header comment baris 3 diupdate ke v36.
-     ── v35 fixes aktif: Privacy-First Success Panel, Twitter button dihapus
-     ── v34 fixes aktif: OG Meta Tags, Favicon, Canonical
-     ── v36/v33/v32/v31/v30/v29/v27 fixes aktif: semua
+<!-- Exillion Capital Finecosystem — v40 (Pre-Sale v2.0 — Spec v2.0):
+     FIX v40 TIER-1: Struktur tier baru sesuai Spec v2.0.
+                      Semua 3 tier OPEN bersamaan dari hari pertama.
+                      Supply: 225M / 275M / 325M EXXE per tier.
+                      Max per wallet: $100 / $250 / $500 (anti-bot/whale).
+                      Min $10 semua tier.
+     FIX v40 TIER-2: Tier selector buttons di buy form.
+                      Wallet cap bar — tampil sisa cap per tier setelah connect.
+                      fetchWalletStatus() dari /api/wallet-status.
+                      updateTierCards() update live dari /api/stats tiers data.
+     FIX v40 TIER-3: Progress bar diganti 3 bar per tier masing-masing.
+                      Setiap bar: sold, remaining, raised, status (OPEN/CLOSED).
+                      Badge CLOSED muncul otomatis jika tier supply habis.
+     FIX v40 COPY-1: Hero supply badge, price label, sub-tagline, CTA buttons.
+     FIX v40 COPY-2: Price table, roadmap Phase 02 & 03, risk disclaimer.
+     FIX v40 COPY-3: Nav CTA text diupdate ke "Join Angel Crowd Funding".
+     ── v39/v38/v37/v36/v33 fixes aktif: semua
 -->
 <html lang="en">
 <head>
@@ -3449,7 +3420,7 @@ footer{
     <a href="#roadmap">Roadmap</a>
     <a href="#whitepaper">Whitepaper</a>
     <a href="#dashboard">Dashboard</a>
-    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
+    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
     <span></span><span></span><span></span>
@@ -3658,12 +3629,14 @@ footer{
     ">
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825 M EXXE</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(0,212,255,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">225M | 275M | 325M</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Crowd Funding Reserved</div>
       </div>
       <div style="width:1px;height:32px;background:rgba(0,212,255,0.2);"></div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">$0.01</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:3px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Tier I Founding Price</div>
+        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">From $0.01</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(232,201,122,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">$0.01 · $0.025 · $0.05</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">All Tiers Open Now</div>
       </div>
     </div>
 
@@ -3963,7 +3936,7 @@ footer{
       margin:0;
       text-transform:uppercase;
       opacity:0.85;
-    ">Early Access · Limited Allocation · Verified On-Chain</p>
+    ">3 Tiers Open · Angel Crowd Funding · Verified On-Chain</p>
 
   <div id="hero-stat-block" style="
     margin-top:1.2rem;
@@ -4437,7 +4410,7 @@ footer{
     <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
-      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
+      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
     </div>
 
   </div>
@@ -4528,7 +4501,7 @@ footer{
 
 <!-- JOIN ANGEL INVESTOR BUTTON -->
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
-  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
+  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
   <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Minimum $10 USDC</span>
     <span style="color:rgba(255,255,255,0.3);margin:0 6px;">·</span>
@@ -4825,21 +4798,23 @@ footer{
       <div class="rm-node"></div>
       <div class="rm-content reveal">
         <div class="rm-phase">Phase 02 — Q2 2026</div>
-        <div class="rm-title">The Angel Investor Funding Progress</div>
+        <div class="rm-title">Angel Crowd Funding — All 3 Tiers Open</div>
         <ul class="rm-tasks">
-          <li>Tier I (The Genesis Angel Investor) — 330 M EXXE at $0.01</li>
-          <li>Tier II (The Prime Angel Investor) — 288.75 M EXXE at $0.025</li>
-          <li>Tier III (The Apex Angel Investor) — 206.25 M EXXE at $0.05</li>
-          <li>Target raise: $20,831,250 USDC</li>
+          <li>All 3 Tiers Open Simultaneously from launch day</li>
+          <li>Tier I — Genesis Angel · 225 M EXXE at $0.01</li>
+          <li>Tier II — Prime Angel · 275 M EXXE at $0.025</li>
+          <li>Tier III — Apex Angel · 325 M EXXE at $0.05</li>
+          <li>Target raise: $25,375,000 USDC</li>
         </ul>
       </div>
     </div>
     <div class="rm-item">
       <div class="rm-content reveal">
         <div class="rm-phase">Phase 03 — Q3 2026</div>
-        <div class="rm-title">Collateral Mobile Mining &amp; DeFi Protocol</div>
+        <div class="rm-title">mEXXE Mining App Beta &amp; DeFi Protocol</div>
         <ul class="rm-tasks">
-          <li>mEXXE Mining App (Android &amp; iOS)</li>
+          <li>mEXXE Mining App Beta Launch (Android &amp; iOS)</li>
+          <li>Tier II expected to be filling during this phase</li>
           <li>DeFi lending &amp; borrowing protocol launch</li>
           <li>Global Humanitarian Pool — first aid distribution</li>
           <li>CEX listing negotiations commence</li>
@@ -4935,7 +4910,7 @@ footer{
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal hero-action-row">
     <a href="#" class="btn-outline" onclick="event.preventDefault();showToast('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.','info',6000);">Download Full Whitepaper (PDF)</a>
-    <a href="#angel" onclick="event.preventDefault();scrollToTierThenWallet();" class="btn-gold btn-gold-glow">JOIN ANGEL INVESTOR ROUND</a>
+    <a href="#angel" onclick="event.preventDefault();scrollToTierThenWallet();" class="btn-gold btn-gold-glow">JOIN ANGEL CROWD FUNDING</a>
   </div>
 </section>
 
@@ -4968,39 +4943,85 @@ footer{
       <div class="dash-note note-muted">Pre-Listing</div>
     </div>
   </div>
-  <div class="progress-wrap reveal">
-    <div class="progress-label">The Genesis Angel Investor Progress — Tier I &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span> <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE</span></div>
-    <div class="prog-item">
-      <div class="prog-meta">
-        <span>Sold: <span id="rt-exxe-sold">0</span> EXXE</span>
-        <span>Target: 330,000,000 EXXE</span>
-      </div>
-      <div class="prog-track">
-        <div class="prog-fill" id="rt-exxe-bar" style="width:1%"></div>
-      </div>
+  <!-- FIX v40 TIER-1: Progress bar per tier — 3 tier sekaligus.
+     Data diupdate live dari /api/stats tiers[N].sold / .remaining / .raisedUsdc.
+     REFRESH setiap 60 detik. Status LIVE/CLOSED per tier. -->
+<div class="progress-wrap reveal" id="tierProgressWrap">
+  <div class="progress-label">
+    Angel Crowd Funding — Live Progress
+    &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span>
+    <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE · ON-CHAIN</span>
+  </div>
+
+  <!-- Tier I Progress -->
+  <div class="prog-item" style="margin-bottom:1.4rem;">
+    <div class="prog-meta">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <strong>Tier I — Genesis Angel</strong> &nbsp;·&nbsp; $0.01/EXXE &nbsp;·&nbsp;
+        Sold: <span id="rt-t1-sold">0</span> EXXE
+      </span>
+      <span id="rt-t1-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
     </div>
-    <div class="prog-item" style="margin-top:1.5rem;">
-      <div class="prog-meta">
-        <span>Raised: $<span id="rt-usdc-raised">0</span> USDC+USDT</span>
-        <span>Tier I Target: $3,300,000 USD</span>
-      </div>
-      <div class="prog-track">
-        <div class="prog-fill" id="rt-usdc-bar" style="width:1%;background:linear-gradient(90deg,#0066ff,var(--cyan));"></div>
-      </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="rt-t1-bar" style="width:1%;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
+      <span>Raised: $<span id="rt-t1-raised">0</span></span>
+      <span>Remaining: <span id="rt-t1-remaining">225,000,000</span> EXXE</span>
     </div>
   </div>
+
+  <!-- Tier II Progress -->
+  <div class="prog-item" style="margin-bottom:1.4rem;">
+    <div class="prog-meta">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <strong>Tier II — Prime Angel</strong> &nbsp;·&nbsp; $0.025/EXXE &nbsp;·&nbsp;
+        Sold: <span id="rt-t2-sold">0</span> EXXE
+      </span>
+      <span id="rt-t2-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#00d4ff);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
+      <span>Raised: $<span id="rt-t2-raised">0</span></span>
+      <span>Remaining: <span id="rt-t2-remaining">275,000,000</span> EXXE</span>
+    </div>
+  </div>
+
+  <!-- Tier III Progress -->
+  <div class="prog-item">
+    <div class="prog-meta">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <strong>Tier III — Apex Angel</strong> &nbsp;·&nbsp; $0.05/EXXE &nbsp;·&nbsp;
+        Sold: <span id="rt-t3-sold">0</span> EXXE
+      </span>
+      <span id="rt-t3-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#ff9900);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
+      <span>Raised: $<span id="rt-t3-raised">0</span></span>
+      <span>Remaining: <span id="rt-t3-remaining">325,000,000</span> EXXE</span>
+    </div>
+  </div>
+</div>
   <div class="price-table reveal" style="max-width:1080px;margin:3rem auto 0;">
     <div class="price-table-head">The Angel Investor Pricing Tiers</div>
     <div class="price-row">
-      <span class="price-tier">Tier I — The Genesis Angel Investor</span>
+      <span class="price-tier">Tier I — Genesis Angel (225M EXXE · 27.3%)</span>
       <span class="price-amt t1">$0.01</span>
     </div>
     <div class="price-row">
-      <span class="price-tier">Tier II — The Prime Angel Investor</span>
+      <span class="price-tier">Tier II — Prime Angel (275M EXXE · 33.3%)</span>
       <span class="price-amt t2">$0.025</span>
     </div>
     <div class="price-row">
-      <span class="price-tier">Tier III — The Apex Angel Investor</span>
+      <span class="price-tier">Tier III — Apex Angel (325M EXXE · 39.4%)</span>
       <span class="price-amt t3">$0.05</span>
     </div>
     <div class="price-row">
@@ -5022,38 +5043,81 @@ footer{
     <div class="section-rule"></div>
   </div>
   <div class="angel-wrapper">
-    <div class="tier-grid reveal">
-      <div class="tier-card active">
-        <div class="tier-num">Tier I</div>
-        <div class="tier-name">The Genesis Angel Investor</div>
-        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-          <span>$0.01</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
-        </div>
-        <div class="tier-detail">330 M EXXE available<br/>Min $10 — Max $250 USDC</div>
-        <span class="tier-badge open" onclick="scrollToWallet();" style="cursor:pointer;font-weight:800;">JOIN NOW</span>
-      </div>
-      <div class="tier-card">
-        <div class="tier-num">Tier II</div>
-        <div class="tier-name">The Prime Angel Investor</div>
-        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-          <span>$0.025</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
-        </div>
-        <div class="tier-detail">288.75 M EXXE available<br/>Min $25 — Max $500 USDC</div>
-        <span class="tier-badge soon">Opens after Tier I</span>
-      </div>
-      <div class="tier-card">
-        <div class="tier-num">Tier III</div>
-        <div class="tier-name">The Apex Angel Investor</div>
-        <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-          <span>$0.05</span>
-          <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
-        </div>
-        <div class="tier-detail">206.25 M EXXE available<br/>Min $50 — Max $1,000 USDC</div>
-        <span class="tier-badge soon">Opens after Tier II</span>
-      </div>
+    <!-- FIX v40 TIER-1: Semua 3 tier OPEN bersamaan. Badge LIVE hijau di semua tier.
+     Sisa token (remaining) diupdate live dari /api/stats setiap 60 detik.
+     Jika tier habis → badge berubah ke CLOSED (abu-abu). -->
+<div class="tier-grid reveal" id="tierGrid">
+
+  <!-- TIER I -->
+  <div class="tier-card active" id="tier-card-1" onclick="selectTierAndScroll(1)" style="cursor:pointer;">
+    <div class="tier-num">Tier I</div>
+    <div class="tier-name">Genesis Angel Investor</div>
+    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+      <span>$0.01</span>
+      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
+    <div class="tier-detail">
+      225 M EXXE · Min $10 · Max $100/wallet<br/>
+      ROI to listing: <strong style="color:var(--green);">10×</strong>
+    </div>
+    <div class="tier-remaining" id="tier-remaining-1" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
+      <span id="tier-rem-exxe-1">225,000,000</span> EXXE remaining
+    </div>
+    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
+      <div id="tier-prog-1" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
+    </div>
+    <span class="tier-badge open" id="tier-badge-1" style="cursor:pointer;font-weight:800;">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
+    </span>
+  </div>
+
+  <!-- TIER II -->
+  <div class="tier-card" id="tier-card-2" onclick="selectTierAndScroll(2)" style="cursor:pointer;">
+    <div class="tier-num">Tier II</div>
+    <div class="tier-name">Prime Angel Investor</div>
+    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+      <span>$0.025</span>
+      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+    </div>
+    <div class="tier-detail">
+      275 M EXXE · Min $10 · Max $250/wallet<br/>
+      ROI to listing: <strong style="color:var(--green);">4×</strong>
+    </div>
+    <div class="tier-remaining" id="tier-remaining-2" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
+      <span id="tier-rem-exxe-2">275,000,000</span> EXXE remaining
+    </div>
+    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
+      <div id="tier-prog-2" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
+    </div>
+    <span class="tier-badge open" id="tier-badge-2" style="cursor:pointer;font-weight:800;">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
+    </span>
+  </div>
+
+  <!-- TIER III -->
+  <div class="tier-card" id="tier-card-3" onclick="selectTierAndScroll(3)" style="cursor:pointer;">
+    <div class="tier-num">Tier III</div>
+    <div class="tier-name">Apex Angel Investor</div>
+    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
+      <span>$0.05</span>
+      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+    </div>
+    <div class="tier-detail">
+      325 M EXXE · Min $10 · Max $500/wallet<br/>
+      ROI to listing: <strong style="color:var(--green);">2×</strong>
+    </div>
+    <div class="tier-remaining" id="tier-remaining-3" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
+      <span id="tier-rem-exxe-3">325,000,000</span> EXXE remaining
+    </div>
+    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
+      <div id="tier-prog-3" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
+    </div>
+    <span class="tier-badge open" id="tier-badge-3" style="cursor:pointer;font-weight:800;">
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
+    </span>
+  </div>
+
+</div>
 
     <div class="buy-form reveal" id="angelWalletForm">
       <div class="buy-form-title" style="text-align:center;">Angel Investor Wallet</div>
@@ -5105,12 +5169,37 @@ footer{
           <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--cyan);background:rgba(0,212,255,0.08);color:var(--cyan);cursor:pointer;border-radius:4px;">USDC</button>
           <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;">USDT</button>
         </div>
+        <!-- FIX v40 TIER-1: Tier selector di buy form — pilih tier sebelum isi amount -->
+        <div class="form-field" style="margin-bottom:0.8rem;">
+          <label class="field-label" style="margin-bottom:6px;">Select Your Tier</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+            <button id="tierBtn1" onclick="selectTierBtn(1)"
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--cyan);background:rgba(0,212,255,0.1);color:var(--cyan);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier I<br/><span style="font-size:0.5rem;opacity:0.8;">$0.01 · max $100</span>
+            </button>
+            <button id="tierBtn2" onclick="selectTierBtn(2)"
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier II<br/><span style="font-size:0.5rem;opacity:0.8;">$0.025 · max $250</span>
+            </button>
+            <button id="tierBtn3" onclick="selectTierBtn(3)"
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier III<br/><span style="font-size:0.5rem;opacity:0.8;">$0.05 · max $500</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- FIX v40 TIER-2: Wallet cap display — tampil setelah wallet connect -->
+        <div id="walletCapBar" style="display:none;align-items:center;justify-content:space-between;padding:7px 12px;margin-bottom:0.8rem;background:rgba(153,69,255,0.05);border:1px solid rgba(153,69,255,0.2);font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:1.5px;">
+          <span style="color:var(--text-2);">Wallet cap remaining:</span>
+          <span id="walletCapRemaining" style="color:var(--cyan);font-weight:700;">$100.00</span>
+        </div>
+
         <div class="form-field">
           <label class="field-label">Investment Amount (<span id="tokenLabel">USDC</span>)</label>
           <div class="amount-wrap">
             <input type="number" class="field-input" id="usdcAmount"
-              placeholder="Min $10.00 — Max $250.00 USDC"
-              min="10" max="250" step="0.01"
+              placeholder="Min $10.00 — Max $100.00 USDC"
+              min="10" max="100" step="0.01"
               inputmode="decimal" autocomplete="off"
               oninput="debouncedCalcTokens()" style="font-size:1.2rem;padding:14px 60px 14px 16px;"/>
             <span class="field-currency" id="tokenCurrency">USDC</span>
@@ -5148,7 +5237,7 @@ footer{
           <div class="check-title">Confirm Before Proceeding</div>
           <div class="check-item">
             <input type="checkbox" id="fc1" onchange="checkReady()"/>
-            <label for="fc1" id="fc1Label">I confirm my investment does not exceed <strong id="fc1MaxLabel">$250.00 USDC</strong> (Tier I — The Founding Member maximum per investor).</label>
+            <label for="fc1" id="fc1Label">I confirm my investment does not exceed <strong id="fc1MaxLabel">$100.00 USDC</strong> per wallet for <span id="fc1TierName">Tier I — Genesis Angel</span>.</label>
           </div>
           <div class="check-item">
             <input type="checkbox" id="fc2" onchange="checkReady()"/>
@@ -5348,7 +5437,7 @@ footer{
 <!-- STICKY BANNER -->
 <div class="sticky-banner" id="stickyBanner">
   <div class="banner-text">
-    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Maximum $250 USDC per investor — Tier I: The Founding Member.
+    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Maximum per wallet: $100 (Tier I) · $250 (Tier II) · $500 (Tier III). Each investor may participate in all three tiers independently.
   </div>
   <button class="banner-close" onclick="this.closest('.sticky-banner').classList.remove('show')">✕</button>
 </div>
@@ -5383,10 +5472,13 @@ const CFG = {
   },
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
+  // FIX v40 TIER-1: Struktur tier baru sesuai Spec v2.0
+  // Semua tier OPEN bersamaan — tidak sequential
+  // Max per wallet dirancang anti-bot/anti-whale
   TIERS: {
-    1: { price:0.01,  min:10,  max:250,  gain:900  },
-    2: { price:0.025, min:25,  max:500,  gain:300  },
-    3: { price:0.05,  min:50,  max:1000, gain:100  },
+    1: { price:0.01,  min:10, max:100,  gain:900, supply:225000000, name:'Genesis Angel' },
+    2: { price:0.025, min:10, max:250,  gain:300, supply:275000000, name:'Prime Angel'   },
+    3: { price:0.05,  min:10, max:500,  gain:100, supply:325000000, name:'Apex Angel'    },
   },
   LISTING: 0.10,
 };
@@ -5394,6 +5486,189 @@ const tier = () => CFG.TIERS[CFG.TIER];
 // FIX v37 MAINT-1: Expose apiBase ke window agar IIFE investor counter
 // dan funding tracker tidak hardcode URL backend 2x di luar CFG object.
 window._exillionCfg = { apiBase: CFG.API };
+
+// ── FIX v40 TIER-1: Tier selector functions ──────────────────────────────────
+
+// Dipanggil saat user klik tier card di tier grid
+function selectTierAndScroll(tierNum) {
+  selectTierBtn(tierNum);
+  // Scroll ke wallet form
+  setTimeout(function() { scrollToWallet(); }, 200);
+}
+
+// Dipanggil saat user klik tier button di buy form
+function selectTierBtn(tierNum) {
+  if (!CFG.TIERS[tierNum]) return;
+
+  // Cek apakah tier ini CLOSED (dari stats cache)
+  if (window._exillionTierStatus && window._exillionTierStatus[tierNum] === 'closed') {
+    showToast('Tier ' + tierNum + ' is CLOSED — supply has been exhausted.', 'error');
+    return;
+  }
+
+  CFG.TIER = tierNum;
+  const t = CFG.TIERS[tierNum];
+
+  // Update tier button styles
+  [1,2,3].forEach(function(n) {
+    const btn = document.getElementById('tierBtn' + n);
+    if (!btn) return;
+    const active = n === tierNum;
+    btn.style.borderColor  = active ? 'var(--cyan)' : 'var(--text-2)';
+    btn.style.background   = active ? 'rgba(0,212,255,0.10)' : 'transparent';
+    btn.style.color        = active ? 'var(--cyan)' : 'var(--text-2)';
+  });
+
+  // Update tier card highlight in grid
+  [1,2,3].forEach(function(n) {
+    const card = document.getElementById('tier-card-' + n);
+    if (!card) return;
+    card.classList.toggle('active', n === tierNum);
+  });
+
+  // Update amount input min/max/placeholder
+  const inp = document.getElementById('usdcAmount');
+  const tok = CFG.SELECTED_TOKEN || 'USDC';
+  if (inp) {
+    inp.min         = t.min;
+    inp.max         = t.max;
+    inp.placeholder = 'Min $' + t.min.toFixed(2) + ' — Max $' + t.max.toFixed(2) + ' ' + tok;
+    inp.value       = '';
+  }
+
+  // Update fc1 checkbox text
+  const fc1Max  = document.getElementById('fc1MaxLabel');
+  const fc1Name = document.getElementById('fc1TierName');
+  if (fc1Max)  fc1Max.textContent  = '$' + t.max.toFixed(2) + ' ' + tok;
+  if (fc1Name) fc1Name.textContent = 'Tier ' + tierNum + ' — ' + t.name;
+
+  // Update amount hints
+  if (typeof updateAmountHints === 'function') updateAmountHints();
+
+  // Update wallet cap display
+  updateWalletCapBar();
+
+  // Recalculate
+  if (typeof calcTokens === 'function') calcTokens();
+}
+
+// Update wallet cap bar — tampil berapa sisa cap wallet ini di tier aktif
+function updateWalletCapBar() {
+  const bar = document.getElementById('walletCapBar');
+  const rem = document.getElementById('walletCapRemaining');
+  if (!bar || !rem) return;
+  if (!connectedAddress) { bar.style.display = 'none'; return; }
+
+  const tierNum = CFG.TIER;
+  const max     = CFG.TIERS[tierNum] ? CFG.TIERS[tierNum].max : 100;
+  // Read from cached wallet status
+  const spent   = (window._exillionWalletStatus &&
+                   window._exillionWalletStatus.tiers &&
+                   window._exillionWalletStatus.tiers[tierNum])
+                  ? window._exillionWalletStatus.tiers[tierNum].spent : 0;
+  const remaining = Math.max(0, Math.round((max - spent) * 100) / 100);
+  rem.textContent = '$' + remaining.toFixed(2);
+  bar.style.display = 'flex';
+
+  // Warn jika mendekati cap
+  rem.style.color = remaining < max * 0.2 ? '#ff6b6b' :
+                    remaining < max * 0.5 ? '#e8c97a' : 'var(--cyan)';
+}
+
+// Fetch wallet status dari backend setelah wallet connect
+async function fetchWalletStatus(walletAddress) {
+  if (!walletAddress) return;
+  try {
+    const apiBase = window._exillionCfg ? window._exillionCfg.apiBase
+                  : 'https://exillion-backend-production.up.railway.app';
+    const ctrl    = new AbortController();
+    const timer   = setTimeout(() => ctrl.abort(), 5000);
+    const res     = await fetch(apiBase + '/api/wallet-status?wallet=' + walletAddress,
+                                { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (res.ok) {
+      const data = await res.json();
+      window._exillionWalletStatus = data;
+      updateWalletCapBar();
+    }
+  } catch(e) { /* silent — non-critical */ }
+}
+
+// Update tier cards LIVE state dari /api/stats data
+function updateTierCards(tiersData) {
+  if (!tiersData) return;
+  window._exillionTierStatus = {};
+
+  [1,2,3].forEach(function(n) {
+    const td      = tiersData[n];
+    if (!td) return;
+
+    const supply    = CFG.TIERS[n] ? CFG.TIERS[n].supply : 1;
+    const sold      = td.sold || 0;
+    const remaining = td.remaining != null ? td.remaining : (supply - sold);
+    const raised    = td.raisedUsdc || 0;
+    const status    = td.status || 'open';
+    const pct       = Math.min(100, Math.round((sold / supply) * 100));
+
+    window._exillionTierStatus[n] = status;
+
+    // Update remaining counter in tier card
+    const remEl = document.getElementById('tier-rem-exxe-' + n);
+    if (remEl) remEl.textContent = remaining.toLocaleString('en-US');
+
+    // Update progress bar in tier card
+    const progEl = document.getElementById('tier-prog-' + n);
+    if (progEl) progEl.style.width = Math.max(pct, 0) + '%';
+
+    // Update badge — LIVE or CLOSED
+    const badge = document.getElementById('tier-badge-' + n);
+    if (badge) {
+      if (status === 'closed') {
+        badge.className      = 'tier-badge soon';
+        badge.innerHTML      = 'CLOSED';
+        badge.style.cursor   = 'not-allowed';
+        badge.onclick        = null;
+        // Dim the card
+        const card = document.getElementById('tier-card-' + n);
+        if (card) card.style.opacity = '0.5';
+      } else {
+        badge.className    = 'tier-badge open';
+        badge.style.cursor = 'pointer';
+        badge.innerHTML    = '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW';
+        const card = document.getElementById('tier-card-' + n);
+        if (card) card.style.opacity = '1';
+      }
+    }
+
+    // Update progress bar section
+    const soldEl  = document.getElementById('rt-t' + n + '-sold');
+    const barEl   = document.getElementById('rt-t' + n + '-bar');
+    const remBar  = document.getElementById('rt-t' + n + '-remaining');
+    const raisedEl = document.getElementById('rt-t' + n + '-raised');
+    const dotEl   = document.getElementById('tier-status-dot-' + n);
+    const statEl  = document.getElementById('rt-t' + n + '-status');
+
+    const fmt = function(v, dec) {
+      return v.toLocaleString('en-US', {
+        minimumFractionDigits: dec || 0,
+        maximumFractionDigits: dec || 0
+      });
+    };
+
+    if (soldEl)   soldEl.textContent   = fmt(sold);
+    if (barEl)    barEl.style.width    = Math.max(pct, 1) + '%';
+    if (remBar)   remBar.textContent   = fmt(remaining);
+    if (raisedEl) raisedEl.textContent = fmt(raised, 2);
+
+    if (status === 'closed') {
+      if (dotEl)  { dotEl.style.background = '#888'; dotEl.style.animation = 'none'; }
+      if (statEl) { statEl.textContent = 'CLOSED'; statEl.style.color = '#888'; }
+    } else {
+      if (dotEl)  { dotEl.style.background = '#14F195'; dotEl.style.animation = ''; }
+      if (statEl) { statEl.textContent = 'OPEN'; statEl.style.color = '#14F195'; }
+    }
+  });
+}
 
 function getSelectedToken() { return CFG.SELECTED_TOKEN; }
 function getSelectedMint() { return CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MINT : CFG.USDC_MINT; }
@@ -5438,9 +5713,6 @@ function selectToken(token) {
   const tl2 = document.getElementById('tl2Token');
   if (tl1) tl1.textContent = t;
   if (tl2) tl2.textContent = t;
-  // FIX v31 C: Update fc1 label agar sinkron dengan token yang dipilih
-  const _fc1Max = document.getElementById('fc1MaxLabel');
-  if (_fc1Max) _fc1Max.textContent = '$' + tier().max.toFixed(2) + ' ' + t;
   // FIX v37 UI-1: Update tx step token labels dan buy button text
   const _tl1tok = document.getElementById('tl1Token');
   const _tl2tok = document.getElementById('tl2Token');
@@ -5448,6 +5720,12 @@ function selectToken(token) {
   if (_tl2tok) _tl2tok.textContent = t;
   const _bt = document.getElementById('buyBtnText');
   if (_bt) _bt.textContent = 'Pay with ' + t + ' — Receive EXXE';
+  // FIX v40 TIER-2: Update fc1 max label dengan token terpilih
+  const _fc1Max = document.getElementById('fc1MaxLabel');
+  if (_fc1Max) {
+    const _tierMax = CFG.TIERS[CFG.TIER] ? CFG.TIERS[CFG.TIER].max : 100;
+    _fc1Max.textContent = '$' + _tierMax.toFixed(2) + ' ' + t;
+  }
   calcTokens();
 }
 
@@ -5684,6 +5962,8 @@ function setConnected(name, address) {
 
   // FIX v15 #3: Fetch and display USDC balance
   fetchUsdcBalance(address);
+  // FIX v40 TIER-2: Fetch wallet cap status dari backend
+  fetchWalletStatus(address);
   // FIX v31 F: Update hint buttons sesuai tier aktif
   updateAmountHints();
 
@@ -5713,6 +5993,11 @@ async function disconnectWallet() {
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(null, null);
   }
+
+  // FIX v40 TIER-2: Clear wallet status cache + hide cap bar
+  window._exillionWalletStatus = null;
+  const capBar = document.getElementById('walletCapBar');
+  if (capBar) capBar.style.display = 'none';
 }
 
   // Reset state
@@ -5806,6 +6091,8 @@ function isMobileBrowser() {
   // FIX v33 #2: Tambah SamsungBrowser — Samsung Internet sangat populer di Android Asia
   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
 }
+// Expose ke window agar IIFE dan script terpisah bisa akses
+window.isMobileBrowser = isMobileBrowser;
 
 // Returns true if we are already running inside Phantom's in-app browser
 function isInsidePhantom() {
@@ -7790,6 +8077,10 @@ function startGoldNetwork(canvasId, isSplash) {
               tiers:         data.tiers,
               ts:            Date.now(),
             };
+            // FIX v40 TIER-1: Update tier cards + progress bars dengan data live
+            if (data.tiers && typeof updateTierCards === 'function') {
+              updateTierCards(data.tiers);
+            }
             // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               window._exillionAngelWallet = data.angelWallet;
@@ -7861,9 +8152,16 @@ function startGoldNetwork(canvasId, isSplash) {
 (function() {
   'use strict';
 
+  // FIX v40 ERR-2: isMobileBrowser defined outside this IIFE scope.
+  // Read from window (exposed above) with inline fallback for safety.
+  function _isMob() {
+    if (typeof window.isMobileBrowser === 'function') return window._isMob();
+    return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
+  }
+
   // ── Sticky invest bar logic ──
   function initMobileInvestBar() {
-    if (!isMobileBrowser()) return; // desktop: tidak perlu bar ini
+    if (!_isMob()) return; // desktop: tidak perlu bar ini
 
     var bar     = document.getElementById('mob-invest-bar');
     var heroEl  = document.getElementById('hero');
@@ -7930,7 +8228,7 @@ function startGoldNetwork(canvasId, isSplash) {
     // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
     // dan belum connect, auto-connect setelah page load 1.5 detik.
     // Provider sudah inject oleh in-app browser — tidak perlu deep link keluar.
-    if (isMobileBrowser()) {
+    if (_isMob()) {
       setTimeout(function() {
         if (typeof connectedWallet !== 'undefined' && connectedWallet) return; // sudah connect
         if (isInsidePhantom()) {
