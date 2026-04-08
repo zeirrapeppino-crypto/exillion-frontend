@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v40 (Pre-Sale v2.0 — Spec v2.0):
-     FIX v40 TIER-1: Struktur tier baru sesuai Spec v2.0.
-                      Semua 3 tier OPEN bersamaan dari hari pertama.
-                      Supply: 225M / 275M / 325M EXXE per tier.
-                      Max per wallet: $100 / $250 / $500 (anti-bot/whale).
-                      Min $10 semua tier.
-     FIX v40 TIER-2: Tier selector buttons di buy form.
-                      Wallet cap bar — tampil sisa cap per tier setelah connect.
-                      fetchWalletStatus() dari /api/wallet-status.
-                      updateTierCards() update live dari /api/stats tiers data.
-     FIX v40 TIER-3: Progress bar diganti 3 bar per tier masing-masing.
-                      Setiap bar: sold, remaining, raised, status (OPEN/CLOSED).
-                      Badge CLOSED muncul otomatis jika tier supply habis.
-     FIX v40 COPY-1: Hero supply badge, price label, sub-tagline, CTA buttons.
-     FIX v40 COPY-2: Price table, roadmap Phase 02 & 03, risk disclaimer.
-     FIX v40 COPY-3: Nav CTA text diupdate ke "Join Angel Crowd Funding".
-     ── v39/v38/v37/v36/v33 fixes aktif: semua
+<!-- Exillion Capital Finecosystem — v42 (Pre-Sale v2.2 — Spec v2.2 FINAL):
+     FIX v42 FINAL-1: Angel Investor Funding Pool → 8% = 880,000,000 EXXE (dari 7.27%)
+                       Community/Supporter/Education Pool → 2.5% = 275,000,000 EXXE
+     FIX v42 FINAL-2: Realokasi supply FINAL per tier:
+                       TIER I   → 188,800,000 EXXE @ $0.01  | 3-Month Lock | Cair 100% (1x)        | No Bonus
+                       TIER II  → 251,800,000 EXXE @ $0.025 | 2-Month Lock | Release 35%/35%/30% (3x) | +5% Bonus EXXE
+                       TIER III → 388,000,000 EXXE @ $0.05  | 1-Month Lock | Cair 20%/bln (5x)     | +10% Bonus EXXE
+                       Total Pool: 880,000,000 EXXE
+                       Total Distributed (incl.bonus): 879,990,000 EXXE | Remaining wallet: 10,000 EXXE
+     FIX v42 FINAL-3: Total Raise Potensi: Tier I $1,888,000 + Tier II $6,295,000 + Tier III $19,400,000 = $27,583,000
+     FIX v42 FINAL-4: Wallet Transparansi On-Chain: 4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
+     FIX v42 FINAL-5: Live-calc updated: bonus rows, total EXXE, lock schedule, release schedule.
+     FIX v42 FINAL-6: Tokenomics donut + legend + tcard updated.
+     ── v41/v40/v39/v38/v37/v36/v33 fixes aktif: semua
 -->
 <html lang="en">
 <head>
@@ -3628,15 +3625,15 @@ footer{
       animation:mainFadeIn 0.7s ease 1.1s both;
     ">
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
-        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">825 M EXXE</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(0,212,255,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">225M | 275M | 325M</div>
+        <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">880 M EXXE</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(0,212,255,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">188.8M | 251.8M | 388M</div>
         <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Crowd Funding Reserved</div>
       </div>
       <div style="width:1px;height:32px;background:rgba(0,212,255,0.2);"></div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'Orbitron',monospace;font-size:clamp(0.9rem,2.5vw,1.2rem);font-weight:800;color:#e8c97a;text-shadow:0 0 20px rgba(232,201,122,0.7),0 0 40px rgba(232,201,122,0.3);">From $0.01</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(232,201,122,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">$0.01 · $0.025 · $0.05</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">All Tiers Open Now</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(232,201,122,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">$0.01 · $0.025+5% · $0.05+10%</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">All Tiers Open + Bonus EXXE</div>
       </div>
     </div>
 
@@ -3954,7 +3951,7 @@ footer{
       margin:0 auto;
     ">
 
-      <!-- 825 M EXXE -->
+      <!-- 880 M EXXE -->
       <div style="
         flex:1;
         padding:28px 32px;
@@ -3962,7 +3959,7 @@ footer{
         border-right:1px solid var(--border-dim);
         display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
       ">
-        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">825 M EXXE</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">880 M EXXE</div>
         <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Angel Investor Reserved</div>
       </div>
 
@@ -4443,16 +4440,21 @@ footer{
         </div>
       </div>
 
-      <div class="reveal" style="background:var(--card);border:1px solid var(--border-dim);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);">
+      <div class="reveal" style="background:var(--card);border:1px solid rgba(0,212,255,0.3);padding:1.5rem 1.8rem;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);box-shadow:0 0 30px rgba(0,212,255,0.07);">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
-          <div>
-            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:2px;color:var(--text-1);margin-bottom:0.4rem;">ANGEL INVESTOR DISTRIBUTION WALLET</div>
-            <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);">825,000,000 EXXE</div>
-            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">Angel Investor Reserved</div>
+          <div style="flex:1;min-width:200px;">
+            <div style="font-family:'Orbitron',monospace;font-size:0.88rem;letter-spacing:2px;color:var(--cyan);margin-bottom:0.4rem;">🏦 ANGEL INVESTOR POOL — ON-CHAIN VERIFIED</div>
+            <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.5);">880,000,000 EXXE</div>
+            <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.4rem;">8% of Total Supply — Pre-loaded &amp; verifiable on Solana</div>
           </div>
-          <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-            4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
-          </a>
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+            <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.6rem;color:var(--cyan);text-decoration:none;word-break:break-all;max-width:260px;text-align:right;">
+              4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
+            </a>
+            <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;padding:5px 12px;border:1px solid rgba(0,212,255,0.4);color:var(--cyan);text-decoration:none;background:rgba(0,212,255,0.06);white-space:nowrap;">
+              ↗ VERIFY ON SOLSCAN
+            </a>
+          </div>
         </div>
       </div>
 
@@ -4732,10 +4734,10 @@ footer{
         <div class="legend-row"><div class="ldot" style="background:#4db8c9"></div><span class="lname">Exillioneer Reserved Capital Pool</span><span class="lpct">55%</span><span class="lamt">6.05 B</span></div>
         <div class="legend-row"><div class="ldot" style="background:#c9a84c"></div><span class="lname">Exillion Foundation / Finecosystem / Development</span><span class="lpct">12.5%</span><span class="lamt">1.375 B</span></div>
         <div class="legend-row"><div class="ldot" style="background:#4caf7a"></div><span class="lname">Liquidity Pool</span><span class="lpct">10%</span><span class="lamt">1.1 B</span></div>
-        <div class="legend-row"><div class="ldot" style="background:#e8c97a"></div><span class="lname">Angel Investor Funding Pool</span><span class="lpct">7.5%</span><span class="lamt">825 M</span></div>
+        <div class="legend-row"><div class="ldot" style="background:#e8c97a"></div><span class="lname">Angel Investor Funding Pool</span><span class="lpct">8%</span><span class="lamt">880 M</span></div>
         <div class="legend-row"><div class="ldot" style="background:#c94c4c"></div><span class="lname">Emergency Pool</span><span class="lpct">5%</span><span class="lamt">550 M</span></div>
         <div class="legend-row"><div class="ldot" style="background:#7a6030"></div><span class="lname">Treasury Pool</span><span class="lpct">3%</span><span class="lamt">330 M</span></div>
-        <div class="legend-row"><div class="ldot" style="background:#3d7a60"></div><span class="lname">Community / Supporter / Education</span><span class="lpct">3%</span><span class="lamt">330 M</span></div>
+        <div class="legend-row"><div class="ldot" style="background:#3d7a60"></div><span class="lname">Community / Supporter / Education</span><span class="lpct">2.5%</span><span class="lamt">275 M</span></div>
         <div class="legend-row"><div class="ldot" style="background:#3d3526"></div><span class="lname">Burn Reserve Pool</span><span class="lpct">3%</span><span class="lamt">330 M</span></div>
         <div class="legend-row"><div class="ldot" style="background:#c97a9b"></div><span class="lname">Global Humanitarian Reserve Pool</span><span class="lpct">1%</span><span class="lamt">110 M</span></div>
       </div>
@@ -4754,8 +4756,8 @@ footer{
       </div>
       <div class="tcard">
         <div class="tcard-tag">Angel Investor Funding Pool</div>
-        <div class="tcard-val">825,000,000 EXXE</div>
-        <div class="tcard-sub">7.5% of Total supply — Tier I, II, III open to all</div>
+        <div class="tcard-val">880,000,000 EXXE</div>
+        <div class="tcard-sub">8% of Total supply — Tier I (188.8M) · II (251.8M) · III (388M)</div>
       </div>
       <div class="tcard">
         <div class="tcard-tag">Global Humanitarian Reserve Pool</div>
@@ -4801,9 +4803,9 @@ footer{
         <div class="rm-title">Angel Crowd Funding — All 3 Tiers Open</div>
         <ul class="rm-tasks">
           <li>All 3 Tiers Open Simultaneously from launch day</li>
-          <li>Tier I — Genesis Angel · 225 M EXXE at $0.01</li>
-          <li>Tier II — Prime Angel · 275 M EXXE at $0.025</li>
-          <li>Tier III — Apex Angel · 325 M EXXE at $0.05</li>
+          <li>Tier I — Genesis Angel · 188.8 M EXXE at $0.01 · 3-Month Lock · Release 100% at Once</li>
+          <li>Tier II — Prime Angel · 251.8 M EXXE at $0.025 · <strong>+5% Bonus EXXE</strong> · 2-Month Lock · Release 35%/35%/30%</li>
+          <li>Tier III — Apex Angel · 388 M EXXE at $0.05 · <strong>+10% Bonus EXXE</strong> · 1-Month Lock · Release 20%/mo × 5</li>
           <li>Target raise: $25,375,000 USDC</li>
         </ul>
       </div>
@@ -4884,7 +4886,7 @@ footer{
         <span class="wp-icon">👼</span>
         <div class="wp-title" style="color:var(--gold-light);">Angel Investor Round</div>
       </div>
-      <div class="wp-hook" style="color:var(--gold-light);">825 M EXXE — exclusively yours. From $0.01 to a $0.10 Orca DEX listing target.</div>
+      <div class="wp-hook" style="color:var(--gold-light);">880 M EXXE — exclusively yours. From $0.01 to a $0.10 Orca DEX listing target.</div>
       <div class="wp-text">Three entry tiers for early believers. Every dollar you invest is split instantly on-chain: 75% liquidity, 15% operations, 10% development. Governed by code — not by people.</div>
     </div>
 
@@ -4924,13 +4926,13 @@ footer{
   <div class="dash-cards reveal">
     <div class="dash-card">
       <div class="dash-metric">Angel Investor Reserved</div>
-      <div class="dash-val">825 M EXXE</div>
-      <div class="dash-note note-gold">7.5% of Total Supply</div>
+      <div class="dash-val">880 M EXXE</div>
+      <div class="dash-note note-gold">188.8M · 251.8M · 388M per Tier</div>
     </div>
     <div class="dash-card">
       <div class="dash-metric">Current Presale Price</div>
-      <div class="dash-val">$0.01</div>
-      <div class="dash-note note-gold">Tier I — Genesis Active</div>
+      <div class="dash-val">From $0.01</div>
+      <div class="dash-note note-gold">All 3 Tiers OPEN Now</div>
     </div>
     <div class="dash-card">
       <div class="dash-metric">Orca Listing Price</div>
@@ -4943,9 +4945,7 @@ footer{
       <div class="dash-note note-muted">Pre-Listing</div>
     </div>
   </div>
-  <!-- FIX v40 TIER-1: Progress bar per tier — 3 tier sekaligus.
-     Data diupdate live dari /api/stats tiers[N].sold / .remaining / .raisedUsdc.
-     REFRESH setiap 60 detik. Status LIVE/CLOSED per tier. -->
+  <!-- FIX v43: Progress bar per tier — sold/remaining EXXE only, NO $ raised figures. -->
 <div class="progress-wrap reveal" id="tierProgressWrap">
   <div class="progress-label">
     Angel Crowd Funding — Live Progress
@@ -4967,8 +4967,8 @@ footer{
       <div class="prog-fill" id="rt-t1-bar" style="width:1%;"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-      <span>Raised: $<span id="rt-t1-raised">0</span></span>
-      <span>Remaining: <span id="rt-t1-remaining">225,000,000</span> EXXE</span>
+      <span style="color:rgba(0,212,255,0.65);">🔒 3-month lock · 💰 100% at once</span>
+      <span>Remaining: <span id="rt-t1-remaining" style="color:#14F195;">188,800,000</span> EXXE</span>
     </div>
   </div>
 
@@ -4977,17 +4977,17 @@ footer{
     <div class="prog-meta">
       <span style="display:flex;align-items:center;gap:6px;">
         <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
-        <strong>Tier II — Prime Angel</strong> &nbsp;·&nbsp; $0.025/EXXE &nbsp;·&nbsp;
+        <strong>Tier II — Prime Angel</strong> &nbsp;·&nbsp; $0.025/EXXE &nbsp;·&nbsp; <span style="color:#e8c97a;">+5% Bonus</span> &nbsp;·&nbsp;
         Sold: <span id="rt-t2-sold">0</span> EXXE
       </span>
       <span id="rt-t2-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
     </div>
     <div class="prog-track">
-      <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#00d4ff);"></div>
+      <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#f5d060);"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-      <span>Raised: $<span id="rt-t2-raised">0</span></span>
-      <span>Remaining: <span id="rt-t2-remaining">275,000,000</span> EXXE</span>
+      <span style="color:rgba(232,201,122,0.65);">🔒 2-month lock · 💰 35%·35%·30%</span>
+      <span>Remaining: <span id="rt-t2-remaining" style="color:#14F195;">251,800,000</span> EXXE</span>
     </div>
   </div>
 
@@ -4996,33 +4996,33 @@ footer{
     <div class="prog-meta">
       <span style="display:flex;align-items:center;gap:6px;">
         <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
-        <strong>Tier III — Apex Angel</strong> &nbsp;·&nbsp; $0.05/EXXE &nbsp;·&nbsp;
+        <strong>Tier III — Apex Angel</strong> &nbsp;·&nbsp; $0.05/EXXE &nbsp;·&nbsp; <span style="color:#c4a3ff;">+10% Bonus</span> &nbsp;·&nbsp;
         Sold: <span id="rt-t3-sold">0</span> EXXE
       </span>
       <span id="rt-t3-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
     </div>
     <div class="prog-track">
-      <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#ff9900);"></div>
+      <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#c4a3ff);"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-      <span>Raised: $<span id="rt-t3-raised">0</span></span>
-      <span>Remaining: <span id="rt-t3-remaining">325,000,000</span> EXXE</span>
+      <span style="color:rgba(153,69,255,0.75);">🔒 1-month lock · 💰 20%/mo × 5</span>
+      <span>Remaining: <span id="rt-t3-remaining" style="color:#14F195;">388,000,000</span> EXXE</span>
     </div>
   </div>
 </div>
   <div class="price-table reveal" style="max-width:1080px;margin:3rem auto 0;">
     <div class="price-table-head">The Angel Investor Pricing Tiers</div>
     <div class="price-row">
-      <span class="price-tier">Tier I — Genesis Angel (225M EXXE · 27.3%)</span>
+      <span class="price-tier">Tier I — Genesis Angel (188.8M EXXE · 21.5%) · 3-Month Lock · Release 100% at Once</span>
       <span class="price-amt t1">$0.01</span>
     </div>
     <div class="price-row">
-      <span class="price-tier">Tier II — Prime Angel (275M EXXE · 33.3%)</span>
-      <span class="price-amt t2">$0.025</span>
+      <span class="price-tier">Tier II — Prime Angel (251.8M EXXE · 28.6%) · +5% Bonus · 2-Month Lock · Release 35%/35%/30%</span>
+      <span class="price-amt t2">$0.025 <span style="font-size:0.6rem;color:#e8c97a;margin-left:4px;">+5% BONUS</span></span>
     </div>
     <div class="price-row">
-      <span class="price-tier">Tier III — Apex Angel (325M EXXE · 39.4%)</span>
-      <span class="price-amt t3">$0.05</span>
+      <span class="price-tier">Tier III — Apex Angel (388M EXXE · 44.1%) · +10% Bonus · 1-Month Lock · Release 20%/mo × 5</span>
+      <span class="price-amt t3">$0.05 <span style="font-size:0.6rem;color:#c4a3ff;margin-left:4px;">+10% BONUS</span></span>
     </div>
     <div class="price-row">
       <span class="price-tier">Orca DEX Listing</span>
@@ -5044,7 +5044,7 @@ footer{
   </div>
   <div class="angel-wrapper">
     <!-- FIX v40 TIER-1: Semua 3 tier OPEN bersamaan. Badge LIVE hijau di semua tier.
-     Sisa token (remaining) diupdate live dari /api/stats setiap 60 detik.
+     Remaining token (remaining) diupdate live dari /api/stats setiap 60 detik.
      Jika tier habis → badge berubah ke CLOSED (abu-abu). -->
 <div class="tier-grid reveal" id="tierGrid">
 
@@ -5057,11 +5057,16 @@ footer{
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
     <div class="tier-detail">
-      225 M EXXE · Min $10 · Max $100/wallet<br/>
+      188.8 M EXXE · Min $10 · Max $100/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">10×</strong>
     </div>
+    <!-- v41: Locking & Vesting Info -->
+    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:2px;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(0,212,255,0.8);margin-bottom:2px;">🔒 LOCK: 3 MONTHS AFTER LISTING</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;color:rgba(232,201,122,0.8);">💰 RELEASE: 100% AT ONCE</div>
+    </div>
     <div class="tier-remaining" id="tier-remaining-1" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-1">225,000,000</span> EXXE remaining
+      <span id="tier-rem-exxe-1">188,800,000</span> EXXE remaining
     </div>
     <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
       <div id="tier-prog-1" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
@@ -5075,16 +5080,23 @@ footer{
   <div class="tier-card" id="tier-card-2" onclick="selectTierAndScroll(2)" style="cursor:pointer;">
     <div class="tier-num">Tier II</div>
     <div class="tier-name">Prime Angel Investor</div>
+    <!-- v41: Bonus Badge -->
+    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(232,201,122,0.2),rgba(204,125,7,0.15));border:1px solid rgba(232,201,122,0.6);color:#e8c97a;text-shadow:0 0 10px rgba(232,201,122,0.5);">🎁 +5% BONUS EXXE</div>
     <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
       <span>$0.025</span>
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
     <div class="tier-detail">
-      275 M EXXE · Min $10 · Max $250/wallet<br/>
+      251.8 M EXXE · Min $10 · Max $250/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">4×</strong>
     </div>
+    <!-- v41: Locking & Vesting Info -->
+    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(232,201,122,0.05);border:1px solid rgba(232,201,122,0.2);border-radius:2px;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(232,201,122,0.9);margin-bottom:2px;">🔒 LOCK: 2 MONTHS AFTER LISTING</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;color:rgba(20,241,149,0.8);">💰 RELEASE: 35% · 35% · 30% (3 MONTHS)</div>
+    </div>
     <div class="tier-remaining" id="tier-remaining-2" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-2">275,000,000</span> EXXE remaining
+      <span id="tier-rem-exxe-2">251,800,000</span> EXXE remaining
     </div>
     <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
       <div id="tier-prog-2" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
@@ -5098,16 +5110,23 @@ footer{
   <div class="tier-card" id="tier-card-3" onclick="selectTierAndScroll(3)" style="cursor:pointer;">
     <div class="tier-num">Tier III</div>
     <div class="tier-name">Apex Angel Investor</div>
+    <!-- v41: Bonus Badge -->
+    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(153,69,255,0.2),rgba(0,212,255,0.1));border:1px solid rgba(153,69,255,0.6);color:#c4a3ff;text-shadow:0 0 10px rgba(153,69,255,0.5);animation:buyNowPulse 2s ease-in-out infinite;">🎁 +10% BONUS EXXE</div>
     <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
       <span>$0.05</span>
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
     <div class="tier-detail">
-      325 M EXXE · Min $10 · Max $500/wallet<br/>
+      388 M EXXE · Min $10 · Max $500/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">2×</strong>
     </div>
+    <!-- v41: Locking & Vesting Info -->
+    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(153,69,255,0.06);border:1px solid rgba(153,69,255,0.25);border-radius:2px;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(196,163,255,0.9);margin-bottom:2px;">🔒 LOCK: 1 MONTH AFTER LISTING</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;color:rgba(20,241,149,0.8);">💰 RELEASE: 20% / MONTH (5×)</div>
+    </div>
     <div class="tier-remaining" id="tier-remaining-3" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-3">325,000,000</span> EXXE remaining
+      <span id="tier-rem-exxe-3">388,000,000</span> EXXE remaining
     </div>
     <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
       <div id="tier-prog-3" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
@@ -5175,15 +5194,15 @@ footer{
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <button id="tierBtn1" onclick="selectTierBtn(1)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--cyan);background:rgba(0,212,255,0.1);color:var(--cyan);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier I<br/><span style="font-size:0.5rem;opacity:0.8;">$0.01 · max $100</span>
+              Tier I<br/><span style="font-size:0.5rem;opacity:0.8;">$0.01 · max $100</span><br/><span style="font-size:0.44rem;color:rgba(0,212,255,0.6);">No Bonus · 3-Month Lock</span>
             </button>
             <button id="tierBtn2" onclick="selectTierBtn(2)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier II<br/><span style="font-size:0.5rem;opacity:0.8;">$0.025 · max $250</span>
+              Tier II<br/><span style="font-size:0.5rem;opacity:0.8;">$0.025 · max $250</span><br/><span style="font-size:0.44rem;color:rgba(232,201,122,0.7);">+5% Bonus · 2-Month Lock</span>
             </button>
             <button id="tierBtn3" onclick="selectTierBtn(3)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier III<br/><span style="font-size:0.5rem;opacity:0.8;">$0.05 · max $500</span>
+              Tier III<br/><span style="font-size:0.5rem;opacity:0.8;">$0.05 · max $500</span><br/><span style="font-size:0.44rem;color:rgba(196,163,255,0.8);">+10% Bonus · 1-Month Lock</span>
             </button>
           </div>
         </div>
@@ -5220,9 +5239,20 @@ footer{
           </div>
           <div class="calc-divider"></div>
           <div class="calc-row">
-            <span class="calc-lbl">You Receive</span>
+            <span class="calc-lbl">Base EXXE</span>
             <span class="calc-amt gold" id="calcReceive">—</span>
           </div>
+          <!-- v41: Bonus EXXE row — hidden for Tier I, shown for II & III -->
+          <div class="calc-row" id="calcBonusRow" style="display:none;">
+            <span class="calc-lbl" id="calcBonusLbl">🎁 Bonus EXXE (+5%)</span>
+            <span class="calc-amt" style="color:#e8c97a;" id="calcBonus">—</span>
+          </div>
+          <!-- v41: Total EXXE row — shown when bonus active -->
+          <div class="calc-row" id="calcTotalRow" style="display:none;border-top:1px solid rgba(0,212,255,0.2);padding-top:6px;margin-top:2px;">
+            <span class="calc-lbl" style="color:var(--cyan);font-weight:700;">TOTAL EXXE</span>
+            <span class="calc-amt" style="color:var(--cyan);font-weight:700;" id="calcTotal">—</span>
+          </div>
+          <div class="calc-divider"></div>
           <div class="calc-row">
             <span class="calc-lbl">Value at Listing ($0.10)</span>
             <span class="calc-amt green" id="calcListing">—</span>
@@ -5230,6 +5260,21 @@ footer{
           <div class="calc-row">
             <span class="calc-lbl">Potential Gain</span>
             <span class="calc-amt green" id="calcGain">—</span>
+          </div>
+          <!-- v41: Lock & Vesting info row -->
+          <div class="calc-divider"></div>
+          <div class="calc-row" id="calcLockRow">
+            <span class="calc-lbl">🔒 Locking</span>
+            <span style="font-family:'Orbitron',monospace;font-size:0.62rem;color:rgba(0,212,255,0.8);" id="calcLock">—</span>
+          </div>
+          <div class="calc-row" id="calcVestRow">
+            <span class="calc-lbl">💰 Release</span>
+            <span style="font-family:'Orbitron',monospace;font-size:0.62rem;color:rgba(20,241,149,0.8);" id="calcVest">—</span>
+          </div>
+          <!-- v42: Vesting schedule breakdown — shown for Tier II & III -->
+          <div id="calcVestSchedule" style="display:none;margin-top:6px;padding:8px 10px;background:rgba(20,241,149,0.04);border:1px solid rgba(20,241,149,0.15);border-radius:2px;">
+            <div style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin-bottom:5px;">EXXE RELEASE SCHEDULE</div>
+            <div id="calcVestLines" style="display:flex;flex-direction:column;gap:3px;"></div>
           </div>
         </div>
 
@@ -5255,7 +5300,7 @@ footer{
 
         <p class="form-note">
           USDC/USDT sent on-chain. EXXE delivered automatically to your connected wallet.
-          All transactions are irreversible. Minimum $10.00 — Maximum $250.00 per investor.
+          All transactions are irreversible. Minimum $10.00. Maximum per wallet: $100 (Tier I) · $250 (Tier II +5% Bonus) · $500 (Tier III +10% Bonus). Locking period begins after DEX listing.
         </p>
       </div>
 
@@ -5437,7 +5482,7 @@ footer{
 <!-- STICKY BANNER -->
 <div class="sticky-banner" id="stickyBanner">
   <div class="banner-text">
-    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Maximum per wallet: $100 (Tier I) · $250 (Tier II) · $500 (Tier III). Each investor may participate in all three tiers independently.
+    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Max per wallet: $100 (Tier I · No Bonus) · $250 (Tier II · +5% Bonus EXXE) · $500 (Tier III · +10% Bonus EXXE). Locking: 3/2/1 months after listing. Each investor may participate in all three tiers independently.
   </div>
   <button class="banner-close" onclick="this.closest('.sticky-banner').classList.remove('show')">✕</button>
 </div>
@@ -5472,14 +5517,32 @@ const CFG = {
   },
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
-  // FIX v40 TIER-1: Struktur tier baru sesuai Spec v2.0
+  // FIX v41 ALLOC-1: Tier baru sesuai Spec v2.1 — supply/bonus/lock/vesting dari CFG.TIERS
   // Semua tier OPEN bersamaan — tidak sequential
   // Max per wallet dirancang anti-bot/anti-whale
   TIERS: {
-    1: { price:0.01,  min:10, max:100,  gain:900, supply:225000000, name:'Genesis Angel' },
-    2: { price:0.025, min:10, max:250,  gain:300, supply:275000000, name:'Prime Angel'   },
-    3: { price:0.05,  min:10, max:500,  gain:100, supply:325000000, name:'Apex Angel'    },
+    // v42 FINAL: Supply | Bonus | Lock | Vesting schedule per tier
+    // Tier I  : 188.8M EXXE @ $0.01  | no bonus | lock 3 bln | cair 100% at once
+    // Tier II : 251.8M EXXE @ $0.025 | +5% bonus | lock 2 bln | cair 35%/35%/30%
+    // Tier III: 388M EXXE   @ $0.05  | +10% bonus| lock 1 bln | cair 20%/bln x5
+    1: { price:0.01,  min:10, max:100, gain:900, supply:188800000, name:'Genesis Angel',
+         bonus:0,    bonusPct:0,
+         lock:'3 months after listing',
+         vesting:'Release 100% at once',
+         vestingSchedule:[100] },
+    2: { price:0.025, min:10, max:250, gain:300, supply:251800000, name:'Prime Angel',
+         bonus:0.05, bonusPct:5,
+         lock:'2 months after listing',
+         vesting:'35% · 35% · 30% (3 months)',
+         vestingSchedule:[35,35,30] },
+    3: { price:0.05,  min:10, max:500, gain:100, supply:388000000, name:'Apex Angel',
+         bonus:0.10, bonusPct:10,
+         lock:'1 month after listing',
+         vesting:'20% / month × 5 months',
+         vestingSchedule:[20,20,20,20,20] },
   },
+  // v42 FINAL: Wallet Transparansi On-Chain Angel Investor
+  ANGEL_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
@@ -5552,7 +5615,7 @@ function selectTierBtn(tierNum) {
   if (typeof calcTokens === 'function') calcTokens();
 }
 
-// Update wallet cap bar — tampil berapa sisa cap wallet ini di tier aktif
+// Update wallet cap bar — tampil berapa remaining cap wallet ini di tier aktif
 function updateWalletCapBar() {
   const bar = document.getElementById('walletCapBar');
   const rem = document.getElementById('walletCapRemaining');
@@ -5640,11 +5703,10 @@ function updateTierCards(tiersData) {
       }
     }
 
-    // Update progress bar section
+    // v43: Update progress bar section — sold/remaining/status only (no $ raised)
     const soldEl  = document.getElementById('rt-t' + n + '-sold');
     const barEl   = document.getElementById('rt-t' + n + '-bar');
     const remBar  = document.getElementById('rt-t' + n + '-remaining');
-    const raisedEl = document.getElementById('rt-t' + n + '-raised');
     const dotEl   = document.getElementById('tier-status-dot-' + n);
     const statEl  = document.getElementById('rt-t' + n + '-status');
 
@@ -5658,7 +5720,6 @@ function updateTierCards(tiersData) {
     if (soldEl)   soldEl.textContent   = fmt(sold);
     if (barEl)    barEl.style.width    = Math.max(pct, 1) + '%';
     if (remBar)   remBar.textContent   = fmt(remaining);
-    if (raisedEl) raisedEl.textContent = fmt(raised, 2);
 
     if (status === 'closed') {
       if (dotEl)  { dotEl.style.background = '#888'; dotEl.style.animation = 'none'; }
@@ -5666,6 +5727,24 @@ function updateTierCards(tiersData) {
     } else {
       if (dotEl)  { dotEl.style.background = '#14F195'; dotEl.style.animation = ''; }
       if (statEl) { statEl.textContent = 'OPEN'; statEl.style.color = '#14F195'; }
+    }
+
+    // v43: Update transparency section tier cards
+    const transSoldEl   = document.getElementById('trans-t' + n + '-sold');
+    const transRemEl    = document.getElementById('trans-t' + n + '-rem');
+    const transBarEl    = document.getElementById('trans-t' + n + '-bar');
+    const transStatEl   = document.getElementById('trans-t' + n + '-status');
+    if (transSoldEl) transSoldEl.textContent = fmt(sold);
+    if (transRemEl)  transRemEl.textContent  = fmt(remaining);
+    if (transBarEl)  transBarEl.style.width  = Math.max(pct, 1) + '%';
+    if (transStatEl) {
+      if (status === 'closed') {
+        transStatEl.textContent   = '● CLOSED';
+        transStatEl.style.color   = '#888888';
+      } else {
+        transStatEl.textContent   = '● OPEN';
+        transStatEl.style.color   = '#14F195';
+      }
     }
   });
 }
@@ -5847,13 +5926,33 @@ async function fetchTokenBalance(walletAddress, mint) {
 }
 
 // ── Wallet provider helpers — single source of truth ──────────────
+// ── v45 WALLET FIX: Provider detection — robust multi-path ──────────────────
 function getPhantomProvider() {
-  return (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom)
-    ? window.phantom.solana
-    : (window.solana && window.solana.isPhantom ? window.solana : null);
+  // Path 1: Standard Phantom injection (desktop extension + Phantom in-app browser)
+  if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
+    return window.phantom.solana;
+  }
+  // Path 2: Legacy window.solana injection (older Phantom versions)
+  if (window.solana && window.solana.isPhantom) {
+    return window.solana;
+  }
+  // Path 3: Some mobile browsers expose it differently
+  if (window.solana && window.solana.isPhantom === undefined && window.solana.connect) {
+    return window.solana;
+  }
+  return null;
 }
+
 function getSolflareProvider() {
-  return (window.solflare && window.solflare.isSolflare) ? window.solflare : null;
+  // Path 1: Standard Solflare injection
+  if (window.solflare && window.solflare.isSolflare) {
+    return window.solflare;
+  }
+  // Path 2: Some versions use window.solana with isSolflare flag
+  if (window.solana && window.solana.isSolflare) {
+    return window.solana;
+  }
+  return null;
 }
 
 // --- SCROLL REVEAL — v6: rAF batched, no layout thrash ----------
@@ -6104,246 +6203,341 @@ function isInsideSolflare() {
   return !!(window.solflare && window.solflare.isSolflare);
 }
 
-// FIX v27 #4: Auto-resume setelah deep link mobile.
-// Saat user kembali ke browser dari Phantom/Solflare app, tab menjadi visible kembali.
-// Jika wallet sudah connected tapi state belum diset (user tidak klik lagi),
-// visibilitychange akan auto-detect dan restore session.
+// v45 WALLET FIX: Auto-resume after mobile deep link redirect.
+// When user returns from Phantom/Solflare app, the tab becomes visible again.
+// We retry provider detection with a short delay since injection may not be
+// immediate upon returning from the wallet app.
 document.addEventListener('visibilitychange', function _mobileWalletResume() {
   if (document.hidden) return;
   if (!isMobileBrowser()) return;
-  // FIX v29 MOB-7: Cek connectedAddress (bukan hanya connectedWallet) — state bisa partial.
-  if (connectedWallet && connectedAddress) return; // sudah fully connected
+  if (connectedWallet && connectedAddress) return; // already fully connected
 
-  // FIX v37 MOB-2: Guard — hanya lanjut resume jika tab ini yang melakukan deep link
-  // redirect. Tanpa guard ini, tab Chrome lama (yang sessionStorage-nya TIDAK terhapus
-  // oleh in-app browser Phantom) akan otomatis memanggil setConnected() saat user
-  // kembali dari Phantom app, menyebabkan investor masuk 2x ke website.
+  // Guard: only resume if this tab actually triggered a deep link redirect
   let didRedirect = false;
   try { didRedirect = sessionStorage.getItem('_exxe_did_redirect') === '1'; } catch(e) {}
-  if (!didRedirect) return; // tab ini tidak pernah redirect — tidak perlu resume
+  if (!didRedirect) return;
 
-  // Hapus flag segera — hanya boleh resume SATU KALI per redirect cycle
-  try {
-    sessionStorage.removeItem('_exxe_did_redirect');
-  } catch(e) {}
+  // Remove flag immediately — only resume ONCE per redirect cycle
+  try { sessionStorage.removeItem('_exxe_did_redirect'); } catch(e) {}
 
-  // Ambil intent dari sessionStorage — ditulis saat deep link redirect
   let intent = null;
   try { intent = sessionStorage.getItem('_exxe_wallet_intent'); } catch(e) {}
 
-  // Cek Phantom (prioritaskan jika intent === 'phantom' atau tidak ada intent)
-  if (!intent || intent === 'phantom') {
-    const p = getPhantomProvider();
-    if (p && p.isConnected && p.publicKey) {
-      try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
-      setConnected('Phantom', p.publicKey.toString());
-      return;
+  // Retry with delay — provider may not be injected immediately on return
+  setTimeout(function() {
+    // Check Phantom
+    if (!intent || intent === 'phantom') {
+      const p = getPhantomProvider();
+      if (p && p.publicKey) {
+        try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
+        setConnected('Phantom', p.publicKey.toString());
+        _setupPhantomListeners(p);
+        return;
+      }
     }
-  }
-  // Cek Solflare
-  if (!intent || intent === 'solflare') {
-    const s = getSolflareProvider();
-    if (s && s.isConnected && s.publicKey) {
-      try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
-      setConnected('Solflare', s.publicKey.toString());
+    // Check Solflare
+    if (!intent || intent === 'solflare') {
+      const s = getSolflareProvider();
+      if (s && s.publicKey) {
+        try { sessionStorage.removeItem('_exxe_wallet_intent'); } catch(e) {}
+        setConnected('Solflare', s.publicKey.toString());
+        _setupSolflareListeners(s);
+      }
     }
-  }
+  }, 600); // 600ms delay gives wallet time to inject provider on return
 });
 
 // FIX v27 #8: Rate-limit koneksi wallet — cegah spam klik yang memicu
 // multiple provider.connect() calls secara paralel.
 // FIX v29 MOB-2: Flag terpisah per wallet — satu flag shared menyebabkan
 // Solflare terblokir permanent jika Phantom gagal dengan flag masih true di mobile.
+// ── v45 WALLET FIX: connectPhantom — desktop & mobile ───────────────────────
 let _isConnectingPhantom  = false;
 let _isConnectingSolflare = false;
 
 async function connectPhantom() {
+  // Guard: prevent double-click race condition
   if (_isConnectingPhantom) return;
   _isConnectingPhantom = true;
 
-  // FIX v37 MOB-1: Di mobile, wallet extension bisa lazy-load setelah DOMContentLoaded.
-  // Delay 300ms sebelum cek provider agar extension punya waktu inject window.phantom.
-  if (isMobileBrowser()) await new Promise(r => setTimeout(r, 300));
-
-  // FIX v29 MOB-4: Panggil getPhantomProvider() SEKALI dan cache ke var lokal.
-  const provider = getPhantomProvider();
-
-  if (provider && provider.isConnected && provider.publicKey) {
-    setConnected('Phantom', provider.publicKey.toString());
-    _isConnectingPhantom = false;
-    return;
-  }
-
-  // FIX v39 MOB-BUY-6: Jika sudah di dalam Phantom in-app browser,
-  // provider sudah inject — tidak perlu redirect keluar sama sekali.
-  // Langsung connect dari sini.
-  if (isMobileBrowser() && isInsidePhantom() && !provider) {
-    // Tunggu sebentar dan coba lagi — kadang provider belum siap saat DOMContentLoaded
-    await new Promise(r => setTimeout(r, 500));
-    const retryProvider = getPhantomProvider();
-    if (retryProvider) {
-      try {
-        const resp = await retryProvider.connect();
-        setConnected('Phantom', resp.publicKey.toString());
-      } catch(e) { /* user reject */ }
-    }
-    _isConnectingPhantom = false;
-    return;
-  }
-
-  // MOBILE tanpa provider: redirect ke Phantom in-app browser
-  if (isMobileBrowser() && !provider) {
-    // FIX v29 MOB-8: Simpan intent agar visibilitychange bisa auto-resume setelah kembali
-    // FIX v37 MOB-2: Tambah _exxe_did_redirect agar visibilitychange hanya resume
-    // pada tab yang benar-benar melakukan redirect — mencegah tab Chrome lama
-    // auto-connect dan investor masuk dua kali ke website.
-    try {
-      sessionStorage.setItem('_exxe_wallet_intent', 'phantom');
-      sessionStorage.setItem('_exxe_did_redirect', '1');
-    } catch(e) {}
-    const currentUrl = encodeURIComponent(window.location.href);
-    window.location.href = 'https://phantom.app/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
-    _isConnectingPhantom = false;
-    return;
-  }
-
-  if (window.location.protocol === 'file:') {
-    showToast('Phantom cannot connect via file://. Please deploy to https://', 'warn');
-    _isConnectingPhantom = false;
-    return;
-  }
-
-  if (!provider) {
-    showWalletHint('phantom');
-    _isConnectingPhantom = false;
-    return;
-  }
-
   const pBtn = document.getElementById('phantomBtn');
-  if (pBtn) {
-    pBtn.disabled = true;
-    pBtn.style.opacity = '0.6';
-    const nameEl = pBtn.querySelector('.wallet-name');
-    if (nameEl) nameEl.textContent = 'Connecting…';
-  }
 
-  try {
-    const resp    = await provider.connect();
-    const address = resp.publicKey.toString();
-    setConnected('Phantom', address);
-
-    try { provider.on('disconnect', function() { if (connectedWallet === 'Phantom') disconnectWallet(); }); } catch(e){}
-    try {
-      provider.on('accountChanged', function(pubKey) {
-        if (pubKey) { connectedAddress = pubKey.toString(); setConnected('Phantom', connectedAddress); }
-        else { disconnectWallet(); }
-      });
-    } catch(e){}
-
-  } catch(e) {
+  // Helper: reset button to default state
+  function resetPhantomBtn() {
     if (pBtn) {
       pBtn.disabled = false;
       pBtn.style.opacity = '1';
       const nameEl = pBtn.querySelector('.wallet-name');
       if (nameEl) nameEl.textContent = 'Connect Phantom';
     }
-    if (e.code !== 4001) {
-      showToast('Phantom connection failed: ' + (e.message || 'Please try again.'), 'error');
-    }
-  } finally {
-    _isConnectingPhantom = false; // FIX v29 MOB-2
-  }
-}
-
-async function connectSolflare() {
-  if (_isConnectingSolflare) return; // FIX v29 MOB-2
-  _isConnectingSolflare = true;
-
-  // FIX v37 MOB-1: Di mobile, wallet extension bisa lazy-load — delay 300ms sebelum cek.
-  if (isMobileBrowser()) await new Promise(r => setTimeout(r, 300));
-
-  // FIX v29 MOB-4: Panggil getSolflareProvider() SEKALI dan cache.
-  const provider = getSolflareProvider();
-
-  if (provider && provider.isConnected && provider.publicKey) {
-    setConnected('Solflare', provider.publicKey.toString());
-    _isConnectingSolflare = false;
-    return;
-  }
-
-  // FIX v39 MOB-BUY-6: Jika sudah di dalam Solflare in-app browser,
-  // provider sudah inject — tidak perlu redirect keluar.
-  if (isMobileBrowser() && isInsideSolflare() && !provider) {
-    await new Promise(r => setTimeout(r, 500));
-    const retryProvider = getSolflareProvider();
-    if (retryProvider) {
-      try {
-        await retryProvider.connect();
-        setConnected('Solflare', retryProvider.publicKey.toString());
-      } catch(e) { /* user reject */ }
-    }
-    _isConnectingSolflare = false;
-    return;
-  }
-
-  if (isMobileBrowser() && !provider) {
-    // FIX v37 MOB-2: Tambah _exxe_did_redirect — lihat connectPhantom untuk penjelasan.
-    try {
-      sessionStorage.setItem('_exxe_wallet_intent', 'solflare');
-      sessionStorage.setItem('_exxe_did_redirect', '1');
-    } catch(e) {}
-    const currentUrl = encodeURIComponent(window.location.href);
-    window.location.href = 'https://solflare.com/ul/v1/browse/' + currentUrl + '?ref=' + encodeURIComponent(window.location.origin);
-    _isConnectingSolflare = false;
-    return;
-  }
-
-  if (window.location.protocol === 'file:') {
-    showToast('Solflare cannot connect via file://. Please deploy to https://', 'warn');
-    _isConnectingSolflare = false;
-    return;
-  }
-
-  if (!provider) {
-    showWalletHint('solflare');
-    _isConnectingSolflare = false;
-    return;
-  }
-
-  const sBtn = document.getElementById('solflareBtn');
-  if (sBtn) {
-    sBtn.disabled = true;
-    sBtn.style.opacity = '0.6';
-    const nameEl = sBtn.querySelector('.wallet-name');
-    if (nameEl) nameEl.textContent = 'Connecting…';
+    _isConnectingPhantom = false;
   }
 
   try {
-    await provider.connect();
-    const address = provider.publicKey.toString();
-    setConnected('Solflare', address);
+    // Show connecting state
+    if (pBtn) {
+      pBtn.disabled = true;
+      pBtn.style.opacity = '0.6';
+      const nameEl = pBtn.querySelector('.wallet-name');
+      if (nameEl) nameEl.textContent = 'Connecting…';
+    }
 
-    try { provider.on('disconnect', function() { if (connectedWallet === 'Solflare') disconnectWallet(); }); } catch(e){}
-    try {
-      provider.on('accountChanged', function() {
-        if (provider.publicKey) { connectedAddress = provider.publicKey.toString(); setConnected('Solflare', connectedAddress); }
-        else { disconnectWallet(); }
-      });
-    } catch(e){}
+    // FIX v45: On mobile, give wallet injection time to complete
+    if (isMobileBrowser()) {
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    let provider = getPhantomProvider();
+
+    // ── CASE 1: Already connected ────────────────────────────────────────────
+    if (provider && provider.isConnected && provider.publicKey) {
+      setConnected('Phantom', provider.publicKey.toString());
+      resetPhantomBtn();
+      return;
+    }
+
+    // ── CASE 2: Inside Phantom in-app browser ────────────────────────────────
+    if (isMobileBrowser() && isInsidePhantom()) {
+      // Provider should already be injected — retry with extra delay if needed
+      if (!provider) {
+        await new Promise(r => setTimeout(r, 800));
+        provider = getPhantomProvider();
+      }
+      if (provider) {
+        try {
+          const resp = await provider.connect();
+          const address = (resp && resp.publicKey)
+            ? resp.publicKey.toString()
+            : provider.publicKey ? provider.publicKey.toString() : null;
+          if (address) {
+            setConnected('Phantom', address);
+            _setupPhantomListeners(provider);
+          } else {
+            showToast('Phantom connected but no public key found. Please try again.', 'error');
+          }
+        } catch(e) {
+          if (e.code !== 4001) {
+            showToast('Phantom: ' + (e.message || 'Connection rejected.'), 'error');
+          }
+        }
+      } else {
+        showToast('Phantom not detected inside in-app browser. Please try again.', 'warn');
+      }
+      resetPhantomBtn();
+      return;
+    }
+
+    // ── CASE 3: Mobile — no provider — deep link to Phantom app ─────────────
+    if (isMobileBrowser() && !provider) {
+      try {
+        sessionStorage.setItem('_exxe_wallet_intent', 'phantom');
+        sessionStorage.setItem('_exxe_did_redirect', '1');
+      } catch(e) {}
+      // FIX v45: Use universal link format (more reliable than ul/v1/browse)
+      const currentUrl = encodeURIComponent(window.location.href);
+      const deepLink = 'https://phantom.app/ul/v1/browse/' + currentUrl
+        + '?ref=' + encodeURIComponent(window.location.origin);
+      resetPhantomBtn();
+      window.location.href = deepLink;
+      return;
+    }
+
+    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
+    if (window.location.protocol === 'file:') {
+      showToast('Phantom requires https://. Please open via a web server.', 'warn');
+      resetPhantomBtn();
+      return;
+    }
+
+    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
+    if (!provider) {
+      showWalletHint('phantom');
+      resetPhantomBtn();
+      return;
+    }
+
+    // ── CASE 6: Desktop — extension present, request connect ─────────────────
+    const resp = await provider.connect();
+    const address = (resp && resp.publicKey)
+      ? resp.publicKey.toString()
+      : provider.publicKey ? provider.publicKey.toString() : null;
+
+    if (!address) {
+      throw new Error('No public key returned from Phantom.');
+    }
+
+    setConnected('Phantom', address);
+    _setupPhantomListeners(provider);
 
   } catch(e) {
+    if (e.code !== 4001) {
+      // 4001 = user rejected — silent
+      showToast('Phantom: ' + (e.message || 'Connection failed. Please try again.'), 'error');
+    }
+  } finally {
+    _isConnectingPhantom = false;
+    const pBtnF = document.getElementById('phantomBtn');
+    if (pBtnF && pBtnF.disabled) {
+      pBtnF.disabled = false;
+      pBtnF.style.opacity = '1';
+    }
+  }
+}
+
+function _setupPhantomListeners(provider) {
+  try {
+    provider.on('disconnect', function() {
+      if (connectedWallet === 'Phantom') disconnectWallet();
+    });
+  } catch(e) {}
+  try {
+    provider.on('accountChanged', function(pubKey) {
+      if (pubKey) {
+        connectedAddress = pubKey.toString();
+        setConnected('Phantom', connectedAddress);
+      } else {
+        disconnectWallet();
+      }
+    });
+  } catch(e) {}
+}
+
+// ── v45 WALLET FIX: connectSolflare — desktop & mobile ──────────────────────
+async function connectSolflare() {
+  if (_isConnectingSolflare) return;
+  _isConnectingSolflare = true;
+
+  const sBtn = document.getElementById('solflareBtn');
+
+  function resetSolflareBtn() {
     if (sBtn) {
       sBtn.disabled = false;
       sBtn.style.opacity = '1';
       const nameEl = sBtn.querySelector('.wallet-name');
       if (nameEl) nameEl.textContent = 'Connect Solflare';
     }
+    _isConnectingSolflare = false;
+  }
+
+  try {
+    if (sBtn) {
+      sBtn.disabled = true;
+      sBtn.style.opacity = '0.6';
+      const nameEl = sBtn.querySelector('.wallet-name');
+      if (nameEl) nameEl.textContent = 'Connecting…';
+    }
+
+    // FIX v45: On mobile, give wallet injection time to complete
+    if (isMobileBrowser()) {
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    let provider = getSolflareProvider();
+
+    // ── CASE 1: Already connected ────────────────────────────────────────────
+    if (provider && provider.isConnected && provider.publicKey) {
+      setConnected('Solflare', provider.publicKey.toString());
+      resetSolflareBtn();
+      return;
+    }
+
+    // ── CASE 2: Inside Solflare in-app browser ───────────────────────────────
+    if (isMobileBrowser() && isInsideSolflare()) {
+      if (!provider) {
+        await new Promise(r => setTimeout(r, 800));
+        provider = getSolflareProvider();
+      }
+      if (provider) {
+        try {
+          await provider.connect();
+          const address = provider.publicKey ? provider.publicKey.toString() : null;
+          if (address) {
+            setConnected('Solflare', address);
+            _setupSolflareListeners(provider);
+          } else {
+            showToast('Solflare connected but no public key found. Please try again.', 'error');
+          }
+        } catch(e) {
+          if (e.code !== 4001) {
+            showToast('Solflare: ' + (e.message || 'Connection rejected.'), 'error');
+          }
+        }
+      } else {
+        showToast('Solflare not detected inside in-app browser. Please try again.', 'warn');
+      }
+      resetSolflareBtn();
+      return;
+    }
+
+    // ── CASE 3: Mobile — no provider — deep link to Solflare app ────────────
+    if (isMobileBrowser() && !provider) {
+      try {
+        sessionStorage.setItem('_exxe_wallet_intent', 'solflare');
+        sessionStorage.setItem('_exxe_did_redirect', '1');
+      } catch(e) {}
+      const currentUrl = encodeURIComponent(window.location.href);
+      const deepLink = 'https://solflare.com/ul/v1/browse/' + currentUrl
+        + '?ref=' + encodeURIComponent(window.location.origin);
+      resetSolflareBtn();
+      window.location.href = deepLink;
+      return;
+    }
+
+    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
+    if (window.location.protocol === 'file:') {
+      showToast('Solflare requires https://. Please open via a web server.', 'warn');
+      resetSolflareBtn();
+      return;
+    }
+
+    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
+    if (!provider) {
+      showWalletHint('solflare');
+      resetSolflareBtn();
+      return;
+    }
+
+    // ── CASE 6: Desktop — extension present, request connect ─────────────────
+    await provider.connect();
+    const address = provider.publicKey ? provider.publicKey.toString() : null;
+
+    if (!address) {
+      throw new Error('No public key returned from Solflare.');
+    }
+
+    setConnected('Solflare', address);
+    _setupSolflareListeners(provider);
+
+  } catch(e) {
     if (e.code !== 4001) {
-      showToast('Solflare connection failed: ' + (e.message || 'Please try again.'), 'error');
+      showToast('Solflare: ' + (e.message || 'Connection failed. Please try again.'), 'error');
     }
   } finally {
-    _isConnectingSolflare = false; // FIX v29 MOB-2
+    _isConnectingSolflare = false;
+    const sBtnF = document.getElementById('solflareBtn');
+    if (sBtnF && sBtnF.disabled) {
+      sBtnF.disabled = false;
+      sBtnF.style.opacity = '1';
+    }
   }
+}
+
+function _setupSolflareListeners(provider) {
+  try {
+    provider.on('disconnect', function() {
+      if (connectedWallet === 'Solflare') disconnectWallet();
+    });
+  } catch(e) {}
+  try {
+    provider.on('accountChanged', function() {
+      if (provider.publicKey) {
+        connectedAddress = provider.publicKey.toString();
+        setConnected('Solflare', connectedAddress);
+      } else {
+        disconnectWallet();
+      }
+    });
+  } catch(e) {}
 }
 
 // ── Install wallet banner (replaces the browser's native confirm()) ──
@@ -6573,16 +6767,66 @@ function calcTokens(){
   if(usdc < 0)   { usdc = 0;     document.getElementById('usdcAmount').value = '0'; }
   const box=document.getElementById('calcBox');
   if(usdc >= t.min){
-    // EXXE = usdc / price, rounded to nearest whole token
-    const exxe = Math.round(usdc / t.price);
-    const atL  = Math.round(exxe * CFG.LISTING * 100) / 100;
-    // FIX v26 BUG-6: Ambil token di sini (bukan dari luar) agar selalu sinkron
+    // Base EXXE = usdc / price, rounded to nearest whole token
+    const baseExxe = Math.round(usdc / t.price);
+    // v41: Bonus EXXE calculation
+    const bonusPct  = t.bonusPct || 0;
+    const bonusExxe = Math.round(baseExxe * (bonusPct / 100));
+    const totalExxe = baseExxe + bonusExxe;
+    // Value at listing uses totalExxe (including bonus)
+    const atL  = Math.round(totalExxe * CFG.LISTING * 100) / 100;
     const currentToken = getSelectedToken();
     box.style.display='flex';
     document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
-    document.getElementById('calcReceive').textContent = exxe.toLocaleString('en-US') + ' EXXE';
-    document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD'; // FIX v27 #3: listing value selalu USD, bukan token pembayaran
+    document.getElementById('calcReceive').textContent = baseExxe.toLocaleString('en-US') + ' EXXE';
+    document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD';
     document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
+
+    // v41: Show/hide bonus rows
+    const bonusRow = document.getElementById('calcBonusRow');
+    const totalRow = document.getElementById('calcTotalRow');
+    const bonusLbl = document.getElementById('calcBonusLbl');
+    const bonusEl  = document.getElementById('calcBonus');
+    const totalEl  = document.getElementById('calcTotal');
+    if(bonusPct > 0){
+      if(bonusRow) bonusRow.style.display = 'flex';
+      if(totalRow) totalRow.style.display = 'flex';
+      if(bonusLbl) bonusLbl.textContent   = '🎁 Bonus EXXE (+' + bonusPct + '%)';
+      if(bonusEl)  bonusEl.textContent    = '+' + bonusExxe.toLocaleString('en-US') + ' EXXE';
+      if(totalEl)  totalEl.textContent    = totalExxe.toLocaleString('en-US') + ' EXXE';
+    } else {
+      if(bonusRow) bonusRow.style.display = 'none';
+      if(totalRow) totalRow.style.display = 'none';
+    }
+
+    // v41/v42: Lock & vesting info
+    const lockEl = document.getElementById('calcLock');
+    const vestEl = document.getElementById('calcVest');
+    if(lockEl) lockEl.textContent = t.lock || '—';
+    if(vestEl) vestEl.textContent = t.vesting || '—';
+
+    // v42: Vesting schedule breakdown visual
+    const vestSched   = document.getElementById('calcVestSchedule');
+    const vestLines   = document.getElementById('calcVestLines');
+    const schedArr    = t.vestingSchedule || [];
+    if(vestSched && vestLines && schedArr.length > 1) {
+      vestSched.style.display = 'block';
+      vestLines.innerHTML = '';
+      schedArr.forEach(function(pct, idx) {
+        const exxeAmt = Math.round(totalExxe * pct / 100);
+        const lockMonths = parseInt((t.lock || '0').match(/\d+/) || [0]);
+        const releaseMonth = lockMonths + idx + 1;
+        const line = document.createElement('div');
+        line.style.cssText = 'display:flex;justify-content:space-between;font-family:\'Orbitron\',monospace;font-size:0.48rem;color:rgba(20,241,149,0.85);';
+        line.innerHTML =
+          '<span>Month ' + releaseMonth + ' (' + pct + '%)</span>' +
+          '<span>' + exxeAmt.toLocaleString('en-US') + ' EXXE</span>';
+        vestLines.appendChild(line);
+      });
+    } else if(vestSched) {
+      vestSched.style.display = 'none';
+    }
+
   } else { box.style.display='none'; }
   checkReady();
 }
@@ -6598,15 +6842,16 @@ function checkReady(){
   if(!btn) return;
   const token = getSelectedToken();
   const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
-  // FIX v31 D: Jika wallet belum connect atau balance belum di-fetch (0),
-  // jangan blokir tombol hanya karena cached=0. Balance akan dicek ulang di executeBuy().
-  // Hanya blokir jika balance SUDAH di-fetch (connectedAddress ada) DAN memang tidak cukup.
   const hasEnoughBalance = !connectedAddress || cachedBal >= usdc;
   if(f1&&f2&&f3&&usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
-    const exxe = Math.round(usdc/t.price).toLocaleString('en-US');
+    const baseExxe  = Math.round(usdc/t.price);
+    const bonusExxe = Math.round(baseExxe * ((t.bonusPct||0) / 100));
+    const totalExxe = baseExxe + bonusExxe;
     const usdcFmt = usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent=`Pay $${usdcFmt} ${token} — Receive ${exxe} EXXE`;
+    const exxeFmt = totalExxe.toLocaleString('en-US');
+    const bonusTxt = bonusExxe > 0 ? ' (incl. +' + bonusExxe.toLocaleString('en-US') + ' bonus)' : '';
+    const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent='Pay $'+usdcFmt+' '+token+' — Receive '+exxeFmt+' EXXE'+bonusTxt;
     goStep(3);
   } else {
     btn.classList.remove('ready');
@@ -7062,40 +7307,49 @@ function showSuccess(usdc,exxe,wallet,tx,token){
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
   // Tandai semua 3 step yang ada di HTML sebagai selesai.
-  // (Step 4 tidak ada sebagai elemen HTML — goStep(4) adalah no-op yang aman)
   for(let i=1;i<=3;i++){
     const el=document.getElementById('step'+i);
     if(el){ el.classList.remove('active'); el.classList.add('done'); }
   }
-  // Pastikan step 4 juga ditandai done jika elemen ada
   const step4=document.getElementById('step4');
   if(step4){ step4.classList.remove('active'); step4.classList.add('done'); }
 
   const short   = wallet.slice(0,6)+'...'+wallet.slice(-6);
-  // tx bisa berupa signature EXXE delivery atau fallback ke USDC tx
   const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
   const txFull  = tx || '';
   const tokenLabel = token || 'USDC';
 
-  // Gunakan DOM construction untuk mencegah XSS
-  // (data blockchain selalu dianggap untrusted input)
+  // v41: Calculate bonus for success display
+  const t = tier();
+  const bonusPct  = t.bonusPct || 0;
+  const bonusExxe = Math.round(exxe * (bonusPct / 100));
+  const totalExxe = Math.round(exxe) + bonusExxe;
+
   const details = document.getElementById('successDetails');
   details.textContent = '';
   const lines = [
     ['Wallet',    short],
     ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
-    ['Received',  Math.round(exxe).toLocaleString('en-US') + ' EXXE'],
-    ['TX',        txShort],
-    ['Status',    'CONFIRMED ✓'],
+    ['Base EXXE', Math.round(exxe).toLocaleString('en-US') + ' EXXE'],
   ];
+  if(bonusExxe > 0){
+    lines.push(['Bonus EXXE', '+' + bonusExxe.toLocaleString('en-US') + ' EXXE (+' + bonusPct + '%)']);
+    lines.push(['Total EXXE', totalExxe.toLocaleString('en-US') + ' EXXE ✨']);
+  }
+  lines.push(['TX',      txShort]);
+  lines.push(['Status',  'CONFIRMED ✓']);
+  lines.push(['🔒 Lock',  t.lock || '—']);
+  lines.push(['💰 Release',  t.vesting || '—']);
+
   lines.forEach(([label, value]) => {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;gap:8px;margin-bottom:4px;font-family:\'JetBrains Mono\',monospace;font-size:0.78rem;';
     const lbl = document.createElement('span');
-    lbl.style.cssText = 'color:var(--text-2);min-width:70px;flex-shrink:0;';
+    lbl.style.cssText = 'color:var(--text-2);min-width:80px;flex-shrink:0;';
     lbl.textContent = label + ':';
     const val = document.createElement('span');
-    val.style.color = 'var(--text-1)';
+    val.style.color = label.includes('Total') ? 'var(--cyan)' : label.includes('Bonus') ? '#e8c97a' : 'var(--text-1)';
+    if(label.includes('Total')) val.style.fontWeight = '700';
     val.textContent = value;
     row.appendChild(lbl);
     row.appendChild(val);
@@ -8152,10 +8406,10 @@ function startGoldNetwork(canvasId, isSplash) {
 (function() {
   'use strict';
 
-  // FIX v40 ERR-2: isMobileBrowser defined outside this IIFE scope.
-  // Read from window (exposed above) with inline fallback for safety.
+  // FIX v43 ERR-1: Perbaiki recursive call bug — window._isMob() → window.isMobileBrowser()
+  // Bug asal: _isMob() memanggil window._isMob() lagi → TypeError infinite recursion.
   function _isMob() {
-    if (typeof window.isMobileBrowser === 'function') return window._isMob();
+    if (typeof window.isMobileBrowser === 'function') return window.isMobileBrowser();
     return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
   }
 
