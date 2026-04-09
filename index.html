@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v42 (Pre-Sale v2.2 — Spec v2.2 FINAL):
-     FIX v42 FINAL-1: Angel Investor Funding Pool → 8% = 880,000,000 EXXE (dari 7.27%)
-                       Community/Supporter/Education Pool → 2.5% = 275,000,000 EXXE
-     FIX v42 FINAL-2: Realokasi supply FINAL per tier:
-                       TIER I   → 188,800,000 EXXE @ $0.01  | 3-Month Lock | Cair 100% (1x)        | No Bonus
-                       TIER II  → 251,800,000 EXXE @ $0.025 | 2-Month Lock | Release 35%/35%/30% (3x) | +5% Bonus EXXE
-                       TIER III → 388,000,000 EXXE @ $0.05  | 1-Month Lock | Cair 20%/bln (5x)     | +10% Bonus EXXE
-                       Total Pool: 880,000,000 EXXE
-                       Total Distributed (incl.bonus): 879,990,000 EXXE | Remaining wallet: 10,000 EXXE
-     FIX v42 FINAL-3: Total Raise Potensi: Tier I $1,888,000 + Tier II $6,295,000 + Tier III $19,400,000 = $27,583,000
-     FIX v42 FINAL-4: Wallet Transparansi On-Chain: 4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
-     FIX v42 FINAL-5: Live-calc updated: bonus rows, total EXXE, lock schedule, release schedule.
-     FIX v42 FINAL-6: Tokenomics donut + legend + tcard updated.
-     ── v41/v40/v39/v38/v37/v36/v33 fixes aktif: semua
+<!-- Exillion Capital Finecosystem — v46 (Pre-Sale v2.2 FINAL — Synced BE v34.1):
+     ── All v42/v43/v44/v45 fixes active ──
+     FIX v46 BUG-1 [CRITICAL]: disconnectWallet() — catch(e) bracket was never closed.
+                    _updateMobileBar, walletStatus reset, capBar hide were trapped
+                    inside catch block and never executed on disconnect. FIXED.
+     FIX v46 BUG-2 [CRITICAL]: proceedBuy — actualExxe was verifyData.exxeAmount
+                    (base EXXE only, no bonus). Now uses sendData.exxeTotal
+                    (base + bonus) for step 4 label, done message, showSuccess(). FIXED.
+     FIX v46 BUG-3: proceedBuy — local bonus fallback calc added so exxeTotal is
+                    always correct even if backend returns base only. FIXED.
+     FIX v46 BUG-4: USDC_TARGET corrected $3,300,000 → $27,583,000
+                    (was old Tier I only; now full raise potential all 3 tiers). FIXED.
+     FIX v46 BUG-5: txStep 4 label now shows total EXXE including bonus. FIXED.
+     FIX v46 SYNC:  Full sync with Backend v34.1 — verify-payment returns
+                    exxeBase/exxeBonus/exxeTotal/bonusPct/lock/vesting.
+                    build-split-tx returns exxeTotal preview.
 -->
 <html lang="en">
 <head>
@@ -6087,17 +6089,17 @@ async function disconnectWallet() {
       const s = getSolflareProvider();
       if (s) await s.disconnect();
     }
-  } catch(e) { /* ignore disconnect errors */ 
-  // FIX v39 MOB-BUY-4: Reset sticky mobile bar
+  } catch(e) { /* ignore disconnect errors — wallet may already be gone */ }
+
+  // v46 BUG1 FIX: These MUST be OUTSIDE catch block — they always run on disconnect
+  // Reset sticky mobile bar
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(null, null);
   }
-
-  // FIX v40 TIER-2: Clear wallet status cache + hide cap bar
+  // Clear wallet status cache + hide cap bar
   window._exillionWalletStatus = null;
   const capBar = document.getElementById('walletCapBar');
   if (capBar) capBar.style.display = 'none';
-}
 
   // Reset state
   connectedWallet  = null;
@@ -7116,12 +7118,21 @@ async function proceedBuy(){
     if (!verifyRes.ok) {
       throw new Error((verifyData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
     }
-    const actualAmount = verifyData.usdcAmount  || usdc;        // on-chain verified amount
-    const actualExxe   = verifyData.exxeAmount  || Math.round(usdc / t.price); // on-chain verified EXXE
+    const actualAmount = verifyData.usdcAmount  || usdc;
+    // v46 BUG2 FIX: Use exxeTotal from verify (includes bonus) if available,
+    // otherwise calculate locally (base + bonus) as fallback
+    const t = tier();
+    const _baseExxe  = verifyData.exxeAmount || Math.round(usdc / t.price);
+    const _bonusExxe = verifyData.exxeBonus  || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
+    const actualExxe = verifyData.exxeTotal  || (_baseExxe + _bonusExxe);
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
-    await txStep(4, 'active', 'Sending ' + actualExxe.toLocaleString('en-US') + ' EXXE to your wallet...');
+    // v46 BUG5 FIX: Show correct total EXXE (base + bonus) in step 4 label
+    const _step4Label = t.bonusPct > 0
+      ? `Sending ${actualExxe.toLocaleString('en-US')} EXXE (incl. ${_bonusExxe.toLocaleString('en-US')} bonus)...`
+      : `Sending ${actualExxe.toLocaleString('en-US')} EXXE to your wallet...`;
+    await txStep(4, 'active', _step4Label);
     // FIX v29 MOB-12: AbortController untuk /send-exxe
     const _sendCtrl  = new AbortController();
     const _sendTimer = setTimeout(() => _sendCtrl.abort(), 60000);
@@ -7150,9 +7161,14 @@ async function proceedBuy(){
       throw new Error((sendData.error || 'EXXE delivery failed — contact support') + '. TX: ' + txSignature);
     }
     const exxeTx   = sendData?.signature || sendData?.tx || '';
-    await txStep(4, 'done', actualExxe.toLocaleString('en-US') + ' EXXE delivered ✓');
+    // v46 BUG2 FIX: Use backend-confirmed exxeTotal (includes bonus) for display
+    const confirmedExxe = sendData.exxeTotal || actualExxe;
+    const _doneLabel = tier().bonusPct > 0
+      ? `${confirmedExxe.toLocaleString('en-US')} EXXE delivered ✓ (incl. bonus)`
+      : `${confirmedExxe.toLocaleString('en-US')} EXXE delivered ✓`;
+    await txStep(4, 'done', _doneLabel);
 
-    showSuccess(actualAmount, actualExxe, connectedAddress, exxeTx || txSignature, token);
+    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token);
     _isBuying = false;
 
   } catch(e) {
@@ -8138,7 +8154,12 @@ function startGoldNetwork(canvasId, isSplash) {
   // Backend mengembalikan tiers: { 1: { price, min, max }, 2: ..., 3: ... }
   let TIER1_PRICE  = 0.01;
   const EXXE_TARGET  = 330000000;
-  const USDC_TARGET  = 3300000; // Tier I only: 330M EXXE × $0.01
+  // v46 BUG4 FIX: USDC_TARGET updated to total raise potential across all 3 tiers
+  // Tier I: 188.8M × $0.01 = $1,888,000
+  // Tier II: 251.8M × $0.025 = $6,295,000
+  // Tier III: 388M × $0.05 = $19,400,000
+  // Total: $27,583,000
+  const USDC_TARGET  = 27583000;
   // FIX v36 SYNC-3: 60s — match backend STATS_TTL_MS agar setiap poll dapat data segar
   const REFRESH_MS   = 60000;
   const SESSION_KEY  = 'exxe_funding_total_v16';
