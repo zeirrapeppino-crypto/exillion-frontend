@@ -22,7 +22,7 @@
 <!-- FIX QUALITY #6: Content Security Policy — critical for a financial site handling
      crypto transactions. Prevents XSS attacks that could steal wallet addresses or
      manipulate transaction amounts. Adjust connect-src if backend URL changes. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://solana-rpc.publicnode.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://mainnet.helius-rpc.com https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://solana-rpc.publicnode.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
@@ -5833,7 +5833,11 @@ function selectToken(token) {
 
 // ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
 // FIX v26 BUG-7: Tambah endpoint ke-3 sebagai fallback extra saat Solana congested
+// FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
+// FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
+  'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
+  'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
   'https://api.mainnet-beta.solana.com',
   'https://rpc.ankr.com/solana',
   'https://solana-rpc.publicnode.com',
@@ -7953,6 +7957,8 @@ function startGoldNetwork(canvasId, isSplash) {
   const CACHE_TTL_MS = 300000; // 5 menit
 
   const RPC_ENDPOINTS = [
+    'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
+    'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
@@ -8200,6 +8206,8 @@ function startGoldNetwork(canvasId, isSplash) {
   const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
 
   const RPC_ENDPOINTS = [
+    'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
+    'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
