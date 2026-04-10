@@ -2341,17 +2341,21 @@ footer{
                 letter-spacing: clamp(1.5px, 0.5vw, 2px) !important;
             }
 
-            /* Splash 1 — Collateral text */
+                       /* Splash 1 — Collateral text */
             #splash-page .splash-collateral {
                 font-size: clamp(0.6rem, 1.5vw, 0.82rem) !important;
             }
 
-            /* Splash 1 — Enter button */
+            /* Override Mobile untuk Tombol Enter Premium */
             #splash-page .enter-btn {
-                font-size: clamp(0.7rem, 1.8vw, 0.95rem) !important;
+                /* Pastikan sudut membulat 12px */
+                border-radius: 12px !important;
+                
+                /* Sesuaikan ukuran agar pas di layar HP */
                 padding: clamp(12px, 1.8vh, 18px) clamp(28px, 7vw, 52px) !important;
-                letter-spacing: clamp(2.5px, 0.8vw, 4px) !important;
-                margin-top: clamp(10px, 1.5vh, 18px) !important;
+                font-size: clamp(0.65rem, 1.8vw, 0.95rem) !important;
+                letter-spacing: clamp(2px, 0.8vw, 4px) !important;
+                margin-top: clamp(8px, 1.2vh, 14px) !important;
             }
 
             /* Splash 1 — Loading bar */
@@ -2649,96 +2653,109 @@ footer{
             100% { width: 100%; }
         }
 
-        /* Enter Button — Solana Gradient */
+         /* ========== PREMIUM ENTER BUTTON — Solana Gradient ========== */
         .enter-btn {
-            font-family:'Orbitron', monospace;
+            font-family: 'Orbitron', monospace;
             margin-top: clamp(12px, 2vh, 22px);
             padding: clamp(14px, 1.8vh, 20px) clamp(36px, 8vw, 64px);
-            background: linear-gradient(135deg, #9945FF 0%, #6a1fff 35%, #00d4ff 65%, #14F195 100%);
+            
+            /* Desain Premium: Sudut membulat (12px) dan border halus */
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            
+            /* Gradien Warna Solana Premium */
+            background: linear-gradient(135deg, #9945FF 0%, #6a1fff 25%, #00d4ff 75%, #14F195 100%);
             background-size: 200% 200%;
-            border: none;
-            border-radius: 5px;
+            
             font-size: clamp(0.75rem, 1.8vw, 1.05rem);
             font-weight: 700;
-            cursor: pointer;
             text-transform: uppercase;
             letter-spacing: clamp(3px, 0.8vw, 5px);
-            opacity: 0;
-            transform: translateY(16px);
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            
+            cursor: pointer;
             position: relative;
             overflow: hidden;
-            transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease, background-position 0.4s ease;
+            
+            /* Splash Reveal Animation (Agar tombol muncul smooth) */
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.7s ease, transform 0.7s ease, 
+                        box-shadow 0.3s ease, background-position 0.4s ease, 
+                        letter-spacing 0.3s ease;
+            
+            /* Efek Glow Premium */
             box-shadow:
-                0 0 22px rgba(153,69,255,0.65),
-                0 0 50px rgba(0,212,255,0.35),
-                0 0 80px rgba(20,241,149,0.2),
-                0 4px 20px rgba(0,0,0,0.4);
-            animation: solanaBtnShift 4s ease-in-out infinite;
+                0 4px 15px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(153, 69, 255, 0.35),
+                0 0 60px rgba(0, 212, 255, 0.2);
+            
+            animation: solanaBtnShift 6s ease infinite;
             -webkit-tap-highlight-color: transparent;
         }
-        @keyframes solanaBtnShift {
-            0%   { background-position: 0% 50%; box-shadow: 0 0 22px rgba(153,69,255,0.65), 0 0 50px rgba(0,212,255,0.3), 0 4px 20px rgba(0,0,0,0.4); }
-            50%  { background-position: 100% 50%; box-shadow: 0 0 32px rgba(0,212,255,0.8), 0 0 65px rgba(20,241,149,0.45), 0 4px 24px rgba(0,0,0,0.4); }
-            100% { background-position: 0% 50%; box-shadow: 0 0 22px rgba(153,69,255,0.65), 0 0 50px rgba(0,212,255,0.3), 0 4px 20px rgba(0,0,0,0.4); }
-        }
-        /* BUG FIX #9 & #10: goldBtnShift and goldSunlight keyframes removed here —
-           they are already defined in the global <style> block above.
-           Duplicate @keyframes cause redundant CSS parsing and potential animation conflicts. */
+
+        /* Class untuk menampilkan tombol setelah halaman loading */
         .enter-btn.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Button text — dark for contrast on gold */
-        .enter-btn-text {
-            color: #ffffff;
-            font-weight: 900;
-            letter-spacing: inherit;
-            display: inline-block;
-            -webkit-text-fill-color: #ffffff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+        /* Hover: Membesar dan bersinar */
+        .enter-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow:
+                0 8px 25px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(153, 69, 255, 0.6),
+                0 0 80px rgba(0, 212, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+            letter-spacing: clamp(4px, 1vw, 7px);
         }
 
-        /* Sunlight shimmer — white ray sweeping across gold */
+        /* Active: Sensasi ditekan */
+        .enter-btn:active {
+            transform: translateY(1px) scale(0.96) !important;
+            filter: brightness(0.85);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+            transition: all 0.05s ease !important;
+        }
+
+        /* Shimmer Effect: Cahaya bergerak */
         .enter-btn::before {
             content: '';
             position: absolute;
-            top: -20%;
-            left: -80%;
-            width: 55%;
-            height: 140%;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
             background: linear-gradient(
-                105deg,
-                transparent 20%,
-                rgba(255,255,255,0.18) 40%,
-                rgba(255,255,255,0.55) 50%,
-                rgba(255,255,255,0.18) 60%,
-                transparent 80%
+                to right, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 40%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255, 255, 255, 0.1) 60%, 
+                transparent 100%
             );
-            animation: goldSunlight 3.5s ease-in-out infinite;
+            animation: btnShimmer 4s infinite;
             pointer-events: none;
+            z-index: 1;
         }
-        /* goldSunlight defined globally — no duplicate needed here */
 
-        /* Hover shimmer override */
-        .enter-btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%, rgba(255,255,255,0.06) 100%);
-            pointer-events: none;
+        .enter-btn-text {
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+            font-weight: 900;
+            -webkit-text-fill-color: #ffffff;
         }
-        .enter-btn:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow:
-                0 0 40px rgba(153,69,255,0.9),
-                0 0 80px rgba(0,212,255,0.6),
-                0 0 120px rgba(20,241,149,0.35),
-                0 8px 30px rgba(0,0,0,0.5);
-            letter-spacing: clamp(4px, 1vw, 7px);
+
+        @keyframes solanaBtnShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .enter-btn:active {
-            transform: scale(0.97);
+
+        @keyframes btnShimmer {
+            0%   { left: -100%; }
+            100% { left: 100%; }
         }
 
         /* Particles */
@@ -3065,7 +3082,7 @@ footer{
                 letter-spacing: clamp(1.5px, 0.5vw, 2.5px) !important;
                 margin-top: clamp(6px, 1.2vh, 12px) !important;
                 margin-bottom: 0 !important;
-                border-radius: 4px !important;
+                border-radius: 12px !important;
             }
             /* Micro-copy */
             #splash-page > div:nth-child(8) > div > span {
@@ -3388,12 +3405,12 @@ footer{
             <!-- Tombol naik — margin-top dikurangi -->
             <button class="enter-btn" id="enter-btn" onclick="enterSite()"
               style="margin-top:clamp(6px,1vh,10px);padding:clamp(10px,1.3vh,15px) clamp(24px,5.5vw,48px);font-size:clamp(0.62rem,1.4vw,0.82rem);letter-spacing:clamp(2px,0.6vw,3.5px);">
-              <span class="enter-btn-text">ENTER ANGEL INVESTOR ROUND</span>
+              <span class="enter-btn-text">ENTER</span>
             </button>
             <!-- Micro-copy — di bawah tombol, merapat -->
             <div style="margin-top:clamp(4px,0.6vh,7px);animation:splashSlideUp 1.2s ease-out 1.0s both;">
                 <span style="font-family:'Orbitron',monospace;font-size:clamp(0.32rem,0.68vw,0.44rem);letter-spacing:2.5px;color:var(--text-1);text-transform:uppercase;opacity:0.9;text-shadow:0 0 10px rgba(0,212,255,0.4);">
-                    No KYC &nbsp;·&nbsp; Connect Wallet &nbsp;·&nbsp; Transparency On-Chain
+                    No KYC &nbsp;·&nbsp; Secure On-Chain &nbsp;·&nbsp; Verify On Solscan
                 </span>
             </div>
         </div>
@@ -3417,7 +3434,7 @@ footer{
     <a href="#roadmap">Roadmap</a>
     <a href="#whitepaper">Whitepaper</a>
     <a href="#dashboard">Dashboard</a>
-    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
+    <a href="#angel" class="nav-cta" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" style="display:none;">
     <span></span><span></span><span></span>
@@ -3919,128 +3936,134 @@ footer{
       filter:drop-shadow(0 0 18px rgba(232,201,122,0.55));
       margin:0;
     ">Let's Start Your Investment Journey</p>
+    
     <div id="journey-line" style="
       width:320px;height:1.5px;
       background:linear-gradient(90deg,transparent,#e8c97a,#00d4ff,#e8c97a,transparent);
       opacity:0.7;
       animation:solanaShimmer 4s linear infinite;
     "></div>
+
+    <!-- MOVED: Angel Investors Joined (Counter) -->
+    <div style="
+      margin-top:1.2rem;
+      display:flex;flex-direction:column;align-items:center;gap:0.7rem;
+      width:100%;
+    ">
+      <div id="hero-investor-bar" style="
+        display:inline-flex;align-items:center;gap:10px;
+        padding:10px 22px;
+        background:rgba(20,241,149,0.06);
+        border:1px solid rgba(20,241,149,0.22);
+        clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
+      ">
+        <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 18px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+        <span style="font-family:'Orbitron',monospace;font-size:clamp(0.6rem,1.1vw,0.72rem);font-weight:600;letter-spacing:2.5px;color:#14F195;text-transform:uppercase;">
+          <span id="hero-investor-count" style="
+            font-family:'Orbitron',monospace;
+            font-size:clamp(0.9rem,1.6vw,1.1rem);
+            font-weight:800;
+            color:#ffffff;
+            letter-spacing:2px;
+            text-shadow:0 0 16px rgba(255,255,255,0.5);
+          ">—</span>
+          &nbsp;Angel Investors Joined
+        </span>
+        <div style="
+          display:flex;align-items:center;gap:6px;
+          font-family:'Orbitron',monospace;
+          font-size:0.42rem;
+          letter-spacing:2px;
+          color:rgba(20,241,149,0.7);
+          text-transform:uppercase;
+          border-left:1px solid rgba(20,241,149,0.25);
+          padding-left:10px;
+        ">
+          <div style="width:6px;height:6px;border-radius:50%;background:#14F195;box-shadow:0 0 6px #14F195,0 0 14px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+          Live · On-Chain
+        </div>
+      </div>
+    </div>
+
+    <div id="hero-stat-block" style="
+      margin-top:1.2rem;
+      width:100%;
+      border-top:1px solid var(--border-dim);
+      border-bottom:1px solid var(--border-dim);
+      animation:riseUp 0.8s 0.7s ease both;
+      overflow-x:auto;
+    ">
+      <div id="hero-stat-inner" style="
+        display:flex;
+        justify-content:center;
+        align-items:stretch;
+        max-width:780px;
+        margin:0 auto;
+      ">
+        <!-- 880 M EXXE -->
+        <div style="
+          flex:1;
+          padding:28px 32px;
+          text-align:center;
+          border-right:1px solid var(--border-dim);
+          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+        ">
+          <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">880 M EXXE</div>
+          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Angel Investor Reserved</div>
+        </div>
+
+        <!-- $0.01 -->
+        <div style="
+          flex:1;
+          padding:28px 32px;
+          text-align:center;
+          background:rgba(201,168,76,0.05);
+          border-right:1px solid var(--border-dim);
+          border-top:1px solid rgba(201,168,76,0.25);
+          border-bottom:1px solid rgba(201,168,76,0.25);
+          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+        ">
+          <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
+            <div style="font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 60px rgba(201,168,76,0.3);">$0.01</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</div>
+          </div>
+          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Tier I Presale Price</div>
+        </div>
+
+        <!-- $0.10 -->
+        <div style="
+          flex:1;
+          padding:28px 32px;
+          text-align:center;
+          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+        ">
+          <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
+            <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:600;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">$0.10</div>
+            <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.75;line-height:1;margin-bottom:1px;">per EXXE</div>
+          </div>
+          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">ORCA Listing Price</div>
+        </div>
+
+      </div>
+    </div>
+  </div> <!-- End of journey-block -->
+
+  <!-- MOVED: 3 Tiers Text + CTA Button -->
+  <div style="
+    margin-top:1rem;
+    display:flex;flex-direction:column;align-items:center;gap:0.7rem;
+    animation:riseUp 0.8s 0.8s ease both;
+  ">
     <p style="
       font-family:'Orbitron',monospace;
       font-size:clamp(0.65rem,1.1vw,0.78rem);
       letter-spacing:3px;
-      color:var(--text-1);
+      color:var(--cyan);
       margin:0;
       text-transform:uppercase;
       opacity:0.85;
-    ">3 Tiers Open · Angel Crowd Funding · Verified On-Chain</p>
+    ">TIER I · TIER II · TIER III · ALL NOW OPEN</p>
 
-  <div id="hero-stat-block" style="
-    margin-top:1.2rem;
-    width:100%;
-    border-top:1px solid var(--border-dim);
-    border-bottom:1px solid var(--border-dim);
-    animation:riseUp 0.8s 0.7s ease both;
-    overflow-x:auto;
-  ">
-    <div id="hero-stat-inner" style="
-      display:flex;
-      justify-content:center;
-      align-items:stretch;
-      max-width:780px;
-      margin:0 auto;
-    ">
-
-      <!-- 880 M EXXE -->
-      <div style="
-        flex:1;
-        padding:28px 32px;
-        text-align:center;
-        border-right:1px solid var(--border-dim);
-        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-      ">
-        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">880 M EXXE</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Angel Investor Reserved</div>
-      </div>
-
-      <!-- $0.01 -->
-      <div style="
-        flex:1;
-        padding:28px 32px;
-        text-align:center;
-        background:rgba(201,168,76,0.05);
-        border-right:1px solid var(--border-dim);
-        border-top:1px solid rgba(201,168,76,0.25);
-        border-bottom:1px solid rgba(201,168,76,0.25);
-        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-      ">
-        <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
-          <div style="font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 30px rgba(201,168,76,0.7),0 0 60px rgba(201,168,76,0.3);">$0.01</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</div>
-        </div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">Tier I Presale Price</div>
-      </div>
-
-      <!-- $0.10 -->
-      <div style="
-        flex:1;
-        padding:28px 32px;
-        text-align:center;
-        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-      ">
-        <div style="display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;">
-          <div style="font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:600;color:var(--cyan);line-height:1;text-shadow:0 0 16px rgba(0,212,255,0.4);">$0.10</div>
-          <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);opacity:0.75;line-height:1;margin-bottom:1px;">per EXXE</div>
-        </div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--text-1);text-transform:uppercase;">ORCA Listing Price</div>
-      </div>
-
-    </div>
-  </div>
-  </div>
-
-<!-- LIVE INVESTOR COUNTER — above Join Angel Investor Round CTA -->
-  <div style="
-    margin-top:2.5rem;
-    display:flex;flex-direction:column;align-items:center;gap:0.7rem;
-    animation:riseUp 0.8s 0.8s ease both;
-  ">
-    <!-- Counter badge -->
-    <div id="hero-investor-bar" style="
-      display:inline-flex;align-items:center;gap:10px;
-      padding:10px 22px;
-      background:rgba(20,241,149,0.06);
-      border:1px solid rgba(20,241,149,0.22);
-      clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
-    ">
-      <div style="width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 8px #14F195,0 0 18px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-      <span style="font-family:'Orbitron',monospace;font-size:clamp(0.6rem,1.1vw,0.72rem);font-weight:600;letter-spacing:2.5px;color:#14F195;text-transform:uppercase;">
-        <span id="hero-investor-count" style="
-          font-family:'Orbitron',monospace;
-          font-size:clamp(0.9rem,1.6vw,1.1rem);
-          font-weight:800;
-          color:#ffffff;
-          letter-spacing:2px;
-          text-shadow:0 0 16px rgba(255,255,255,0.5);
-        ">—</span>
-        &nbsp;Angel Investors Joined
-      </span>
-      <div style="
-        display:flex;align-items:center;gap:6px;
-        font-family:'Orbitron',monospace;
-        font-size:0.42rem;
-        letter-spacing:2px;
-        color:rgba(20,241,149,0.7);
-        text-transform:uppercase;
-        border-left:1px solid rgba(20,241,149,0.25);
-        padding-left:10px;
-      ">
-        <div style="width:6px;height:6px;border-radius:50%;background:#14F195;box-shadow:0 0 6px #14F195,0 0 14px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-        Live · On-Chain
-      </div>
-    </div>
-
-    <!-- CTA Button -->
     <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();"
       style="font-size:clamp(0.85rem,1.5vw,1rem);padding:18px 48px;letter-spacing:3px;">
       Join Angel Investor Round
@@ -4404,7 +4427,7 @@ footer{
     <!-- ── SECTION 4: CTA below infographic ────────────── -->
     <div class="reveal" style="text-align:center;margin-top:1.2rem;">
       <p style="font-family:'Orbitron',monospace;font-size:clamp(0.8rem,1.2vw,0.95rem);color:var(--text-2);font-style:italic;margin-bottom:1rem;line-height:1.8;">This is not speculation. This is a system — transparent, on-chain, and structurally designed so that the more people it helps, the stronger your position becomes.</p>
-      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
+      <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
     </div>
 
   </div>
@@ -4500,7 +4523,7 @@ footer{
 
 <!-- JOIN ANGEL INVESTOR BUTTON -->
 <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;padding:0 5% 1.5rem;margin-top:-30px;text-align:center;">
-  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Crowd Funding</a>
+  <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();">Join Angel Investor Round</a>
   <p style="font-family:'Orbitron',monospace;font-size:0.78rem;letter-spacing:2.5px;text-transform:uppercase;margin:0;line-height:1.8;">
     <span style="color:#14F195;text-shadow:0 0 12px rgba(20,241,149,0.7);">✓ Minimum $10 USDC</span>
     <span style="color:rgba(255,255,255,0.3);margin:0 6px;">·</span>
@@ -4909,7 +4932,7 @@ footer{
   </div>
   <div style="text-align:center;margin-top:3rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;" class="reveal hero-action-row">
     <a href="#" class="btn-outline" onclick="event.preventDefault();showToast('Whitepaper PDF will be available at launch. Join the Angel Round to receive early access.','info',6000);">Download Full Whitepaper (PDF)</a>
-    <a href="#angel" onclick="event.preventDefault();scrollToTierThenWallet();" class="btn-gold btn-gold-glow">JOIN ANGEL CROWD FUNDING</a>
+    <a href="#angel" onclick="event.preventDefault();scrollToTierThenWallet();" class="btn-gold btn-gold-glow">Join Angel Investor Round</a>
   </div>
 </section>
 
@@ -8558,7 +8581,7 @@ function startGoldNetwork(canvasId, isSplash) {
 <div id="mob-invest-bar">
   <!-- State 1: belum connect — tampilkan tombol Invest Now -->
   <button id="mob-invest-bar-btn" onclick="scrollToTierThenWallet()">
-    Invest Now — Join Angel Round
+    Invest Now — Join Angel Investor Round
   </button>
   <!-- State 2: sudah connect — tampilkan info wallet + disconnect + buy -->
   <div id="mob-invest-bar-wallet">
