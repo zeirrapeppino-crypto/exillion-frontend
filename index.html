@@ -5242,7 +5242,7 @@ footer{
           </div>
           <div class="calc-divider"></div>
           <div class="calc-row">
-            <span class="calc-lbl">Base EXXE</span>
+            <span class="calc-lbl">EXXE Received</span>
             <span class="calc-amt gold" id="calcReceive">—</span>
           </div>
           <!-- v41: Bonus EXXE row — hidden for Tier I, shown for II & III -->
@@ -5545,6 +5545,7 @@ const CFG = {
          vestingSchedule:[20,20,20,20,20] },
   },
   // v42 FINAL: Wallet Transparansi On-Chain Angel Investor
+  // Default fallback; overridden dynamically from /api/stats if backend returns angelWallet.
   ANGEL_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
   LISTING: 0.10,
 };
@@ -5552,6 +5553,25 @@ const tier = () => CFG.TIERS[CFG.TIER];
 // FIX v37 MAINT-1: Expose apiBase ke window agar IIFE investor counter
 // dan funding tracker tidak hardcode URL backend 2x di luar CFG object.
 window._exillionCfg = { apiBase: CFG.API };
+function setAngelWalletFromStats(wallet) {
+  if (wallet && typeof wallet === 'string' && wallet.length >= 32) {
+    CFG.ANGEL_WALLET = wallet;
+    window._exillionAngelWallet = wallet;
+  }
+}
+function setSplitWalletsFromStats(wallets) {
+  if (!wallets || typeof wallets !== 'object') return;
+  const { liquidity, operational, development } = wallets;
+  if (liquidity && typeof liquidity === 'string' && liquidity.length >= 32) {
+    CFG.WALLETS.LIQUIDITY = liquidity;
+  }
+  if (operational && typeof operational === 'string' && operational.length >= 32) {
+    CFG.WALLETS.OPERATIONAL = operational;
+  }
+  if (development && typeof development === 'string' && development.length >= 32) {
+    CFG.WALLETS.DEVELOPMENT = development;
+  }
+}
 
 // ── FIX v40 TIER-1: Tier selector functions ──────────────────────────────────
 
@@ -6795,7 +6815,7 @@ function calcTokens(){
     const currentToken = getSelectedToken();
     box.style.display='flex';
     document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
-    document.getElementById('calcReceive').textContent = baseExxe.toLocaleString('en-US') + ' EXXE';
+    document.getElementById('calcReceive').textContent = totalExxe.toLocaleString('en-US') + ' EXXE';
     document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD';
     document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
 
@@ -7021,11 +7041,13 @@ async function proceedBuy(){
       throw _be;
     } finally { clearTimeout(_buildTimer); }
     if (!buildRes.ok) throw new Error('Failed to build transaction (server error ' + buildRes.status + ')');
-    const { transaction } = await buildRes.json();
+    const { transaction, exxeTotal: _buildExxeTotal, exxeBonus: _buildExxeBonus, bonusPct: _buildBonusPct } = await buildRes.json();
     if (!transaction || typeof transaction !== 'string') {
       throw new Error('Backend returned invalid transaction data.');
     }
-    await txStep(1, 'done', 'Transaction prepared ✓');
+    await txStep(1, 'done', _buildExxeTotal
+      ? `Transaction prepared ✓ Preview ${_buildExxeTotal.toLocaleString('en-US')} EXXE`
+      : 'Transaction prepared ✓');
 
     // ── Step 2: Deserialise → VersionedTransaction → Wallet sign & send ──
     await txStep(2, 'active', 'Please approve in your wallet...');
@@ -7135,11 +7157,10 @@ async function proceedBuy(){
     }
     const actualAmount = verifyData.usdcAmount  || usdc;
     // v46 BUG2 FIX: Use exxeTotal from verify (includes bonus) if available,
-    // otherwise calculate locally using t already declared at proceedBuy top
-    // FIX I1: removed duplicate 'const t = tier()' — t is already in scope
+    // otherwise use the backend build preview fallback or calculate locally.
     const _baseExxe  = verifyData.exxeAmount || Math.round(usdc / t.price);
-    const _bonusExxe = verifyData.exxeBonus  || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
-    const actualExxe = verifyData.exxeTotal  || (_baseExxe + _bonusExxe);
+    const _bonusExxe = verifyData.exxeBonus  || _buildExxeBonus || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
+    const actualExxe = verifyData.exxeTotal  || _buildExxeTotal || (_baseExxe + _bonusExxe);
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
@@ -8106,7 +8127,10 @@ function startGoldNetwork(canvasId, isSplash) {
             const data = await res.json();
             // FIX v36 SYNC-1: Simpan angelWallet dari backend ke window
             if (data.angelWallet && typeof data.angelWallet === 'string') {
-              window._exillionAngelWallet = data.angelWallet;
+              setAngelWalletFromStats(data.angelWallet);
+            }
+            if (data.wallets && typeof data.wallets === 'object') {
+              setSplitWalletsFromStats(data.wallets);
             }
             // FIX v36 SYNC-4: Isi shared cache agar funding tracker tidak double-fetch
             window._exillionStatsCache = {
@@ -8397,7 +8421,10 @@ function startGoldNetwork(canvasId, isSplash) {
             }
             // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
             if (data.angelWallet && typeof data.angelWallet === 'string') {
-              window._exillionAngelWallet = data.angelWallet;
+              setAngelWalletFromStats(data.angelWallet);
+            }
+            if (data.wallets && typeof data.wallets === 'object') {
+              setSplitWalletsFromStats(data.wallets);
             }
             // FIX v37 SYNC-2: Override TIER1_PRICE dari backend jika tersedia
             if (data.tiers && data.tiers[1] && typeof data.tiers[1].price === 'number') {
