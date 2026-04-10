@@ -380,6 +380,32 @@ nav{
   animation:goldBtnShift 4s ease-in-out infinite;
 }
 
+.hero-enter-btn{
+  text-transform:uppercase;
+  letter-spacing:4.5px;
+  font-weight:800;
+  min-width:220px;
+  border:1px solid rgba(255,255,255,0.28);
+  background:linear-gradient(135deg,rgba(255,223,77,0.95) 0%,rgba(255,250,220,0.95) 38%,rgba(116,235,255,0.95) 68%,rgba(0,212,255,0.95) 100%);
+  box-shadow:0 0 32px rgba(255,214,86,0.45),0 0 90px rgba(0,212,255,0.22),0 16px 46px rgba(0,0,0,0.24);
+  animation:heroEnterPulse 1.8s ease-in-out infinite alternate;
+}
+.hero-enter-btn:hover{
+  transform:translateY(-2px) scale(1.04);
+  box-shadow:0 0 72px rgba(255,214,86,0.55),0 0 120px rgba(0,212,255,0.32),0 22px 60px rgba(0,0,0,0.35);
+}
+
+@keyframes heroEnterPulse {
+  0% {
+    text-shadow:0 1px 3px rgba(0,0,0,0.35),0 0 20px rgba(255,255,255,0.25),0 0 36px rgba(0,212,255,0.18);
+    transform:translateY(0) scale(1);
+  }
+  100% {
+    text-shadow:0 2px 6px rgba(0,0,0,0.4),0 0 32px rgba(255,255,255,0.45),0 0 64px rgba(0,212,255,0.28);
+    transform:translateY(-1px) scale(1.02);
+  }
+}
+
 .btn-outline{
   font-family:'Orbitron',monospace;
   font-size:0.9rem;letter-spacing:2.5px;
@@ -472,7 +498,6 @@ nav{
   margin-top:0rem;
   animation:riseUp 0.8s 0.3s ease both, goldSweepMain 11s ease-in-out infinite;
 }
-.hero-ticker span{}
 
 .hero-tagline{
   font-family:'Orbitron',monospace;
@@ -1509,7 +1534,6 @@ footer{
   gap:3rem;margin-bottom:3rem;
 }
 
-.footer-brand{}
 .footer-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
 .footer-name{
   font-family:'Orbitron',monospace;font-size:1rem;font-weight:600;
@@ -4043,13 +4067,13 @@ footer{
     </div>
 
     <!-- CTA Button -->
-    <a href="#angel" class="btn-gold btn-gold-glow" onclick="event.preventDefault();scrollToTierThenWallet();"
-      style="font-size:clamp(0.85rem,1.5vw,1rem);padding:18px 48px;letter-spacing:3px;">
-      Join Angel Investor Round
-    </a>
-    <p style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:var(--text-2);text-transform:uppercase;margin:0;">
-      Verified from Solana blockchain · Updates every 60s
+    <p style="font-family:'Orbitron',monospace;font-size:0.75rem;letter-spacing:2.8px;color:var(--text-2);text-transform:uppercase;margin:0 0 0.85rem;opacity:0.95;">
+      No KYC · Secure On-Chain · Verify on Solscan
     </p>
+    <a href="#angel" class="btn-gold btn-gold-glow hero-enter-btn" onclick="event.preventDefault();scrollToTierThenWallet();"
+      style="font-size:clamp(0.95rem,1.6vw,1.05rem);padding:18px 54px;">
+      ENTER
+    </a>
   </div>
 
 </section>
@@ -5994,6 +6018,7 @@ function acceptDisclaimer(){
   });
   if (!allChecked) return;
   disclaimerAccepted = true;
+  checkReady();
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
   setTimeout(()=>{
@@ -6686,7 +6711,7 @@ function scrollToTierThenWallet() {
   }
 }
 
-function scrollToWallet() {
+async function scrollToWallet() {
   // FIX v39 MOB-BUY-2: Tutup mobile nav menu jika terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
@@ -6713,13 +6738,26 @@ function scrollToWallet() {
   // langsung auto-connect tanpa perlu user tap tombol lagi.
   // Provider sudah inject — tidak perlu redirect keluar.
   if (!connectedWallet) {
-    setTimeout(function() {
-      if (isInsidePhantom() && !connectedWallet) {
-        connectPhantom();
-      } else if (isInsideSolflare() && !connectedWallet) {
-        connectSolflare();
+    const attemptConnect = async () => {
+      if (connectedWallet) return;
+      if (isInsidePhantom()) {
+        await connectPhantom();
+      } else if (isInsideSolflare()) {
+        await connectSolflare();
       }
-    }, 800);
+    };
+
+    attemptConnect();
+    let tries = 0;
+    const maxTries = 4;
+    const intervalId = setInterval(function() {
+      if (connectedWallet || tries >= maxTries) {
+        clearInterval(intervalId);
+        return;
+      }
+      tries += 1;
+      attemptConnect();
+    }, 500);
   }
 }
 
@@ -7168,7 +7206,8 @@ async function proceedBuy(){
       : `${confirmedExxe.toLocaleString('en-US')} EXXE delivered ✓`;
     await txStep(4, 'done', _doneLabel);
 
-    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token);
+    const confirmedBonus = typeof sendData.exxeBonus === 'number' ? sendData.exxeBonus : _bonusExxe;
+    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token, confirmedBonus);
     _isBuying = false;
 
   } catch(e) {
@@ -7266,10 +7305,12 @@ async function waitForConfirmation(signature) {
         const err    = status?.err;
         if (err) throw new Error('Transaction rejected by Solana: ' + JSON.stringify(err));
         if (conf === 'confirmed' || conf === 'finalized') return;
+      } else {
+        rpcIdx = (rpcIdx + 1) % RPC_LIST.length;
       }
     } catch(e) {
       if (e.message && e.message.startsWith('Transaction rejected')) throw e;
-      rpcIdx++; // rotate to next RPC on failure
+      rpcIdx = (rpcIdx + 1) % RPC_LIST.length;
     }
     await new Promise(r => setTimeout(r, interval));
   }
@@ -7319,7 +7360,7 @@ function resetAfterBuy() {
   window.scrollTo({ top: document.getElementById('angelWalletForm')?.getBoundingClientRect().top + window.pageYOffset - 100 || 0, behavior: 'smooth' });
 }
 
-function showSuccess(usdc,exxe,wallet,tx,token){
+function showSuccess(usdc,exxe,wallet,tx,token, bonusExxe){
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
   // Tandai semua 3 step yang ada di HTML sebagai selesai.
@@ -7337,16 +7378,19 @@ function showSuccess(usdc,exxe,wallet,tx,token){
 
   // v41: Calculate bonus for success display
   const t = tier();
+  const totalExxe = Math.round(exxe);
   const bonusPct  = t.bonusPct || 0;
-  const bonusExxe = Math.round(exxe * (bonusPct / 100));
-  const totalExxe = Math.round(exxe) + bonusExxe;
+  if (typeof bonusExxe !== 'number') {
+    bonusExxe = bonusPct > 0 ? Math.round(totalExxe - (totalExxe / (1 + bonusPct / 100))) : 0;
+  }
+  const baseExxe  = Math.max(0, totalExxe - bonusExxe);
 
   const details = document.getElementById('successDetails');
   details.textContent = '';
   const lines = [
     ['Wallet',    short],
     ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
-    ['Base EXXE', Math.round(exxe).toLocaleString('en-US') + ' EXXE'],
+    ['Base EXXE', baseExxe.toLocaleString('en-US') + ' EXXE'],
   ];
   if(bonusExxe > 0){
     lines.push(['Bonus EXXE', '+' + bonusExxe.toLocaleString('en-US') + ' EXXE (+' + bonusPct + '%)']);
@@ -7945,7 +7989,10 @@ function startGoldNetwork(canvasId, isSplash) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'getSignaturesForAddress', params: [address, opts] })
         }, 10000);
-        if (!res.ok) break;
+        if (!res.ok) {
+          rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+          continue;
+        }
         const data = await res.json();
         const sigs = data?.result || [];
         const good = sigs.filter(s => !s.err);
@@ -7953,7 +8000,10 @@ function startGoldNetwork(canvasId, isSplash) {
         if (sigs.length < 1000) break;
         before = sigs[sigs.length - 1].signature;
         await new Promise(r => setTimeout(r, 300));
-      } catch(e) { rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length; break; }
+      } catch(e) {
+        rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+        continue;
+      }
     }
     return all;
   }
@@ -7975,7 +8025,10 @@ function startGoldNetwork(canvasId, isSplash) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(requests)
         }, 15000);
-        if (!res.ok) continue;
+        if (!res.ok) {
+          rpcIdx = (rpcIdx + 1) % RPC_ENDPOINTS.length;
+          continue;
+        }
         const results = await res.json();
         (Array.isArray(results) ? results : [results]).forEach(r => {
           try {
@@ -8183,10 +8236,10 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   async function fetchAllSigsForWallet(wallet) {
-    const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
     const all = [];
     let before = null;
     for (let page = 0; page < 5; page++) {
+      const rpc = RPC_ENDPOINTS[rpcIndex % RPC_ENDPOINTS.length];
       const opts = { limit: 1000, commitment: 'confirmed' };
       if (before) opts.before = before;
       try {
@@ -8195,7 +8248,10 @@ function startGoldNetwork(canvasId, isSplash) {
           method: 'getSignaturesForAddress',
           params: [wallet, opts]
         }, 10000);
-        if (!res.ok) break;
+        if (!res.ok) {
+          rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+          continue;
+        }
         const data = await res.json();
         const sigs = data?.result || [];
         const good = sigs.filter(s => !s.err);
@@ -8203,7 +8259,10 @@ function startGoldNetwork(canvasId, isSplash) {
         if (sigs.length < 1000) break;
         before = sigs[sigs.length - 1].signature;
         await new Promise(r => setTimeout(r, 300));
-      } catch(e) { break; }
+      } catch(e) {
+        rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+        continue;
+      }
     }
     return all;
   }
@@ -8223,7 +8282,10 @@ function startGoldNetwork(canvasId, isSplash) {
           params: [sig, { encoding: 'jsonParsed', maxSupportedTransactionVersion: 0 }]
         }));
         const res = await fetchWithTimeout(rpc, requests, 15000);
-        if (!res.ok) continue;
+        if (!res.ok) {
+          rpcIndex = (rpcIndex + 1) % RPC_ENDPOINTS.length;
+          continue;
+        }
         const results = await res.json();
         (Array.isArray(results) ? results : [results]).forEach(r => {
           try {
