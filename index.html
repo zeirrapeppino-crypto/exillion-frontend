@@ -7120,8 +7120,8 @@ async function proceedBuy(){
     }
     const actualAmount = verifyData.usdcAmount  || usdc;
     // v46 BUG2 FIX: Use exxeTotal from verify (includes bonus) if available,
-    // otherwise calculate locally (base + bonus) as fallback
-    const t = tier();
+    // otherwise calculate locally using t already declared at proceedBuy top
+    // FIX I1: removed duplicate 'const t = tier()' — t is already in scope
     const _baseExxe  = verifyData.exxeAmount || Math.round(usdc / t.price);
     const _bonusExxe = verifyData.exxeBonus  || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
     const actualExxe = verifyData.exxeTotal  || (_baseExxe + _bonusExxe);
