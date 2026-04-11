@@ -4989,7 +4989,7 @@ footer{
       <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#f5d060);"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-      <span style="color:rgba(232,201,122,0.65);">🔒 2-month lock · 💰 35%·35%·30%</span>
+      <span style="color:rgba(232,201,122,0.65);">🔒 2-month lock · 💰 100% after lock</span>
       <span>Remaining: <span id="rt-t2-remaining" style="color:#14F195;">251,800,000</span> EXXE</span>
     </div>
   </div>
@@ -5008,7 +5008,7 @@ footer{
       <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#c4a3ff);"></div>
     </div>
     <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-      <span style="color:rgba(153,69,255,0.75);">🔒 1-month lock · 💰 20%/mo × 5</span>
+      <span style="color:rgba(153,69,255,0.75);">🔒 1-month lock · 💰 100% after lock</span>
       <span>Remaining: <span id="rt-t3-remaining" style="color:#14F195;">388,000,000</span> EXXE</span>
     </div>
   </div>
@@ -5259,10 +5259,7 @@ footer{
             <span class="calc-lbl">Value at Listing ($0.10)</span>
             <span class="calc-amt green" id="calcListing">—</span>
           </div>
-          <div class="calc-row">
-            <span class="calc-lbl">Potential Gain</span>
-            <span class="calc-amt green" id="calcGain">—</span>
-          </div>
+
           <!-- v48: Vesting dihapus — hanya tampilkan Lock -->
           <div class="calc-divider"></div>
           <div class="calc-row" id="calcLockRow">
@@ -6806,7 +6803,7 @@ function calcTokens(){
     // Investor lihat: base → bonus → total — alur yang jelas dan tidak membingungkan
     document.getElementById('calcReceive').textContent = baseExxe.toLocaleString('en-US') + ' EXXE';
     document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD';
-    document.getElementById('calcGain').textContent    = '+' + t.gain + '%';
+
 
     // v41: Show/hide bonus rows
     const bonusRow = document.getElementById('calcBonusRow');
@@ -7156,7 +7153,8 @@ async function proceedBuy(){
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
     // FIX v25 BUG-6: Cek success flag di response body — HTTP 200 belum tentu berhasil
-    if (sendData.success === false) {
+    // FIX v47: Ganti === false dengan !sendData.success — cover kasus {error:'...'} tanpa field success
+    if (!sendData.success) {
       // FIX v30 #1: Reset panels sebelum throw — cegah spinner abadi saat EXXE delivery gagal
       const _pp = document.getElementById('processingPanel');
       const _bp = document.getElementById('buyPanel');
