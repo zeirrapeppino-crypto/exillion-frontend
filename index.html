@@ -408,7 +408,7 @@ nav{
   font-family:'Orbitron',monospace;
   font-size:0.88rem;
   letter-spacing:2px;
-  color:var(--cyan);
+  color:var(--green);
   opacity:0.7;
   text-transform:none;
   margin-bottom:2rem;
@@ -3341,14 +3341,14 @@ footer{
         <!-- BLOCK 1: Live Status + Logo -->
         <div style="display:flex;flex-direction:column;align-items:center;z-index:10;width:100%;animation:splashSlideUp 1.2s ease-out 0s both, neonRingGlow 3s ease-in-out infinite;will-change:opacity,transform,filter;">
 
-          <!-- LIVE · LIMITED ACCESS · OPEN — lebih besar, proporsional dengan logo -->
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:clamp(8px,1.6vh,16px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
-            <div style="width:5px;height:5px;border-radius:50%;background:#00d4ff;box-shadow:0 0 6px #00d4ff,0 0 14px rgba(0,212,255,0.5);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
-            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.8vw,0.55rem);font-weight:500;letter-spacing:3.5px;color:#00d4ff;text-transform:uppercase;opacity:0.85;">LIVE &nbsp;·&nbsp; LIMITED ACCESS &nbsp;·&nbsp; NOW OPEN</span>
+          <!-- LIVE · NOW OPEN — emerald green premium -->
+          <div style="display:flex;align-items:center;justify-content:flex-end;width:100%;gap:7px;margin-bottom:clamp(8px,1.6vh,16px);animation:splashSlideUp 1.2s ease-out 0.28s both;">
+            <div style="width:5px;height:5px;border-radius:50%;background:#10b981;box-shadow:0 0 6px #10b981,0 0 14px rgba(16,185,129,0.6);animation:livePulse 1.6s ease-in-out infinite;flex-shrink:0;"></div>
+            <span style="font-family:'Orbitron',monospace;font-size:clamp(0.50rem,1vw,0.65rem);font-weight:600;letter-spacing:3.5px;color:#10b981;text-transform:uppercase;opacity:0.95;text-shadow:0 0 12px rgba(16,185,129,0.5);">LIVE NOW OPEN</span>
           </div>
 
           <!-- LOGO -->
-          <div style="width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+          <div style="width:clamp(160px,24vw,260px);height:clamp(160px,24vw,260px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;">
             <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" loading="eager" fetchpriority="high" crossorigin="anonymous" style="width:100%;height:100%;object-fit:contain;transform:translateZ(0);"/>
           </div>
         </div>
@@ -3357,7 +3357,7 @@ footer{
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;z-index:10;width:100%;gap:0;">
             <h1 class="splash-title">EXILLION</h1>
             <!-- Capital Finecosystem — spacing diperketat -->
-            <p class="splash-subtitle" style="margin-top:4px;margin-bottom:0px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
+            <p class="splash-subtitle" style="margin-top:-3px;margin-bottom:0px;font-size:clamp(0.62rem,1.4vw,0.88rem);">Capital Finecosystem</p>
             <!-- Solana Badge — rapat di bawah Capital Finecosystem -->
             <div style="display:flex;align-items:center;margin-top:2px;animation:splashSlideUp 1.2s ease-out 0.38s both;">
                 <span style="font-family:'Orbitron',monospace;font-size:clamp(0.34rem,0.72vw,0.46rem);letter-spacing:1.8px;font-weight:700;color:#00d4ff;white-space:nowrap;opacity:0.9;">
@@ -3391,9 +3391,9 @@ footer{
               <span class="enter-btn-text">ENTER ANGEL INVESTOR ROUND</span>
             </button>
             <!-- Micro-copy — di bawah tombol, merapat -->
-            <div style="margin-top:clamp(4px,0.6vh,7px);animation:splashSlideUp 1.2s ease-out 1.0s both;">
-                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.32rem,0.68vw,0.44rem);letter-spacing:2.5px;color:var(--text-1);text-transform:uppercase;opacity:0.9;text-shadow:0 0 10px rgba(0,212,255,0.4);">
-                    No KYC &nbsp;·&nbsp; Secured On-Chain &nbsp;·&nbsp; Verify On Solscan
+            <div style="margin-top:clamp(3px,0.4vh,5px);animation:splashSlideUp 1.2s ease-out 1.0s both;text-align:center;">
+                <span style="font-family:'Orbitron',monospace;font-size:clamp(0.42rem,0.9vw,0.58rem);letter-spacing:2px;color:#10b981;text-transform:uppercase;opacity:1;text-shadow:0 0 14px rgba(16,185,129,0.7);font-weight:600;">
+                    Limited Access &nbsp;·&nbsp; No KYC &nbsp;·&nbsp; Transparency On-Chain
                 </span>
             </div>
         </div>
@@ -3486,7 +3486,7 @@ footer{
       font-family:'Orbitron',monospace;
       font-size:clamp(0.75rem,2vw,1.05rem);letter-spacing:4px;
       font-weight:600;
-      text-transform:uppercase;margin-top:0.4rem;margin-bottom:0.8rem;
+      text-transform:uppercase;margin-top:1.8rem;margin-bottom:0.8rem;
       background:linear-gradient(90deg, #9945FF 0%, #00d4ff 35%, #14F195 50%, #00d4ff 65%, #9945FF 100%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
@@ -3553,7 +3553,7 @@ footer{
 
     <!-- Logo + Title -->
     <div style="animation:mainScaleIn 0.8s cubic-bezier(.34,1.56,.64,1) 0.4s both;">
-      <div style="display:flex;justify-content:center;margin-top:4px;margin-bottom:0.8rem;"><div style="width:clamp(180px,28vw,260px);height:clamp(180px,28vw,260px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
+      <div style="display:flex;justify-content:center;margin-top:4px;margin-bottom:0.8rem;"><div style="width:clamp(150px,22vw,240px);height:clamp(150px,22vw,240px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
       <h1 style="
         font-family:'Orbitron',monospace;
         font-size:clamp(2.4rem,6vw,4rem);
