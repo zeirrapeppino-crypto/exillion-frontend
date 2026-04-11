@@ -22,7 +22,7 @@
 <!-- FIX QUALITY #6: Content Security Policy — critical for a financial site handling
      crypto transactions. Prevents XSS attacks that could steal wallet addresses or
      manipulate transaction amounts. Adjust connect-src if backend URL changes. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://mainnet.helius-rpc.com https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-mainnet.g.alchemy.com https://solana-rpc.publicnode.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-rpc.publicnode.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
@@ -287,7 +287,7 @@ nav{
   font-size:0.58rem;
   letter-spacing:2.5px;
   text-transform:uppercase;
-  color:var(--green);
+  color:var(--text-2);
   text-decoration:none;
   transition:color 0.2s;
 }
@@ -3627,7 +3627,7 @@ footer{
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
         <div style="font-family:'Orbitron',monospace;font-size:clamp(0.85rem,2.2vw,1.1rem);font-weight:800;color:#00d4ff;text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3);">880 M EXXE</div>
         <div style="font-family:'Orbitron',monospace;font-size:0.42rem;letter-spacing:1.5px;color:rgba(0,212,255,0.7);font-weight:400;margin-top:2px;text-transform:uppercase;">188.8M | 251.8M | 388M</div>
-        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Investor Reserved</div>
+        <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#ffffff;font-weight:400;margin-top:2px;text-transform:uppercase;text-shadow:0 0 8px rgba(255,255,255,0.4);">Angel Crowd Funding Reserved</div>
       </div>
       <div style="width:1px;height:32px;background:rgba(0,212,255,0.2);"></div>
       <div style="text-align:center;display:flex;flex-direction:column;align-items:center;">
@@ -4951,7 +4951,7 @@ footer{
   <!-- FIX v43: Progress bar per tier — sold/remaining EXXE only, NO $ raised figures. -->
 <div class="progress-wrap reveal" id="tierProgressWrap">
   <div class="progress-label">
-    Angel Investor Round — Live Progress
+    Angel Crowd Funding — Live Progress
     &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span>
     <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE · ON-CHAIN</span>
   </div>
@@ -5059,6 +5059,8 @@ footer{
       <span>$0.01</span>
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
+    <!-- Badge NO BONUS di bawah harga -->
+    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.25);color:rgba(0,212,255,0.7);">— NO BONUS —</div>
     <div class="tier-detail">
       188.8 M EXXE · Min $10 · Max $100/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">10×</strong>
@@ -5083,12 +5085,12 @@ footer{
   <div class="tier-card" id="tier-card-2" onclick="selectTierAndScroll(2)" style="cursor:pointer;">
     <div class="tier-num">Tier II</div>
     <div class="tier-name">Prime Angel Investor</div>
-    <!-- v41: Bonus Badge -->
-    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(232,201,122,0.2),rgba(204,125,7,0.15));border:1px solid rgba(232,201,122,0.6);color:#e8c97a;text-shadow:0 0 10px rgba(232,201,122,0.5);">🎁 +5% BONUS EXXE</div>
     <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
       <span>$0.025</span>
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
+    <!-- Badge +5% BONUS di bawah harga -->
+    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(232,201,122,0.2),rgba(204,125,7,0.15));border:1px solid rgba(232,201,122,0.6);color:#e8c97a;text-shadow:0 0 10px rgba(232,201,122,0.5);">🎁 +5% BONUS EXXE</div>
     <div class="tier-detail">
       251.8 M EXXE · Min $10 · Max $250/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">4×</strong>
@@ -5113,12 +5115,12 @@ footer{
   <div class="tier-card" id="tier-card-3" onclick="selectTierAndScroll(3)" style="cursor:pointer;">
     <div class="tier-num">Tier III</div>
     <div class="tier-name">Apex Angel Investor</div>
-    <!-- v41: Bonus Badge -->
-    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(153,69,255,0.2),rgba(0,212,255,0.1));border:1px solid rgba(153,69,255,0.6);color:#c4a3ff;text-shadow:0 0 10px rgba(153,69,255,0.5);animation:buyNowPulse 2s ease-in-out infinite;">🎁 +10% BONUS EXXE</div>
     <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
       <span>$0.05</span>
       <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
     </div>
+    <!-- Badge +10% BONUS di bawah harga -->
+    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(153,69,255,0.2),rgba(0,212,255,0.1));border:1px solid rgba(153,69,255,0.6);color:#c4a3ff;text-shadow:0 0 10px rgba(153,69,255,0.5);animation:buyNowPulse 2s ease-in-out infinite;">🎁 +10% BONUS EXXE</div>
     <div class="tier-detail">
       388 M EXXE · Min $10 · Max $500/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">2×</strong>
@@ -5665,8 +5667,7 @@ function updateWalletCapBar() {
 async function fetchWalletStatus(walletAddress) {
   if (!walletAddress) return;
   try {
-    const apiBase = window._exillionCfg ? window._exillionCfg.apiBase
-                  : 'https://exillion-backend-production.up.railway.app';
+    const apiBase = CFG.API;
     const ctrl    = new AbortController();
     const timer   = setTimeout(() => ctrl.abort(), 5000);
     const res     = await fetch(apiBase + '/api/wallet-status?wallet=' + walletAddress,
@@ -5836,8 +5837,9 @@ function selectToken(token) {
 // FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
 // FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
-  'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
-  'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
+  // ⚠ SECURITY v47-SEC: API key RPC premium (Helius/Alchemy) TIDAK boleh di-hardcode
+  // di frontend — file ini publik dan bisa dilihat via View Source. Key premium hanya
+  // di backend (Railway env vars RPC_URL / RPC_URL_2). Frontend pakai public endpoints.
   'https://api.mainnet-beta.solana.com',
   'https://rpc.ankr.com/solana',
   'https://solana-rpc.publicnode.com',
@@ -6967,7 +6969,9 @@ async function executeBuy(){
   // Disclaimer accepted + balance ok — proceed with transaction
   // FIX v25 BUG-1: jangan reset _isBuying sebelum proceedBuy.
   // proceedBuy mengecek _isBuying lagi di awal, jadi flag harus tetap true.
-  proceedBuy();
+  // FIX SEC-D: await proceedBuy agar runtime exception di luar try/catch-nya
+  // tidak bypass finally → _isBuying tidak terkunci permanen.
+  await proceedBuy();
 }
 
 async function proceedBuy(){
@@ -7014,8 +7018,6 @@ async function proceedBuy(){
     return;
   }
   _isBuying = true;
-  // usdc adalah integer → EXXE selalu exact, tidak ada floating point issue
-  const exxe = Math.round(usdc / t.price);
 
   // FIX v27 #1: _idempKey di scope proceedBuy (bukan dalam try) agar key
   // tetap sama untuk semua 3 endpoint dan tidak out-of-scope di catch/log.
@@ -7962,8 +7964,7 @@ function startGoldNetwork(canvasId, isSplash) {
   const CACHE_TTL_MS = 300000; // 5 menit
 
   const RPC_ENDPOINTS = [
-    'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
-    'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
+    // ⚠ SECURITY: key premium hanya di backend. Frontend pakai public endpoints.
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
@@ -8211,8 +8212,7 @@ function startGoldNetwork(canvasId, isSplash) {
   const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
 
   const RPC_ENDPOINTS = [
-    'https://mainnet.helius-rpc.com/?api-key=bc86aac7-adfc-48b3-8ae6-07e78fc4a121',
-    'https://solana-mainnet.g.alchemy.com/v2/F9NIxKAy0dZ6Gw6xuMHlB',
+    // ⚠ SECURITY: key premium hanya di backend. Frontend pakai public endpoints.
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
