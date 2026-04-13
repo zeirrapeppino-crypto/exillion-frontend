@@ -5091,7 +5091,7 @@ footer{
     <!-- Badge +5% BONUS di bawah harga -->
     <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(232,201,122,0.2),rgba(204,125,7,0.15));border:1px solid rgba(232,201,122,0.6);color:#e8c97a;text-shadow:0 0 10px rgba(232,201,122,0.5);">🎁 +5% BONUS EXXE</div>
     <div class="tier-detail">
-      251.8 M EXXE · Min $10 · Max $250/wallet<br/>
+      251.8 M EXXE · Min $10 · Max $500/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">4×</strong>
     </div>
     <!-- Lock Info -->
@@ -5120,7 +5120,7 @@ footer{
     <!-- Badge +10% BONUS di bawah harga -->
     <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(153,69,255,0.2),rgba(0,212,255,0.1));border:1px solid rgba(153,69,255,0.6);color:#c4a3ff;text-shadow:0 0 10px rgba(153,69,255,0.5);animation:buyNowPulse 2s ease-in-out infinite;">🎁 +10% BONUS EXXE</div>
     <div class="tier-detail">
-      388 M EXXE · Min $10 · Max $500/wallet<br/>
+      388 M EXXE · Min $10 · Max $1,000/wallet<br/>
       ROI to listing: <strong style="color:var(--green);">2×</strong>
     </div>
     <!-- Lock Info -->
@@ -5230,7 +5230,7 @@ footer{
             <button class="hint" onclick="setAmount(10)">$10</button>
             <button class="hint" onclick="setAmount(50)">$50</button>
             <button class="hint" onclick="setAmount(125)">$125</button>
-            <button class="hint" onclick="setAmount(250)">MAX $250</button>
+            <button class="hint" onclick="setAmount(500)">MAX $500</button>
           </div>
         </div>
 
@@ -5290,7 +5290,7 @@ footer{
 
         <p class="form-note">
           USDC/USDT sent on-chain. EXXE delivered automatically to your connected wallet.
-          All transactions are irreversible. Minimum $10.00. Maximum per wallet: $100 (Tier I) · $250 (Tier II +5% Bonus) · $500 (Tier III +10% Bonus). Locking period begins after DEX listing.
+          All transactions are irreversible. Minimum $10.00. Maximum per wallet: $100 (Tier I) · $500 (Tier II +5% Bonus) · $1,000 (Tier III +10% Bonus). Locking period begins after DEX listing.
         </p>
       </div>
 
@@ -5448,13 +5448,14 @@ footer{
     </div>
 
     <div class="modal-rule"></div>
-    <div class="modal-progress" id="modalProgress">Confirm all items to continue — <span id="checkCount">0</span> / 4</div>
+    <div class="modal-progress" id="modalProgress">Confirm all items to continue — <span id="checkCount">0</span> / 5</div>
 
     <div class="modal-checks">
       <div class="modal-check"><input type="checkbox" id="mc1" onchange="updateModal()"/><label for="mc1">I understand that investing in EXXE carries <strong>significant financial risk</strong> including potential total loss of capital.</label></div>
-      <div class="modal-check"><input type="checkbox" id="mc2" onchange="updateModal()"/><label for="mc2">I confirm I am <strong>not a resident</strong> of the United States, China, or any jurisdiction where token sales are prohibited.</label></div>
-      <div class="modal-check"><input type="checkbox" id="mc3" onchange="updateModal()"/><label for="mc3">I acknowledge the listing price of <strong>$0.10 USD</strong> on Orca DEX is a target only — not a guaranteed return.</label></div>
+      <div class="modal-check"><input type="checkbox" id="mc2" onchange="updateModal()"/><label for="mc2">I confirm I am not in the country that any jurisdiction where <strong>token sales are prohibited</strong>.</label></div>
+      <div class="modal-check"><input type="checkbox" id="mc3" onchange="updateModal()"/><label for="mc3">I acknowledge the listing price of <strong>$0.10 USD</strong> on Orca DEX is our goal — not a guaranteed return.</label></div>
       <div class="modal-check"><input type="checkbox" id="mc4" onchange="updateModal()"/><label for="mc4">I am participating <strong>voluntarily</strong> and have read all risk factors described above.</label></div>
+      <div class="modal-check" style="border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.04);"><input type="checkbox" id="mc5" onchange="updateModal()"/><label for="mc5">🔒 I commit to the <strong>lock period for my selected tier</strong> after listing on Orca DEX (Solana). I acknowledge this is a gentleman's agreement — EXXE will be delivered now to my wallet and I agree not to sell or transfer during the lock period as an <strong>Angel investor</strong> commitment for the <strong>Exillion Capital Finecosystem</strong>.</label></div>
     </div>
 
     <button class="modal-agree" id="agreeBtn" onclick="acceptDisclaimer()">
@@ -5472,7 +5473,7 @@ footer{
 <!-- STICKY BANNER -->
 <div class="sticky-banner" id="stickyBanner">
   <div class="banner-text">
-    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Max per wallet: $100 (Tier I · No Bonus) · $250 (Tier II · +5% Bonus EXXE) · $500 (Tier III · +10% Bonus EXXE). Locking: 3/2/1 months after listing. Each investor may participate in all three tiers independently.
+    <em>Risk Warning:</em> EXXE is not a guaranteed investment. You may lose all capital. Not a security. Not financial advice. Max per wallet: $100 (Tier I · No Bonus) · $500 (Tier II · +5% Bonus EXXE) · $1,000 (Tier III · +10% Bonus EXXE). Locking: 3/2/1 months after listing. Each investor may participate in all three tiers independently.
   </div>
   <button class="banner-close" onclick="this.closest('.sticky-banner').classList.remove('show')">✕</button>
 </div>
@@ -5514,15 +5515,15 @@ const CFG = {
     // Tier I  : 188.8M EXXE @ $0.01  | no bonus  | lock 3 bln | cair 100% setelah lock
     // Tier II : 251.8M EXXE @ $0.025 | +5% bonus  | lock 2 bln | cair 100% setelah lock
     // Tier III: 388M EXXE   @ $0.05  | +10% bonus | lock 1 bln | cair 100% setelah lock
-    1: { price:0.01,  min:10, max:100, gain:900, supply:188800000, name:'Genesis Angel',
+    1: { price:0.01,  min:10, max:100,  gain:900, supply:188800000, name:'Genesis Angel',
          bonus:0,    bonusPct:0,
-         lock:'3 months after listing' },
-    2: { price:0.025, min:10, max:250, gain:300, supply:251800000, name:'Prime Angel',
+         lock:'3 months after listing on Orca DEX (Solana)' },
+    2: { price:0.025, min:10, max:500,  gain:300, supply:251800000, name:'Prime Angel',
          bonus:0.05, bonusPct:5,
-         lock:'2 months after listing' },
-    3: { price:0.05,  min:10, max:500, gain:100, supply:388000000, name:'Apex Angel',
+         lock:'2 months after listing on Orca DEX (Solana)' },
+    3: { price:0.05,  min:10, max:1000, gain:100, supply:388000000, name:'Apex Angel',
          bonus:0.10, bonusPct:10,
-         lock:'1 month after listing' },
+         lock:'1 month after listing on Orca DEX (Solana)' },
   },
   // v42 FINAL: Wallet Transparansi On-Chain Angel Investor
   // Default fallback; overridden dynamically from /api/stats if backend returns angelWallet.
@@ -5983,17 +5984,17 @@ document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
 let disclaimerAccepted = false;
 
 function updateModal(){
-  const checked = ['mc1','mc2','mc3','mc4'].filter(id=>{ const el=document.getElementById(id); return el && el.checked; }).length;
+  const checked = ['mc1','mc2','mc3','mc4','mc5'].filter(id=>{ const el=document.getElementById(id); return el && el.checked; }).length;
   const countEl = document.getElementById('checkCount'); if(countEl) countEl.textContent = checked;
   const btn = document.getElementById('agreeBtn');
   if(!btn) return;
-  if(checked===4){ btn.classList.add('ready'); btn.textContent='I Understand — Proceed'; }
-  else { btn.classList.remove('ready'); btn.textContent=`Please confirm ${4-checked} remaining item(s)`; }
+  if(checked===5){ btn.classList.add('ready'); btn.textContent='I Understand — Proceed'; }
+  else { btn.classList.remove('ready'); btn.textContent=`Please confirm ${5-checked} remaining item(s)`; }
 }
 
 function acceptDisclaimer(){
   // FIX v31 E: Null-guard eksplisit — setiap checkbox dicek keberadaannya dulu
-  const allChecked = ['mc1','mc2','mc3','mc4'].every(id => {
+  const allChecked = ['mc1','mc2','mc3','mc4','mc5'].every(id => {
     const el = document.getElementById(id);
     return el && el.checked;
   });
@@ -6875,12 +6876,12 @@ async function executeBuy(){
   // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
     _isBuying = false; // reset: kita belum mulai transaksi
-    ['mc1','mc2','mc3','mc4'].forEach(id=>{
+    ['mc1','mc2','mc3','mc4','mc5'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
     });
     const _cc=document.getElementById('checkCount'); if(_cc) _cc.textContent='0';
     const btn = document.getElementById('agreeBtn');
-    if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm 4 remaining item(s)'; }
+    if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm 5 remaining item(s)'; }
     const _ov = document.getElementById('disclaimerOverlay');
     if(_ov){
       _ov.classList.add('active');
@@ -7351,36 +7352,66 @@ function showSuccess(usdc,exxe,wallet,tx,token, bonusExxe){
 
   const details = document.getElementById('successDetails');
   details.textContent = '';
+
+  // Purchase date — format: DD Month YYYY
+  const _now = new Date();
+  const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const purchaseDate = _now.getDate() + ' ' + _months[_now.getMonth()] + ' ' + _now.getFullYear();
+
+  // Lock Until — gentleman agreement, Orca DEX (Solana)
+  const lockUntil = t.lock || '— months after listing on Orca DEX (Solana)';
+
   const lines = [
-    ['Wallet',    short],
-    ['Paid',      usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
-    ['Base EXXE', baseExxe.toLocaleString('en-US') + ' EXXE'],
+    ['Tier',       t.name ? ('Tier ' + CFG.TIER + ' \u2014 ' + t.name) : 'Tier ' + CFG.TIER],
+    ['Date',       purchaseDate],
+    ['Wallet',     wallet],
+    ['Paid',       usdc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + tokenLabel],
+    ['Base EXXE',  baseExxe.toLocaleString('en-US') + ' EXXE'],
   ];
   if(bonusExxe > 0){
     lines.push(['Bonus EXXE', '+' + bonusExxe.toLocaleString('en-US') + ' EXXE (+' + bonusPct + '%)']);
     lines.push(['Total EXXE', totalExxe.toLocaleString('en-US') + ' EXXE ✨']);
   }
-  lines.push(['TX',      txShort]);
-  lines.push(['Status',  'CONFIRMED ✓']);
-  lines.push(['🔒 Lock',  t.lock || '—']);
+  lines.push(['TX',        txFull || 'N/A']);
+  lines.push(['Status',    'CONFIRMED ✓']);
 
   lines.forEach(([label, value]) => {
     const row = document.createElement('div');
     row.style.cssText = 'display:flex;gap:8px;margin-bottom:4px;font-family:\'JetBrains Mono\',monospace;font-size:0.78rem;';
     const lbl = document.createElement('span');
-    lbl.style.cssText = 'color:var(--text-2);min-width:80px;flex-shrink:0;';
+    lbl.style.cssText = 'color:var(--text-2);min-width:90px;flex-shrink:0;';
     lbl.textContent = label + ':';
     const val = document.createElement('span');
-    val.style.color = label.includes('Total') ? 'var(--cyan)' : label.includes('Bonus') ? '#e8c97a' : 'var(--text-1)';
+    val.style.cssText = 'word-break:break-all;';
+    val.style.color = label.includes('Total') ? 'var(--cyan)' : label.includes('Bonus') ? '#e8c97a' : label === 'Status' ? 'var(--green)' : 'var(--text-1)';
     if(label.includes('Total')) val.style.fontWeight = '700';
+    if(label === 'Tier') { val.style.color = 'var(--gold-light)'; val.style.fontWeight = '700'; }
     val.textContent = value;
     row.appendChild(lbl);
     row.appendChild(val);
     details.appendChild(row);
   });
+
+  // Lock banner — gentleman agreement
+  const lockBanner = document.createElement('div');
+  lockBanner.style.cssText = 'margin-top:12px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.22);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;';
+  const lockIconEl = document.createElement('span');
+  lockIconEl.style.cssText = 'font-size:1rem;flex-shrink:0;line-height:1.5;';
+  lockIconEl.textContent = '🔒';
+  const lockTextEl = document.createElement('div');
+  lockTextEl.style.cssText = 'font-family:var(--font-body);font-size:0.72rem;color:rgba(232,244,255,0.75);line-height:1.6;';
+  const tierName = t.name || 'Genesis Angel';
+  lockTextEl.innerHTML = '<strong style="color:rgba(0,212,255,0.9);font-weight:600;display:block;margin-bottom:3px;">Lock period: ' + lockUntil + '</strong>'
+    + 'By completing this purchase, you have committed to holding your EXXE for <strong style="color:rgba(0,212,255,0.85);">' + lockUntil + '</strong> as a gentleman\'s agreement. '
+    + 'EXXE has been sent to your wallet. We trust your commitment as a ' + tierName + ' investor.';
+  lockBanner.appendChild(lockIconEl);
+  lockBanner.appendChild(lockTextEl);
+  details.appendChild(lockBanner);
+
   const link = document.getElementById('solscanLink');
   if (link && txFull) link.href = 'https://solscan.io/tx/' + encodeURIComponent(txFull);
 }
+
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
