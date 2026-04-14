@@ -4401,6 +4401,7 @@ canvas { transform: translateZ(0); }
     .infog-flywheel{grid-template-columns:1fr;gap:1.5rem;}
     .infog-fw-item.right{flex-direction:row;text-align:left;}
     .infog-fw-center{order:-1;}
+    .tier-summary{grid-template-columns:1fr !important;max-width:400px !important;gap:0.75rem !important;}
   }
   </style>
 
@@ -4984,30 +4985,30 @@ canvas { transform: translateZ(0); }
     </div>
   </div>
 
-  <div class="tier-summary reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem auto 0.5rem;max-width:1080px;">
-    <div class="dash-card" style="padding:1.2rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.4rem;">TIER I</div>
-      <div style="font-size:0.52rem;color:var(--text-2);margin-bottom:3px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.01</div>
-      <div style="font-size:0.48rem;color:var(--text-2);margin:3px 0;">Per EXXE</div>
-      <div style="font-size:0.52rem;color:var(--text-2);margin-bottom:5px;">NO BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+  <div class="tier-summary reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin:1rem auto 0.5rem;max-width:1080px;">
+    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER I</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin-bottom:2px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.01</div>
+      <div style="font-size:0.45rem;color:var(--text-2);margin:2px 0;">Per EXXE</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin-bottom:4px;">NO BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
     </div>
-    <div class="dash-card" style="padding:1.2rem;background:rgba(232,201,122,0.06);border-color:rgba(232,201,122,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#e8c97a;margin-bottom:0.4rem;">TIER II</div>
-      <div style="font-size:0.52rem;color:var(--text-2);margin-bottom:3px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#e8c97a;text-shadow:0 0 12px rgba(232,201,122,0.5);">$0.025</div>
-      <div style="font-size:0.48rem;color:var(--text-2);margin:3px 0;">Per EXXE</div>
-      <div style="font-size:0.52rem;color:#e8c97a;margin-bottom:5px;">+5% BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER II</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin-bottom:2px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.025</div>
+      <div style="font-size:0.45rem;color:var(--text-2);margin:2px 0;">Per EXXE</div>
+      <div style="font-size:0.5rem;color:#00d4ff;margin-bottom:4px;">+5% BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
     </div>
-    <div class="dash-card" style="padding:1.2rem;background:rgba(153,69,255,0.06);border-color:rgba(153,69,255,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#9945FF;margin-bottom:0.4rem;">TIER III</div>
-      <div style="font-size:0.52rem;color:var(--text-2);margin-bottom:3px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:700;color:#9945FF;text-shadow:0 0 12px rgba(153,69,255,0.5);">$0.05</div>
-      <div style="font-size:0.48rem;color:var(--text-2);margin:3px 0;">Per EXXE</div>
-      <div style="font-size:0.52rem;color:#c4a3ff;margin-bottom:5px;">+10% BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER III</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin-bottom:2px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.05</div>
+      <div style="font-size:0.45rem;color:var(--text-2);margin:2px 0;">Per EXXE</div>
+      <div style="font-size:0.5rem;color:#00d4ff;margin-bottom:4px;">+10% BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
     </div>
   </div>
 
@@ -7622,25 +7623,24 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     setTimeout(updateNavHeight, 200);
   });
 
-  // FIX: Show sticky banner on page load only (after main-splash if used)
-  (function() {
-    const banner = document.getElementById('stickyBanner');
-    if (!banner) return;
-    if (banner.dataset.dismissed === '1') return;
-    // Show once after page load delay
-    setTimeout(() => {
+  // FIX: Show sticky banner AFTER main-splash animation completes (not during)
+  // Delay = 5000ms = 5 detik — cukup untuk main-splash selesai dulu
+  setTimeout(function() {
+    try {
+      var banner = document.getElementById('stickyBanner');
+      if (!banner) return;
+      if (banner.dataset.dismissed === '1') return;
       banner.classList.add('show');
-      const toast = document.getElementById('toast-container');
+      var toast = document.getElementById('toast-container');
       if (toast) toast.classList.add('banner-visible');
-    }, 1500);
-    // Handle close button — remember dismissal
-    banner.querySelector('.banner-close').onclick = function() {
-      banner.classList.remove('show');
-      banner.dataset.dismissed = '1';
-      const _tc = document.getElementById('toast-container');
-      if (_tc) _tc.classList.remove('banner-visible');
-    };
-  })();
+      banner.querySelector('.banner-close').onclick = function() {
+        banner.classList.remove('show');
+        banner.dataset.dismissed = '1';
+        var tc = document.getElementById('toast-container');
+        if (tc) tc.classList.remove('banner-visible');
+      };
+    } catch(e) { /* ignore errors */ }
+  }, 5500);
 
   updateNavHeight();
 
