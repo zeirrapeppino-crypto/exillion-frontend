@@ -4340,16 +4340,31 @@ canvas { transform: translateZ(0); }
   }
   .infog-fw-ring{
     width:110px;height:110px;border-radius:50%;
-    border:2px solid rgba(0,212,255,0.3);
+    border:2px solid rgba(153,69,255,0.4);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:radial-gradient(circle,rgba(0,66,255,0.15),rgba(0,212,255,0.05));
-    box-shadow:0 0 30px rgba(0,212,255,0.15),inset 0 0 20px rgba(0,212,255,0.05);
-    animation:infogPulse 3s ease-in-out infinite;
+    background:radial-gradient(circle,rgba(153,69,255,0.2),rgba(0,212,255,0.08));
+    box-shadow:0 0 25px rgba(153,69,255,0.3),inset 0 0 25px rgba(0,212,255,0.1);
+    animation:solanaPulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes solanaPulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(153,69,255,0.25), inset 0 0 20px rgba(0,212,255,0.08);
+      border-color: rgba(153,69,255,0.35);
+    }
+    50% {
+      box-shadow: 0 0 45px rgba(153,69,255,0.5), 0 0 20px rgba(0,212,255,0.3), inset 0 0 35px rgba(0,212,255,0.15);
+      border-color: rgba(0,212,255,0.5);
+    }
   }
   .infog-fw-ring-label{
     font-family:'Orbitron',monospace;
     font-size:0.55rem;letter-spacing:1.5px;
-    color:var(--cyan);font-weight:700;
+    background:linear-gradient(135deg, #9945FF 0%, #00d4ff 50%, #14F195 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    font-weight:700;
     line-height:1.3;
   }
   .infog-fw-ring-sub{
@@ -4969,18 +4984,45 @@ canvas { transform: translateZ(0); }
     </div>
   </div>
 
+  <div class="tier-summary reveal" style="display:flex;gap:1rem;margin:1.5rem 0 0.5rem;flex-wrap:wrap;justify-content:center;">
+    <div class="tier-box" style="flex:1;min-width:180px;max-width:240px;padding:1rem;border-radius:8px;background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:var(--cyan);margin-bottom:0.5rem;">TIER I</div>
+      <div style="font-size:0.55rem;color:var(--text-2);margin-bottom:4px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:#00d4ff;text-shadow:0 0 12px rgba(0,212,255,0.5);">$0.01</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin:4px 0;">Per EXXE</div>
+      <div style="font-size:0.55rem;color:var(--text-2);margin-bottom:6px;">NO BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+    </div>
+    <div class="tier-box" style="flex:1;min-width:180px;max-width:240px;padding:1rem;border-radius:8px;background:rgba(232,201,122,0.08);border:1px solid rgba(232,201,122,0.35);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#e8c97a;margin-bottom:0.5rem;">TIER II</div>
+      <div style="font-size:0.55rem;color:var(--text-2);margin-bottom:4px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:#e8c97a;text-shadow:0 0 12px rgba(232,201,122,0.5);">$0.025</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin:4px 0;">Per EXXE</div>
+      <div style="font-size:0.55rem;color:#e8c97a;margin-bottom:6px;">+5% BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+    </div>
+    <div class="tier-box" style="flex:1;min-width:180px;max-width:240px;padding:1rem;border-radius:8px;background:rgba(153,69,255,0.08);border:1px solid rgba(153,69,255,0.35);text-align:center;">
+      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#9945FF;margin-bottom:0.5rem;">TIER III</div>
+      <div style="font-size:0.55rem;color:var(--text-2);margin-bottom:4px;">Presale Price</div>
+      <div style="font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:700;color:#9945FF;text-shadow:0 0 12px rgba(153,69,255,0.5);">$0.05</div>
+      <div style="font-size:0.5rem;color:var(--text-2);margin:4px 0;">Per EXXE</div>
+      <div style="font-size:0.55rem;color:#c4a3ff;margin-bottom:6px;">+10% BONUS</div>
+      <div style="font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+    </div>
+  </div>
+
   <div class="progress-wrap reveal" id="tierProgressWrap">
     <div class="progress-label">
-      Angel Investor — Live Progress
-      &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(20,241,149,0.4);vertical-align:middle;transition:background 0.3s;" title="Live data from Solana blockchain"></span>
-      <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:rgba(20,241,149,0.6);vertical-align:middle;">LIVE · ON-CHAIN</span>
+      Angel Investor Round — Live Progress
+      &nbsp;<span class="rt-live-dot" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#14F195;box-shadow:0 0 6px #14F195,0 0 12px rgba(20,241,149,0.5);vertical-align:middle;animation:livePulse 1.6s ease-in-out infinite;" title="Live data from Solana blockchain"></span>
+      <span style="font-family:'Orbitron',monospace;font-size:0.45rem;letter-spacing:2px;color:#14F195;vertical-align:middle;text-shadow:0 0 8px rgba(20,241,149,0.5);">LIVE · ON-CHAIN</span>
     </div>
 
     <!-- Tier I Progress -->
     <div class="prog-item" style="margin-bottom:1.4rem;">
       <div class="prog-meta">
         <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+          <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
           <strong>Tier I — Genesis Angel</strong> &nbsp;·&nbsp; $0.01/EXXE &nbsp;·&nbsp;
           Sold: <span id="rt-t1-sold">0</span> EXXE
         </span>
@@ -4990,7 +5032,7 @@ canvas { transform: translateZ(0); }
         <div class="prog-fill" id="rt-t1-bar" style="width:1%;"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:rgba(0,212,255,0.65);">🔒 3-month hold · 💰 100% at once</span>
+        <span style="color:#00d4ff;text-shadow:0 0 6px rgba(0,212,255,0.5);">🔒 3-month hold</span>
         <span>Remaining: <span id="rt-t1-remaining" style="color:#14F195;">188,800,000</span> EXXE</span>
       </div>
     </div>
@@ -4999,7 +5041,7 @@ canvas { transform: translateZ(0); }
     <div class="prog-item" style="margin-bottom:1.4rem;">
       <div class="prog-meta">
         <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+          <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e8c97a;box-shadow:0 0 8px rgba(232,201,122,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
           <strong>Tier II — Prime Angel</strong> &nbsp;·&nbsp; $0.025/EXXE &nbsp;·&nbsp; <span style="color:#e8c97a;">+5% Bonus</span> &nbsp;·&nbsp;
           Sold: <span id="rt-t2-sold">0</span> EXXE
         </span>
@@ -5009,7 +5051,7 @@ canvas { transform: translateZ(0); }
         <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#f5d060);"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:rgba(232,201,122,0.65);">🔒 2-month hold · 💰 100% after hold</span>
+        <span style="color:#e8c97a;text-shadow:0 0 6px rgba(232,201,122,0.5);">🔒 2-month hold</span>
         <span>Remaining: <span id="rt-t2-remaining" style="color:#14F195;">251,800,000</span> EXXE</span>
       </div>
     </div>
@@ -5018,7 +5060,7 @@ canvas { transform: translateZ(0); }
     <div class="prog-item">
       <div class="prog-meta">
         <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#14F195;flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
+          <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9945FF;box-shadow:0 0 8px rgba(153,69,255,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
           <strong>Tier III — Apex Angel</strong> &nbsp;·&nbsp; $0.05/EXXE &nbsp;·&nbsp; <span style="color:#c4a3ff;">+10% Bonus</span> &nbsp;·&nbsp;
           Sold: <span id="rt-t3-sold">0</span> EXXE
         </span>
@@ -5028,33 +5070,9 @@ canvas { transform: translateZ(0); }
         <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#c4a3ff);"></div>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:rgba(153,69,255,0.75);">🔒 1-month hold · 💰 100% after hold</span>
+        <span style="color:#9945FF;text-shadow:0 0 6px rgba(153,69,255,0.5);">🔒 1-month hold</span>
         <span>Remaining: <span id="rt-t3-remaining" style="color:#14F195;">388,000,000</span> EXXE</span>
       </div>
-    </div>
-  </div>
-
-  <div class="price-table reveal" style="max-width:1080px;margin:3rem auto 0;">
-    <div class="price-table-head">The Angel Investor Pricing Tiers</div>
-    <div class="price-row">
-      <span class="price-tier">Tier I — Genesis Angel (188.8M EXXE · 21.5%) · 3-Month Hold</span>
-      <span class="price-amt t1">$0.01</span>
-    </div>
-    <div class="price-row">
-      <span class="price-tier">Tier II — Prime Angel (251.8M EXXE · 28.6%) · +5% Bonus · 2-Month Hold</span>
-      <span class="price-amt t2">$0.025 <span style="font-size:0.6rem;color:#e8c97a;margin-left:4px;">+5% BONUS</span></span>
-    </div>
-    <div class="price-row">
-      <span class="price-tier">Tier III — Apex Angel (388M EXXE · 44.1%) · +10% Bonus · 1-Month Hold</span>
-      <span class="price-amt t3">$0.05 <span style="font-size:0.6rem;color:#c4a3ff;margin-left:4px;">+10% BONUS</span></span>
-    </div>
-    <div class="price-row">
-      <span class="price-tier">Orca DEX Listing</span>
-      <span class="price-amt tl">$0.10</span>
-    </div>
-    <div class="price-row" style="border:none;">
-      <span class="price-tier">Liquidity is secured on-chain on Orca</span>
-      <span class="gain">75% of Angel Investor Round Funds</span>
     </div>
   </div>
 </section>
@@ -7604,17 +7622,26 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     setTimeout(updateNavHeight, 200);
   });
 
-  // v18 #1: Sticky banner scroll — MUST be passive to prevent mobile scroll jank
-  window.addEventListener('scroll', function() {
+  // FIX: Sticky banner — show only once on first load, not again after close
+  (function() {
     const banner = document.getElementById('stickyBanner');
-    if (banner && window.scrollY > 300) banner.classList.add('show');
-    // FIX v52 BUG-10: Keep toast offset in sync with banner visibility
-    const toast = document.getElementById('toast-container');
-    if (toast && banner) {
-      if (banner.classList.contains('show')) toast.classList.add('banner-visible');
-      else toast.classList.remove('banner-visible');
-    }
-  }, { passive: true });
+    if (!banner) return;
+    // Check if already dismissed this session
+    if (banner.dataset.dismissed === '1') return;
+    // Show once after short delay
+    setTimeout(() => {
+      banner.classList.add('show');
+      const toast = document.getElementById('toast-container');
+      if (toast) toast.classList.add('banner-visible');
+    }, 1500);
+    // Handle close button — remember dismissal
+    banner.querySelector('.banner-close').onclick = function() {
+      banner.classList.remove('show');
+      banner.dataset.dismissed = '1';
+      const _tc = document.getElementById('toast-container');
+      if (_tc) _tc.classList.remove('banner-visible');
+    };
+  })();
 
   updateNavHeight();
 
