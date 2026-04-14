@@ -7622,21 +7622,25 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     setTimeout(updateNavHeight, 200);
   });
 
-  // FIX: Show sticky banner after main-splash animation completes
-  function showStickyBanner() {
+  // FIX: Show sticky banner on page load only (after main-splash if used)
+  (function() {
     const banner = document.getElementById('stickyBanner');
     if (!banner) return;
     if (banner.dataset.dismissed === '1') return;
-    banner.classList.add('show');
-    const toast = document.getElementById('toast-container');
-    if (toast) toast.classList.add('banner-visible');
+    // Show once after page load delay
+    setTimeout(() => {
+      banner.classList.add('show');
+      const toast = document.getElementById('toast-container');
+      if (toast) toast.classList.add('banner-visible');
+    }, 1500);
+    // Handle close button — remember dismissal
     banner.querySelector('.banner-close').onclick = function() {
       banner.classList.remove('show');
       banner.dataset.dismissed = '1';
       const _tc = document.getElementById('toast-container');
       if (_tc) _tc.classList.remove('banner-visible');
     };
-  }
+  })();
 
   updateNavHeight();
 
@@ -7799,8 +7803,6 @@ function enterSite() {
                     mainSplash.style.display = 'none';
                     document.body.style.overflowY = 'scroll';
                     document.body.style.overflowX = 'hidden';
-                    // Show sticky banner after main-splash exits
-                    showStickyBanner();
 
                     var mainNav = document.getElementById('main-nav');
                     if (mainNav) {
