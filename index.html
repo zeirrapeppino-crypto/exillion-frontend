@@ -2644,11 +2644,11 @@ footer {
 .sticky-banner.show { transform: translateY(0); }
 
 .banner-text {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.58rem;
+  font-family: var(--font-body);
+  font-size: 0.55rem;
   color: var(--text-1);
-  letter-spacing: 1px;
-  line-height: 1.5;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
 }
 
 .banner-text em {
@@ -2718,12 +2718,6 @@ footer {
 /* =========================================
    GLOBAL ANIMATIONS (Cinematic)
    ========================================= */
-
-@keyframes riseUp {
-  from { opacity: 0; transform: translateY(52px) scale(0.97); }
-  55% { opacity: 1; }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
 
 @keyframes heroLogoGlow {
   from { filter: drop-shadow(0 0 14px rgba(204,125,7,0.8)) drop-shadow(0 0 30px rgba(232,201,122,0.5)) drop-shadow(0 0 60px rgba(204,125,7,0.25)); }
@@ -3114,7 +3108,7 @@ footer {
 /* ========== v6 PERFORMANCE OPTIMIZATIONS ========== */
 #vision        { content-visibility: auto; contain-intrinsic-size: 0 1200px; }
 #tokenomics    { content-visibility: auto; contain-intrinsic-size: 0 900px; }
-#angel         { content-visibility: auto; contain-intrinsic-size: 0 1100px; }
+#angel         { } /* content-visibility removed - buy form must render immediately */
 #roadmap       { content-visibility: auto; contain-intrinsic-size: 0 800px; }
 #mining        { content-visibility: auto; contain-intrinsic-size: 0 900px; }
 #transparency  { content-visibility: auto; contain-intrinsic-size: 0 500px; }
@@ -3659,18 +3653,14 @@ canvas { transform: translateZ(0); }
         }
 
         @keyframes riseUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(52px) scale(0.97); }
+            55% { opacity: 1; }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         @keyframes splashHscanIn {
             from { left: -100%; opacity: 0; }
             to { left: 100%; opacity: 1; }
-        }
-
-        @keyframes goldSweepMain {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
         }
 
         @keyframes goldShimmer {
@@ -5511,7 +5501,7 @@ canvas { transform: translateZ(0); }
   <div class="banner-text">
     <em>Risk Warning:</em> EXXE is not a guaranteed investment. Cryptocurrency markets are volatile and unpredictable.You may lose all capital. Not a security. Not financial advice. Max per wallet: $100 (Tier I · No Bonus) · $500 (Tier II · +5% Bonus EXXE) · $1,000 (Tier III · +10% Bonus EXXE). Hold period: 3/2/1 months after listing. Each Angel Investor may participate in all three tiers independently.
   </div>
-  <button class="banner-close" onclick="this.closest('.sticky-banner').classList.remove('show');var _tc=document.getElementById('toast-container');if(_tc)_tc.classList.remove('banner-visible');">✕</button>
+  <button class="banner-close" id="bannerCloseBtn">✕</button>
 </div>
 
 <script>
@@ -5931,7 +5921,8 @@ function showToast(message, type, duration) {
 var cachedUsdcBalance = 0;
 var cachedUsdtBalance = 0;
 
-async function fetchUsdcBalance(walletAddress) {
+// Fetches BOTH USDC and USDT balances in parallel
+async function fetchTokenBalances(walletAddress) {
   const bar = document.getElementById('usdcBalanceBar');
   const amt = document.getElementById('usdcBalanceAmt');
   if (bar) bar.style.display = 'flex';
@@ -6128,7 +6119,7 @@ function setConnected(name, address) {
   }
 
   // FIX v15 #3: Fetch and display USDC balance
-  fetchUsdcBalance(address);
+  fetchTokenBalances(address);
   // FIX v40 TIER-2: Fetch wallet cap status dari backend
   fetchWalletStatus(address);
   // FIX v31 F: Update hint buttons sesuai tier aktif
@@ -6170,6 +6161,9 @@ async function disconnectWallet() {
   // Reset state
   connectedWallet  = null;
   connectedAddress = null;
+  // FIX BUG-8: Reset both cached balances on disconnect
+  cachedUsdcBalance = 0;
+  cachedUsdtBalance = 0;
   // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
   // is shown again for each new connection/transaction session. This ensures the user
   // always re-acknowledges risks before a new transaction, not just once per page load.
@@ -6963,7 +6957,7 @@ async function executeBuy(){
   const t = tier();
   const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   try {
-    const currentBalance = await fetchUsdcBalance(connectedAddress);
+    const currentBalance = await fetchTokenBalances(connectedAddress);
     if (currentBalance < t.min) {
       showToast(
         'Insufficient ' + getSelectedToken() + ' balance. Minimum deposit is $' + t.min.toFixed(2) + ' ' + getSelectedToken() + '.',
@@ -7268,11 +7262,12 @@ async function proceedBuy(){
     const _buyP2  = document.getElementById('buyPanel');
     if (_procP2) _procP2.style.display = 'none';
     if (_buyP2)  _buyP2.style.display  = 'block';
-    // BUG FIX: Restore buy button state after error
+    // BUG FIX: Restore buy button state after error - use checkReady() for proper validation
     const _buyBtnErr = document.getElementById('buyBtn');
     if (_buyBtnErr) {
       _buyBtnErr.disabled = false;
-      _buyBtnErr.classList.add('ready');
+      // checkReady() properly validates amount/wallet/balance before setting ready state
+      checkReady();
     }
     if (e.code !== 4001) {
       showToast('Transaction failed: ' + (e.message || 'Please try again.'), 'error', 10000);
@@ -7623,24 +7618,6 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   });
 
   // FIX: Show sticky banner AFTER main-splash animation completes (not during)
-  // Delay = 15000ms = 15 detik — cukup untuk main-splash selesai + buffer
-  setTimeout(function() {
-    try {
-      var banner = document.getElementById('stickyBanner');
-      if (!banner) return;
-      if (banner.dataset.dismissed === '1') return;
-      banner.classList.add('show');
-      var toast = document.getElementById('toast-container');
-      if (toast) toast.classList.add('banner-visible');
-      banner.querySelector('.banner-close').onclick = function() {
-        banner.classList.remove('show');
-        banner.dataset.dismissed = '1';
-        var tc = document.getElementById('toast-container');
-        if (tc) tc.classList.remove('banner-visible');
-      };
-    } catch(e) { /* ignore errors */ }
-  }, 15000);
-
   updateNavHeight();
 
   // FIX v27 #6: Escape key tutup modal disclaimer dan restore body overflow.
@@ -7812,6 +7789,8 @@ function enterSite() {
                     if (mcInner) {
                         mcInner.style.transition = 'opacity 0.6s ease';
                         mcInner.style.opacity    = '1';
+                        // Show sticky banner 4 detik setelah halaman utama visible
+                        setTimeout(showStickyBanner, 4000);
                         setTimeout(function () {
                             mcInner.style.transition = '';
                             if (mainNav) mainNav.style.transition = '';
@@ -7824,7 +7803,22 @@ function enterSite() {
     _splashProgressRafId = requestAnimationFrame(tickProgress);
 }
 
-function startMainSplashParticles() {
+// Show sticky banner after main-splash exits
+  function showStickyBanner() {
+    var banner = document.getElementById('stickyBanner');
+    if (!banner || banner.dataset.dismissed === '1') return;
+    banner.classList.add('show');
+    var toast = document.getElementById('toast-container');
+    if (toast) toast.classList.add('banner-visible');
+    banner.querySelector('.banner-close').onclick = function() {
+      banner.classList.remove('show');
+      banner.dataset.dismissed = '1';
+      var tc = document.getElementById('toast-container');
+      if (tc) tc.classList.remove('banner-visible');
+    };
+  }
+
+  function startMainSplashParticles() {
     var canvas = document.getElementById('main-splash-canvas');
     if (!canvas) return;
     // BUG FIX #11: guard against double-init (enterSite + old MutationObserver)
@@ -9032,36 +9026,6 @@ async function downloadCertificate() {
     }
   } catch(e) {
     showToast('Download error: ' + e.message, 'error', 6000);
-  }
-}
-
-// FIX v52 BUG-4 + BUG-8: Screenshot with iOS Safari fix + html2canvas check
-async function screenshotCertificate() {
-  const el = document.getElementById('certDocument');
-  
-  if (!el) {
-    showToast('Certificate element not found.', 'error');
-    return;
-  }
-  if (typeof html2canvas === 'undefined' && !window._html2canvasLoaded) {
-    showToast('Screenshot library not loaded. Please use Save Certificate button instead.', 'warn', 8000);
-    return;
-  }
-  
-  // FIX: window.open BEFORE await — iOS Safari requirement
-  const win = window.open('about:blank', '_blank');
-  if (!win) {
-    showToast('Popup blocked. Please use the Save Certificate button instead.', 'warn', 6000);
-    return;
-  }
-  
-  try {
-    const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#0d0d1f', logging: false });
-    win.document.write('<img src="' + canvas.toDataURL('image/png') + '" style="max-width:100%;"/>');
-    win.document.title = 'EXXE Certificate — Right click → Save image';
-  } catch(e) {
-    win.close();
-    showToast('Screenshot error: ' + e.message, 'error', 6000);
   }
 }
 
