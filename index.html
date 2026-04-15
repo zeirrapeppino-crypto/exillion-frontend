@@ -1543,8 +1543,8 @@ blockquote.centerquote {
   font-family: 'Orbitron', monospace;
   font-size: 0.55rem;
   letter-spacing: 3px;
-  color: var(--cyan);
-  opacity: 0.7;
+  color: #fff;
+  opacity: 0.9;
   display: block;
   margin-bottom: 6px;
 }
@@ -5226,15 +5226,15 @@ canvas { transform: translateZ(0); }
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <button id="tierBtn1" onclick="selectTierBtn(1)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--cyan);background:rgba(0,212,255,0.1);color:var(--cyan);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier I<br/><span style="font-size:0.75rem;font-weight:700;color:var(--gold);">$0.01</span> · <span style="font-size:0.5rem;opacity:0.8;">max $100</span><br/><span style="font-size:0.5rem;color:rgba(0,212,255,0.7);">— NO BONUS —</span>
+              Tier I<br/><span style="font-size:0.75rem;font-weight:700;color:var(--gold);">$0.01</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $100</span><br/><span style="font-size:0.5rem;color:rgba(0,212,255,0.7);">— NO BONUS —</span>
             </button>
             <button id="tierBtn2" onclick="selectTierBtn(2)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(232,201,122,0.6);background:rgba(232,201,122,0.08);color:#e8c97a;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier II<br/><span style="font-size:0.75rem;font-weight:700;color:#e8c97a;text-shadow:0 0 8px rgba(232,201,122,0.5);">$0.025</span> · <span style="font-size:0.5rem;opacity:0.8;">max $500</span><br/><span style="font-size:0.7rem;color:#e8c97a;font-weight:700;">🎁 +5% BONUS</span>
+              Tier II<br/><span style="font-size:0.75rem;font-weight:700;color:#e8c97a;text-shadow:0 0 8px rgba(232,201,122,0.5);">$0.025</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $500</span><br/><span style="font-size:0.7rem;color:#e8c97a;font-weight:700;">🎁 +5% BONUS</span>
             </button>
             <button id="tierBtn3" onclick="selectTierBtn(3)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(153,69,255,0.6);background:rgba(153,69,255,0.08);color:#c4a3ff;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier III<br/><span style="font-size:0.75rem;font-weight:700;color:#c4a3ff;text-shadow:0 0 8px rgba(153,69,255,0.5);">$0.05</span> · <span style="font-size:0.5rem;opacity:0.8;">max $1,000</span><br/><span style="font-size:0.7rem;color:#c4a3ff;font-weight:700;">🎁 +10% BONUS</span>
+              Tier III<br/><span style="font-size:0.75rem;font-weight:700;color:#c4a3ff;text-shadow:0 0 8px rgba(153,69,255,0.5);">$0.05</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $1,000</span><br/><span style="font-size:0.7rem;color:#c4a3ff;font-weight:700;">🎁 +10% BONUS</span>
             </button>
           </div>
         </div>
@@ -5279,8 +5279,8 @@ canvas { transform: translateZ(0); }
           </div>
           <!-- v41: Total EXXE row — shown when bonus active -->
           <div class="calc-row" id="calcTotalRow" style="display:none;border-top:1px solid rgba(0,212,255,0.2);padding-top:6px;margin-top:2px;">
-            <span class="calc-lbl" style="color:var(--cyan);font-weight:700;">✅ TOTAL EXXE Sent to Wallet</span>
-            <span class="calc-amt" style="color:var(--cyan);font-weight:700;" id="calcTotal">—</span>
+            <span class="calc-lbl" style="color:var(--cyan);font-weight:700;font-size:0.9rem;">✅ TOTAL EXXE Sent to Wallet</span>
+            <span class="calc-amt" style="color:var(--cyan);font-weight:700;font-size:1.1rem;" id="calcTotal">—</span>
           </div>
           <div class="calc-divider"></div>
           <div class="calc-row">
