@@ -6893,9 +6893,10 @@ function calcTokens(){
       // Total row = base + bonus = yang dikirim ke wallet investor
       if(totalEl)  totalEl.textContent    = totalExxe.toLocaleString('en-US') + ' EXXE';
     } else {
-      // TIER I: tidak ada bonus, sembunyikan baris bonus dan total
+      // TIER I: tidak ada bonus, tampilkan total row dgn base amount
       if(bonusRow) bonusRow.style.display = 'none';
-      if(totalRow) totalRow.style.display = 'none';
+      if(totalRow) totalRow.style.display = 'flex';
+      if(totalEl)  totalEl.textContent    = baseExxe.toLocaleString('en-US') + ' EXXE';
     }
 
     // v48: Hanya Lock — vesting dihapus
