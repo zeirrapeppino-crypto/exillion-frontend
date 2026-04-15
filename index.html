@@ -12,7 +12,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-rpc.publicnode.com https://exillion-backend-production.up.railway.app; frame-ancestors 'none';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://raw.githubusercontent.com; connect-src 'self' https://exillion-backend-production.up.railway.app https://api.mainnet-beta.solana.com https://rpc.ankr.com https://solana-rpc.publicnode.com; frame-ancestors 'none';"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <meta name="description" content="Exillion Capital Finecosystem — EXXE Angel Investor Round. Invest in the future of mobile collateral mining on Solana. Verified on-chain, limited allocation."/>
 <meta name="theme-color" content="#010b18"/>
@@ -6504,8 +6504,10 @@ function selectToken(token) {
   calcTokens();
 }
 
-// ── FIX v15: RPC fallback list — shared by all RPC calls ─────────
-// FIX v26 BUG-7: Tambah endpoint ke-3 sebagai fallback extra saat Solana congested
+// ── FIX v15: RPC fallback list — HANYA untuk send transaction & confirmation ─
+// FIX v59-BACKEND: Balance check sudah TIDAK pakai RPC_LIST lagi.
+//   Balance sekarang fetch via backend proxy (/api/token-balance) yang pakai Helius.
+//   RPC_LIST di sini hanya dipakai oleh sendTransaction() dan waitForConfirmation().
 // FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
 // FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
@@ -6563,59 +6565,46 @@ function showToast(message, type, duration) {
   closeBtn.addEventListener('click', () => { clearTimeout(timer); remove(); });
 }
 
-// ── FIX v15 #3: Fetch USDC + USDT balances for connected wallet ──
+// ── FIX v15 #3 / v59-BACKEND: Fetch token balance via backend proxy ──
 // FIX v58-CACHE: Use -1 as sentinel — distinguishes "never loaded" from "balance is 0"
+// FIX v59-BACKEND: Balance fetch sekarang lewat backend (Helius/Alchemy) — bukan public RPC.
+//   - API key aman di server, tidak keluar ke browser.
+//   - Backend cache 20 detik — RPC call jauh lebih sedikit.
+//   - Frontend tidak lagi butuh RPC_LIST untuk balance check.
 var cachedUsdcBalance = -1;
 var cachedUsdtBalance = -1;
 
-// Fetches BOTH USDC and USDT balances in parallel
+// Fetches balance untuk token yang dipilih via backend endpoint
 // FLOW FIX v58: Never touches DOM — selectTokenAndProceed() handles all balance display
 async function fetchTokenBalances(walletAddress) {
-  const token = CFG.SELECTED_TOKEN;
-  const usdcFut = fetchTokenBalance(walletAddress, CFG.USDC_MINT);
-  const usdtFut = fetchTokenBalance(walletAddress, CFG.USDT_MINT);
-  const [usdc, usdt] = await Promise.all([usdcFut, usdtFut]);
-  cachedUsdcBalance = usdc;
-  cachedUsdtBalance = usdt;
-  return token === 'USDT' ? usdt : usdc;
+  const token = CFG.SELECTED_TOKEN || 'USDC';
+  const balance = await fetchTokenBalanceViaBackend(walletAddress, token);
+  if (token === 'USDT') { cachedUsdtBalance = balance; }
+  else                  { cachedUsdcBalance = balance; }
+  return balance;
 }
 
-async function fetchTokenBalance(walletAddress, mint) {
-  const errors = [];
-  for (let i = 0; i < RPC_LIST.length; i++) {
-    try {
-      const ctrl  = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 8000);
-      const res   = await fetch(RPC_LIST[i], {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          jsonrpc: '2.0', id: 1,
-          method: 'getTokenAccountsByOwner',
-          params: [
-            walletAddress,
-            { mint: mint },
-            { encoding: 'jsonParsed' }
-          ]
-        }),
-        signal: ctrl.signal
-      });
-      clearTimeout(timer);
-      if (!res.ok) continue;
-      const data     = await res.json();
-      const accounts = data?.result?.value || [];
-      let balance = 0;
-      accounts.forEach(acc => {
-        const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
-        if (typeof ui === 'number' && ui > 0) balance += ui;
-      });
-      return balance;
-    } catch(e) {
-      errors.push(e.message || String(e));
-      continue;
+// FIX v59-BACKEND: Ganti fetch langsung ke RPC → fetch ke backend proxy
+// Backend pakai Helius (env RPC_URL) sebagai primary — jauh lebih cepat & reliable.
+async function fetchTokenBalanceViaBackend(walletAddress, token) {
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 10000); // 10s timeout
+  try {
+    const url = CFG.API + '/api/token-balance'
+      + '?wallet=' + encodeURIComponent(walletAddress)
+      + '&token='  + encodeURIComponent(token || 'USDC');
+    const res = await fetch(url, { signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Backend returned ' + res.status);
     }
+    const data = await res.json();
+    return typeof data.balance === 'number' ? data.balance : 0;
+  } catch(e) {
+    clearTimeout(timer);
+    throw new Error('Balance fetch failed: ' + (e.message || String(e)));
   }
-  throw new Error('All RPC endpoints failed for balance check: ' + errors.slice(-1)[0]);
 }
 
 // ── Wallet provider helpers — single source of truth ──────────────
