@@ -6433,23 +6433,7 @@ function updateTierCards(tiersData) {
       if (statEl) { statEl.textContent = 'OPEN'; statEl.style.color = '#14F195'; }
     }
 
-    // v43: Update transparency section tier cards
-    const transSoldEl   = document.getElementById('trans-t' + n + '-sold');
-    const transRemEl    = document.getElementById('trans-t' + n + '-rem');
-    const transBarEl    = document.getElementById('trans-t' + n + '-bar');
-    const transStatEl   = document.getElementById('trans-t' + n + '-status');
-    if (transSoldEl) transSoldEl.textContent = fmt(sold);
-    if (transRemEl)  transRemEl.textContent  = fmt(remaining);
-    if (transBarEl)  transBarEl.style.width  = Math.max(pct, 1) + '%';
-    if (transStatEl) {
-      if (status === 'closed') {
-        transStatEl.textContent   = '● CLOSED';
-        transStatEl.style.color   = '#888888';
-      } else {
-        transStatEl.textContent   = '● OPEN';
-        transStatEl.style.color   = '#14F195';
-      }
-    }
+
   });
 }
 
@@ -6490,8 +6474,13 @@ function selectToken(token) {
     const bal = t === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
     const amt = document.getElementById('usdcBalanceAmt');
     if (amt) {
-      amt.textContent = bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + t;
-      amt.style.color = bal >= activeTier.min ? 'var(--green)' : 'var(--red)';
+      if (bal >= 0) {
+        amt.textContent = bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + t;
+        amt.style.color = bal >= activeTier.min ? 'var(--green)' : 'var(--red)';
+      } else {
+        amt.textContent = '—';
+        amt.style.color = 'var(--text-2)';
+      }
     }
   }
   const tl1 = document.getElementById('tl1Token');
@@ -6575,8 +6564,9 @@ function showToast(message, type, duration) {
 }
 
 // ── FIX v15 #3: Fetch USDC + USDT balances for connected wallet ──
-var cachedUsdcBalance = 0;
-var cachedUsdtBalance = 0;
+// FIX v58-CACHE: Use -1 as sentinel — distinguishes "never loaded" from "balance is 0"
+var cachedUsdcBalance = -1;
+var cachedUsdtBalance = -1;
 
 // Fetches BOTH USDC and USDT balances in parallel
 // FLOW FIX v58: Never touches DOM — selectTokenAndProceed() handles all balance display
@@ -6591,6 +6581,7 @@ async function fetchTokenBalances(walletAddress) {
 }
 
 async function fetchTokenBalance(walletAddress, mint) {
+  const errors = [];
   for (let i = 0; i < RPC_LIST.length; i++) {
     try {
       const ctrl  = new AbortController();
@@ -6615,15 +6606,16 @@ async function fetchTokenBalance(walletAddress, mint) {
       const accounts = data?.result?.value || [];
       let balance = 0;
       accounts.forEach(acc => {
-        // BUG FIX v16 #10: uiAmount bisa null (bukan undefined) saat balance = 0.
-        // `if (ui)` akan skip nilai 0 yang valid. Gunakan typeof check eksplisit.
         const ui = acc?.account?.data?.parsed?.info?.tokenAmount?.uiAmount;
         if (typeof ui === 'number' && ui > 0) balance += ui;
       });
       return balance;
-    } catch(e) { /* try next RPC */ }
+    } catch(e) {
+      errors.push(e.message || String(e));
+      continue;
+    }
   }
-  return 0;
+  throw new Error('All RPC endpoints failed for balance check: ' + errors.slice(-1)[0]);
 }
 
 // ── Wallet provider helpers — single source of truth ──────────────
@@ -6810,8 +6802,9 @@ async function disconnectWallet() {
   connectedWallet  = null;
   connectedAddress = null;
   // FIX BUG-8: Reset both cached balances on disconnect
-  cachedUsdcBalance = 0;
-  cachedUsdtBalance = 0;
+  // FIX v58-CACHE: Reset to -1 (sentinel) on disconnect
+  cachedUsdcBalance = -1;
+  cachedUsdtBalance = -1;
   // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
   // is shown again for each new connection/transaction session. This ensures the user
   // always re-acknowledges risks before a new transaction, not just once per page load.
@@ -7466,14 +7459,14 @@ function goStep(n){
 // FLOW FIX v58: Called when user selects token from the tokenSelectBar.
 // Shows balance, then reveals the buyPanel (tier + amount form).
 // FLOW FIX v58-BAL: If balance < 10, blocks progression and shows warning.
-// CRITICAL FIX: Ensure fresh balance is loaded if cache is stale (balance = 0 means not yet loaded)
+// FIX v58-CACHE: Always fetch fresh balance on token click (never rely on stale cache).
+// FIX v58-THROW: fetchTokenBalance now throws on RPC failure so retry works.
 async function selectTokenAndProceed(token) {
   selectToken(token);
 
   const balBar = document.getElementById('usdcBalanceBar');
   if (balBar) {
     balBar.style.display = 'flex';
-    // Show loading state while fetching
     const amtEl = document.getElementById('usdcBalanceAmt');
     if (amtEl) {
       amtEl.textContent = 'Loading...';
@@ -7481,63 +7474,54 @@ async function selectTokenAndProceed(token) {
     }
   }
 
-  // Default to Tier 1 if no tier selected yet (tier is chosen inside buyPanel)
   const activeTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
   const minAmount = activeTier.min;
 
-  // Check cached balance first, then fetch fresh if cache is stale (balance = 0)
-  let balance = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
-  
-  // If balance cache is stale (still 0), fetch fresh balance
-  if (balance === 0 && connectedAddress) {
-    try {
-      balance = await fetchTokenBalances(connectedAddress);
-    } catch(e) {
-      // Retry once on failure
+  let balance = -1;
+
+  if (connectedAddress) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
       try {
         balance = await fetchTokenBalances(connectedAddress);
-      } catch(e2) {
-        const amtEl2 = document.getElementById('usdcBalanceAmt');
-        if (amtEl2) { amtEl2.textContent = 'Error loading balance'; amtEl2.style.color = 'var(--red)'; }
-        showToast('Failed to load ' + token + ' balance. Please check your connection and try again.', 'error', 10000);
-        return;
+        break;
+      } catch(e) {
+        if (attempt === 2) {
+          const amtEl2 = document.getElementById('usdcBalanceAmt');
+          if (amtEl2) { amtEl2.textContent = 'Error loading balance'; amtEl2.style.color = 'var(--red)'; }
+          showToast('Failed to load ' + token + ' balance. Please check your internet and try again.', 'error', 10000);
+          return;
+        }
       }
     }
   }
 
-  // Now display the verified balance
   const amtEl = document.getElementById('usdcBalanceAmt');
   if (amtEl) {
-    if (balance > 0) {
+    if (balance >= 0) {
       amtEl.textContent = balance.toLocaleString('en-US', {
         minimumFractionDigits: 2, maximumFractionDigits: 2
       }) + ' ' + token;
       amtEl.style.color = balance >= minAmount ? 'var(--green)' : 'var(--red)';
     } else {
-      amtEl.textContent = '0.00 ' + token;
-      amtEl.style.color = 'var(--red)';
+      amtEl.textContent = '—';
+      amtEl.style.color = 'var(--text-2)';
     }
   }
 
-  // FLOW FIX v58-BAL: Block if balance below minimum ($10)
   if (balance < minAmount) {
     showToast(
       'Insufficient ' + token + ' balance. Minimum investment is $' + minAmount.toFixed(2) + ' ' + token + '. Please top up your wallet and try again.',
       'error', 12000
     );
-    // Stay on step 2 — do not advance, do not show buyPanel
     if (amtEl) amtEl.style.color = 'var(--red)';
     return;
   }
 
-  // Balance OK — advance to step 3 (Balance confirmed)
   goStep(3);
 
-  // Now show the buy panel (tier selector + amount input)
   const bp = document.getElementById('buyPanel');
   if (bp) bp.style.display = 'block';
 
-  // Scroll to buyPanel
   setTimeout(function() {
     const bp2 = document.getElementById('buyPanel');
     if (bp2) bp2.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7652,11 +7636,12 @@ function checkReady(){
 
 // FLOW FIX v58-BAL-2: Async version of checkReady — fetches fresh balance before validating.
 // Called by executeBuy before showing disclaimer and after acceptance.
+// FIX v58-CACHE: Check sentinel (-1) instead of 0 to detect "never loaded"
 async function checkReadyWithBalance(){
   if(!connectedAddress) return;
   const token = getSelectedToken();
   const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
-  if(cachedBal === 0){
+  if(cachedBal < 0){
     await fetchTokenBalances(connectedAddress);
   }
   checkReady();
@@ -8176,6 +8161,8 @@ function resetAfterBuy() {
   goStep(4);
   // Refresh balance untuk tampilkan saldo terkini
   if (connectedAddress) fetchTokenBalances(connectedAddress);
+  // FIX v58-CAP: Refresh wallet cap bar agar remaining cap akurat setelah purchase
+  if (connectedAddress) fetchWalletStatus(connectedAddress);
   // BUG FIX: Proper scroll calculation with bounds check
   const formEl = document.getElementById('angelWalletForm');
   if (formEl) {
@@ -9254,39 +9241,23 @@ function startGoldNetwork(canvasId, isSplash) {
   // FIX v37 SYNC-1: updateUI menerima optional exxeSold dari /api/stats backend.
   // Jika tersedia, gunakan nilai on-chain yang dihitung per-tier (akurat).
   // Jika tidak tersedia (fallback on-chain mode), estimasi dengan TIER1_PRICE.
+  // FIX v58: Total raised display removed — only per-tier sold + investor count are shown.
+  // updateUI kept minimal: pulse live dots only. Per-tier data is handled by updateTierCards().
   function updateUI(totalUsdc, exxeSoldOnChain) {
+    // High watermark — prevents regression if backend returns stale lower value
     if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
     else _highWatermark = totalUsdc;
 
-    // Gunakan exxeSold dari backend jika ada, fallback ke estimasi TIER1_PRICE
-    const exxeSold = (typeof exxeSoldOnChain === 'number' && exxeSoldOnChain > 0)
-      ? exxeSoldOnChain
-      : totalUsdc / TIER1_PRICE;
-    const pctUsdc  = Math.min((totalUsdc / USDC_TARGET) * 100, 100);
-    const pctExxe  = Math.min((exxeSold  / EXXE_TARGET) * 100, 100);
-
-    const elExxeSold   = document.getElementById('rt-exxe-sold');
-    const elExxeBar    = document.getElementById('rt-exxe-bar');
-    const elUsdcRaised = document.getElementById('rt-usdc-raised');
-    const elUsdcBar    = document.getElementById('rt-usdc-bar');
-    // FIX v38 REVERT-1: splash2-raised dihapus dari splash screen — elemen tidak ada, getElementById returns null (aman)
-    const elSplash2    = document.getElementById('splash2-raised');
-
-    if (elExxeSold)   elExxeSold.textContent  = fmt(exxeSold, 0);
-    if (elExxeBar)    elExxeBar.style.width    = Math.max(pctExxe, 1) + '%';
-    if (elUsdcRaised) elUsdcRaised.textContent = fmt(totalUsdc);
-    if (elUsdcBar)    elUsdcBar.style.width    = Math.max(pctUsdc, 1) + '%';
-    if (elSplash2)    elSplash2.textContent    = '$' + fmt(totalUsdc);
-
+    // Pulse live indicator dots
     document.querySelectorAll('.rt-live-dot').forEach(function(d) {
       d.style.background = '#14F195';
       setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
     });
 
+    // Persist to session storage (used by loadCachedFunding on page reload)
     try {
       sessionStorage.setItem(SESSION_KEY,  String(totalUsdc));
       sessionStorage.setItem(SESSION_TS,   String(Date.now()));
-      // FIX v37 SYNC-1: persist exxeSold so page reload shows correct counter
       if (typeof exxeSoldOnChain === 'number' && exxeSoldOnChain > 0) {
         sessionStorage.setItem(SESSION_EXXE, String(exxeSoldOnChain));
       }
