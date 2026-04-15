@@ -5807,11 +5807,13 @@ canvas { transform: translateZ(0); }
       <div class="buy-steps">
         <div class="bstep active" id="step1"><div class="bstep-num">1</div><div class="bstep-lbl">Connect</div></div>
         <div class="step-line"></div>
-        <div class="bstep" id="step2"><div class="bstep-num">2</div><div class="bstep-lbl">Amount</div></div>
+        <div class="bstep" id="step2"><div class="bstep-num">2</div><div class="bstep-lbl">Token</div></div>
         <div class="step-line"></div>
-        <div class="bstep" id="step3"><div class="bstep-num">3</div><div class="bstep-lbl">Confirm</div></div>
+        <div class="bstep" id="step3"><div class="bstep-num">3</div><div class="bstep-lbl">Balance</div></div>
         <div class="step-line"></div>
-        <div class="bstep" id="step4"><div class="bstep-num">4</div><div class="bstep-lbl">Done</div></div>
+        <div class="bstep" id="step4"><div class="bstep-num">4</div><div class="bstep-lbl">Amount</div></div>
+        <div class="step-line"></div>
+        <div class="bstep" id="step5"><div class="bstep-num">5</div><div class="bstep-lbl">Done</div></div>
       </div>
 
       <!-- WALLET CONNECT -->
@@ -5840,19 +5842,23 @@ canvas { transform: translateZ(0); }
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- FIX v15: Token Balance display — shown after wallet connect -->
+      <!-- FLOW FIX v58: Token selector — appears after wallet connect, BEFORE buyPanel -->
+      <div id="tokenSelectBar" style="display:none;margin-bottom:1rem;">
+        <div class="form-field" style="margin-bottom:0.6rem;">
+          <label class="field-label" style="margin-bottom:6px;">Select Your Token</label>
+          <div style="display:flex;gap:10px;">
+            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')" style="flex:1;padding:10px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;transition:all 0.2s;">USDC</button>
+            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')" style="flex:1;padding:10px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;transition:all 0.2s;">USDT</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIX v15: Token Balance display — shown AFTER token is selected -->
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
         <span style="color:var(--text-2);">YOUR <span id="tokenBalanceLabel">USDC</span> BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
-        <div class="form-field" style="margin-bottom:0.8rem;">
-          <label class="field-label" style="margin-bottom:6px;">Select Your Token</label>
-          <div style="display:flex;gap:10px;margin-bottom:1rem;">
-            <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDC</button>
-            <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDT</button>
-          </div>
-        </div>
         <!-- FIX v40 TIER-1: Tier selector di buy form — pilih tier sebelum isi amount -->
         <div class="form-field" style="margin-bottom:0.8rem;">
           <label class="field-label" style="margin-bottom:6px;">Select Your Tier</label>
@@ -6572,10 +6578,9 @@ var cachedUsdcBalance = 0;
 var cachedUsdtBalance = 0;
 
 // Fetches BOTH USDC and USDT balances in parallel
+// FLOW FIX v58: No longer auto-shows balance bar — shown by selectTokenAndProceed() after user picks token
 async function fetchTokenBalances(walletAddress) {
-  const bar = document.getElementById('usdcBalanceBar');
   const amt = document.getElementById('usdcBalanceAmt');
-  if (bar) bar.style.display = 'flex';
   if (amt) amt.textContent = 'Loading...';
 
   const token = CFG.SELECTED_TOKEN;
@@ -6591,7 +6596,7 @@ async function fetchTokenBalances(walletAddress) {
     }) + ' ' + token;
     amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
   }
-  checkReady();
+  // FLOW FIX v58: Don't call checkReady() here — buyPanel not visible yet
   return balance;
 }
 
@@ -6694,24 +6699,22 @@ function updateModal(){
 }
 
 function acceptDisclaimer(){
-  // FIX v31 E: Null-guard eksplisit — setiap checkbox dicek keberadaannya dulu
   const allChecked = ['mc1','mc2','mc3','mc4','mc5','mc6'].every(id => {
     const el = document.getElementById(id);
     return el && el.checked;
   });
   if (!allChecked) return;
   disclaimerAccepted = true;
-  checkReady();
+  // FLOW FIX v58-BAL-2: Fetch fresh balance before proceeding so .ready class is set correctly
+  checkReadyWithBalance();
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
   setTimeout(()=>{
     overlay.classList.remove('active');
     overlay.style.opacity='';
     overlay.style.transition='';
-    document.body.style.overflow=''; // FIX v26 BUG-5: restore scroll
-    // FIX v59 BUG-DISCLAIMER: Setelah disclaimer diterima, langsung lanjut executeBuy().
-    // User sudah klik Pay sebelumnya — tidak perlu klik lagi.
-    // Aman: _isBuying sudah false, disclaimerAccepted sudah true.
+    document.body.style.overflow='';
+    // executeBuy() will now check .ready class which should be set by checkReadyWithBalance()
     executeBuy();
   },300);
 }
@@ -6747,10 +6750,16 @@ function setConnected(name, address) {
     if (txt) txt.textContent = name + ' Connected: ' + short;
   }
 
-  // Show buy panel
+  // FLOW FIX v58: Show token selector FIRST — BEFORE buyPanel
+  const tsb = document.getElementById('tokenSelectBar');
+  if (tsb) tsb.style.display = 'block';
+  // Hide buyPanel until token is selected
   const bp = document.getElementById('buyPanel');
-  if (bp) bp.style.display = 'block';
+  if (bp) bp.style.display = 'none';
   goStep(2);
+
+  // Pre-fetch BOTH token balances in background (no UI yet)
+  fetchTokenBalances(address);
 
   // Update buttons
   const pBtn = document.getElementById('phantomBtn');
@@ -6842,6 +6851,9 @@ async function disconnectWallet() {
   if (ws) ws.style.display = 'none';
   const bp = document.getElementById('buyPanel');
   if (bp) bp.style.display = 'none';
+  // FLOW FIX v58: also hide token selector bar
+  const tsb = document.getElementById('tokenSelectBar');
+  if (tsb) tsb.style.display = 'none';
   // FIX v15: also hide balance bar
   const bb = document.getElementById('usdcBalanceBar');
   if (bb) bb.style.display = 'none';
@@ -7452,14 +7464,59 @@ async function scrollToWallet() {
 }
 
 // --- STEPS ---------------------------------------------------
+// FLOW FIX v58: Updated to 5 steps (Connect → Token → Balance → Amount → Done)
 function goStep(n){
-  for(let i=1;i<=4;i++){
+  for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
     if(!el) continue;
     el.classList.remove('active','done');
     if(i<n) el.classList.add('done');
     if(i===n) el.classList.add('active');
   }
+}
+
+// FLOW FIX v58: Called when user selects token from the tokenSelectBar.
+// Shows balance, then reveals the buyPanel (tier + amount form).
+// FLOW FIX v58-BAL: If balance < 10, blocks progression and shows warning.
+async function selectTokenAndProceed(token) {
+  selectToken(token);
+
+  const balBar = document.getElementById('usdcBalanceBar');
+  if (balBar) balBar.style.display = 'flex';
+
+  // Display the balance for the selected token (balances already cached from setConnected)
+  const balance = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  const amtEl = document.getElementById('usdcBalanceAmt');
+  if (amtEl) {
+    amtEl.textContent = balance.toLocaleString('en-US', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    }) + ' ' + token;
+    amtEl.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
+  }
+
+  // FLOW FIX v58-BAL: Block if balance below minimum ($10)
+  if (balance < tier().min) {
+    showToast(
+      'Insufficient ' + token + ' balance. Minimum investment is $' + tier().min.toFixed(2) + ' ' + token + '. Please top up your wallet and try again.',
+      'error', 12000
+    );
+    // Stay on step 2 — do not advance, do not show buyPanel
+    amtEl.style.color = 'var(--red)';
+    return;
+  }
+
+  // Balance OK — advance to step 3 (Balance confirmed)
+  goStep(3);
+
+  // Now show the buy panel (tier selector + amount input)
+  const bp = document.getElementById('buyPanel');
+  if (bp) bp.style.display = 'block';
+
+  // Scroll to buyPanel
+  setTimeout(function() {
+    const bp2 = document.getElementById('buyPanel');
+    if (bp2) bp2.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 200);
 }
 
 // --- CALCULATOR ----------------------------------------------
@@ -7545,16 +7602,15 @@ function calcTokens(){
 
 function checkReady(){
   const t=tier();
-  // fc1/fc2/fc3 are now always pre-checked (hidden) — gate moved to Risk Disclaimer modal
-  // v19: allow decimals, round to 2dp
-  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   const btn=document.getElementById('buyBtn');
   if(!btn) return;
   const token = getSelectedToken();
   const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   const hasEnoughBalance = !connectedAddress || cachedBal >= usdc;
   if(usdc>=t.min&&usdc<=t.max&&connectedAddress&&hasEnoughBalance){
     btn.classList.add('ready');
+    btn.disabled = false;
     const baseExxe  = Math.round(usdc/t.price);
     const bonusExxe = Math.round(baseExxe * ((t.bonusPct||0) / 100));
     const totalExxe = baseExxe + bonusExxe;
@@ -7562,17 +7618,32 @@ function checkReady(){
     const exxeFmt = totalExxe.toLocaleString('en-US');
     const bonusTxt = bonusExxe > 0 ? ' (incl. +' + bonusExxe.toLocaleString('en-US') + ' bonus)' : '';
     const _bt2=document.getElementById('buyBtnText'); if(_bt2) _bt2.textContent='Pay $'+usdcFmt+' '+token+' — Receive '+exxeFmt+' EXXE'+bonusTxt;
-    goStep(3);
+    goStep(4);
   } else {
     btn.classList.remove('ready');
     const _bt3=document.getElementById('buyBtnText'); if(_bt3) _bt3.textContent='Pay with '+token+' — Receive EXXE';
   }
 }
 
+// FLOW FIX v58-BAL-2: Async version of checkReady — fetches fresh balance before validating.
+// Called by executeBuy before showing disclaimer and after acceptance.
+async function checkReadyWithBalance(){
+  if(!connectedAddress) return;
+  const token = getSelectedToken();
+  const cachedBal = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  if(cachedBal === 0){
+    await fetchTokenBalances(connectedAddress);
+  }
+  checkReady();
+}
+
 // --- EXECUTE BUY — Cek disclaimer + USDC balance dulu --------
 let _isBuying = false;
 async function executeBuy(){
-  // BUG-6 FIX: Reset _isBuying di SEMUA early return untuk mencegah form terkunci permanen
+  // FLOW FIX v58-BAL-2: Fetch fresh balance before checking .ready class.
+  // This fixes the race condition where cachedBal=0 because fetchTokenBalances()
+  // hasn't finished yet when user quickly clicks Pay after connecting wallet.
+  await checkReadyWithBalance();
   const _bb = document.getElementById('buyBtn');
   if(!_bb || !_bb.classList.contains('ready')) {
     _isBuying = false;
@@ -7598,7 +7669,8 @@ async function executeBuy(){
     });
     const _cc=document.getElementById('checkCount'); if(_cc) _cc.textContent='0';
     const btn = document.getElementById('agreeBtn');
-    if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm '+(6-checked)+' remaining item(s)'; }
+    const _checkedCount = ['mc1','mc2','mc3','mc4','mc5','mc6'].filter(id=>{ const el=document.getElementById(id); return el&&el.checked; }).length;
+    if(btn){ btn.classList.remove('ready'); btn.textContent='Please confirm '+(6-_checkedCount)+' remaining item(s)'; }
     const _ov = document.getElementById('disclaimerOverlay');
     if(_ov){
       _ov.classList.add('active');
@@ -7724,7 +7796,7 @@ async function proceedBuy(){
       buildRes = await fetch(`${CFG.API}/build-split-tx`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey }),
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: usdc, tier: _capturedTier, token, idempotencyKey: _idempKey }),
         signal:  _buildCtrl.signal,
       });
     } catch(_be) {
@@ -7844,7 +7916,7 @@ async function proceedBuy(){
       verifyRes = await fetch(CFG.API + '/verify-payment', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: CFG.TIER, token, idempotencyKey: _idempKey }),
+        body:    JSON.stringify({ txSignature, investorWallet: connectedAddress, usdcAmount: usdc, tier: _capturedTier, token, idempotencyKey: _idempKey }),
         signal:  _verifyCtrl.signal,
       });
     } catch(_ve) {
@@ -7880,7 +7952,7 @@ async function proceedBuy(){
       sendRes = await fetch(CFG.API + '/send-exxe', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: CFG.TIER, txSignature, token, idempotencyKey: _idempKey }),
+        body:    JSON.stringify({ investorWallet: connectedAddress, usdcAmount: actualAmount, tier: _capturedTier, txSignature, token, idempotencyKey: _idempKey }),
         signal:  _sendCtrl.signal,
       });
     } catch(_se) {
@@ -7909,7 +7981,7 @@ async function proceedBuy(){
     await txStep(4, 'done', _doneLabel);
 
     const confirmedBonus = typeof sendData.exxeBonus === 'number' ? sendData.exxeBonus : _bonusExxe;
-    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token, confirmedBonus, CFG.TIER); // FIX v51: pass tier at tx time
+    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token, confirmedBonus, _capturedTier); // FLOW FIX v58: use _capturedTier for consistency
     _isBuying = false;
 
   } catch(e) {
@@ -7927,10 +7999,10 @@ async function proceedBuy(){
     if (e.code !== 4001) {
       showToast('Transaction failed: ' + (e.message || 'Please try again.'), 'error', 10000);
     }
-    // BUG FIX: Only go back to step 2 if currently at step 3 - don't reset if already progressed
+    // FLOW FIX v58: After error, return to step 4 (Amount) if already past that point
     const currStep = document.querySelector('.bstep.active');
     const currStepNum = currStep ? parseInt(currStep.id.replace('step','')) : 0;
-    if (currStepNum >= 3) goStep(3);
+    if (currStepNum >= 4) goStep(4);
   } finally {
     // FIX v29 MOB-3: ALWAYS reset _isBuying via finally.
     // Tanpa ini, exception antara _isBuying=true dan try{} menyebabkan form terkunci permanen.
@@ -8075,10 +8147,10 @@ function resetAfterBuy() {
     const bt = document.getElementById('buyBtnText');
     if (bt) bt.textContent = 'Pay with ' + getSelectedToken() + ' — Receive EXXE';
   }
-  // Disclaimer sudah diterima di sesi ini, tidak perlu ulang
-  goStep(2);
+  // FLOW FIX v58: Wallet still connected, token still selected — go back to step 4 (Amount)
+  goStep(4);
   // Refresh balance untuk tampilkan saldo terkini
-  if (connectedAddress) fetchUsdcBalance(connectedAddress);
+  if (connectedAddress) fetchTokenBalances(connectedAddress);
   // BUG FIX: Proper scroll calculation with bounds check
   const formEl = document.getElementById('angelWalletForm');
   if (formEl) {
@@ -8109,13 +8181,11 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   // FIX v52 BUG-2: Scroll to successPanel so mobile users see it without manual scroll
   const _spEl = document.getElementById('successPanel');
   if (_spEl) setTimeout(function(){ _spEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
-  // Tandai semua 3 step yang ada di HTML sebagai selesai.
-  for(let i=1;i<=3;i++){
+  // FLOW FIX v58: Mark all 5 steps as done, step 5 as active (Done)
+  for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
     if(el){ el.classList.remove('active'); el.classList.add('done'); }
   }
-  const step4=document.getElementById('step4');
-  if(step4){ step4.classList.remove('active'); step4.classList.add('done'); }
 
   const short   = wallet.slice(0,6)+'...'+wallet.slice(-6);
   const txShort = tx ? tx.slice(0,22)+'...' : 'N/A';
@@ -8199,7 +8269,9 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
 
   // Show Genesis Certificate modal after short delay (let success panel render first)
   // FIX v51: pass tierNum (captured at tx time) instead of CFG.TIER global
-  // BUG FIX: Increased delay to 1500ms to ensure scroll animation completes before modal locks overflow
+  // FLOW FIX v58-STAT: Immediately refresh live counters so investor count & EXXE remaining update right away
+  if (typeof window._exxeRefreshInvestorCount === 'function') window._exxeRefreshInvestorCount();
+  if (typeof window._exxeRefreshFunding === 'function') window._exxeRefreshFunding();
   setTimeout(function() {
     if (typeof showCertificate === 'function') {
       showCertificate(usdc, exxe, wallet, tx, token, bonusExxe, tierNum);
@@ -8970,6 +9042,11 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    // Expose refresh function so showSuccess() can trigger immediate update
+    window._exxeRefreshInvestorCount = function() {
+      _isFetching = false;
+      fetchInvestorCount();
+    };
     // Loading skeleton — tampilkan placeholder sebelum data backend siap
     ['1','2','3'].forEach(n => {
       const rem = document.getElementById('tier-rem-exxe-' + n);
@@ -9296,6 +9373,11 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   document.addEventListener('DOMContentLoaded', function() {
+    // Expose refresh function so showSuccess() can trigger immediate update
+    window._exxeRefreshFunding = function() {
+      _fetchFundingActive = false;
+      fetchFunding();
+    };
     // Loading skeleton — tampilkan placeholder sebelum data backend siap
     ['1','2','3'].forEach(n => {
       const rtRem = document.getElementById('rt-t' + n + '-remaining');
