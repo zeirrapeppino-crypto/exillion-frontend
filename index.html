@@ -6748,9 +6748,6 @@ function setConnected(name, address) {
   if (bp) bp.style.display = 'none';
   goStep(2);
 
-  // Pre-fetch BOTH token balances in background (no UI yet)
-  fetchTokenBalances(address);
-
   // Update buttons
   const pBtn = document.getElementById('phantomBtn');
   const sBtn = document.getElementById('solflareBtn');
@@ -7469,24 +7466,57 @@ function goStep(n){
 // FLOW FIX v58: Called when user selects token from the tokenSelectBar.
 // Shows balance, then reveals the buyPanel (tier + amount form).
 // FLOW FIX v58-BAL: If balance < 10, blocks progression and shows warning.
+// CRITICAL FIX: Ensure fresh balance is loaded if cache is stale (balance = 0 means not yet loaded)
 async function selectTokenAndProceed(token) {
   selectToken(token);
 
   const balBar = document.getElementById('usdcBalanceBar');
-  if (balBar) balBar.style.display = 'flex';
+  if (balBar) {
+    balBar.style.display = 'flex';
+    // Show loading state while fetching
+    const amtEl = document.getElementById('usdcBalanceAmt');
+    if (amtEl) {
+      amtEl.textContent = 'Loading...';
+      amtEl.style.color = 'var(--text-2)';
+    }
+  }
 
   // Default to Tier 1 if no tier selected yet (tier is chosen inside buyPanel)
   const activeTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
   const minAmount = activeTier.min;
 
-  // Display the balance for the selected token (balances already cached from setConnected)
-  const balance = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  // Check cached balance first, then fetch fresh if cache is stale (balance = 0)
+  let balance = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
+  
+  // If balance cache is stale (still 0), fetch fresh balance
+  if (balance === 0 && connectedAddress) {
+    try {
+      balance = await fetchTokenBalances(connectedAddress);
+    } catch(e) {
+      // Retry once on failure
+      try {
+        balance = await fetchTokenBalances(connectedAddress);
+      } catch(e2) {
+        const amtEl2 = document.getElementById('usdcBalanceAmt');
+        if (amtEl2) { amtEl2.textContent = 'Error loading balance'; amtEl2.style.color = 'var(--red)'; }
+        showToast('Failed to load ' + token + ' balance. Please check your connection and try again.', 'error', 10000);
+        return;
+      }
+    }
+  }
+
+  // Now display the verified balance
   const amtEl = document.getElementById('usdcBalanceAmt');
   if (amtEl) {
-    amtEl.textContent = balance.toLocaleString('en-US', {
-      minimumFractionDigits: 2, maximumFractionDigits: 2
-    }) + ' ' + token;
-    amtEl.style.color = balance >= minAmount ? 'var(--green)' : 'var(--red)';
+    if (balance > 0) {
+      amtEl.textContent = balance.toLocaleString('en-US', {
+        minimumFractionDigits: 2, maximumFractionDigits: 2
+      }) + ' ' + token;
+      amtEl.style.color = balance >= minAmount ? 'var(--green)' : 'var(--red)';
+    } else {
+      amtEl.textContent = '0.00 ' + token;
+      amtEl.style.color = 'var(--red)';
+    }
   }
 
   // FLOW FIX v58-BAL: Block if balance below minimum ($10)
