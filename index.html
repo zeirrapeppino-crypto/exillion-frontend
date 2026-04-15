@@ -6458,6 +6458,8 @@ function getSelectedMint() { return CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MIN
 function selectToken(token) {
   CFG.SELECTED_TOKEN = token;
   const t = getSelectedToken();
+  // Default to Tier 1 if no tier selected yet (tier chosen inside buyPanel)
+  const activeTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
   const balLbl = document.getElementById('tokenBalanceLabel');
@@ -6466,9 +6468,9 @@ function selectToken(token) {
   if (cur) cur.textContent = t;
   if (balLbl) balLbl.textContent = t;
   if (inp) {
-    inp.placeholder = 'Min $' + tier().min.toFixed(2) + ' — Max $' + tier().max.toFixed(2) + ' ' + t;
-    inp.min  = tier().min;
-    inp.max  = tier().max;
+    inp.placeholder = 'Min $' + activeTier.min.toFixed(2) + ' — Max $' + activeTier.max.toFixed(2) + ' ' + t;
+    inp.min  = activeTier.min;
+    inp.max  = activeTier.max;
     inp.step = '0.01';
   }
   // FIX v26 BUG-2: Null-guard — elemen mungkin belum ada saat dipanggil di mobile
@@ -6489,7 +6491,7 @@ function selectToken(token) {
     const amt = document.getElementById('usdcBalanceAmt');
     if (amt) {
       amt.textContent = bal.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' ' + t;
-      amt.style.color = bal >= tier().min ? 'var(--green)' : 'var(--red)';
+      amt.style.color = bal >= activeTier.min ? 'var(--green)' : 'var(--red)';
     }
   }
   const tl1 = document.getElementById('tl1Token');
@@ -6501,8 +6503,7 @@ function selectToken(token) {
   // FIX v40 TIER-2: Update fc1 max label dengan token terpilih
   const _mc6Max = document.getElementById('mc6MaxLabel');
   if (_mc6Max) {
-    const _t6 = tier(); const _tm6 = _t6 ? _t6.max : 100;
-    _mc6Max.textContent = '$' + _tm6.toFixed(2) + ' ' + t;
+    _mc6Max.textContent = '$' + activeTier.max.toFixed(2) + ' ' + t;
   }
   const _fc1Max = document.getElementById('fc1MaxLabel');
   if (_fc1Max) {
@@ -6578,26 +6579,15 @@ var cachedUsdcBalance = 0;
 var cachedUsdtBalance = 0;
 
 // Fetches BOTH USDC and USDT balances in parallel
-// FLOW FIX v58: No longer auto-shows balance bar — shown by selectTokenAndProceed() after user picks token
+// FLOW FIX v58: Never touches DOM — selectTokenAndProceed() handles all balance display
 async function fetchTokenBalances(walletAddress) {
-  const amt = document.getElementById('usdcBalanceAmt');
-  if (amt) amt.textContent = 'Loading...';
-
   const token = CFG.SELECTED_TOKEN;
   const usdcFut = fetchTokenBalance(walletAddress, CFG.USDC_MINT);
   const usdtFut = fetchTokenBalance(walletAddress, CFG.USDT_MINT);
   const [usdc, usdt] = await Promise.all([usdcFut, usdtFut]);
   cachedUsdcBalance = usdc;
   cachedUsdtBalance = usdt;
-  const balance = token === 'USDT' ? usdt : usdc;
-  if (amt) {
-    amt.textContent = balance.toLocaleString('en-US', {
-      minimumFractionDigits: 2, maximumFractionDigits: 2
-    }) + ' ' + token;
-    amt.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
-  }
-  // FLOW FIX v58: Don't call checkReady() here — buyPanel not visible yet
-  return balance;
+  return token === 'USDT' ? usdt : usdc;
 }
 
 async function fetchTokenBalance(walletAddress, mint) {
@@ -6871,9 +6861,10 @@ async function disconnectWallet() {
   if (inp) {
     inp.value = '';
     // FIX v27 #2: Reset placeholder ke Tier I USDC default saat disconnect
-    inp.placeholder = 'Min $' + tier().min.toFixed(2) + ' — Max $' + tier().max.toFixed(2) + ' USDC';
-    inp.min  = String(tier().min);
-    inp.max  = String(tier().max);
+    const resetTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
+    inp.placeholder = 'Min $' + resetTier.min.toFixed(2) + ' — Max $' + resetTier.max.toFixed(2) + ' USDC';
+    inp.min  = String(resetTier.min);
+    inp.max  = String(resetTier.max);
   }
   const cb = document.getElementById('calcBox');
   if (cb) cb.style.display = 'none';
@@ -7484,6 +7475,10 @@ async function selectTokenAndProceed(token) {
   const balBar = document.getElementById('usdcBalanceBar');
   if (balBar) balBar.style.display = 'flex';
 
+  // Default to Tier 1 if no tier selected yet (tier is chosen inside buyPanel)
+  const activeTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
+  const minAmount = activeTier.min;
+
   // Display the balance for the selected token (balances already cached from setConnected)
   const balance = token === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
   const amtEl = document.getElementById('usdcBalanceAmt');
@@ -7491,17 +7486,17 @@ async function selectTokenAndProceed(token) {
     amtEl.textContent = balance.toLocaleString('en-US', {
       minimumFractionDigits: 2, maximumFractionDigits: 2
     }) + ' ' + token;
-    amtEl.style.color = balance >= tier().min ? 'var(--green)' : 'var(--red)';
+    amtEl.style.color = balance >= minAmount ? 'var(--green)' : 'var(--red)';
   }
 
   // FLOW FIX v58-BAL: Block if balance below minimum ($10)
-  if (balance < tier().min) {
+  if (balance < minAmount) {
     showToast(
-      'Insufficient ' + token + ' balance. Minimum investment is $' + tier().min.toFixed(2) + ' ' + token + '. Please top up your wallet and try again.',
+      'Insufficient ' + token + ' balance. Minimum investment is $' + minAmount.toFixed(2) + ' ' + token + '. Please top up your wallet and try again.',
       'error', 12000
     );
     // Stay on step 2 — do not advance, do not show buyPanel
-    amtEl.style.color = 'var(--red)';
+    if (amtEl) amtEl.style.color = 'var(--red)';
     return;
   }
 
