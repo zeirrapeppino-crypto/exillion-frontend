@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v58_TT_Final
+<!-- Exillion Capital Finecosystem — v59_TT_Fixed
+     FIX v59 BUG-DISCLAIMER [CRITICAL]: Tombol Pay terkunci permanen setelah modal disclaimer muncul.
+       - executeBuy(): tambah `_buyBtn.disabled = false` sebelum return di blok disclaimerAccepted=false
+       - acceptDisclaimer(): setelah modal tutup, otomatis lanjut executeBuy() tanpa user harus klik Pay lagi
      FIX v53: Removed Screenshot button, keep Save Certificate only.
      FIX v52 BUG-1 [CRITICAL]: html2canvas load verification + fallback URL.
      FIX v52 BUG-2 [CRITICAL]: showSuccess() — mobile scroll + mob-invest-bar not hidden.
@@ -6706,9 +6709,11 @@ function acceptDisclaimer(){
     overlay.style.opacity='';
     overlay.style.transition='';
     document.body.style.overflow=''; // FIX v26 BUG-5: restore scroll
+    // FIX v59 BUG-DISCLAIMER: Setelah disclaimer diterima, langsung lanjut executeBuy().
+    // User sudah klik Pay sebelumnya — tidak perlu klik lagi.
+    // Aman: _isBuying sudah false, disclaimerAccepted sudah true.
+    executeBuy();
   },300);
-  // FIX CRITICAL #1: Removed auto-trigger of proceedBuy(). Blockchain transactions
-  // must ONLY be initiated by an explicit user click — never auto-fired after modal close.
 }
 
 function declineDisclaimer(){
@@ -7586,6 +7591,8 @@ async function executeBuy(){
   // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
     _isBuying = false; // reset: kita belum mulai transaksi
+    // FIX v59 BUG-DISCLAIMER: Re-enable button agar bisa diklik lagi setelah modal ditutup
+    if (_buyBtn) _buyBtn.disabled = false;
     ['mc1','mc2','mc3','mc4','mc5','mc6'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
     });
