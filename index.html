@@ -5216,9 +5216,12 @@ canvas { transform: translateZ(0); }
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
-        <div style="display:flex;gap:10px;margin-bottom:1rem;">
-          <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDC</button>
-          <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDT</button>
+        <div class="form-field" style="margin-bottom:0.8rem;">
+          <label class="field-label" style="margin-bottom:6px;">Select Your Token</label>
+          <div style="display:flex;gap:10px;margin-bottom:1rem;">
+            <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDC</button>
+            <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDT</button>
+          </div>
         </div>
         <!-- FIX v40 TIER-1: Tier selector di buy form — pilih tier sebelum isi amount -->
         <div class="form-field" style="margin-bottom:0.8rem;">
@@ -5282,6 +5285,7 @@ canvas { transform: translateZ(0); }
             <span class="calc-lbl" style="color:var(--cyan);font-weight:700;font-size:0.9rem;">✅ TOTAL EXXE Sent to Wallet</span>
             <span class="calc-amt" style="color:var(--cyan);font-weight:700;font-size:1.1rem;" id="calcTotal">—</span>
           </div>
+          <style>#calcTotalRow .calc-lbl { font-size: 0.9rem; } #calcTotalRow .calc-amt { font-size: 1.1rem; } @media (max-width: 480px) { #calcTotalRow .calc-lbl { font-size: 0.75rem; } #calcTotalRow .calc-amt { font-size: 0.9rem; } }</style>
           <div class="calc-divider"></div>
           <div class="calc-row">
             <span class="calc-lbl">Value at Listing ($0.10)</span>
