@@ -5217,8 +5217,8 @@ canvas { transform: translateZ(0); }
       </div>
       <div id="buyPanel" style="display:none;">
         <div style="display:flex;gap:10px;margin-bottom:1rem;">
-          <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--cyan);background:rgba(0,212,255,0.08);color:var(--cyan);cursor:pointer;border-radius:4px;">USDC</button>
-          <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;">USDT</button>
+          <button class="hint" id="btnUSDC" onclick="selectToken('USDC')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDC</button>
+          <button class="hint" id="btnUSDT" onclick="selectToken('USDT')" style="flex:1;padding:8px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;">USDT</button>
         </div>
         <!-- FIX v40 TIER-1: Tier selector di buy form — pilih tier sebelum isi amount -->
         <div class="form-field" style="margin-bottom:0.8rem;">
@@ -5226,15 +5226,15 @@ canvas { transform: translateZ(0); }
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
             <button id="tierBtn1" onclick="selectTierBtn(1)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--cyan);background:rgba(0,212,255,0.1);color:var(--cyan);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier I<br/><span style="font-size:0.5rem;opacity:0.8;">$0.01 · max $100</span><br/><span style="font-size:0.44rem;color:rgba(0,212,255,0.6);">No Bonus · 3-Month Hold</span>
+              Tier I<br/><span style="font-size:0.75rem;font-weight:700;color:var(--gold);">$0.01</span> · <span style="font-size:0.5rem;opacity:0.8;">max $100</span><br/><span style="font-size:0.5rem;color:rgba(0,212,255,0.7);">— NO BONUS —</span>
             </button>
             <button id="tierBtn2" onclick="selectTierBtn(2)"
-              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier II<br/><span style="font-size:0.5rem;opacity:0.8;">$0.025 · max $500</span><br/><span style="font-size:0.44rem;color:rgba(232,201,122,0.7);">+5% Bonus · 2-Month Hold</span>
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(232,201,122,0.6);background:rgba(232,201,122,0.08);color:#e8c97a;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier II<br/><span style="font-size:0.75rem;font-weight:700;color:#e8c97a;text-shadow:0 0 8px rgba(232,201,122,0.5);">$0.025</span> · <span style="font-size:0.5rem;opacity:0.8;">max $500</span><br/><span style="font-size:0.7rem;color:#e8c97a;font-weight:700;">🎁 +5% BONUS</span>
             </button>
             <button id="tierBtn3" onclick="selectTierBtn(3)"
-              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid var(--text-2);background:transparent;color:var(--text-2);cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier III<br/><span style="font-size:0.5rem;opacity:0.8;">$0.05 · max $1,000</span><br/><span style="font-size:0.44rem;color:rgba(196,163,255,0.8);">+10% Bonus · 1-Month Hold</span>
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(153,69,255,0.6);background:rgba(153,69,255,0.08);color:#c4a3ff;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier III<br/><span style="font-size:0.75rem;font-weight:700;color:#c4a3ff;text-shadow:0 0 8px rgba(153,69,255,0.5);">$0.05</span> · <span style="font-size:0.5rem;opacity:0.8;">max $1,000</span><br/><span style="font-size:0.7rem;color:#c4a3ff;font-weight:700;">🎁 +10% BONUS</span>
             </button>
           </div>
         </div>
@@ -5606,9 +5606,25 @@ function selectTierBtn(tierNum) {
     const btn = document.getElementById('tierBtn' + n);
     if (!btn) return;
     const active = n === tierNum;
-    btn.style.borderColor  = active ? 'var(--cyan)' : 'var(--text-2)';
-    btn.style.background   = active ? 'rgba(0,212,255,0.10)' : 'transparent';
-    btn.style.color        = active ? 'var(--cyan)' : 'var(--text-2)';
+    if (active) {
+      if (n === 1) {
+        btn.style.borderColor = 'var(--cyan)';
+        btn.style.background = 'rgba(0,212,255,0.1)';
+        btn.style.color = 'var(--cyan)';
+      } else if (n === 2) {
+        btn.style.borderColor = 'rgba(232,201,122,0.6)';
+        btn.style.background = 'rgba(232,201,122,0.08)';
+        btn.style.color = '#e8c97a';
+      } else {
+        btn.style.borderColor = 'rgba(153,69,255,0.6)';
+        btn.style.background = 'rgba(153,69,255,0.08)';
+        btn.style.color = '#c4a3ff';
+      }
+    } else {
+      btn.style.borderColor = 'var(--text-2)';
+      btn.style.background = 'transparent';
+      btn.style.color = 'var(--text-2)';
+    }
   });
 
   // Update tier card highlight in grid
