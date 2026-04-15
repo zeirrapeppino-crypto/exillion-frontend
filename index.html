@@ -4329,38 +4329,76 @@ canvas { transform: translateZ(0); }
     gap:0.5rem;text-align:center;
   }
   .infog-fw-ring{
-    width:110px;height:110px;border-radius:50%;
-    border:2px solid rgba(153,69,255,0.4);
+    width:130px;height:130px;border-radius:50%;
+    border:2px solid rgba(153,69,255,0.5);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    background:radial-gradient(circle,rgba(153,69,255,0.2),rgba(0,212,255,0.08));
-    box-shadow:0 0 25px rgba(153,69,255,0.3),inset 0 0 25px rgba(0,212,255,0.1);
-    animation:solanaPulse 2.5s ease-in-out infinite;
+    background:radial-gradient(circle at 50% 40%, rgba(153,69,255,0.22) 0%, rgba(0,212,255,0.1) 50%, transparent 75%);
+    box-shadow:
+      0 0 28px rgba(153,69,255,0.35),
+      0 0 60px rgba(153,69,255,0.12),
+      inset 0 0 28px rgba(0,212,255,0.12);
+    animation: demandRingGlow 3s ease-in-out infinite;
+    position: relative;
   }
 
-  @keyframes solanaPulse {
+  /* Outer halo ring */
+  .infog-fw-ring::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,212,255,0.18);
+    animation: demandHaloExpand 3s ease-in-out infinite;
+  }
+
+  /* Second outer ring */
+  .infog-fw-ring::after {
+    content: '';
+    position: absolute;
+    inset: -18px;
+    border-radius: 50%;
+    border: 1px solid rgba(153,69,255,0.1);
+    animation: demandHaloExpand 3s ease-in-out infinite;
+  }
+
+  @keyframes demandRingGlow {
     0%, 100% {
-      box-shadow: 0 0 20px rgba(153,69,255,0.25), inset 0 0 20px rgba(0,212,255,0.08);
+      box-shadow:
+        0 0 18px rgba(153,69,255,0.22),
+        0 0 40px rgba(153,69,255,0.08),
+        inset 0 0 18px rgba(0,212,255,0.08);
       border-color: rgba(153,69,255,0.35);
     }
     50% {
-      box-shadow: 0 0 45px rgba(153,69,255,0.5), 0 0 20px rgba(0,212,255,0.3), inset 0 0 35px rgba(0,212,255,0.15);
-      border-color: rgba(0,212,255,0.5);
+      box-shadow:
+        0 0 44px rgba(0,212,255,0.6),
+        0 0 90px rgba(0,212,255,0.2),
+        inset 0 0 40px rgba(0,212,255,0.2);
+      border-color: rgba(0,212,255,0.8);
     }
+  }
+
+  @keyframes demandHaloExpand {
+    0%, 100% { opacity: 0.25; transform: scale(1); }
+    50%       { opacity: 0.65; transform: scale(1.06); }
   }
   .infog-fw-ring-label{
     font-family:'Orbitron',monospace;
-    font-size:0.55rem;letter-spacing:1.5px;
+    font-size:0.62rem;letter-spacing:1.8px;
     background:linear-gradient(135deg, #9945FF 0%, #00d4ff 50%, #14F195 100%);
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
     background-clip:text;
-    font-weight:700;
-    line-height:1.3;
+    font-weight:900;
+    line-height:1.35;
+    text-align:center;
+    filter: drop-shadow(0 0 8px rgba(0,212,255,0.4));
   }
   .infog-fw-ring-sub{
     font-family:'Orbitron',monospace;
-    font-size:0.42rem;letter-spacing:1px;
-    color:var(--text-2);margin-top:3px;
+    font-size:0.44rem;letter-spacing:1.5px;
+    color:rgba(0,212,255,0.65);margin-top:4px;
+    text-shadow: 0 0 10px rgba(0,212,255,0.4);
   }
   .infog-fw-arrows{
     font-family:'Orbitron',monospace;
@@ -4391,6 +4429,9 @@ canvas { transform: translateZ(0); }
     .infog-flywheel{grid-template-columns:1fr;gap:1.5rem;}
     .infog-fw-item.right{flex-direction:row;text-align:left;}
     .infog-fw-center{order:-1;}
+    .infog-fw-ring{width:110px;height:110px;}
+    .infog-fw-ring::before{inset:-6px;}
+    .infog-fw-ring::after{inset:-14px;}
     .tier-summary{grid-template-columns:1fr !important;max-width:400px !important;gap:0.75rem !important;}
   }
   </style>
@@ -4486,8 +4527,8 @@ canvas { transform: translateZ(0); }
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.4rem;">8% of Total Supply — Verify On SOLSCAN</div>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
-            <a href="https://solscan.io/account/4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
-              4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr
+            <a href="https://solscan.io/account/ESQLRpyxveHQADptFFs7CV51un6gJkM2TPk578v8dry" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--cyan);text-decoration:none;word-break:break-all;">
+              ESQLRpyxveHQADptFFs7CV51un6gJkM2TPk578v8dry
             </a>
           </div>
         </div>
@@ -4500,8 +4541,8 @@ canvas { transform: translateZ(0); }
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">EXXE/USDC On Orca DEX</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">75% of All Angel Investor Round Funds — locked for Orca DEX listing</div>
           </div>
-          <a href="https://solscan.io/account/G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D
+          <a href="https://solscan.io/account/4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+            4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP
           </a>
         </div>
       </div>
@@ -4513,8 +4554,8 @@ canvas { transform: translateZ(0); }
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Operations, Security &amp; Legal</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">15% of All Angel Investor Round Funds — team, marketing, legal</div>
           </div>
-          <a href="https://solscan.io/account/DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF
+          <a href="https://solscan.io/account/GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+            GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN
           </a>
         </div>
       </div>
@@ -4526,8 +4567,8 @@ canvas { transform: translateZ(0); }
             <div style="font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--green);">Development &amp; Infrastructure</div>
             <div style="font-size:0.8rem;font-style:italic;color:var(--text-1);margin-top:0.3rem;">10% of All Angel Investor Round Funds — app, smart contract, infrastructure</div>
           </div>
-          <a href="https://solscan.io/account/GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
-            GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o
+          <a href="https://solscan.io/account/BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx" target="_blank" rel="noopener noreferrer" style="font-family:'Orbitron',monospace;font-size:0.68rem;color:var(--green);text-decoration:none;word-break:break-all;">
+            BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx
           </a>
         </div>
       </div>
@@ -4975,31 +5016,314 @@ canvas { transform: translateZ(0); }
     </div>
   </div>
 
-  <div class="tier-summary reveal" style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin:0.2rem auto 0.5rem;max-width:1080px;">
-    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER I</div>
-      <div style="font-size:0.5rem;color:#00d4ff;margin-bottom:2px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#e8c97a;text-shadow:0 0 12px rgba(232,201,122,0.5);">$0.01</div>
-      <div style="font-size:0.45rem;color:#00d4ff;margin:2px 0;">Per EXXE</div>
-      <div style="font-size:0.5rem;color:#14F195;margin-bottom:4px;">NO BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+  <!-- TIER SUMMARY PREMIUM CARDS v54 -->
+  <style>
+    .tier-premium-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1rem auto 1.2rem;
+      max-width: 1080px;
+    }
+
+    .tier-premium-card {
+      position: relative;
+      padding: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .tier-premium-card:hover {
+      transform: translateY(-4px);
+    }
+
+    /* === TIER I — Cyan/Teal Premium === */
+    .tier-premium-card.t1-card {
+      background: linear-gradient(160deg, #010f1e 0%, #011a2e 50%, #010d1e 100%);
+      border: 1px solid rgba(0,212,255,0.35);
+      box-shadow: 0 0 28px rgba(0,212,255,0.08), inset 0 0 40px rgba(0,212,255,0.03);
+    }
+    .tier-premium-card.t1-card:hover {
+      box-shadow: 0 8px 40px rgba(0,212,255,0.18), inset 0 0 40px rgba(0,212,255,0.06);
+      border-color: rgba(0,212,255,0.6);
+    }
+    .tier-premium-card.t1-card .tier-prem-top-bar {
+      background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), transparent);
+    }
+    .tier-premium-card.t1-card .tier-prem-label {
+      color: #00d4ff;
+      text-shadow: 0 0 10px rgba(0,212,255,0.5);
+    }
+    .tier-premium-card.t1-card .tier-prem-badge {
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      color: #00d4ff;
+    }
+    .tier-premium-card.t1-card .tier-prem-icon {
+      color: rgba(0,212,255,0.2);
+    }
+    .tier-premium-card.t1-card .tier-prem-lock {
+      color: rgba(0,212,255,0.7);
+      border-top: 1px solid rgba(0,212,255,0.12);
+    }
+
+    /* === TIER II — Solana Green Premium === */
+    .tier-premium-card.t2-card {
+      background: linear-gradient(160deg, #001209 0%, #001f10 50%, #000e07 100%);
+      border: 1px solid rgba(20,241,149,0.32);
+      box-shadow: 0 0 28px rgba(20,241,149,0.08), inset 0 0 40px rgba(20,241,149,0.03);
+    }
+    .tier-premium-card.t2-card:hover {
+      box-shadow: 0 8px 40px rgba(20,241,149,0.18), inset 0 0 40px rgba(20,241,149,0.06);
+      border-color: rgba(20,241,149,0.6);
+    }
+    .tier-premium-card.t2-card .tier-prem-top-bar {
+      background: linear-gradient(90deg, transparent, rgba(20,241,149,0.6), rgba(0,229,160,0.9), rgba(20,241,149,0.6), transparent);
+    }
+    .tier-premium-card.t2-card .tier-prem-label {
+      color: #14F195;
+      text-shadow: 0 0 10px rgba(20,241,149,0.5);
+    }
+    .tier-premium-card.t2-card .tier-prem-badge {
+      background: rgba(20,241,149,0.08);
+      border: 1px solid rgba(20,241,149,0.28);
+      color: #14F195;
+    }
+    .tier-premium-card.t2-card .tier-prem-icon {
+      color: rgba(20,241,149,0.16);
+    }
+    .tier-premium-card.t2-card .tier-prem-lock {
+      color: rgba(20,241,149,0.6);
+      border-top: 1px solid rgba(20,241,149,0.12);
+    }
+
+    /* === TIER III — Purple/Solana Premium === */
+    .tier-premium-card.t3-card {
+      background: linear-gradient(160deg, #08011a 0%, #100024 50%, #060011 100%);
+      border: 1px solid rgba(153,69,255,0.38);
+      box-shadow: 0 0 28px rgba(153,69,255,0.09), inset 0 0 40px rgba(153,69,255,0.03);
+    }
+    .tier-premium-card.t3-card:hover {
+      box-shadow: 0 8px 40px rgba(153,69,255,0.2), inset 0 0 40px rgba(153,69,255,0.06);
+      border-color: rgba(196,163,255,0.6);
+    }
+    .tier-premium-card.t3-card .tier-prem-top-bar {
+      background: linear-gradient(90deg, transparent, rgba(153,69,255,0.7), rgba(196,163,255,0.9), rgba(153,69,255,0.7), transparent);
+    }
+    .tier-premium-card.t3-card .tier-prem-label {
+      color: #c4a3ff;
+      text-shadow: 0 0 10px rgba(153,69,255,0.5);
+    }
+    .tier-premium-card.t3-card .tier-prem-badge {
+      background: rgba(153,69,255,0.1);
+      border: 1px solid rgba(153,69,255,0.28);
+      color: #c4a3ff;
+    }
+    .tier-premium-card.t3-card .tier-prem-icon {
+      color: rgba(153,69,255,0.16);
+    }
+    .tier-premium-card.t3-card .tier-prem-lock {
+      color: rgba(196,163,255,0.65);
+      border-top: 1px solid rgba(153,69,255,0.13);
+    }
+
+    /* — Shared inner elements — */
+    .tier-prem-top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+
+    .tier-prem-body {
+      padding: 1.4rem 1.2rem 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tier-prem-icon {
+      position: absolute;
+      top: 12px; right: 14px;
+      font-size: 1.6rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .tier-prem-label {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .tier-prem-name {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.55rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .tier-prem-price-wrap {
+      margin-bottom: 0.6rem;
+    }
+
+    .tier-prem-presale-lbl {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.48rem;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.38);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .tier-prem-price {
+      font-family: 'Orbitron', monospace;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #e8c97a;
+      text-shadow:
+        0 0 18px rgba(232,201,122,0.55),
+        0 0 40px rgba(204,125,7,0.3),
+        0 2px 4px rgba(0,0,0,0.5);
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+
+    .tier-prem-per {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.45rem;
+      letter-spacing: 2.5px;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+      margin-top: 0.25rem;
+    }
+
+    .tier-prem-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+      margin: 0.65rem 0;
+    }
+
+    .tier-prem-badge {
+      display: inline-block;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.48rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      padding: 3px 10px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+
+    .tier-prem-lock {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.48rem;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.4);
+      padding-top: 0.6rem;
+      margin-top: 0.1rem;
+    }
+
+    .tier-prem-open {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.45rem;
+      letter-spacing: 2.5px;
+      color: #14F195;
+      text-shadow: 0 0 8px rgba(20,241,149,0.5);
+      animation: livePulse 1.6s ease-in-out infinite;
+      margin-top: 0.5rem;
+    }
+
+    /* Corner accent */
+    .tier-prem-corner {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 18px; height: 18px;
+      border-bottom: 2px solid currentColor;
+      border-right: 2px solid currentColor;
+      opacity: 0.3;
+    }
+
+    @media (max-width: 640px) {
+      .tier-premium-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        margin: 0.8rem auto 1rem;
+      }
+      .tier-prem-price { font-size: 1.7rem; }
+      .tier-prem-body { padding: 1.2rem 1rem 1rem; }
+    }
+  </style>
+
+  <div class="tier-premium-grid reveal">
+
+    <!-- TIER I -->
+    <div class="tier-premium-card t1-card">
+      <div class="tier-prem-top-bar"></div>
+      <div class="tier-prem-body">
+        <div class="tier-prem-icon">◈</div>
+        <div class="tier-prem-label">TIER I</div>
+        <div class="tier-prem-name">Genesis Angel</div>
+        <div class="tier-prem-price-wrap">
+          <div class="tier-prem-presale-lbl">Presale Price</div>
+          <div class="tier-prem-price">$0.01</div>
+          <div class="tier-prem-per">per EXXE</div>
+        </div>
+        <div class="tier-prem-divider"></div>
+        <div><span class="tier-prem-badge">NO BONUS</span></div>
+        <div class="tier-prem-lock">🔒 3-month hold period</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-corner" style="color:#00d4ff;"></div>
+      </div>
     </div>
-    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER II</div>
-      <div style="font-size:0.5rem;color:#00d4ff;margin-bottom:2px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#e8c97a;text-shadow:0 0 12px rgba(232,201,122,0.5);">$0.025</div>
-      <div style="font-size:0.45rem;color:#00d4ff;margin:2px 0;">Per EXXE</div>
-      <div style="font-size:0.5rem;color:#14F195;margin-bottom:4px;">+5% BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+
+    <!-- TIER II -->
+    <div class="tier-premium-card t2-card">
+      <div class="tier-prem-top-bar"></div>
+      <div class="tier-prem-body">
+        <div class="tier-prem-icon">◈</div>
+        <div class="tier-prem-label">TIER II</div>
+        <div class="tier-prem-name">Prime Angel</div>
+        <div class="tier-prem-price-wrap">
+          <div class="tier-prem-presale-lbl">Presale Price</div>
+          <div class="tier-prem-price">$0.025</div>
+          <div class="tier-prem-per">per EXXE</div>
+        </div>
+        <div class="tier-prem-divider"></div>
+        <div><span class="tier-prem-badge">+5% BONUS</span></div>
+        <div class="tier-prem-lock">🔒 2-month hold period</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-corner" style="color:#14F195;"></div>
+      </div>
     </div>
-    <div class="dash-card" style="padding:1rem;background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.35);text-align:center;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.6rem;letter-spacing:1.5px;color:#00d4ff;margin-bottom:0.3rem;">TIER III</div>
-      <div style="font-size:0.5rem;color:#00d4ff;margin-bottom:2px;">Presale Price</div>
-      <div style="font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#e8c97a;text-shadow:0 0 12px rgba(232,201,122,0.5);">$0.05</div>
-      <div style="font-size:0.45rem;color:#00d4ff;margin:2px 0;">Per EXXE</div>
-      <div style="font-size:0.5rem;color:#14F195;margin-bottom:4px;">+10% BONUS</div>
-      <div style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;color:#14F195;text-shadow:0 0 8px rgba(20,241,149,0.5);animation:livePulse 1.6s ease-in-out infinite;">● OPEN NOW</div>
+
+    <!-- TIER III -->
+    <div class="tier-premium-card t3-card">
+      <div class="tier-prem-top-bar"></div>
+      <div class="tier-prem-body">
+        <div class="tier-prem-icon">◈</div>
+        <div class="tier-prem-label">TIER III</div>
+        <div class="tier-prem-name">Apex Angel</div>
+        <div class="tier-prem-price-wrap">
+          <div class="tier-prem-presale-lbl">Presale Price</div>
+          <div class="tier-prem-price">$0.05</div>
+          <div class="tier-prem-per">per EXXE</div>
+        </div>
+        <div class="tier-prem-divider"></div>
+        <div><span class="tier-prem-badge">+10% BONUS</span></div>
+        <div class="tier-prem-lock">🔒 1-month hold period</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-corner" style="color:#9945FF;"></div>
+      </div>
     </div>
+
   </div>
 
   <div class="progress-wrap reveal" id="tierProgressWrap">
@@ -5079,93 +5403,396 @@ canvas { transform: translateZ(0); }
     <!-- FIX v40 TIER-1: Semua 3 tier OPEN bersamaan. Badge LIVE hijau di semua tier.
      Remaining token (remaining) diupdate live dari /api/stats setiap 60 detik.
      Jika tier habis → badge berubah ke CLOSED (abu-abu). -->
+<!-- TIER SELECT PREMIUM v54 — matches Token Dashboard style -->
+<style>
+  /* Override default tier-grid/tier-card for the angel round */
+  #tierGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .tier-card-premium {
+    position: relative;
+    padding: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+  }
+  .tier-card-premium:hover { transform: translateY(-4px); }
+
+  /* Tier I — Cyan */
+  .tier-card-premium.tc1 {
+    background: linear-gradient(160deg, #010f1e 0%, #011a2e 50%, #010d1e 100%);
+    border: 1px solid rgba(0,212,255,0.3);
+    box-shadow: 0 0 24px rgba(0,212,255,0.07);
+  }
+  .tier-card-premium.tc1:hover,
+  .tier-card-premium.tc1.active {
+    border-color: rgba(0,212,255,0.65);
+    box-shadow: 0 8px 36px rgba(0,212,255,0.18), inset 0 0 30px rgba(0,212,255,0.05);
+    transform: translateY(-4px);
+  }
+  .tier-card-premium.tc1 .tcp-topbar { background: linear-gradient(90deg, transparent, rgba(0,212,255,0.7), transparent); }
+  .tier-card-premium.tc1 .tcp-tiernum { color: #00d4ff; text-shadow: 0 0 10px rgba(0,212,255,0.5); }
+  .tier-card-premium.tc1 .tcp-tiername { color: rgba(0,212,255,0.55); }
+  .tier-card-premium.tc1 .tcp-badge { background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25); color: rgba(0,212,255,0.85); }
+  .tier-card-premium.tc1 .tcp-lock-box { background: rgba(0,212,255,0.04); border: 1px solid rgba(0,212,255,0.14); }
+  .tier-card-premium.tc1 .tcp-lock-text { color: rgba(0,212,255,0.75); }
+  .tier-card-premium.tc1 .tcp-join { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.35); color: #00d4ff; }
+  .tier-card-premium.tc1 .tcp-join:hover { background: rgba(0,212,255,0.2); }
+  .tier-card-premium.tc1 .tcp-corner { color: #00d4ff; }
+  .tier-card-premium.tc1 .tcp-active-bar { background: linear-gradient(90deg, transparent, #00d4ff, transparent); }
+
+  /* Tier II — Solana Green */
+  .tier-card-premium.tc2 {
+    background: linear-gradient(160deg, #001209 0%, #001f10 50%, #000e07 100%);
+    border: 1px solid rgba(20,241,149,0.28);
+    box-shadow: 0 0 24px rgba(20,241,149,0.07);
+  }
+  .tier-card-premium.tc2:hover,
+  .tier-card-premium.tc2.active {
+    border-color: rgba(20,241,149,0.6);
+    box-shadow: 0 8px 36px rgba(20,241,149,0.17), inset 0 0 30px rgba(20,241,149,0.05);
+    transform: translateY(-4px);
+  }
+  .tier-card-premium.tc2 .tcp-topbar { background: linear-gradient(90deg, transparent, rgba(20,241,149,0.7), transparent); }
+  .tier-card-premium.tc2 .tcp-tiernum { color: #14F195; text-shadow: 0 0 10px rgba(20,241,149,0.5); }
+  .tier-card-premium.tc2 .tcp-tiername { color: rgba(20,241,149,0.5); }
+  .tier-card-premium.tc2 .tcp-badge { background: rgba(20,241,149,0.08); border: 1px solid rgba(20,241,149,0.28); color: #14F195; }
+  .tier-card-premium.tc2 .tcp-lock-box { background: rgba(20,241,149,0.04); border: 1px solid rgba(20,241,149,0.13); }
+  .tier-card-premium.tc2 .tcp-lock-text { color: rgba(20,241,149,0.7); }
+  .tier-card-premium.tc2 .tcp-join { background: rgba(20,241,149,0.1); border: 1px solid rgba(20,241,149,0.35); color: #14F195; }
+  .tier-card-premium.tc2 .tcp-join:hover { background: rgba(20,241,149,0.2); }
+  .tier-card-premium.tc2 .tcp-corner { color: #14F195; }
+  .tier-card-premium.tc2 .tcp-active-bar { background: linear-gradient(90deg, transparent, #14F195, transparent); }
+
+  /* Tier III — Purple */
+  .tier-card-premium.tc3 {
+    background: linear-gradient(160deg, #08011a 0%, #100024 50%, #060011 100%);
+    border: 1px solid rgba(153,69,255,0.3);
+    box-shadow: 0 0 24px rgba(153,69,255,0.07);
+  }
+  .tier-card-premium.tc3:hover,
+  .tier-card-premium.tc3.active {
+    border-color: rgba(153,69,255,0.65);
+    box-shadow: 0 8px 36px rgba(153,69,255,0.18), inset 0 0 30px rgba(153,69,255,0.05);
+    transform: translateY(-4px);
+  }
+  .tier-card-premium.tc3 .tcp-topbar { background: linear-gradient(90deg, transparent, rgba(153,69,255,0.7), transparent); }
+  .tier-card-premium.tc3 .tcp-tiernum { color: #c4a3ff; text-shadow: 0 0 10px rgba(153,69,255,0.5); }
+  .tier-card-premium.tc3 .tcp-tiername { color: rgba(196,163,255,0.5); }
+  .tier-card-premium.tc3 .tcp-badge { background: rgba(153,69,255,0.1); border: 1px solid rgba(153,69,255,0.3); color: #c4a3ff; }
+  .tier-card-premium.tc3 .tcp-lock-box { background: rgba(153,69,255,0.05); border: 1px solid rgba(153,69,255,0.18); }
+  .tier-card-premium.tc3 .tcp-lock-text { color: rgba(196,163,255,0.8); }
+  .tier-card-premium.tc3 .tcp-join { background: rgba(153,69,255,0.1); border: 1px solid rgba(153,69,255,0.38); color: #c4a3ff; }
+  .tier-card-premium.tc3 .tcp-join:hover { background: rgba(153,69,255,0.2); }
+  .tier-card-premium.tc3 .tcp-corner { color: #9945FF; }
+  .tier-card-premium.tc3 .tcp-active-bar { background: linear-gradient(90deg, transparent, #9945FF, transparent); }
+
+  /* Shared inner parts */
+  .tcp-topbar {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .tcp-active-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .tier-card-premium.active .tcp-active-bar { opacity: 1; }
+
+  .tcp-body {
+    padding: 1.6rem 1.2rem 1.3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .tcp-corner {
+    position: absolute; bottom: 0; right: 0;
+    width: 16px; height: 16px;
+    border-bottom: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    opacity: 0.25;
+  }
+  .tcp-tiernum {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+  .tcp-tiername {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .tcp-price-lbl {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.44rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.32);
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+  }
+  .tcp-price {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #e8c97a;
+    text-shadow:
+      0 0 16px rgba(232,201,122,0.5),
+      0 0 36px rgba(204,125,7,0.28),
+      0 2px 4px rgba(0,0,0,0.5);
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+  .tcp-per {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.42rem;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+    margin-bottom: 0.7rem;
+  }
+  .tcp-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    margin: 0.55rem 0;
+  }
+  .tcp-badge {
+    display: inline-block;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.46rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .tcp-detail {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+    margin-bottom: 0.5rem;
+  }
+  .tcp-detail strong { color: #14F195; }
+  .tcp-lock-box {
+    padding: 5px 8px;
+    border-radius: 2px;
+    margin: 0.4rem 0;
+  }
+  .tcp-lock-text {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.42rem;
+    letter-spacing: 1.5px;
+  }
+  .tcp-remaining {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.47rem;
+    letter-spacing: 1.2px;
+    color: rgba(20,241,149,0.65);
+    margin: 0.45rem 0 0.3rem;
+    min-height: 14px;
+  }
+  .tcp-prog-track {
+    width: 100%; height: 3px;
+    background: rgba(20,241,149,0.08);
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+  .tcp-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    padding: 7px 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-transform: uppercase;
+    width: 100%;
+    justify-content: center;
+  }
+  .tcp-join-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #14F195;
+    box-shadow: 0 0 6px rgba(20,241,149,0.6);
+    animation: livePulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  /* ── GLOWING JOIN NOW BUTTON — all tiers breathe together ── */
+  .tcp-join {
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  /* Tier I — Cyan, synchronized */
+  .tier-card-premium.tc1 .tcp-join {
+    animation: joinGlowCyan 3s ease-in-out infinite;
+  }
+  @keyframes joinGlowCyan {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(0,212,255,0.12), inset 0 0 6px rgba(0,212,255,0.03);
+      border-color: rgba(0,212,255,0.25);
+    }
+    50% {
+      box-shadow: 0 0 26px rgba(0,212,255,0.65), 0 0 52px rgba(0,212,255,0.22), inset 0 0 20px rgba(0,212,255,0.14);
+      border-color: rgba(0,212,255,0.85);
+    }
+  }
+
+  /* Tier II — Green, synchronized (same 3s, no delay) */
+  .tier-card-premium.tc2 .tcp-join {
+    animation: joinGlowGreen 3s ease-in-out infinite;
+  }
+  @keyframes joinGlowGreen {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(20,241,149,0.12), inset 0 0 6px rgba(20,241,149,0.03);
+      border-color: rgba(20,241,149,0.25);
+    }
+    50% {
+      box-shadow: 0 0 26px rgba(20,241,149,0.65), 0 0 52px rgba(20,241,149,0.22), inset 0 0 20px rgba(20,241,149,0.14);
+      border-color: rgba(20,241,149,0.85);
+    }
+  }
+
+  /* Tier III — Purple, synchronized (same 3s, no delay) */
+  .tier-card-premium.tc3 .tcp-join {
+    animation: joinGlowPurple 3s ease-in-out infinite;
+  }
+  @keyframes joinGlowPurple {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(153,69,255,0.12), inset 0 0 6px rgba(153,69,255,0.03);
+      border-color: rgba(153,69,255,0.25);
+    }
+    50% {
+      box-shadow: 0 0 26px rgba(153,69,255,0.65), 0 0 52px rgba(153,69,255,0.22), inset 0 0 20px rgba(153,69,255,0.14);
+      border-color: rgba(153,69,255,0.85);
+    }
+  }
+
+  @media (max-width: 680px) {
+    #tierGrid { grid-template-columns: 1fr; gap: 0.8rem; }
+    .tcp-price { font-size: 1.55rem; }
+    .tcp-body { padding: 1.3rem 1rem 1.1rem; }
+  }
+</style>
+
 <div class="tier-grid reveal" id="tierGrid">
 
   <!-- TIER I -->
-  <div class="tier-card active" id="tier-card-1" onclick="selectTierAndScroll(1)" style="cursor:pointer;">
-    <div class="tier-num">Tier I</div>
-    <div class="tier-name">Genesis Angel Investor</div>
-    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-      <span>$0.01</span>
-      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+  <div class="tier-card-premium tc1 active" id="tier-card-1" onclick="selectTierAndScroll(1)">
+    <div class="tcp-topbar"></div>
+    <div class="tcp-body">
+      <div class="tcp-tiernum">TIER I</div>
+      <div class="tcp-tiername">Genesis Angel Investor</div>
+      <div class="tcp-price-lbl">Presale Price</div>
+      <div class="tcp-price">$0.01</div>
+      <div class="tcp-per">per EXXE</div>
+      <div class="tcp-divider"></div>
+      <div><span class="tcp-badge">— NO BONUS —</span></div>
+      <div class="tcp-detail">
+        Min $10 · Max $100/wallet<br/>
+        ROI to listing: <strong>10×</strong>
+      </div>
+      <div class="tcp-lock-box">
+        <div class="tcp-lock-text">🔒 HOLD: 3 MONTHS AFTER LISTING</div>
+      </div>
+      <div class="tcp-remaining" id="tier-remaining-1">
+        <span id="tier-rem-exxe-1">188,800,000</span> EXXE remaining
+      </div>
+      <div class="tcp-prog-track">
+        <div id="tier-prog-1" style="height:100%;width:0%;background:linear-gradient(90deg,#00d4ff,#14F195);border-radius:2px;transition:width 1s ease;"></div>
+      </div>
+      <span class="tcp-join" id="tier-badge-1">
+        <span class="tcp-join-dot"></span>LIVE · JOIN NOW
+      </span>
+      <div class="tcp-corner"></div>
     </div>
-    <!-- Badge NO BONUS di bawah harga -->
-    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.25);color:rgba(0,212,255,0.7);">— NO BONUS —</div>
-    <div class="tier-detail">
-      Min $10 · Max $100/wallet<br/>
-      ROI to listing: <strong style="color:var(--green);">10×</strong>
-    </div>
-    <!-- Lock Info -->
-    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);border-radius:2px;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(0,212,255,0.8);">🔒 HOLD: 3 MONTHS AFTER LISTING</div>
-    </div>
-    <div class="tier-remaining" id="tier-remaining-1" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-1">188,800,000</span> EXXE remaining
-    </div>
-    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
-      <div id="tier-prog-1" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
-    </div>
-    <span class="tier-badge open" id="tier-badge-1" style="cursor:pointer;font-weight:800;">
-      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
-    </span>
+    <div class="tcp-active-bar"></div>
   </div>
 
   <!-- TIER II -->
-  <div class="tier-card" id="tier-card-2" onclick="selectTierAndScroll(2)" style="cursor:pointer;">
-    <div class="tier-num">Tier II</div>
-    <div class="tier-name">Prime Angel Investor</div>
-    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-      <span>$0.025</span>
-      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+  <div class="tier-card-premium tc2" id="tier-card-2" onclick="selectTierAndScroll(2)">
+    <div class="tcp-topbar"></div>
+    <div class="tcp-body">
+      <div class="tcp-tiernum">TIER II</div>
+      <div class="tcp-tiername">Prime Angel Investor</div>
+      <div class="tcp-price-lbl">Presale Price</div>
+      <div class="tcp-price">$0.025</div>
+      <div class="tcp-per">per EXXE</div>
+      <div class="tcp-divider"></div>
+      <div><span class="tcp-badge">🎁 +5% BONUS EXXE</span></div>
+      <div class="tcp-detail">
+        Min $10 · Max $500/wallet<br/>
+        ROI to listing: <strong>4×</strong>
+      </div>
+      <div class="tcp-lock-box">
+        <div class="tcp-lock-text">🔒 HOLD: 2 MONTHS AFTER LISTING</div>
+      </div>
+      <div class="tcp-remaining" id="tier-remaining-2">
+        <span id="tier-rem-exxe-2">251,800,000</span> EXXE remaining
+      </div>
+      <div class="tcp-prog-track">
+        <div id="tier-prog-2" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00e5a0);border-radius:2px;transition:width 1s ease;"></div>
+      </div>
+      <span class="tcp-join" id="tier-badge-2">
+        <span class="tcp-join-dot"></span>LIVE · JOIN NOW
+      </span>
+      <div class="tcp-corner"></div>
     </div>
-    <!-- Badge +5% BONUS di bawah harga -->
-    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(232,201,122,0.2),rgba(204,125,7,0.15));border:1px solid rgba(232,201,122,0.6);color:#e8c97a;text-shadow:0 0 10px rgba(232,201,122,0.5);">🎁 +5% BONUS EXXE</div>
-    <div class="tier-detail">
-      Min $10 · Max $500/wallet<br/>
-      ROI to listing: <strong style="color:var(--green);">4×</strong>
-    </div>
-    <!-- Lock Info -->
-    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(232,201,122,0.05);border:1px solid rgba(232,201,122,0.2);border-radius:2px;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(232,201,122,0.9);">🔒 HOLD: 2 MONTHS AFTER LISTING</div>
-    </div>
-    <div class="tier-remaining" id="tier-remaining-2" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-2">251,800,000</span> EXXE remaining
-    </div>
-    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
-      <div id="tier-prog-2" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
-    </div>
-    <span class="tier-badge open" id="tier-badge-2" style="cursor:pointer;font-weight:800;">
-      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
-    </span>
+    <div class="tcp-active-bar"></div>
   </div>
 
   <!-- TIER III -->
-  <div class="tier-card" id="tier-card-3" onclick="selectTierAndScroll(3)" style="cursor:pointer;">
-    <div class="tier-num">Tier III</div>
-    <div class="tier-name">Apex Angel Investor</div>
-    <div class="tier-price" style="display:flex;align-items:flex-end;justify-content:center;gap:5px;">
-      <span>$0.05</span>
-      <span style="font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:2px;color:var(--gold);opacity:0.85;line-height:1;margin-bottom:4px;">per EXXE</span>
+  <div class="tier-card-premium tc3" id="tier-card-3" onclick="selectTierAndScroll(3)">
+    <div class="tcp-topbar"></div>
+    <div class="tcp-body">
+      <div class="tcp-tiernum">TIER III</div>
+      <div class="tcp-tiername">Apex Angel Investor</div>
+      <div class="tcp-price-lbl">Presale Price</div>
+      <div class="tcp-price">$0.05</div>
+      <div class="tcp-per">per EXXE</div>
+      <div class="tcp-divider"></div>
+      <div><span class="tcp-badge">🎁 +10% BONUS EXXE</span></div>
+      <div class="tcp-detail">
+        Min $10 · Max $1,000/wallet<br/>
+        ROI to listing: <strong>2×</strong>
+      </div>
+      <div class="tcp-lock-box">
+        <div class="tcp-lock-text">🔒 HOLD: 1 MONTH AFTER LISTING</div>
+      </div>
+      <div class="tcp-remaining" id="tier-remaining-3">
+        <span id="tier-rem-exxe-3">388,000,000</span> EXXE remaining
+      </div>
+      <div class="tcp-prog-track">
+        <div id="tier-prog-3" style="height:100%;width:0%;background:linear-gradient(90deg,#9945FF,#c4a3ff);border-radius:2px;transition:width 1s ease;"></div>
+      </div>
+      <span class="tcp-join" id="tier-badge-3">
+        <span class="tcp-join-dot"></span>LIVE · JOIN NOW
+      </span>
+      <div class="tcp-corner"></div>
     </div>
-    <!-- Badge +10% BONUS di bawah harga -->
-    <div style="display:inline-block;font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:2px;font-weight:800;padding:3px 10px;margin-bottom:6px;background:linear-gradient(135deg,rgba(153,69,255,0.2),rgba(0,212,255,0.1));border:1px solid rgba(153,69,255,0.6);color:#c4a3ff;text-shadow:0 0 10px rgba(153,69,255,0.5);animation:buyNowPulse 2s ease-in-out infinite;">🎁 +10% BONUS EXXE</div>
-    <div class="tier-detail">
-      Min $10 · Max $1,000/wallet<br/>
-      ROI to listing: <strong style="color:var(--green);">2×</strong>
-    </div>
-    <!-- Lock Info -->
-    <div style="margin:6px 0 4px;padding:5px 8px;background:rgba(153,69,255,0.06);border:1px solid rgba(153,69,255,0.25);border-radius:2px;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1.5px;color:rgba(196,163,255,0.9);">🔒 HOLD: 1 MONTH AFTER LISTING</div>
-    </div>
-    <div class="tier-remaining" id="tier-remaining-3" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:rgba(20,241,149,0.7);margin:6px 0 4px;min-height:14px;">
-      <span id="tier-rem-exxe-3">388,000,000</span> EXXE remaining
-    </div>
-    <div style="width:100%;height:3px;background:rgba(20,241,149,0.1);border-radius:2px;margin-bottom:8px;">
-      <div id="tier-prog-3" style="height:100%;width:0%;background:linear-gradient(90deg,#14F195,#00d4ff);border-radius:2px;transition:width 1s ease;"></div>
-    </div>
-    <span class="tier-badge open" id="tier-badge-3" style="cursor:pointer;font-weight:800;">
-      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW
-    </span>
+    <div class="tcp-active-bar"></div>
   </div>
 
 </div>
@@ -5232,8 +5859,8 @@ canvas { transform: translateZ(0); }
               Tier I<br/><span style="font-size:0.75rem;font-weight:700;color:var(--gold);">$0.01</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $100</span><br/><span style="font-size:0.5rem;color:rgba(0,212,255,0.7);">— NO BONUS —</span>
             </button>
             <button id="tierBtn2" onclick="selectTierBtn(2)"
-              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(232,201,122,0.6);background:rgba(232,201,122,0.08);color:#e8c97a;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
-              Tier II<br/><span style="font-size:0.75rem;font-weight:700;color:#e8c97a;text-shadow:0 0 8px rgba(232,201,122,0.5);">$0.025</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $500</span><br/><span style="font-size:0.7rem;color:#e8c97a;font-weight:700;">🎁 +5% BONUS</span>
+              style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(20,241,149,0.5);background:rgba(20,241,149,0.06);color:#14F195;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
+              Tier II<br/><span style="font-size:0.75rem;font-weight:700;color:#e8c97a;text-shadow:0 0 8px rgba(232,201,122,0.5);">$0.025</span><br/><span style="font-size:0.5rem;opacity:0.8;">max $500</span><br/><span style="font-size:0.7rem;color:#14F195;font-weight:700;">🎁 +5% BONUS</span>
             </button>
             <button id="tierBtn3" onclick="selectTierBtn(3)"
               style="font-family:'Orbitron',monospace;font-size:0.58rem;letter-spacing:1.5px;padding:10px 6px;border:1px solid rgba(153,69,255,0.6);background:rgba(153,69,255,0.08);color:#c4a3ff;cursor:pointer;border-radius:4px;line-height:1.4;transition:all 0.2s;">
@@ -5532,9 +6159,9 @@ const CFG = {
   USDT_MINT: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
   SELECTED_TOKEN: 'USDC',
   WALLETS: {
-    LIQUIDITY:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
-    OPERATIONAL: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
-    DEVELOPMENT: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
+    LIQUIDITY:   '4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP',
+    OPERATIONAL: 'GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN',
+    DEVELOPMENT: 'BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx',
   },
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
@@ -5556,7 +6183,7 @@ const CFG = {
   },
   // v42 FINAL: Wallet Transparansi On-Chain Angel Investor
   // Default fallback; overridden dynamically from /api/stats if backend returns angelWallet.
-  ANGEL_WALLET: '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr',
+  ANGEL_WALLET: 'ESQLRpyxveHQADptFFs7CV51un6gJkM2TPk578v8dry',
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
@@ -5616,9 +6243,9 @@ function selectTierBtn(tierNum) {
         btn.style.background = 'rgba(0,212,255,0.1)';
         btn.style.color = 'var(--cyan)';
       } else if (n === 2) {
-        btn.style.borderColor = 'rgba(232,201,122,0.6)';
-        btn.style.background = 'rgba(232,201,122,0.08)';
-        btn.style.color = '#e8c97a';
+        btn.style.borderColor = 'rgba(20,241,149,0.6)';
+        btn.style.background = 'rgba(20,241,149,0.1)';
+        btn.style.color = '#14F195';
       } else {
         btn.style.borderColor = 'rgba(153,69,255,0.6)';
         btn.style.background = 'rgba(153,69,255,0.08)';
@@ -6714,7 +7341,7 @@ function scrollToTierI() {
   window.scrollTo({ top: y, behavior: 'smooth' });
   // Highlight tier cards
   setTimeout(function() {
-    var cards = document.querySelectorAll('#angel .tier-card');
+    var cards = document.querySelectorAll('#angel .tier-card-premium');
     cards.forEach(function(card) {
       card.style.transition = 'box-shadow 0.4s ease';
       card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.75), 0 0 32px rgba(0,212,255,0.35)';
@@ -6751,7 +7378,7 @@ function scrollToTierThenWallet() {
 
   // Highlight tier cards
   setTimeout(function() {
-    var cards = document.querySelectorAll('#angel .tier-card');
+    var cards = document.querySelectorAll('#angel .tier-card-premium');
     cards.forEach(function(card) {
       card.style.transition = 'box-shadow 0.4s ease';
       card.style.boxShadow = '0 0 0 2px rgba(0,212,255,0.75), 0 0 32px rgba(0,212,255,0.35)';
@@ -8114,7 +8741,7 @@ function startGoldNetwork(canvasId, isSplash) {
 
   const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
   // FIX v36 SYNC-1: Default fallback — akan di-override dari /api/stats
-  const ANGEL_DIST_WALLET_DEFAULT = '4GHn88vdS2VSMQpexKE2hzN963UdqWaLTniWuRcofmwr';
+  const ANGEL_DIST_WALLET_DEFAULT = 'ESQLRpyxveHQADptFFs7CV51un6gJkM2TPk578v8dry';
 
   const REFRESH_MS   = 60000; // FIX v36 SYNC-3: selaras dengan backend TTL 60s
   const SESSION_KEY  = 'exxe_investor_count_v16';
@@ -8373,9 +9000,9 @@ function startGoldNetwork(canvasId, isSplash) {
 
   // FIX v36 SYNC-2: Default wallet fallback — akan di-override dari /api/stats
   const WALLETS_DEFAULT = {
-    liquidity:   'G4aZyUSiUe2VPGjx9mRLmfx4VLZvQiR75RvAH9ymxL6D',
-    operational: 'DbojPAStaVyG2fVK187xVKsAfYd4awPdkrT1SqZ7JPaF',
-    development: 'GjCaAD9deoXD7f8tFrq3SLscu7nB7nwNpmSMRxXHXu8o',
+    liquidity:   '4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP',
+    operational: 'GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN',
+    development: 'BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx',
   };
   // FIX v36 SYNC-2: Default split fallback — akan di-override dari /api/stats
   const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
@@ -8888,7 +9515,7 @@ function startGoldNetwork(canvasId, isSplash) {
       </div>
 
       <!-- Footer -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:13px;border-top:1px solid rgba(204,125,7,0.2);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;padding-top:13px;border-top:1px solid rgba(204,125,7,0.2);">
         <div style="display:flex;align-items:center;gap:12px;">
           <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXXE" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(204,125,7,0.5));flex-shrink:0;"/>
           <div style="line-height:1.3;">
@@ -8897,7 +9524,7 @@ function startGoldNetwork(canvasId, isSplash) {
             <div style="font-family:'Exo 2',sans-serif;font-size:8px;color:rgba(255,255,255,0.5);letter-spacing:0.8px;">Solana Blockchain · SPL Token · Verified On-Chain</div>
           </div>
         </div>
-        <div style="text-align:right;position:absolute;bottom:15px;right:18px;">
+        <div style="text-align:right;display:flex;flex-direction:column;justify-content:flex-end;">
           <div style="font-family:'Orbitron',monospace;font-size:9px;color:#CC7D07;letter-spacing:1px;margin-bottom:3px;">www.exillioneer.com</div>
           <div style="font-family:'Exo 2',sans-serif;font-size:9px;color:#00d4ff;letter-spacing:0.8px;">© 2026 All rights reserved</div>
         </div>
