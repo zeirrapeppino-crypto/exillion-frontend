@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v59_TT_Fixed
+<!-- Exillion Capital Finecosystem — v60_FRONTEND
+     FIX v60: Frontend-Backend Integration
+       - showSuccess() calls /api/certificate for server-side proof
+       - Certificate displays server timestamp (not browser time)
+       - Certificate ID shown from backend
      FIX v59 BUG-DISCLAIMER [CRITICAL]: Tombol Pay terkunci permanen setelah modal disclaimer muncul.
        - executeBuy(): tambah `_buyBtn.disabled = false` sebelum return di blok disclaimerAccepted=false
        - acceptDisclaimer(): setelah modal tutup, otomatis lanjut executeBuy() tanpa user harus klik Pay lagi
@@ -7,7 +11,6 @@
      FIX v52 BUG-1 [CRITICAL]: html2canvas load verification + fallback URL.
      FIX v52 BUG-2 [CRITICAL]: showSuccess() — mobile scroll + mob-invest-bar not hidden.
      FIX v52 BUG-3 [MAJOR]: certTime displayed local browser time labelled as "UTC".
-     (All v51/v50/v49/v46/v47/v48 fixes remain active)
 -->
 <html lang="en">
 <head>
@@ -8273,11 +8276,37 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   // FLOW FIX v58-STAT: Immediately refresh live counters so investor count & EXXE remaining update right away
   if (typeof window._exxeRefreshInvestorCount === 'function') window._exxeRefreshInvestorCount();
   if (typeof window._exxeRefreshFunding === 'function') window._exxeRefreshFunding();
-  setTimeout(function() {
+
+  // FRONTEND INTEGRATION: Call /api/certificate for server-side proof with timestamp
+  // Store certificate data globally for showCertificate to use
+  window._certServerData = null;
+  (async function() {
+    try {
+      const certRes = await fetch(CFG.API + '/api/certificate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          txSignature: tx,
+          investorWallet: wallet,
+          exxeTotal: totalExxe,
+          tier: tierNum,
+          usdcAmount: usdc,
+          token: tokenLabel
+        })
+      });
+      if (certRes.ok) {
+        window._certServerData = await certRes.json();
+        // Update _lastCertData with server certificate info
+        window._lastCertData = window._certServerData;
+      }
+    } catch(certErr) {
+      console.warn('[CERT] Server certificate unavailable, using local:', certErr.message);
+    }
+    // Show certificate modal (with or without server data)
     if (typeof showCertificate === 'function') {
       showCertificate(usdc, exxe, wallet, tx, token, bonusExxe, tierNum);
     }
-  }, 1500);
+  })();
 }
 
 
@@ -9576,6 +9605,12 @@ function startGoldNetwork(canvasId, isSplash) {
         <div class="cert-addr-sub">TX Signature · Solana Blockchain</div>
       </div>
 
+      <!-- Certificate ID (from server) -->
+      <div id="certIdBox" class="cert-addr-box" style="margin-bottom:14px;display:none;">
+        <div id="certIdVal" class="cert-addr-val" style="color:#14F195;">—</div>
+        <div class="cert-addr-sub">Certificate ID · Exillion Backend</div>
+      </div>
+
       <!-- Gentleman's Agreement -->
       <div style="margin:12px 0;padding:11px 15px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);border-radius:4px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
@@ -9678,10 +9713,20 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const walletEl = document.getElementById('certWalletAddr');
   if (walletEl) walletEl.textContent = wallet || '—';
 
-  const now = new Date();
-  const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const dateStr = now.getUTCDate() + ' ' + months[now.getUTCMonth()] + ' ' + now.getUTCFullYear();
-  const timeStr = now.getUTCHours().toString().padStart(2,'0') + ':' + now.getUTCMinutes().toString().padStart(2,'0') + ':' + now.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
+  // Use server timestamp from /api/certificate if available, otherwise local time
+  const serverData = window._certServerData;
+  let dateStr, timeStr;
+  if (serverData && serverData.issuedAt) {
+    const serverDate = new Date(serverData.issuedAt);
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    dateStr = serverDate.getUTCDate() + ' ' + months[serverDate.getUTCMonth()] + ' ' + serverDate.getUTCFullYear();
+    timeStr = serverDate.getUTCHours().toString().padStart(2,'0') + ':' + serverDate.getUTCMinutes().toString().padStart(2,'0') + ':' + serverDate.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
+  } else {
+    const now = new Date();
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    dateStr = now.getUTCDate() + ' ' + months[now.getUTCMonth()] + ' ' + now.getUTCFullYear();
+    timeStr = now.getUTCHours().toString().padStart(2,'0') + ':' + now.getUTCMinutes().toString().padStart(2,'0') + ':' + now.getUTCSeconds().toString().padStart(2,'0') + ' UTC';
+  }
   const dateEl = document.getElementById('certDate');
   const timeEl = document.getElementById('certTime');
   if (dateEl) dateEl.textContent = dateStr;
@@ -9703,6 +9748,16 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
 
   const txEl = document.getElementById('certTxSig');
   if (txEl) txEl.textContent = tx ? (tx.slice(0,32) + '...') : '—';
+
+  // Display certificate ID from server if available
+  const certIdBox = document.getElementById('certIdBox');
+  const certIdVal = document.getElementById('certIdVal');
+  if (serverData && serverData.certificateId) {
+    if (certIdBox) certIdBox.style.display = 'block';
+    if (certIdVal) certIdVal.textContent = serverData.certificateId;
+  } else {
+    if (certIdBox) certIdBox.style.display = 'none';
+  }
 
   const lockCyanEl = document.getElementById('certLockCyan');
   if (lockCyanEl) {
