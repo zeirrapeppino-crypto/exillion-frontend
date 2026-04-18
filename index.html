@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v63 Frontend -->
+<!-- Exillion Capital Finecosystem — v65 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -6044,56 +6044,231 @@ canvas { transform: translateZ(0); }
       </div>
 
       <!-- FLOW FIX v58: Token selector — appears after wallet connect, BEFORE buyPanel -->
-      <div id="tokenSelectBar" style="display:none;margin-bottom:1.2rem;">
-        <div class="form-field" style="margin-bottom:0.6rem;">
-          <label class="field-label" style="margin-bottom:10px;font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase;">Select Your Token</label>
-          <div style="display:flex;gap:12px;">
+      <div id="tokenSelectBar" style="display:none;margin-bottom:1.4rem;">
+        <style>
+          /* ═══ TOKEN SELECT BOX — Premium Minimalist ═══ */
+          .token-select-box {
+            background: linear-gradient(145deg, rgba(4,28,52,0.95) 0%, rgba(2,18,36,0.98) 100%);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 14px;
+            padding: 20px 18px 18px;
+            position: relative;
+            overflow: hidden;
+          }
+          .token-select-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+          }
+          .token-select-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+          }
+          .token-select-label-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent);
+          }
+          .token-select-label-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.5rem;
+            letter-spacing: 4px;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+            white-space: nowrap;
+          }
+          .token-btn-row {
+            display: flex;
+            gap: 10px;
+          }
+
+          /* ── USDC BUTTON ── */
+          #btnUSDC {
+            flex: 1;
+            position: relative;
+            padding: 0;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.85);
+            background: linear-gradient(145deg, #1565C0 0%, #0D47A1 40%, #1976D2 100%);
+            box-shadow:
+              0 0 0 0 rgba(41,182,246,0),
+              0 4px 20px rgba(0,0,0,0.5),
+              inset 0 1px 0 rgba(255,255,255,0.2),
+              inset 0 -1px 0 rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            height: 64px;
+          }
+          #btnUSDC::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+            pointer-events: none;
+          }
+          #btnUSDC::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(100,181,246,0.8), transparent);
+            pointer-events: none;
+          }
+          #btnUSDC:hover {
+            border-color: #ffffff;
+            background: linear-gradient(145deg, #1976D2 0%, #1565C0 40%, #42A5F5 100%);
+            box-shadow:
+              0 0 30px rgba(41,182,246,0.55),
+              0 0 60px rgba(21,101,192,0.25),
+              0 6px 24px rgba(0,0,0,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+          }
+          #btnUSDC:active { transform: translateY(0px); }
+          .usdc-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            line-height: 1;
+          }
+          .usdc-symbol {
+            font-size: 0.42rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+          }
+
+          /* ── USDT BUTTON ── */
+          #btnUSDT {
+            flex: 1;
+            position: relative;
+            padding: 0;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.75);
+            background: linear-gradient(145deg, #1B5E20 0%, #2E7D32 40%, #388E3C 100%);
+            box-shadow:
+              0 0 0 0 rgba(38,198,118,0),
+              0 4px 20px rgba(0,0,0,0.5),
+              inset 0 1px 0 rgba(255,255,255,0.18),
+              inset 0 -1px 0 rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            height: 64px;
+          }
+          #btnUSDT::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+          }
+          #btnUSDT::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(102,187,106,0.8), transparent);
+            pointer-events: none;
+          }
+          #btnUSDT:hover {
+            border-color: #ffffff;
+            background: linear-gradient(145deg, #2E7D32 0%, #1B5E20 40%, #66BB6A 100%);
+            box-shadow:
+              0 0 30px rgba(38,198,118,0.5),
+              0 0 60px rgba(27,94,32,0.25),
+              0 6px 24px rgba(0,0,0,0.55),
+              inset 0 1px 0 rgba(255,255,255,0.28);
+            transform: translateY(-2px);
+          }
+          #btnUSDT:active { transform: translateY(0px); }
+          .usdt-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            line-height: 1;
+          }
+          .usdt-symbol {
+            font-size: 0.42rem;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+          }
+
+          /* Active/selected state override for both */
+          #btnUSDC.token-active {
+            border-color: #ffffff !important;
+            background: linear-gradient(145deg, #1976D2 0%, #1565C0 50%, #42A5F5 100%) !important;
+            box-shadow:
+              0 0 32px rgba(41,182,246,0.65) !important,
+              0 0 70px rgba(21,101,192,0.3) !important,
+              0 6px 24px rgba(0,0,0,0.55) !important,
+              inset 0 1px 0 rgba(255,255,255,0.3) !important;
+            transform: translateY(-1px) !important;
+          }
+          #btnUSDT.token-active {
+            border-color: #ffffff !important;
+            background: linear-gradient(145deg, #2E7D32 0%, #1B5E20 50%, #66BB6A 100%) !important;
+            box-shadow:
+              0 0 32px rgba(38,198,118,0.6) !important,
+              0 0 70px rgba(27,94,32,0.28) !important,
+              0 6px 24px rgba(0,0,0,0.55) !important,
+              inset 0 1px 0 rgba(255,255,255,0.28) !important;
+            transform: translateY(-1px) !important;
+          }
+          #btnUSDC.token-inactive,
+          #btnUSDT.token-inactive {
+            border-color: rgba(255,255,255,0.18) !important;
+            opacity: 0.42 !important;
+            transform: translateY(0) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
+          }
+        </style>
+
+        <div class="token-select-box">
+          <div class="token-select-label">
+            <div class="token-select-label-line"></div>
+            <span class="token-select-label-text">Select Your Token</span>
+            <div class="token-select-label-line" style="background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06));"></div>
+          </div>
+          <div class="token-btn-row">
 
             <!-- USDC Button -->
-            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')" style="
-              flex:1;
-              position:relative;
-              padding:14px 10px;
-              font-family:'Orbitron',monospace;
-              font-size:0.7rem;
-              font-weight:700;
-              letter-spacing:3px;
-              color:#ffffff;
-              cursor:pointer;
-              border-radius:8px;
-              border:1.5px solid rgba(41,182,246,0.6);
-              background:linear-gradient(135deg,rgba(21,101,192,0.85) 0%,rgba(2,136,209,0.7) 50%,rgba(0,176,255,0.5) 100%);
-              box-shadow:0 0 18px rgba(0,145,234,0.45),0 4px 15px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.15);
-              transition:all 0.25s ease;
-              overflow:hidden;
-            ">
-              <span style="position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:6px;">
-                <span style="font-size:1rem;line-height:1;">💲</span>
-                USDC
+            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')">
+              <span class="usdc-inner">
+                <span style="font-size:0.85rem;font-weight:900;letter-spacing:4px;color:#fff;">USDC</span>
+                <span class="usdc-symbol">USD COIN</span>
               </span>
             </button>
 
             <!-- USDT Button -->
-            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')" style="
-              flex:1;
-              position:relative;
-              padding:14px 10px;
-              font-family:'Orbitron',monospace;
-              font-size:0.7rem;
-              font-weight:700;
-              letter-spacing:3px;
-              color:#ffffff;
-              cursor:pointer;
-              border-radius:8px;
-              border:1.5px solid rgba(38,198,118,0.5);
-              background:linear-gradient(135deg,rgba(0,105,92,0.8) 0%,rgba(0,150,136,0.7) 50%,rgba(0,200,150,0.45) 100%);
-              box-shadow:0 0 16px rgba(0,168,107,0.35),0 4px 15px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.12);
-              transition:all 0.25s ease;
-              overflow:hidden;
-            ">
-              <span style="position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:6px;">
-                <span style="font-size:1rem;line-height:1;">₮</span>
-                USDT
+            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')">
+              <span class="usdt-inner">
+                <span style="font-size:0.85rem;font-weight:900;letter-spacing:4px;color:#fff;">USDT</span>
+                <span class="usdt-symbol">TETHER</span>
               </span>
             </button>
 
@@ -6695,32 +6870,20 @@ function selectToken(token) {
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
     if (t === 'USDC') {
-      _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.95) 0%,rgba(2,136,209,0.85) 50%,rgba(0,176,255,0.7) 100%)';
-      _bU.style.borderColor = 'rgba(41,182,246,0.9)';
-      _bU.style.boxShadow   = '0 0 28px rgba(0,145,234,0.7),0 0 60px rgba(0,145,234,0.25),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.25)';
-      _bU.style.color       = '#ffffff';
-      _bU.style.transform   = 'translateY(-1px)';
+      _bU.classList.add('token-active');
+      _bU.classList.remove('token-inactive');
     } else {
-      _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.35) 0%,rgba(2,136,209,0.25) 100%)';
-      _bU.style.borderColor = 'rgba(41,182,246,0.25)';
-      _bU.style.boxShadow   = '0 0 8px rgba(0,145,234,0.1),0 4px 15px rgba(0,0,0,0.3)';
-      _bU.style.color       = 'rgba(255,255,255,0.45)';
-      _bU.style.transform   = 'translateY(0)';
+      _bU.classList.add('token-inactive');
+      _bU.classList.remove('token-active');
     }
   }
   if (_bT) {
     if (t === 'USDT') {
-      _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.95) 0%,rgba(0,150,136,0.85) 50%,rgba(0,200,150,0.7) 100%)';
-      _bT.style.borderColor = 'rgba(38,198,118,0.9)';
-      _bT.style.boxShadow   = '0 0 28px rgba(0,168,107,0.65),0 0 60px rgba(0,168,107,0.2),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.2)';
-      _bT.style.color       = '#ffffff';
-      _bT.style.transform   = 'translateY(-1px)';
+      _bT.classList.add('token-active');
+      _bT.classList.remove('token-inactive');
     } else {
-      _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.35) 0%,rgba(0,150,136,0.25) 100%)';
-      _bT.style.borderColor = 'rgba(38,198,118,0.25)';
-      _bT.style.boxShadow   = '0 0 8px rgba(0,168,107,0.1),0 4px 15px rgba(0,0,0,0.3)';
-      _bT.style.color       = 'rgba(255,255,255,0.45)';
-      _bT.style.transform   = 'translateY(0)';
+      _bT.classList.add('token-inactive');
+      _bT.classList.remove('token-active');
     }
   }
   if (connectedAddress) {
@@ -7114,18 +7277,10 @@ async function disconnectWallet() {
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
-    _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.95) 0%,rgba(2,136,209,0.85) 50%,rgba(0,176,255,0.7) 100%)';
-    _bU.style.borderColor = 'rgba(41,182,246,0.9)';
-    _bU.style.boxShadow   = '0 0 28px rgba(0,145,234,0.7),0 0 60px rgba(0,145,234,0.25),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.25)';
-    _bU.style.color       = '#ffffff';
-    _bU.style.transform   = 'translateY(-1px)';
+    _bU.classList.remove('token-active','token-inactive');
   }
   if (_bT) {
-    _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.35) 0%,rgba(0,150,136,0.25) 100%)';
-    _bT.style.borderColor = 'rgba(38,198,118,0.25)';
-    _bT.style.boxShadow   = '0 0 8px rgba(0,168,107,0.1),0 4px 15px rgba(0,0,0,0.3)';
-    _bT.style.color       = 'rgba(255,255,255,0.45)';
-    _bT.style.transform   = 'translateY(0)';
+    _bT.classList.remove('token-active','token-inactive');
   }
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
