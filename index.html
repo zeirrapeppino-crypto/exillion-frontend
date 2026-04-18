@@ -1,17 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v60_FRONTEND
-     FIX v60: Frontend-Backend Integration
-       - showSuccess() calls /api/certificate for server-side proof
-       - Certificate displays server timestamp (not browser time)
-       - Certificate ID shown from backend
-     FIX v59 BUG-DISCLAIMER [CRITICAL]: Tombol Pay terkunci permanen setelah modal disclaimer muncul.
-       - executeBuy(): tambah `_buyBtn.disabled = false` sebelum return di blok disclaimerAccepted=false
-       - acceptDisclaimer(): setelah modal tutup, otomatis lanjut executeBuy() tanpa user harus klik Pay lagi
-     FIX v53: Removed Screenshot button, keep Save Certificate only.
-     FIX v52 BUG-1 [CRITICAL]: html2canvas load verification + fallback URL.
-     FIX v52 BUG-2 [CRITICAL]: showSuccess() — mobile scroll + mob-invest-bar not hidden.
-     FIX v52 BUG-3 [MAJOR]: certTime displayed local browser time labelled as "UTC".
--->
+<!-- Exillion Capital Finecosystem — v62 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -3086,7 +3074,7 @@ footer {
   .wp-text { font-size: 0.75rem; }
 }
 
-/* ========== FIX v15: TOAST NOTIFICATION SYSTEM ========== */
+/* Toast Notification System */
 #toast-container {
   position: fixed; bottom: 28px; right: 24px; z-index: 99999;
   display: flex; flex-direction: column; gap: 8px; align-items: flex-end; pointer-events: none;
@@ -6347,7 +6335,7 @@ canvas { transform: translateZ(0); }
   </div>
 </div>
 
-<!-- FIX v15: TOAST NOTIFICATION CONTAINER -->
+<!-- Toast Notification Container -->
 <div id="toast-container"></div>
 
 <!-- STICKY BANNER -->
@@ -6410,7 +6398,7 @@ const CFG = {
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
-// FIX v37 MAINT-1: Expose apiBase ke window agar IIFE investor counter
+// Expose apiBase to window for investor counter
 // dan funding tracker tidak hardcode URL backend 2x di luar CFG object.
 window._exillionCfg = { apiBase: CFG.API };
 function setAngelWalletFromStats(wallet) {
@@ -6671,7 +6659,7 @@ function selectToken(token) {
     inp.max  = activeTier.max;
     inp.step = '0.01';
   }
-  // FIX v26 BUG-2: Null-guard — elemen mungkin belum ada saat dipanggil di mobile
+  // Null-guard for mobile elements
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
@@ -6703,7 +6691,7 @@ function selectToken(token) {
   if (tl2) tl2.textContent = t;
   const _bt = document.getElementById('buyBtnText');
   if (_bt) _bt.textContent = 'Pay with ' + t + ' — Receive EXXE';
-  // FIX v40 TIER-2: Update fc1 max label dengan token terpilih
+  // Update tier max label with selected token
   const _mc6Max = document.getElementById('mc6MaxLabel');
   if (_mc6Max) {
     _mc6Max.textContent = '$' + activeTier.max.toFixed(2) + ' ' + t;
@@ -6719,7 +6707,7 @@ function selectToken(token) {
 }
 
 // ── FIX v15: RPC fallback list — HANYA untuk send transaction & confirmation ─
-// FIX v59-BACKEND: Balance check sudah TIDAK pakai RPC_LIST lagi.
+// Balance check now via backend
 //   Balance sekarang fetch via backend proxy (/api/token-balance) yang pakai Helius.
 //   RPC_LIST di sini hanya dipakai oleh sendTransaction() dan waitForConfirmation().
 // FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
@@ -7923,11 +7911,7 @@ async function executeBuy(){
     return;
   }
 
-  // Disclaimer accepted + balance ok — proceed with transaction
-  // FIX v25 BUG-1: jangan reset _isBuying sebelum proceedBuy.
-  // proceedBuy mengecek _isBuying lagi di awal, jadi flag harus tetap true.
-// FIX SEC-D: await proceedBuy agar runtime exception di luar try/catch-nya
-// tidak bypass finally → _isBuying tidak terkunci permanen.
+ 
 await proceedBuy();
 }
 
@@ -8061,8 +8045,7 @@ async function proceedBuy(){
           if (typeof provider.signTransaction !== 'function') {
             throw new Error('Wallet does not support transaction signing. Please update Phantom.');
           }
-          // FIX v52 BUG-8: Phantom mobile v24+ may expose signTransaction but throw
-          // WalletNotConnectedError if deep-link session has timed out. Catch specifically
+         
           // so user gets an actionable message instead of "signing failed: undefined".
           let signedTx;
           try {
@@ -8103,9 +8086,6 @@ async function proceedBuy(){
     }
     await txStep(2, 'done', token + ' split signed ✓');
 
-    // ── Step 3: Wait for on-chain confirmation then verify ────────────
-    // v24 FIX #4: Jika waitForConfirmation timeout, jangan diam-diam lanjut.
-    // Tetap coba verify (backend cek langsung ke chain), tapi beri tahu investor.
     await txStep(3, 'active', 'Verifying on Solana blockchain...');
     let confirmOk = false;
     try {
@@ -8259,10 +8239,7 @@ async function sendRawTransaction(signedBytes) {
   throw new Error('All RPC endpoints failed to send transaction. Please try again.');
 }
 
-// FIX v15 #5: waitForConfirmation uses full RPC_LIST fallback, not single hardcoded RPC
-// FIX v37 MOB-3: Timeout dinaikkan 40s → 90s dan interval 3500ms → 4000ms untuk
-// koneksi mobile Indonesia yang bisa lambat di luar Jawa/Bali. Setelah 20s, tampilkan
-// pesan "Still confirming..." agar investor tidak panik dan refresh halaman.
+
 async function waitForConfirmation(signature) {
   const maxWait     = 90000; // FIX v37 MOB-3: 90s (dari 40s) — cukup untuk mobile lambat
   const interval    = 4000;  // FIX v37 MOB-3: 4000ms (dari 3500ms) — hemat baterai
@@ -8381,9 +8358,7 @@ function resetAfterBuy() {
 // can re-open with correct values (not 0,0) after auto-modal is closed.
 window._lastCertData = null;
 
-// FIX v51 BUG-1: tierNum added as explicit 7th parameter.
-// Previously relied on CFG.TIER global — race condition risk if tier state
-// changed between transaction completion and certificate render.
+
 function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   tierNum = tierNum || CFG.TIER;
   // v49+v51: Save to global for manual re-open — store tierNum captured at tx time
