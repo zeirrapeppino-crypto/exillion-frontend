@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v65 Frontend -->
+<!-- Exillion Capital Finecosystem — v63 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -6044,232 +6044,206 @@ canvas { transform: translateZ(0); }
       </div>
 
       <!-- FLOW FIX v58: Token selector — appears after wallet connect, BEFORE buyPanel -->
-      <div id="tokenSelectBar" style="display:none;margin-bottom:1.4rem;">
+      <div id="tokenSelectBar" style="display:none;margin-bottom:1.2rem;">
+
         <style>
-          /* ═══ TOKEN SELECT BOX — Premium Minimalist ═══ */
-          .token-select-box {
-            background: linear-gradient(145deg, rgba(4,28,52,0.95) 0%, rgba(2,18,36,0.98) 100%);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 14px;
-            padding: 20px 18px 18px;
-            position: relative;
-            overflow: hidden;
-          }
-          .token-select-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-          }
-          .token-select-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 14px;
-          }
-          .token-select-label-line {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.06), transparent);
-          }
-          .token-select-label-text {
-            font-family: 'Orbitron', monospace;
-            font-size: 0.5rem;
-            letter-spacing: 4px;
-            color: rgba(255,255,255,0.35);
-            text-transform: uppercase;
-            white-space: nowrap;
-          }
-          .token-btn-row {
-            display: flex;
-            gap: 10px;
-          }
+        /* ═══ TOKEN SELECT — mirrors tier-premium-card style ═══ */
+        .token-select-heading {
+          font-family: 'Orbitron', monospace;
+          font-size: 0.5rem;
+          font-weight: 700;
+          letter-spacing: 3.5px;
+          color: rgba(255,255,255,0.38);
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+        .token-card-row {
+          display: flex;
+          gap: 10px;
+        }
+        /* Base card — mirrors .tier-premium-card */
+        .token-card {
+          flex: 1;
+          position: relative;
+          overflow: hidden;
+          border-radius: 8px;
+          cursor: pointer;
+          padding: 0;
+          border: none;
+          background: none;
+          transition: box-shadow 0.28s ease, border-color 0.28s ease, transform 0.2s ease;
+          text-align: left;
+        }
+        .token-card-inner {
+          padding: 1rem 1rem 0.9rem;
+          position: relative;
+          z-index: 1;
+        }
+        /* Top glow bar — mirrors .tier-prem-top-bar */
+        .token-card-bar {
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          pointer-events: none;
+        }
+        /* Corner accent — mirrors .tier-prem-corner */
+        .token-card-corner {
+          position: absolute;
+          bottom: 0; right: 0;
+          width: 14px; height: 14px;
+          border-bottom: 2px solid currentColor;
+          border-right: 2px solid currentColor;
+          opacity: 0.35;
+          pointer-events: none;
+        }
+        /* Divider */
+        .token-card-divider {
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+          margin: 0.5rem 0;
+        }
+        /* Icon */
+        .token-card-icon {
+          position: absolute;
+          top: 10px; right: 12px;
+          font-size: 1.3rem;
+          line-height: 1;
+          pointer-events: none;
+          opacity: 0.2;
+        }
+        /* Token name — big white like tier label */
+        .token-card-name {
+          font-family: 'Orbitron', monospace;
+          font-size: 1.05rem;
+          font-weight: 900;
+          letter-spacing: 4px;
+          color: #ffffff;
+          text-transform: uppercase;
+          line-height: 1;
+          margin-bottom: 0.2rem;
+        }
+        /* Sub label */
+        .token-card-sub {
+          font-family: 'Exo 2', sans-serif;
+          font-size: 0.48rem;
+          letter-spacing: 2px;
+          color: rgba(255,255,255,0.38);
+          text-transform: uppercase;
+          margin-bottom: 0.55rem;
+        }
+        /* Network badge — mirrors .tier-prem-badge */
+        .token-card-badge {
+          display: inline-block;
+          font-family: 'Orbitron', monospace;
+          font-size: 0.42rem;
+          font-weight: 700;
+          letter-spacing: 2px;
+          padding: 2px 8px;
+          border-radius: 2px;
+          text-transform: uppercase;
+        }
+        /* "SELECT" pulse line — mirrors .tier-prem-open */
+        .token-card-select {
+          font-family: 'Orbitron', monospace;
+          font-size: 0.42rem;
+          letter-spacing: 2.5px;
+          color: #14F195;
+          text-shadow: 0 0 8px rgba(20,241,149,0.5);
+          animation: livePulse 1.6s ease-in-out infinite;
+          margin-top: 0.45rem;
+        }
 
-          /* ── USDC BUTTON ── */
-          #btnUSDC {
-            flex: 1;
-            position: relative;
-            padding: 0;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            color: #ffffff;
-            cursor: pointer;
-            border-radius: 10px;
-            border: 2px solid rgba(255,255,255,0.85);
-            background: linear-gradient(145deg, #1565C0 0%, #0D47A1 40%, #1976D2 100%);
-            box-shadow:
-              0 0 0 0 rgba(41,182,246,0),
-              0 4px 20px rgba(0,0,0,0.5),
-              inset 0 1px 0 rgba(255,255,255,0.2),
-              inset 0 -1px 0 rgba(0,0,0,0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            height: 64px;
-          }
-          #btnUSDC::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-            pointer-events: none;
-          }
-          #btnUSDC::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(100,181,246,0.8), transparent);
-            pointer-events: none;
-          }
-          #btnUSDC:hover {
-            border-color: #ffffff;
-            background: linear-gradient(145deg, #1976D2 0%, #1565C0 40%, #42A5F5 100%);
-            box-shadow:
-              0 0 30px rgba(41,182,246,0.55),
-              0 0 60px rgba(21,101,192,0.25),
-              0 6px 24px rgba(0,0,0,0.55),
-              inset 0 1px 0 rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-          }
-          #btnUSDC:active { transform: translateY(0px); }
-          .usdc-inner {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            line-height: 1;
-          }
-          .usdc-symbol {
-            font-size: 0.42rem;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.55);
-            font-weight: 400;
-          }
+        /* ── USDC card — cyan palette (like Tier I) ── */
+        #btnUSDC {
+          background: linear-gradient(160deg, #010f1e 0%, #011a2e 50%, #010d1e 100%);
+          border: 1px solid rgba(0,212,255,0.35);
+          box-shadow: 0 0 28px rgba(0,212,255,0.08), inset 0 0 40px rgba(0,212,255,0.03);
+        }
+        #btnUSDC .token-card-bar {
+          background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), transparent);
+        }
+        #btnUSDC .token-card-icon { color: rgba(0,212,255,1); }
+        #btnUSDC .token-card-badge {
+          background: rgba(0,212,255,0.08);
+          border: 1px solid rgba(0,212,255,0.25);
+          color: #00d4ff;
+        }
+        #btnUSDC .token-card-corner { color: #00d4ff; }
+        #btnUSDC:hover {
+          box-shadow: 0 8px 40px rgba(0,212,255,0.18), inset 0 0 40px rgba(0,212,255,0.06);
+          border-color: rgba(0,212,255,0.6);
+          transform: translateY(-2px);
+        }
 
-          /* ── USDT BUTTON ── */
-          #btnUSDT {
-            flex: 1;
-            position: relative;
-            padding: 0;
-            font-family: 'Orbitron', monospace;
-            font-size: 0.85rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-            color: #ffffff;
-            cursor: pointer;
-            border-radius: 10px;
-            border: 2px solid rgba(255,255,255,0.75);
-            background: linear-gradient(145deg, #1B5E20 0%, #2E7D32 40%, #388E3C 100%);
-            box-shadow:
-              0 0 0 0 rgba(38,198,118,0),
-              0 4px 20px rgba(0,0,0,0.5),
-              inset 0 1px 0 rgba(255,255,255,0.18),
-              inset 0 -1px 0 rgba(0,0,0,0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            height: 64px;
-          }
-          #btnUSDT::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-          }
-          #btnUSDT::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(102,187,106,0.8), transparent);
-            pointer-events: none;
-          }
-          #btnUSDT:hover {
-            border-color: #ffffff;
-            background: linear-gradient(145deg, #2E7D32 0%, #1B5E20 40%, #66BB6A 100%);
-            box-shadow:
-              0 0 30px rgba(38,198,118,0.5),
-              0 0 60px rgba(27,94,32,0.25),
-              0 6px 24px rgba(0,0,0,0.55),
-              inset 0 1px 0 rgba(255,255,255,0.28);
-            transform: translateY(-2px);
-          }
-          #btnUSDT:active { transform: translateY(0px); }
-          .usdt-inner {
-            position: relative;
-            z-index: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            line-height: 1;
-          }
-          .usdt-symbol {
-            font-size: 0.42rem;
-            letter-spacing: 2px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 400;
-          }
+        /* ── USDT card — green palette (like Tier II) ── */
+        #btnUSDT {
+          background: linear-gradient(160deg, #001209 0%, #001f10 50%, #000e07 100%);
+          border: 1px solid rgba(20,241,149,0.32);
+          box-shadow: 0 0 28px rgba(20,241,149,0.08), inset 0 0 40px rgba(20,241,149,0.03);
+        }
+        #btnUSDT .token-card-bar {
+          background: linear-gradient(90deg, transparent, rgba(20,241,149,0.6), rgba(0,229,160,0.9), rgba(20,241,149,0.6), transparent);
+        }
+        #btnUSDT .token-card-icon { color: rgba(20,241,149,1); }
+        #btnUSDT .token-card-badge {
+          background: rgba(20,241,149,0.08);
+          border: 1px solid rgba(20,241,149,0.28);
+          color: #14F195;
+        }
+        #btnUSDT .token-card-corner { color: #14F195; }
+        #btnUSDT:hover {
+          box-shadow: 0 8px 40px rgba(20,241,149,0.18), inset 0 0 40px rgba(20,241,149,0.06);
+          border-color: rgba(20,241,149,0.6);
+          transform: translateY(-2px);
+        }
 
-          /* Active/selected state override for both */
-          #btnUSDC.token-active {
-            border-color: #ffffff !important;
-            background: linear-gradient(145deg, #1976D2 0%, #1565C0 50%, #42A5F5 100%) !important;
-            box-shadow:
-              0 0 32px rgba(41,182,246,0.65) !important,
-              0 0 70px rgba(21,101,192,0.3) !important,
-              0 6px 24px rgba(0,0,0,0.55) !important,
-              inset 0 1px 0 rgba(255,255,255,0.3) !important;
-            transform: translateY(-1px) !important;
-          }
-          #btnUSDT.token-active {
-            border-color: #ffffff !important;
-            background: linear-gradient(145deg, #2E7D32 0%, #1B5E20 50%, #66BB6A 100%) !important;
-            box-shadow:
-              0 0 32px rgba(38,198,118,0.6) !important,
-              0 0 70px rgba(27,94,32,0.28) !important,
-              0 6px 24px rgba(0,0,0,0.55) !important,
-              inset 0 1px 0 rgba(255,255,255,0.28) !important;
-            transform: translateY(-1px) !important;
-          }
-          #btnUSDC.token-inactive,
-          #btnUSDT.token-inactive {
-            border-color: rgba(255,255,255,0.18) !important;
-            opacity: 0.42 !important;
-            transform: translateY(0) !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3) !important;
-          }
+        /* Active (selected) state */
+        #btnUSDC.token-active {
+          border-color: rgba(0,212,255,0.75) !important;
+          box-shadow: 0 0 32px rgba(0,212,255,0.28), 0 8px 40px rgba(0,212,255,0.15), inset 0 0 50px rgba(0,212,255,0.07) !important;
+          transform: translateY(-2px);
+        }
+        #btnUSDT.token-active {
+          border-color: rgba(20,241,149,0.75) !important;
+          box-shadow: 0 0 32px rgba(20,241,149,0.28), 0 8px 40px rgba(20,241,149,0.15), inset 0 0 50px rgba(20,241,149,0.07) !important;
+          transform: translateY(-2px);
+        }
+        /* Inactive (dimmed) state */
+        #btnUSDC.token-inactive,
+        #btnUSDT.token-inactive {
+          opacity: 0.38 !important;
+          transform: translateY(0) !important;
+        }
         </style>
 
-        <div class="token-select-box">
-          <div class="token-select-label">
-            <div class="token-select-label-line"></div>
-            <span class="token-select-label-text">Select Your Token</span>
-            <div class="token-select-label-line" style="background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06));"></div>
-          </div>
-          <div class="token-btn-row">
+        <div class="form-field" style="margin-bottom:0.6rem;">
+          <div class="token-select-heading">Select Your Token</div>
+          <div class="token-card-row">
 
-            <!-- USDC Button -->
-            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')">
-              <span class="usdc-inner">
-                <span style="font-size:0.85rem;font-weight:900;letter-spacing:4px;color:#fff;">USDC</span>
-                <span class="usdc-symbol">USD COIN</span>
-              </span>
+            <!-- USDC Card -->
+            <button id="btnUSDC" class="token-card" onclick="selectTokenAndProceed('USDC')">
+              <div class="token-card-bar"></div>
+              <div class="token-card-icon">◈</div>
+              <div class="token-card-inner">
+                <div class="token-card-name">USDC</div>
+                <div class="token-card-divider"></div>
+                <div><span class="token-card-badge">SPL TOKEN</span></div>
+                <div class="token-card-select">● SELECT</div>
+              </div>
+              <div class="token-card-corner"></div>
             </button>
 
-            <!-- USDT Button -->
-            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')">
-              <span class="usdt-inner">
-                <span style="font-size:0.85rem;font-weight:900;letter-spacing:4px;color:#fff;">USDT</span>
-                <span class="usdt-symbol">TETHER</span>
-              </span>
+            <!-- USDT Card -->
+            <button id="btnUSDT" class="token-card" onclick="selectTokenAndProceed('USDT')">
+              <div class="token-card-bar"></div>
+              <div class="token-card-icon">◈</div>
+              <div class="token-card-inner">
+                <div class="token-card-name">USDT</div>
+                <div class="token-card-divider"></div>
+                <div><span class="token-card-badge">SPL TOKEN</span></div>
+                <div class="token-card-select">● SELECT</div>
+              </div>
+              <div class="token-card-corner"></div>
             </button>
 
           </div>
@@ -6870,20 +6844,16 @@ function selectToken(token) {
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
     if (t === 'USDC') {
-      _bU.classList.add('token-active');
-      _bU.classList.remove('token-inactive');
+      _bU.classList.add('token-active'); _bU.classList.remove('token-inactive');
     } else {
-      _bU.classList.add('token-inactive');
-      _bU.classList.remove('token-active');
+      _bU.classList.add('token-inactive'); _bU.classList.remove('token-active');
     }
   }
   if (_bT) {
     if (t === 'USDT') {
-      _bT.classList.add('token-active');
-      _bT.classList.remove('token-inactive');
+      _bT.classList.add('token-active'); _bT.classList.remove('token-inactive');
     } else {
-      _bT.classList.add('token-inactive');
-      _bT.classList.remove('token-active');
+      _bT.classList.add('token-inactive'); _bT.classList.remove('token-active');
     }
   }
   if (connectedAddress) {
@@ -7276,12 +7246,8 @@ async function disconnectWallet() {
   // v18 #2: null-guard — buttons may not exist if angel section not yet scrolled into view
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
-  if (_bU) {
-    _bU.classList.remove('token-active','token-inactive');
-  }
-  if (_bT) {
-    _bT.classList.remove('token-active','token-inactive');
-  }
+  if (_bU) { _bU.classList.remove('token-active','token-inactive'); }
+  if (_bT) { _bT.classList.remove('token-active','token-inactive'); }
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
   const balLbl = document.getElementById('tokenBalanceLabel');
