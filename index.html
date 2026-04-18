@@ -6347,21 +6347,6 @@ canvas { transform: translateZ(0); }
 </div>
 
 <script>
-// ============================================================
-// EXILLION v18 — MAIN JAVASCRIPT
-// FIXES APPLIED:
-//  #1  Toast system replaces alert()
-//  #2  web3.js VersionedTransaction signing (Phantom + Solflare)
-//  #3  USDC balance fetch + display after wallet connect
-//  #4  USDC balance pre-check before submit
-//  #5  waitForConfirmation uses RPC fallback array
-//  #6  Mobile: restore wallet state on return from wallet app
-//  v18 #1  sticky-banner scroll uses passive listener (no jank)
-//  v18 #2  disconnectWallet null-guard for token selector buttons
-//  v18 #3  fetchWithTimeout body mismatch fix (investor count script)
-//  v18 #4  duplicate DOMContentLoaded coalesced into one
-//  v18 #5  canvas animation stopped immediately when splash exits
-// ============================================================
 
 // --- CONFIG --------------------------------------------------
 const CFG = {
@@ -6378,7 +6363,7 @@ const CFG = {
   TIER: 1,
   // Semua tier OPEN bersamaan — tidak sequential
   TIERS: {
-    // v48 FINAL: Supply | Bonus | Hold period per tier — NO VESTING
+    // FINAL: Supply | Bonus | Hold period per tier — NO VESTING
     // Tier I  : 188.8M EXXE @ $0.01  | no bonus  | hold 3 bln 
     // Tier II : 251.8M EXXE @ $0.025 | +5% bonus  | hold 2 bln 
     // Tier III: 388M EXXE   @ $0.05  | +10% bonus | hold 1 bln 
@@ -6392,7 +6377,7 @@ const CFG = {
          bonus:0.10, bonusPct:10,
          lock:'1-month hold after listing on Orca DEX (Solana)' },
   },
-  // v42 FINAL: Wallet Transparansi On-Chain Angel Investor
+  // FINAL: Wallet Transparansi On-Chain Angel Investor
   // Default fallback; overridden dynamically from /api/stats if backend returns angelWallet.
   ANGEL_WALLET: '4Y9Zg3K8Ut8NboWf7BuVmhS6kXedaozjvK61uSNnXkNW',
   LISTING: 0.10,
@@ -6421,7 +6406,6 @@ function setSplitWalletsFromStats(wallets) {
   }
 }
 
-// ── FIX v40 TIER-1: Tier selector functions ──────────────────────────────────
 
 // Dipanggil saat user klik tier card di tier grid
 function selectTierAndScroll(tierNum) {
@@ -6706,10 +6690,6 @@ function selectToken(token) {
   calcTokens();
 }
 
-// ── FIX v15: RPC fallback list — HANYA untuk send transaction & confirmation ─
-// Balance check now via backend
-//   Balance sekarang fetch via backend proxy (/api/token-balance) yang pakai Helius.
-//   RPC_LIST di sini hanya dipakai oleh sendTransaction() dan waitForConfirmation().
 // FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
 // FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
@@ -6767,17 +6747,11 @@ function showToast(message, type, duration) {
   closeBtn.addEventListener('click', () => { clearTimeout(timer); remove(); });
 }
 
-// ── FIX v15 #3 / v59-BACKEND: Fetch token balance via backend proxy ──
-// FIX v58-CACHE: Use -1 as sentinel — distinguishes "never loaded" from "balance is 0"
-// FIX v59-BACKEND: Balance fetch sekarang lewat backend (Helius/Alchemy) — bukan public RPC.
-//   - API key aman di server, tidak keluar ke browser.
-//   - Backend cache 20 detik — RPC call jauh lebih sedikit.
-//   - Frontend tidak lagi butuh RPC_LIST untuk balance check.
 var cachedUsdcBalance = -1;
 var cachedUsdtBalance = -1;
 
 // Fetches balance untuk token yang dipilih via backend endpoint
-// FLOW FIX v58: Never touches DOM — selectTokenAndProceed() handles all balance display
+// Never touches DOM — selectTokenAndProceed() handles all balance display
 async function fetchTokenBalances(walletAddress) {
   const token = CFG.SELECTED_TOKEN || 'USDC';
   const balance = await fetchTokenBalanceViaBackend(walletAddress, token);
@@ -6786,7 +6760,7 @@ async function fetchTokenBalances(walletAddress) {
   return balance;
 }
 
-// FIX v59-BACKEND: Ganti fetch langsung ke RPC → fetch ke backend proxy
+// BACKEND: Ganti fetch langsung ke RPC → fetch ke backend proxy
 // Backend pakai Helius (env RPC_URL) sebagai primary — jauh lebih cepat & reliable.
 async function fetchTokenBalanceViaBackend(walletAddress, token) {
   const ctrl  = new AbortController();
@@ -6864,7 +6838,7 @@ function updateModal(){
   const countEl = document.getElementById('checkCount'); if(countEl) countEl.textContent = checked;
   const btn = document.getElementById('agreeBtn');
   if(!btn) return;
-  // FIX v52 BUG-7: Always update agreeBtn visual state regardless of modal visibility.
+  // Always update agreeBtn visual state regardless of modal visibility.
   // Previously, if modal was closed when tier changed (mc4-mc6 unchecked), agreeBtn could
   // show stale "Proceed" state on re-open until a checkbox was interacted with.
   if(checked===6){ btn.classList.add('ready'); btn.textContent='I Understand — Proceed'; }
@@ -7104,10 +7078,6 @@ function isInsideSolflare() {
   return !!(window.solflare && window.solflare.isSolflare);
 }
 
-// v45 WALLET FIX: Auto-resume after mobile deep link redirect.
-// When user returns from Phantom/Solflare app, the tab becomes visible again.
-// We retry provider detection with a short delay since injection may not be
-// immediate upon returning from the wallet app.
 document.addEventListener('visibilitychange', function _mobileWalletResume() {
   if (document.hidden) return;
   if (!isMobileBrowser()) return;
@@ -7148,10 +7118,6 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
   }, 600); // 600ms delay gives wallet time to inject provider on return
 });
 
-// FIX v27 #8: Rate-limit koneksi wallet — cegah spam klik yang memicu
-// multiple provider.connect() calls secara paralel.
-// FIX v29 MOB-2: Flag terpisah per wallet — satu flag shared menyebabkan
-// Solflare terblokir permanent jika Phantom gagal dengan flag masih true di mobile.
 // ── v45 WALLET FIX: connectPhantom — desktop & mobile ───────────────────────
 let _isConnectingPhantom  = false;
 let _isConnectingSolflare = false;
@@ -7541,12 +7507,6 @@ function scrollToTierI() {
   }, 600);
 }
 
-// "BUY NOW" → precise scroll to the Angel Investor Wallet box
-// FIX v39 MOB-BUY-3: Fungsi khusus mobile — scroll ke tier dulu, lalu ke wallet.
-// Dipanggil oleh semua tombol CTA "Join Angel Investor Round".
-// Di desktop: sama seperti scrollToTierI biasa (tier cards visible langsung).
-// Di mobile: tier cards muncul dulu (user lihat harga), lalu 1.2s kemudian
-//            scroll ke wallet connect agar flow terasa natural.
 function scrollToTierThenWallet() {
   // Tutup nav menu jika terbuka
   var navLinks = document.getElementById('navLinks');
@@ -8507,10 +8467,6 @@ function toggleMenu(){
   btn.classList.toggle('open');
 }
 
-// FIX v18 #1: All event listener setup consolidated here.
-// - scroll uses passive:true → no scroll jank on mobile
-// - orientationchange added → nav-h updates on device rotate
-// - outside click closes mobile menu
 document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   function closeMenu() {
     const nl = document.getElementById('navLinks');
@@ -8563,9 +8519,6 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   // FIX: Show sticky banner AFTER main-splash animation completes (not during)
   updateNavHeight();
 
-  // FIX v27 #6: Escape key tutup modal disclaimer dan restore body overflow.
-  // Tanpa ini, jika user menutup tab saat modal terbuka lalu kembali,
-  // atau browser tidak trigger tombol decline, overflow tetap 'hidden'.
   document.addEventListener('keydown', function(e) {
     if (e.key !== 'Escape') return;
     const overlay = document.getElementById('disclaimerOverlay');
@@ -9010,26 +8963,8 @@ function startGoldNetwork(canvasId, isSplash) {
     };
 }
 
-// BUG FIX #7: MutationObserver removed — startGoldNetwork('gold-network-main') and
-// startMainSplashParticles() are already called inside enterSite() at the correct moment.
-// Running them again here created two concurrent canvas animation loops, wasting CPU/GPU.
-
-
-
-
-
-
 </script>
 
-<!-- ---------------------------------------------------
-     LIVE INVESTOR COUNT — v16 (FIX v36 SYNC-1 + SYNC-4)
-     FIX v36 SYNC-1: ANGEL_DIST_WALLET tidak lagi hardcode.
-       Dibaca dinamis dari /api/stats (field: angelWallet).
-       Fallback ke address default jika backend belum siap.
-     FIX v36 SYNC-4: Script ini sekarang menggunakan window._exillionStatsCache
-       (shared cache) yang diisi oleh REAL-TIME FUNDING TRACKER di bawah.
-       Tidak ada double fetch ke /api/stats dari dua script terpisah.
-     --------------------------------------------------- -->
 <script>
 (function() {
   'use strict';
@@ -9281,18 +9216,6 @@ function startGoldNetwork(canvasId, isSplash) {
 })();
 </script>
 
-<!-- ---------------------------------------------------
-     REAL-TIME FUNDING TRACKER — v16 (FIX v36 SYNC-2/3/4)
-     FIX v36 SYNC-2: Split pct tidak lagi hardcode (0.75/0.15/0.10).
-       Dibaca dari /api/stats (field: split.liquidity/operational/development).
-       Fallback ke 75/15/10 jika backend tidak merespons.
-     FIX v36 SYNC-3: REFRESH_MS naik dari 30s ke 60s.
-       Match backend STATS_TTL_MS=60s — polling 30s sia-sia karena
-       cache backend belum di-refresh saat itu.
-     FIX v36 SYNC-4: Shared stats cache via window._exillionStatsCache.
-       Investor counter membaca dari cache yang sama.
-       Tidak ada double fetch ke /api/stats dari dua script terpisah.
-     --------------------------------------------------- -->
 <script>
 (function() {
   const USDC_MINT  = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
@@ -9442,11 +9365,6 @@ function startGoldNetwork(canvasId, isSplash) {
     });
   }
 
-  // FIX v37 SYNC-1: updateUI menerima optional exxeSold dari /api/stats backend.
-  // Jika tersedia, gunakan nilai on-chain yang dihitung per-tier (akurat).
-  // Jika tidak tersedia (fallback on-chain mode), estimasi dengan TIER1_PRICE.
-  // FIX v58: Total raised display removed — only per-tier sold + investor count are shown.
-  // updateUI kept minimal: pulse live dots only. Per-tier data is handled by updateTierCards().
   function updateUI(totalUsdc, exxeSoldOnChain) {
     // High watermark — prevents regression if backend returns stale lower value
     if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
@@ -9682,10 +9600,7 @@ function startGoldNetwork(canvasId, isSplash) {
   document.addEventListener('DOMContentLoaded', function() {
     initMobileInvestBar();
 
-    // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
-    // dan belum connect, auto-connect setelah page load 1.5 detik.
-    // Provider sudah inject oleh in-app browser — tidak perlu deep link keluar.
-    if (_isMob()) {
+     if (_isMob()) {
       setTimeout(function() {
         if (typeof connectedWallet !== 'undefined' && connectedWallet) return; // sudah connect
         if (isInsidePhantom()) {
