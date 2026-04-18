@@ -41,9 +41,7 @@
 <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js" defer></script>
 
 <style>
-/* ═══════════════════════════════════════════
-   FONT METRICS OVERRIDE — prevents layout shift
-   ═══════════════════════════════════════════ */
+
 @font-face {
   font-family: 'orbitron-fallback';
   src: local('monospace');
@@ -73,9 +71,6 @@ body {
   font-family: 'Orbitron', 'orbitron-fallback', monospace;
 }
 
-/* ═══════════════════════════════════════════
-   GENESIS CERTIFICATE — dynamic per tier
-   ═══════════════════════════════════════════ */
 #certModal {
   display: none;
   position: fixed;
@@ -284,9 +279,7 @@ body {
 </style>
 
 <style>
-/* ═══════════════════════════════════════════
-   DESIGN SYSTEM — EXILLION NAVY BLUE FUTURISTIC
-   ═══════════════════════════════════════════ */
+
 :root {
   --void:        #010b18;
   --deep:        #021525;
@@ -423,7 +416,6 @@ body::after {
   to { opacity: 1.0; }
 }
 
-/* --- NAVIGATION --- */
 nav {
   position: fixed;
   top: 0;
@@ -617,7 +609,6 @@ nav {
   box-shadow: 0 0 20px rgba(0,212,255,0.15);
 }
 
-/* --- HERO --- */
 #hero {
   min-height: 100vh;
   display: flex;
@@ -711,41 +702,7 @@ nav {
   opacity: 0.8;
   animation: riseUp 0.8s 0.4s ease both;
 }
-
-.hero-desc {
-  font-family: 'Orbitron', monospace;
-  max-width: 1100px;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: var(--text-1);
-  line-height: 1.7;
-  margin: 1.5rem auto 1.5rem;
-  font-style: normal;
-  text-align: center;
-  animation: riseUp 0.8s 0.5s ease both;
-  padding: 0 2rem;
-}
-
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: riseUp 0.8s 0.6s ease both;
-}
 /* STATS */
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--border-dim);
-  border-bottom: 1px solid var(--border-dim);
-  margin-top: 4rem;
-  width: 100%;
-  animation: riseUp 0.8s 0.7s ease both;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
 
 .stat {
   padding: 22px 36px;
@@ -778,7 +735,6 @@ nav {
   text-transform: uppercase;
 }
 
-/* --- SECTION HEADER ----------------------- */
 .section-header {
   text-align: center;
   margin-bottom: 5rem;
@@ -829,7 +785,6 @@ nav {
   100% { filter: drop-shadow(0 0 6px rgba(255,215,0,0.5)) drop-shadow(0 0 14px rgba(204,125,7,0.3)); }
 }
 
-/* --- VISION ------------------------------- */
 #vision {
   padding: 0px 5% 80px;
 }
@@ -860,19 +815,7 @@ nav {
   margin-bottom: 2rem;
 }
 
-blockquote.centerquote {
-  display: block;
-  font-family: var(--font-body);
-  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
-  font-weight: 600;
-  font-style: italic;
-  color: var(--gold-light);
-  text-align: center;
-  line-height: 1.4;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 30px rgba(232,201,122,0.35), 0 0 60px rgba(201,168,76,0.15);
-  letter-spacing: 1px;
-}
+blockquote
 
 /* Vision text: optimised for readability & investor trust */
 .vision-text p {
@@ -940,7 +883,6 @@ blockquote.centerquote {
   line-height: 1.65;
 }
 
-/* --- TOKENOMICS --------------------------- */
 #tokenomics {
   padding: 110px 5%;
   background: linear-gradient(180deg, transparent, rgba(0,66,255,0.04), transparent);
@@ -1093,58 +1035,12 @@ blockquote.centerquote {
 }
 
 /* PRICE TABLE */
-.price-table {
-  background: var(--card);
-  border: 1px solid var(--border);
-  padding: 1.6rem 1.8rem;
-  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
-}
-
-.price-table-head {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  color: var(--cyan);
-  opacity: 0.7;
-  margin-bottom: 1.2rem;
-}
-
-.price-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border-dim);
-}
-
-.price-row:last-child {
-  border-bottom: none;
-}
-
-.price-tier {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: var(--text-1);
-}
-
-.price-amt {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
 
 .t1 { color: var(--green); }
 .t2 { color: var(--gold-light); }
 .t3 { color: var(--gold); }
 .tl { color: var(--cyan); }
 
-.gain {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.7rem;
-  color: var(--green);
-}
-
-/* --- ANGEL ROUND -------------------------- */
 #angel {
   padding: 110px 5%;
 }
@@ -1188,60 +1084,6 @@ blockquote.centerquote {
   box-shadow: 0 0 8px rgba(0,212,255,0.4);
 }
 
-.tier-num {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 3px;
-  color: var(--cyan);
-  margin-bottom: 0.5rem;
-}
-
-.tier-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 1px;
-  color: var(--text-1);
-  margin-bottom: 1rem;
-}
-
-.tier-price {
-  font-family: 'Orbitron', monospace;
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--gold);
-  line-height: 1;
-}
-
-.tier-price sub {
-  font-size: 0.7rem;
-  color: var(--text-1);
-}
-
-.tier-detail {
-  font-family: var(--font-body);
-  font-size: 0.88rem;
-  font-weight: 400;
-  color: var(--text-1);
-  margin-top: 0.5rem;
-}
-
-.tier-gain {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.7rem;
-  color: var(--green);
-  margin-top: 0.8rem;
-  font-weight: 500;
-}
-
-.tier-badge {
-  display: inline-block;
-  font-family: 'Orbitron', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 2px;
-  padding: 4px 10px;
-  margin-top: 0.8rem;
-}
-
 .tier-badge.open {
   color: #fff;
   border: 1px solid rgba(20,241,149,0.6);
@@ -1272,19 +1114,6 @@ blockquote.centerquote {
     text-shadow: 0 0 20px #14F195, 0 0 50px #14F195, 0 0 90px rgba(0,212,255,0.7);
     border-color: rgba(20,241,149,1);
   }
-}
-
-.tier-badge.soon {
-  color: var(--text-1);
-  border: 1px solid var(--border-dim);
-}
-/* BUY FORM */
-.buy-form {
-  background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: 0 0 60px rgba(0,212,255,0.07), inset 0 0 60px rgba(0,212,255,0.01);
-  padding: 1.6rem 2rem;
-  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
 }
 
 .buy-form-title {
@@ -1660,45 +1489,6 @@ blockquote.centerquote {
   background: rgba(0,212,255,0.02);
 }
 
-.check-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.55rem;
-  letter-spacing: 3px;
-  color: var(--cyan);
-  opacity: 0.6;
-  margin-bottom: 0.8rem;
-}
-
-.check-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 0.6rem;
-  cursor: pointer;
-}
-
-.check-item:last-child { margin-bottom: 0; }
-
-.check-item input {
-  accent-color: var(--cyan);
-  margin-top: 3px;
-  flex-shrink: 0;
-}
-
-.check-item label {
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  font-weight: 400;
-  color: var(--text-1);
-  cursor: pointer;
-  line-height: 1.6;
-}
-
-.check-item label strong {
-  color: var(--cyan);
-  font-weight: 600;
-}
-
 .buy-btn {
   width: 100%;
   margin-top: 1.2rem;
@@ -1951,11 +1741,6 @@ blockquote.centerquote {
 }
 
 /* Price table tier label */
-.price-tier {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-style: normal;
-}
 
 /* Legend name */
 .lname {
@@ -1970,10 +1755,7 @@ blockquote.centerquote {
 }
 
 /* Angel round form check labels */
-.checks .check-item label,
-.modal-checks .modal-check label {
-  font-family: var(--font-body) !important;
-}
+.checks
 
 /* ─────────────────────────────────────────────────────────────────── */
 #whitepaper {
@@ -2035,11 +1817,6 @@ blockquote.centerquote {
   flex-shrink: 0;
 }
 
-.wp-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
 .wp-title {
   font-family: 'Orbitron', monospace;
   font-size: 0.75rem;
@@ -2067,7 +1844,6 @@ blockquote.centerquote {
   line-height: 1.7;
 }
 
-/* --- DASHBOARD ---------------------------- */
 #dashboard {
   padding: 110px 5%;
 }
@@ -2231,17 +2007,6 @@ blockquote.centerquote {
   transform: translateY(-2px);
 }
 
-.prog-meta {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'Orbitron', monospace;
-  font-size: 0.6rem;
-  color: var(--text-1);
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
 .prog-track {
   width: 100%;
   height: 4px;
@@ -2276,7 +2041,6 @@ blockquote.centerquote {
   to { }
 }
 
-/* --- ROADMAP ------------------------------ */
 #roadmap {
   padding: 0px 5% 80px;
   background: linear-gradient(180deg, transparent, rgba(0,66,255,0.05), transparent);
@@ -2410,7 +2174,6 @@ blockquote.centerquote {
   box-shadow: none;
 }
 
-/* --- FOOTER ------------------------------- */
 footer {
   padding: 40px 5% 30px;
   border-top: 1px solid var(--border-dim);
@@ -2509,7 +2272,6 @@ footer {
   animation: pulse 2s infinite;
 }
 
-/* --- DISCLAIMER MODAL --------------------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -2607,12 +2369,6 @@ footer {
   padding: 0.8rem 1rem;
   background: rgba(0,212,255,0.03);
   border-left: 2px solid rgba(0,212,255,0.3);
-}
-
-.risk-icon {
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  margin-top: 2px;
 }
 
 .risk-text {
@@ -2719,7 +2475,6 @@ footer {
   color: var(--red);
 }
 
-/* --- STICKY BANNER ------------------------ */
 .sticky-banner {
   position: fixed;
   bottom: 0;
@@ -2768,7 +2523,6 @@ footer {
 
 .banner-close:hover { color: var(--text-1); }
 
-/* --- HAMBURGER BUTTON --------------------- */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -2813,10 +2567,6 @@ footer {
   transform: translateY(-6.5px) rotate(-45deg);
 }
 
-/* =========================================
-   GLOBAL ANIMATIONS (Cinematic)
-   ========================================= */
-
 @keyframes heroLogoGlow {
   from { filter: drop-shadow(0 0 14px rgba(204,125,7,0.8)) drop-shadow(0 0 30px rgba(232,201,122,0.5)) drop-shadow(0 0 60px rgba(204,125,7,0.25)); }
   to { filter: drop-shadow(0 0 28px rgba(232,201,122,1)) drop-shadow(0 0 60px rgba(204,125,7,0.8)) drop-shadow(0 0 110px rgba(255,200,80,0.45)); }
@@ -2857,11 +2607,6 @@ footer {
   will-change: auto;
 }
 
-/* =========================================
-   RESPONSIVE STYLES (MERGED & CLEANED)
-   ========================================= */
-
-/* --- TABLET & MOBILE 768px ---------------- */
 @media (max-width: 768px) {
 
   /* Nav — show hamburger, hide links */
@@ -2910,7 +2655,6 @@ footer {
   }
 
   /* Hero stats block */
-  .hero-stats { flex-wrap: wrap; }
 
   /* Vision grid */
   .vision-grid { grid-template-columns: 1fr !important; gap: 2.5rem; }
@@ -2941,13 +2685,12 @@ footer {
   /* Dashboard */
   .dash-cards { grid-template-columns: 1fr 1fr !important; }
 
-  /* --- COMPONENT SPECIFIC MOBILE STYLES --- */
+  
 
   /* Angel Investor Round */
   .buy-form { padding: 1.2rem 1rem !important; }
   .buy-form-title { font-size: 0.75rem; letter-spacing: 2px; }
   .tier-card { padding: 1.2rem 0.9rem !important; }
-  .tier-price { font-size: 1.4rem !important; }
   .field-input { font-size: 0.82rem !important; padding: 10px 12px !important; }
   .buy-btn { font-size: 0.62rem !important; letter-spacing: 1px !important; }
 
@@ -3065,7 +2808,6 @@ footer {
 
   /* Overflow fix */
   section, #hero { overflow-x: hidden; }
-  .hero-stats { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Live calc row wraps on mobile */
   .calc-row { flex-wrap: wrap; gap: 4px; }
@@ -3074,7 +2816,6 @@ footer {
   .calc-amt.gold { font-size: 0.95rem; }
 
   /* Check labels more readable */
-  .check-item label { font-size: 0.78rem; }
 
   /* Transparency wallet addresses */
   #transparency a[href*="solscan"] {
@@ -3085,7 +2826,6 @@ footer {
 
   /* Progress section */
   .progress-wrap { padding: 0 !important; }
-  .rt-stats { flex-wrap: wrap !important; }
 }
 
 /* ── FIX v39 MOB-BUY-4: Mobile sticky invest bar ── */
@@ -3127,7 +2867,6 @@ footer {
   animation: goldSweep 5s linear infinite;
 }
 
-/* --- MOBILE 480px ------------------------- */
 @media(max-width:480px){
   body { font-size: 15px; }
   nav { padding: 10px 4% !important; }
@@ -3138,11 +2877,7 @@ footer {
   .hero-title { font-size: clamp(1.8rem, 7vw, 3.5rem) !important; letter-spacing: 5px !important; }
   .hero-ticker { font-size: 1.1rem !important; letter-spacing: 2px !important; }
   .hero-tagline { font-size: 0.8rem !important; letter-spacing: 1.5px !important; }
-  .hero-desc { font-size: 0.82rem !important; padding: 0 0.5rem; text-align: center; }
-  .hero-actions { flex-direction: column !important; align-items: center !important; }
-  .hero-actions a { font-size: 0.75rem; padding: 0 20px; width: 95% !important; }
   .btn-gold, .btn-outline { padding: 12px 20px !important; font-size: 0.78rem !important; letter-spacing: 1.5px !important; }
-  .hero-contract { flex-direction: column; gap: 4px; text-align: center; }
   .stat { min-width: 100px; padding: 14px 16px; }
   .stat-val { font-size: 1rem; }
   .stat-lbl { font-size: 0.48rem; letter-spacing: 1px; }
@@ -3160,7 +2895,6 @@ footer {
   .dash-metric { font-size: 0.48rem; letter-spacing: 2px; }
 }
 
-/* --- SMALL MOBILE 360px ------------------- */
 @media (max-width: 360px) {
   .hero-title { font-size: clamp(1.5rem, 6vw, 2.8rem) !important; letter-spacing: 3px !important; }
   .stat { min-width: 88px; padding: 12px 10px; }
@@ -3196,15 +2930,14 @@ footer {
   max-width: 340px; pointer-events: auto;
   animation: toastIn 0.3s ease both; will-change: transform, opacity;
 }
-.toast.toast-success { border-left-color: var(--green); }
-.toast.toast-error { border-left-color: var(--red); }
-.toast.toast-warn { border-left-color: var(--gold); }
+.toast
+.toast
+.toast
 .toast-icon { font-size: 1rem; flex-shrink: 0; line-height: 1.2; }
 .toast-msg { flex: 1; line-height: 1.6; }
 .toast-close { background: none; border: none; color: var(--text-2); font-size: 0.8rem; cursor: pointer; padding: 0; flex-shrink: 0; line-height: 1; margin-top: 1px; }
 .toast.toast-out { animation: toastOut 0.25s ease forwards; }
 
-/* ========== v6 PERFORMANCE OPTIMIZATIONS ========== */
 #vision        { content-visibility: auto; contain-intrinsic-size: 0 1200px; }
 #tokenomics    { content-visibility: auto; contain-intrinsic-size: 0 900px; }
 #angel         { } /* content-visibility removed - buy form must render immediately */
@@ -3216,7 +2949,6 @@ footer {
 .reveal { contain: layout style; }
 canvas { transform: translateZ(0); }
 
-/* ========== SPLASH PAGE ========== */
 #splash-page {
   position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100dvh;
   background: 
@@ -3273,9 +3005,6 @@ canvas { transform: translateZ(0); }
   #main-splash-content > div[style*="340px"] { width: min(340px, 82vw) !important; }
   #main-splash-status { font-size: clamp(0.38rem, 1vw, 0.62rem) !important; letter-spacing: clamp(1px, 0.4vw, 1.5px) !important; }
 }
-
-.splash-logo { text-align: center; z-index: 10; padding: clamp(2px, 0.5vh, 8px) 20px clamp(2px, 0.3vh, 4px); position: relative; width: 100%; max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 0; padding-bottom: clamp(8px, 2vh, 24px); }
-.splash-logo-img-wrap { display: block; margin: 0 auto; margin-top: clamp(-11px, -1.5vw, -8px); margin-bottom: clamp(-10px, -1.5vw, -5px); will-change: opacity, transform, filter; transform: translateZ(0); }
 .splash-title {
   font-family: 'Orbitron', monospace; font-size: clamp(2.5rem, 7vw, 4.4rem); font-weight: 900; text-transform: uppercase; letter-spacing: clamp(2px, 0.8vw, 6px);
   background: linear-gradient(90deg, #4a2800 0%, #7a4a10 8%, #c17f13 18%, #e8c97a 28%, #ffd700 38%, #ffe55c 45%, #fff1a0 50%, #ffe55c 55%, #ffd700 62%, #e8c97a 72%, #c17f13 82%, #7a4a10 92%, #4a2800 100%);
@@ -3320,10 +3049,6 @@ canvas { transform: translateZ(0); }
 #main-splash { will-change: opacity, transform, filter; backface-visibility: hidden; }
 #main-content-inner { opacity: 0; }
 
-/* ========================================= 
-   KEYFRAMES / ANIMATIONS (CONSOLIDATED)
-   ========================================= */
-
 @keyframes toastIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(30px); } }
 
@@ -3350,186 +3075,14 @@ canvas { transform: translateZ(0); }
 @keyframes particleFloat { 0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; } }
 @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
 
-       /* ========== DISCLAIMER MODAL ========== */
-        .disclaimer-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 9998;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(15px);
-        }
-
-        .disclaimer-content {
-            font-family: 'Orbitron', monospace;
-            background: linear-gradient(135deg, #12121a 0%, #0a0a0f 100%);
-            border: 1px solid rgba(149, 117, 205, 0.4);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 650px;
-            width: 90%;
-            max-height: 85vh;
-            max-height: 85dvh;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            overscroll-behavior: contain;
-            box-shadow: 
-                0 0 80px rgba(149, 117, 205, 0.3),
-                inset 0 0 60px rgba(149, 117, 205, 0.05);
-            position: relative;
-        }
-
-        .disclaimer-content::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--solana-purple), var(--solana-green), var(--solana-purple));
-            border-radius: 20px;
-            z-index: -1;
-            opacity: 0.5;
-            filter: blur(20px);
-        }
-
-        .disclaimer-title {
-            font-family: 'Orbitron', monospace;
-            color: #ff6b6b;
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            text-align: center;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
-        }
-
-        .disclaimer-items {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 2;
-            margin-bottom: 30px;
-        }
-
-        .disclaimer-items li {
-            margin-bottom: 18px;
-            padding: 15px;
-            padding-left: 20px;
-            border-left: 4px solid var(--solana-purple);
-            background: rgba(149, 117, 205, 0.05);
-            border-radius: 0 10px 10px 0;
-        }
-
-        .disclaimer-items strong {
-            font-family: 'Orbitron', monospace;
-            color: var(--solana-green);
-            letter-spacing: 1px;
-        }
-
-        .checkbox-item {
-            font-family:'Orbitron', monospace; 
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 18px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            border: 1px solid rgba(149, 117, 205, 0.2);
-            transition: all 0.3s;
-        }
-
-        .checkbox-item:hover {
-            border-color: var(--solana-purple);
-            background: rgba(149, 117, 205, 0.08);
-        }
-
-        .checkbox-item input {
-            margin-right: 15px;
-            margin-top: 3px;
-            width: 18px;
-            height: 18px;
-            accent-color: var(--solana-purple);
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            cursor: pointer;
-            line-height: 1.5;
-        }
-
-        .disclaimer-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .btn-disagree {
-            font-family:'Orbitron', monospace; 
-            padding: 14px 35px;
-            background: transparent;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            color: rgba(255, 255, 255, 0.7);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-        }
-
-        .btn-disagree:hover {
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-            box-shadow: 0 0 30px rgba(255, 107, 107, 0.4);
-        }
-
-        .btn-agree {
-            font-family:'Orbitron', monospace; 
-            padding: 14px 35px;
-            background: linear-gradient(90deg, var(--solana-purple), var(--solana-green));
-            border: none;
-            color: #0a0a0f;
-            font-weight: 800;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.4s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 0.9rem;
-        }
-
-        .btn-agree:hover {
-            transform: scale(1.05);
-            box-shadow: 
-                0 0 40px rgba(149, 117, 205, 0.6),
-                0 0 80px rgba(149, 117, 205, 0.3);
-            letter-spacing: 4px;
-        }
-
-        .btn-agree:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ========== RESPONSIVE — TABLET ========== */
+        
         @media (max-width: 900px) {
-            .splash-logo {
-                padding: 20px 16px 8px;
-            }
             .splash-collateral {
                 max-width: 90vw;
             }
         }
 
-        /* ========== RESPONSIVE — MOBILE ========== */
+        
         @media (max-width: 600px) {
             #splash-page {
                 justify-content: space-between;
@@ -3615,32 +3168,6 @@ canvas { transform: translateZ(0); }
                 font-size: clamp(0.28rem, 0.85vw, 0.38rem) !important;
                 letter-spacing: clamp(1px, 0.4vw, 1.6px) !important;
             }
-
-            .disclaimer-content {
-                padding: 24px 18px;
-                max-height: 90vh;
-            }
-            .disclaimer-title {
-                font-size: 1.3rem;
-            }
-            .disclaimer-buttons {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .btn-disagree,
-            .btn-agree {
-                padding: 12px 24px;
-                font-size: 0.8rem;
-                width: 100%;
-            }
-        }
-
-        /* ========== RESPONSIVE — SMALL MOBILE ========== */
-        @media (max-width: 380px) {
-            .splash-title {
-                font-size: clamp(1.5rem, 7.5vw, 2.2rem) !important;
-                letter-spacing: 2px !important;
-            }
             .splash-collateral span {
                 letter-spacing: 0.7px !important;
                 font-size: 0.42rem !important;
@@ -3656,7 +3183,7 @@ canvas { transform: translateZ(0); }
             }
         }
 
-        /* ========== LANDSCAPE MOBILE ========== */
+        
         @media (max-height: 600px) and (orientation: landscape) {
             #splash-page {
                 flex-direction: row !important;
@@ -3729,7 +3256,7 @@ canvas { transform: translateZ(0); }
             display: none;
         }
 
-        /* ========== ALL @KEYFRAMES ========== */
+        
         @keyframes neonBoxGlow {
             0%   { box-shadow: 0 0 10px 3px rgba(255,160,0,0.7), 0 0 28px 8px rgba(153,69,255,0.5), 0 0 55px 14px rgba(0,212,255,0.3); }
             33%  { box-shadow: 0 0 12px 4px rgba(0,212,255,0.8), 0 0 32px 9px rgba(0,150,255,0.6), 0 0 60px 15px rgba(153,69,255,0.3); }
@@ -3814,7 +3341,7 @@ canvas { transform: translateZ(0); }
             100% { background-position: 200% center; }
         }
 
-        /* --- MAIN SPLASH MOBILE ---- */
+        
         @media (max-width: 600px) {
             #main-splash {
                 padding: 0 !important;
@@ -4190,7 +3717,7 @@ canvas { transform: translateZ(0); }
 
     <div id="main-content-inner">
 
-        <!-- HERO -->
+        
         <section id="hero">
             <div class="hero-eyebrow">Do Kindness-The Universe Will Pay You Back</div>
             <div style="display:block;margin-bottom:0.5rem;animation:riseUp 0.8s 0.1s ease both;"><div style="width:clamp(220px,32vw,340px);height:clamp(220px,32vw,340px);background:transparent;overflow:hidden;display:flex;align-items:center;justify-content:center;animation:neonRingGlow 3s ease-in-out infinite;"><img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" alt="EXILLION" style="width:100%;height:100%;object-fit:contain;"/></div></div>
@@ -4225,7 +3752,7 @@ canvas { transform: translateZ(0); }
             </div>
         </section>
 
-        <!-- VISION -->
+        
         <section id="vision">
             <div class="section-header reveal">
                 <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Protocol Overview</span>
@@ -4298,10 +3825,6 @@ canvas { transform: translateZ(0); }
     transition:all 0.35s ease;
     cursor:default;
   }
-  .infog-step:first-child{border-radius:4px 0 0 4px;border-left:1px solid var(--border-dim);}
-  .infog-step:last-child{border-right:1px solid var(--border-dim);border-radius:0 4px 4px 0;}
-  .infog-step:hover{background:var(--card-hover);border-color:rgba(0,212,255,0.22);z-index:2;}
-  .infog-step:hover .infog-icon-wrap{transform:scale(1.12);box-shadow:0 0 30px var(--is-glow);}
 
   /* Arrow between steps */
   .infog-arrow{
@@ -4376,7 +3899,6 @@ canvas { transform: translateZ(0); }
     transition:all 0.3s;
     clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,0 100%);
   }
-  .infog-pillar:hover{background:var(--card-hover);box-shadow:0 0 30px var(--ip-glow);}
   .infog-pillar-icon{font-size:2rem;margin-bottom:0.8rem;display:block;}
   .infog-pillar-val{
     font-family:'Orbitron',monospace;
@@ -4673,8 +4195,6 @@ canvas { transform: translateZ(0); }
   @media(max-width:768px){
     .infog-flow{flex-direction:column;gap:0;}
     .infog-step{border-right:1px solid var(--border-dim);border-bottom:none;}
-    .infog-step:first-child{border-radius:4px 4px 0 0;}
-    .infog-step:last-child{border-radius:0 0 4px 4px;border-bottom:1px solid var(--border-dim);}
     .infog-arrow{width:100%;height:28px;border-left:1px solid var(--border-dim);border-right:1px solid var(--border-dim);border-top:none;border-bottom:none;}
     .infog-pillars{grid-template-columns:1fr;}
     .infog-flywheel{grid-template-columns:1fr;gap:1.5rem;}
@@ -5072,7 +4592,6 @@ canvas { transform: translateZ(0); }
   </div>
 </section>
 
-<!-- TOKENOMICS -->
 <section id="tokenomics" style="padding:0px 5% 80px;background:linear-gradient(180deg,transparent,rgba(0,66,255,0.04),transparent);">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Token Distribution</span>
@@ -5159,7 +4678,6 @@ canvas { transform: translateZ(0); }
   </div>
 </section>
 
-<!-- ROADMAP -->
 <section id="roadmap">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Development Timeline</span>
@@ -5296,7 +4814,6 @@ canvas { transform: translateZ(0); }
   </div>
 </section>
 
-<!-- DASHBOARD -->
 <section id="dashboard" style="padding:0px 5% 80px;margin-top:-50px;">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Live Metrics</span>
@@ -5349,7 +4866,7 @@ canvas { transform: translateZ(0); }
       transform: translateY(-4px);
     }
 
-    /* === TIER I — Cyan/Teal Premium === */
+    
     .tier-premium-card.t1-card {
       background: linear-gradient(160deg, #010f1e 0%, #011a2e 50%, #010d1e 100%);
       border: 1px solid rgba(0,212,255,0.35);
@@ -5379,7 +4896,7 @@ canvas { transform: translateZ(0); }
       border-top: 1px solid rgba(0,212,255,0.12);
     }
 
-    /* === TIER II — Solana Green Premium === */
+    
     .tier-premium-card.t2-card {
       background: linear-gradient(160deg, #001209 0%, #001f10 50%, #000e07 100%);
       border: 1px solid rgba(20,241,149,0.32);
@@ -5409,7 +4926,7 @@ canvas { transform: translateZ(0); }
       border-top: 1px solid rgba(20,241,149,0.12);
     }
 
-    /* === TIER III — Purple/Solana Premium === */
+    
     .tier-premium-card.t3-card {
       background: linear-gradient(160deg, #08011a 0%, #100024 50%, #060011 100%);
       border: 1px solid rgba(153,69,255,0.38);
@@ -5574,7 +5091,7 @@ canvas { transform: translateZ(0); }
 
   <div class="tier-premium-grid reveal">
 
-    <!-- TIER I -->
+    
     <div class="tier-premium-card t1-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
@@ -5594,7 +5111,7 @@ canvas { transform: translateZ(0); }
       </div>
     </div>
 
-    <!-- TIER II -->
+    
     <div class="tier-premium-card t2-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
@@ -5614,7 +5131,7 @@ canvas { transform: translateZ(0); }
       </div>
     </div>
 
-    <!-- TIER III -->
+    
     <div class="tier-premium-card t3-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
@@ -5644,7 +5161,7 @@ canvas { transform: translateZ(0); }
 
     <div class="prog-items-grid">
 
-    <!-- Tier I Progress -->
+    
     <div class="prog-item">
       <div style="text-align:center;margin-bottom:10px;">
         <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
@@ -5661,7 +5178,7 @@ canvas { transform: translateZ(0); }
       </div>
     </div>
 
-    <!-- Tier II Progress -->
+    
     <div class="prog-item">
       <div style="text-align:center;margin-bottom:10px;">
         <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e8c97a;box-shadow:0 0 8px rgba(232,201,122,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
@@ -5678,7 +5195,7 @@ canvas { transform: translateZ(0); }
       </div>
     </div>
 
-    <!-- Tier III Progress -->
+    
     <div class="prog-item">
       <div style="text-align:center;margin-bottom:10px;">
         <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9945FF;box-shadow:0 0 8px rgba(153,69,255,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
@@ -5694,11 +5211,10 @@ canvas { transform: translateZ(0); }
         <span style="color:var(--text-2);">Remaining&nbsp;<span id="rt-t3-remaining" style="color:#14F195;font-weight:700;">388,000,000</span></span>
       </div>
     </div>
-    </div><!-- end prog-items-grid -->
+    </div>
   </div>
 </section>
 
-<!-- ANGEL ROUND -->
 <section id="angel" style="padding:0px 5% 80px;">
   <div class="section-header reveal" style="margin-bottom:2rem;">
     <span class="section-tag" style="font-size:clamp(0.85rem,1.2vw,1.05rem);letter-spacing:3px;opacity:0.85;">Angel Investor Round</span>
@@ -5706,10 +5222,8 @@ canvas { transform: translateZ(0); }
     <div class="section-rule"></div>
   </div>
   <div class="angel-wrapper">
-    <!-- FIX v40 TIER-1: Semua 3 tier OPEN bersamaan. Badge LIVE hijau di semua tier.
-     Remaining token (remaining) diupdate live dari /api/stats setiap 60 detik.
-     Jika tier habis → badge berubah ke CLOSED (abu-abu). -->
-<!-- TIER SELECT PREMIUM v54 — matches Token Dashboard style -->
+    
+
 <style>
   /* Override default tier-grid/tier-card for the angel round */
   #tierGrid {
@@ -6005,7 +5519,7 @@ canvas { transform: translateZ(0); }
 
 <div class="tier-grid reveal" id="tierGrid">
 
-  <!-- TIER I -->
+  
   <div class="tier-card-premium tc1 active" id="tier-card-1" onclick="selectTierAndScroll(1)">
     <div class="tcp-topbar"></div>
     <div class="tcp-body">
@@ -6037,7 +5551,7 @@ canvas { transform: translateZ(0); }
     <div class="tcp-active-bar"></div>
   </div>
 
-  <!-- TIER II -->
+  
   <div class="tier-card-premium tc2" id="tier-card-2" onclick="selectTierAndScroll(2)">
     <div class="tcp-topbar"></div>
     <div class="tcp-body">
@@ -6069,7 +5583,7 @@ canvas { transform: translateZ(0); }
     <div class="tcp-active-bar"></div>
   </div>
 
-  <!-- TIER III -->
+  
   <div class="tier-card-premium tc3" id="tier-card-3" onclick="selectTierAndScroll(3)">
     <div class="tcp-topbar"></div>
     <div class="tcp-body">
@@ -6145,11 +5659,11 @@ canvas { transform: translateZ(0); }
         <button class="ws-disconnect" onclick="disconnectWallet()">✕ DISCONNECT</button>
       </div>
 
-      <!-- FLOW FIX v58: Token selector — appears after wallet connect, BEFORE buyPanel -->
+      
       <div id="tokenSelectBar" style="display:none;margin-bottom:1.2rem;">
 
         <style>
-        /* ═══ TOKEN SELECT — mirrors tier-premium-card style ═══ */
+        
         .token-select-heading {
           font-family: 'Orbitron', monospace;
           font-size: 0.5rem;
@@ -6201,14 +5715,6 @@ canvas { transform: translateZ(0); }
           margin: 0.5rem 0;
         }
         /* Icon */
-        .token-card-icon {
-          position: absolute;
-          top: 10px; right: 12px;
-          font-size: 1.3rem;
-          line-height: 1;
-          pointer-events: none;
-          opacity: 0.2;
-        }
         /* Token name — big white like tier label */
         .token-card-name {
           font-family: 'Orbitron', monospace;
@@ -6222,14 +5728,6 @@ canvas { transform: translateZ(0); }
           text-align: center;
         }
         /* Sub label */
-        .token-card-sub {
-          font-family: 'Exo 2', sans-serif;
-          font-size: 0.48rem;
-          letter-spacing: 2px;
-          color: rgba(255,255,255,0.38);
-          text-transform: uppercase;
-          margin-bottom: 0.55rem;
-        }
         /* Network badge — mirrors .tier-prem-badge */
         .token-card-badge {
           display: inline-block;
@@ -6269,7 +5767,7 @@ canvas { transform: translateZ(0); }
         #btnUSDC .token-card-bar {
           background: linear-gradient(90deg, transparent, rgba(0,212,255,0.6), transparent);
         }
-        #btnUSDC .token-card-icon { color: rgba(0,212,255,1); }
+        #btnUSDC
         #btnUSDC .token-card-badge {
           background: rgba(0,212,255,0.08);
           border: 1px solid rgba(0,212,255,0.25);
@@ -6291,7 +5789,7 @@ canvas { transform: translateZ(0); }
         #btnUSDT .token-card-bar {
           background: linear-gradient(90deg, transparent, rgba(20,241,149,0.6), rgba(0,229,160,0.9), rgba(20,241,149,0.6), transparent);
         }
-        #btnUSDT .token-card-icon { color: rgba(20,241,149,1); }
+        #btnUSDT
         #btnUSDT .token-card-badge {
           background: rgba(20,241,149,0.08);
           border: 1px solid rgba(20,241,149,0.28);
@@ -6354,13 +5852,13 @@ canvas { transform: translateZ(0); }
         </div>
       </div>
 
-      <!-- FIX v15: Token Balance display — shown AFTER token is selected -->
+      
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
         <span style="color:var(--text-2);">YOUR <span id="tokenBalanceLabel">USDC</span> BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
       </div>
       <div id="buyPanel" style="display:none;">
-        <!-- FIX v40 TIER-1: Tier selector di buy form — pilih tier sebelum isi amount -->
+        
         <div class="form-field" style="margin-bottom:0.8rem;">
           <label class="field-label" style="margin-bottom:6px;">Select Your Tier</label>
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
@@ -6379,7 +5877,7 @@ canvas { transform: translateZ(0); }
           </div>
         </div>
 
-        <!-- FIX v40 TIER-2: Wallet cap display — tampil setelah wallet connect -->
+        
         <div id="walletCapBar" style="display:none;align-items:center;justify-content:space-between;padding:7px 12px;margin-bottom:0.8rem;background:rgba(153,69,255,0.05);border:1px solid rgba(153,69,255,0.2);font-family:'Orbitron',monospace;font-size:0.52rem;letter-spacing:1.5px;">
           <span style="color:var(--text-2);">Wallet cap remaining:</span>
           <span id="walletCapRemaining" style="color:var(--cyan);font-weight:700;">$100.00</span>
@@ -6396,9 +5894,7 @@ canvas { transform: translateZ(0); }
             <span class="field-currency" id="tokenCurrency">USDC</span>
           </div>
           <div class="amount-hints" id="amountHints">
-            <!-- FIX v52 BUG-9: Intentionally empty — filled by updateAmountHints() on wallet connect.
-                 Previous hardcoded values ($10/$50/$125/MAX $500) were Tier II and confused
-                 users who landed on Tier I or III before wallet was connected. -->
+            
           </div>
         </div>
 
@@ -6535,7 +6031,6 @@ canvas { transform: translateZ(0); }
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
@@ -6647,7 +6142,6 @@ canvas { transform: translateZ(0); }
 
 <script>
 
-// --- CONFIG --------------------------------------------------
 const CFG = {
   EXXE_MINT: '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u',
   USDC_MINT: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
@@ -6660,12 +6154,7 @@ const CFG = {
   },
   API: 'https://exillion-backend-production.up.railway.app',
   TIER: 1,
-  // Semua tier OPEN bersamaan — tidak sequential
   TIERS: {
-    // FINAL: Supply | Bonus | Hold period per tier — NO VESTING
-    // Tier I  : 188.8M EXXE @ $0.01  | no bonus  | hold 3 bln 
-    // Tier II : 251.8M EXXE @ $0.025 | +5% bonus  | hold 2 bln 
-    // Tier III: 388M EXXE   @ $0.05  | +10% bonus | hold 1 bln 
     1: { price:0.01,  min:10, max:100,  gain:900, supply:188800000, name:'Genesis Angel',
          bonus:0,    bonusPct:0,
          lock:'3-month hold after listing on Orca DEX (Solana)' },
@@ -6676,14 +6165,10 @@ const CFG = {
          bonus:0.10, bonusPct:10,
          lock:'1-month hold after listing on Orca DEX (Solana)' },
   },
-  // FINAL: Wallet Transparansi On-Chain Angel Investor
-  // Default fallback; overridden dynamically from /api/stats if backend returns angelWallet.
   ANGEL_WALLET: '4Y9Zg3K8Ut8NboWf7BuVmhS6kXedaozjvK61uSNnXkNW',
   LISTING: 0.10,
 };
 const tier = () => CFG.TIERS[CFG.TIER];
-// Expose apiBase to window for investor counter
-// dan funding tracker tidak hardcode URL backend 2x di luar CFG object.
 window._exillionCfg = { apiBase: CFG.API };
 function setAngelWalletFromStats(wallet) {
   if (wallet && typeof wallet === 'string' && wallet.length >= 32) {
@@ -6705,19 +6190,14 @@ function setSplitWalletsFromStats(wallets) {
   }
 }
 
-
-// Dipanggil saat user klik tier card di tier grid
 function selectTierAndScroll(tierNum) {
   selectTierBtn(tierNum);
-  // Scroll ke wallet form
   setTimeout(function() { scrollToWallet(); }, 200);
 }
 
-// Dipanggil saat user klik tier button di buy form
 function selectTierBtn(tierNum) {
   if (!CFG.TIERS[tierNum]) return;
 
-  // Cek apakah tier ini CLOSED (dari stats cache)
   if (window._exillionTierStatus && window._exillionTierStatus[tierNum] === 'closed') {
     showToast('Tier ' + tierNum + ' is CLOSED — supply has been exhausted.', 'error');
     return;
@@ -6726,7 +6206,6 @@ function selectTierBtn(tierNum) {
   CFG.TIER = tierNum;
   const t = CFG.TIERS[tierNum];
 
-  // Update tier button styles
   [1,2,3].forEach(function(n) {
     const btn = document.getElementById('tierBtn' + n);
     if (!btn) return;
@@ -6752,14 +6231,12 @@ function selectTierBtn(tierNum) {
     }
   });
 
-  // Update tier card highlight in grid
   [1,2,3].forEach(function(n) {
     const card = document.getElementById('tier-card-' + n);
     if (!card) return;
     card.classList.toggle('active', n === tierNum);
   });
 
-  // Update amount input min/max/placeholder
   const inp = document.getElementById('usdcAmount');
   const tok = CFG.SELECTED_TOKEN || 'USDC';
   if (inp) {
@@ -6769,43 +6246,34 @@ function selectTierBtn(tierNum) {
     inp.value       = '';
   }
 
-  // Update fc1 checkbox text
   const fc1Max  = document.getElementById('fc1MaxLabel');
   const fc1Name = document.getElementById('fc1TierName');
   if (fc1Max)  fc1Max.textContent  = '$' + t.max.toFixed(2) + ' ' + tok;
   if (fc1Name) fc1Name.textContent = 'Tier ' + tierNum + ' — ' + t.name;
 
-  // Update dynamic modal checkboxes when tier changes
   const lockLabels  = { 1: '3 months', 2: '2 months', 3: '1 month' };
   const tierLabels  = { 1: 'Genesis Angel Investor', 2: 'Prime Angel Investor', 3: 'Apex Angel Investor' };
-  // mc4 — max investment per tier (gold)
   const mc6MaxEl  = document.getElementById('mc6MaxLabel');
   const mc6NameEl = document.getElementById('mc6TierName');
   if (mc6MaxEl)  mc6MaxEl.textContent  = '$' + t.max.toFixed(2) + ' ' + tok;
   if (mc6NameEl) mc6NameEl.textContent = 'Tier ' + tierNum + ' — ' + t.name;
-  // mc6 — lock-up commitment (cyan)
   const mc5TierName   = document.getElementById('mc5TierName');
   const mc5LockPeriod = document.getElementById('mc5LockPeriod');
   if (mc5TierName)   mc5TierName.textContent   = tierLabels[tierNum] || t.name;
   if (mc5LockPeriod) mc5LockPeriod.textContent = lockLabels[tierNum] || t.lock;
-  // Uncheck mc4, mc5, mc6 saat tier berubah — investor wajib re-confirm
   ['mc4','mc5','mc6'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el && el.checked) { el.checked = false; }
   });
   if (typeof updateModal === 'function') updateModal();
 
-  // Update amount hints
   if (typeof updateAmountHints === 'function') updateAmountHints();
 
-  // Update wallet cap display
   updateWalletCapBar();
 
-  // Recalculate
   if (typeof calcTokens === 'function') calcTokens();
 }
 
-// Update wallet cap bar — tampil berapa remaining cap wallet ini di tier aktif
 function updateWalletCapBar() {
   const bar = document.getElementById('walletCapBar');
   const rem = document.getElementById('walletCapRemaining');
@@ -6814,7 +6282,6 @@ function updateWalletCapBar() {
 
   const tierNum = CFG.TIER;
   const max     = CFG.TIERS[tierNum] ? CFG.TIERS[tierNum].max : 100;
-  // Read from cached wallet status
   const spent   = (window._exillionWalletStatus &&
                    window._exillionWalletStatus.tiers &&
                    window._exillionWalletStatus.tiers[tierNum])
@@ -6823,12 +6290,10 @@ function updateWalletCapBar() {
   rem.textContent = '$' + remaining.toFixed(2);
   bar.style.display = 'flex';
 
-  // Warn jika mendekati cap
   rem.style.color = remaining < max * 0.2 ? '#ff6b6b' :
                     remaining < max * 0.5 ? '#e8c97a' : 'var(--cyan)';
 }
 
-// Fetch wallet status dari backend setelah wallet connect
 async function fetchWalletStatus(walletAddress) {
   if (!walletAddress) return;
   try {
@@ -6846,7 +6311,6 @@ async function fetchWalletStatus(walletAddress) {
   } catch(e) { /* silent — non-critical */ }
 }
 
-// Update tier cards LIVE state dari /api/stats data
 function updateTierCards(tiersData) {
   if (!tiersData) return;
   window._exillionTierStatus = {};
@@ -6864,15 +6328,12 @@ function updateTierCards(tiersData) {
 
     window._exillionTierStatus[n] = status;
 
-    // Update remaining counter in tier card
     const remEl = document.getElementById('tier-rem-exxe-' + n);
     if (remEl) remEl.textContent = remaining.toLocaleString('en-US');
 
-    // Update progress bar in tier card
     const progEl = document.getElementById('tier-prog-' + n);
     if (progEl) progEl.style.width = Math.max(pct, 0) + '%';
 
-    // Update badge — LIVE or CLOSED
     const badge = document.getElementById('tier-badge-' + n);
     if (badge) {
       if (status === 'closed') {
@@ -6880,7 +6341,6 @@ function updateTierCards(tiersData) {
         badge.style.cursor   = 'not-allowed';
         badge.style.opacity  = '0.55';
         badge.innerHTML      = 'CLOSED';
-        // Dim the card
         const card = document.getElementById('tier-card-' + n);
         if (card) card.style.opacity = '0.5';
       } else {
@@ -6893,7 +6353,6 @@ function updateTierCards(tiersData) {
       }
     }
 
-    // v43: Update progress bar section — sold/remaining/status only (no $ raised)
     const soldEl  = document.getElementById('rt-t' + n + '-sold');
     const barEl   = document.getElementById('rt-t' + n + '-bar');
     const remBar  = document.getElementById('rt-t' + n + '-remaining');
@@ -6919,7 +6378,6 @@ function updateTierCards(tiersData) {
       if (statEl) { statEl.textContent = 'OPEN'; statEl.style.color = '#14F195'; }
     }
 
-
   });
 }
 
@@ -6928,7 +6386,6 @@ function getSelectedMint() { return CFG.SELECTED_TOKEN === 'USDT' ? CFG.USDT_MIN
 function selectToken(token) {
   CFG.SELECTED_TOKEN = token;
   const t = getSelectedToken();
-  // Default to Tier 1 if no tier selected yet (tier chosen inside buyPanel)
   const activeTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
@@ -6943,7 +6400,6 @@ function selectToken(token) {
     inp.max  = activeTier.max;
     inp.step = '0.01';
   }
-  // Null-guard for mobile elements
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
@@ -6979,7 +6435,6 @@ function selectToken(token) {
   if (tl2) tl2.textContent = t;
   const _bt = document.getElementById('buyBtnText');
   if (_bt) _bt.textContent = 'Pay with ' + t + ' — Receive EXXE';
-  // Update tier max label with selected token
   const _mc6Max = document.getElementById('mc6MaxLabel');
   if (_mc6Max) {
     _mc6Max.textContent = '$' + activeTier.max.toFixed(2) + ' ' + t;
@@ -6989,33 +6444,22 @@ function selectToken(token) {
     const _tierMax = CFG.TIERS[CFG.TIER] ? CFG.TIERS[CFG.TIER].max : 100;
     _fc1Max.textContent = '$' + _tierMax.toFixed(2) + ' ' + t;
   }
-  // BUG-9 FIX: Update amount hints saat token change (USDC → USDT)
   if (typeof updateAmountHints === 'function') updateAmountHints();
   calcTokens();
 }
 
-// FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
-// FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
-  // ⚠ SECURITY v47-SEC: API key RPC premium (Helius/Alchemy) TIDAK boleh di-hardcode
-  // di frontend — file ini publik dan bisa dilihat via View Source. Key premium hanya
-  // di backend (Railway env vars RPC_URL / RPC_URL_2). Frontend pakai public endpoints.
   'https://api.mainnet-beta.solana.com',
   'https://rpc.ankr.com/solana',
   'https://solana-rpc.publicnode.com',
 ];
 
-// FIX v26 BUG-8: Debounce calcTokens 150ms — cegah input lag di HP low-end
-// Setiap keystroke tidak langsung trigger DOM query + kalkulasi penuh
 let _calcDebounceTimer = null;
 function debouncedCalcTokens() {
   clearTimeout(_calcDebounceTimer);
   _calcDebounceTimer = setTimeout(calcTokens, 150);
 }
 
-// ── FIX v15 #1 / v24: Toast notification system — XSS-safe via DOM ──
-// v24 FIX: Ganti innerHTML dengan DOM construction — textContent tidak
-// parse HTML sehingga pesan error dari blockchain tidak bisa inject script.
 function showToast(message, type, duration) {
   type     = type     || 'info';   // 'info' | 'success' | 'error' | 'warn'
   duration = duration || 7000;
@@ -7054,8 +6498,6 @@ function showToast(message, type, duration) {
 var cachedUsdcBalance = -1;
 var cachedUsdtBalance = -1;
 
-// Fetches balance untuk token yang dipilih via backend endpoint
-// Never touches DOM — selectTokenAndProceed() handles all balance display
 async function fetchTokenBalances(walletAddress) {
   const token = CFG.SELECTED_TOKEN || 'USDC';
   const balance = await fetchTokenBalanceViaBackend(walletAddress, token);
@@ -7064,8 +6506,6 @@ async function fetchTokenBalances(walletAddress) {
   return balance;
 }
 
-// BACKEND: Ganti fetch langsung ke RPC → fetch ke backend proxy
-// Backend pakai Helius (env RPC_URL) sebagai primary — jauh lebih cepat & reliable.
 async function fetchTokenBalanceViaBackend(walletAddress, token) {
   const ctrl  = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 10000); // 10s timeout
@@ -7087,18 +6527,13 @@ async function fetchTokenBalanceViaBackend(walletAddress, token) {
   }
 }
 
-// ── Wallet provider helpers — single source of truth ──────────────
-// ── v45 WALLET FIX: Provider detection — robust multi-path ──────────────────
 function getPhantomProvider() {
-  // Path 1: Standard Phantom injection (desktop extension + Phantom in-app browser)
   if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
     return window.phantom.solana;
   }
-  // Path 2: Legacy window.solana injection (older Phantom versions)
   if (window.solana && window.solana.isPhantom) {
     return window.solana;
   }
-  // Path 3: Some mobile browsers expose it differently
   if (window.solana && window.solana.isPhantom === undefined && window.solana.connect) {
     return window.solana;
   }
@@ -7106,18 +6541,15 @@ function getPhantomProvider() {
 }
 
 function getSolflareProvider() {
-  // Path 1: Standard Solflare injection
   if (window.solflare && window.solflare.isSolflare) {
     return window.solflare;
   }
-  // Path 2: Some versions use window.solana with isSolflare flag
   if (window.solana && window.solana.isSolflare) {
     return window.solana;
   }
   return null;
 }
 
-// --- SCROLL REVEAL — v6: rAF batched, no layout thrash ----------
 const obs = new IntersectionObserver((entries) => {
   requestAnimationFrame(() => {
     entries.forEach((e, i) => {
@@ -7133,8 +6565,6 @@ const obs = new IntersectionObserver((entries) => {
 }, {threshold: 0.06, rootMargin: '0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
 
-// --- MODAL ---------------------------------------------------
-// Disclaimer shown when investor clicks Buy — not on page load
 let disclaimerAccepted = false;
 
 function updateModal(){
@@ -7142,9 +6572,6 @@ function updateModal(){
   const countEl = document.getElementById('checkCount'); if(countEl) countEl.textContent = checked;
   const btn = document.getElementById('agreeBtn');
   if(!btn) return;
-  // Always update agreeBtn visual state regardless of modal visibility.
-  // Previously, if modal was closed when tier changed (mc4-mc6 unchecked), agreeBtn could
-  // show stale "Proceed" state on re-open until a checkbox was interacted with.
   if(checked===6){ btn.classList.add('ready'); btn.textContent='I Understand — Proceed'; }
   else { btn.classList.remove('ready'); btn.textContent='Please confirm '+(6-checked)+' remaining item(s)'; }
 }
@@ -7156,7 +6583,6 @@ function acceptDisclaimer(){
   });
   if (!allChecked) return;
   disclaimerAccepted = true;
-  // FLOW FIX v58-BAL-2: Fetch fresh balance before proceeding so .ready class is set correctly
   checkReadyWithBalance();
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
@@ -7165,7 +6591,6 @@ function acceptDisclaimer(){
     overlay.style.opacity='';
     overlay.style.transition='';
     document.body.style.overflow='';
-    // executeBuy() will now check .ready class which should be set by checkReadyWithBalance()
     executeBuy();
   },300);
 }
@@ -7184,7 +6609,6 @@ function declineDisclaimer(){
   }
 }
 
-// --- WALLET --------------------------------------------------
 let connectedWallet  = null;
 let connectedAddress = null;
 
@@ -7193,7 +6617,6 @@ function setConnected(name, address) {
   connectedAddress = address;
   const short = address.slice(0,4) + '...' + address.slice(-4);
 
-  // Show status bar
   const ws = document.getElementById('walletStatus');
   if (ws) {
     ws.style.display = 'flex';
@@ -7201,15 +6624,12 @@ function setConnected(name, address) {
     if (txt) txt.textContent = name + ' Connected: ' + short;
   }
 
-  // FLOW FIX v58: Show token selector FIRST — BEFORE buyPanel
   const tsb = document.getElementById('tokenSelectBar');
   if (tsb) tsb.style.display = 'block';
-  // Hide buyPanel until token is selected
   const bp = document.getElementById('buyPanel');
   if (bp) bp.style.display = 'none';
   goStep(2);
 
-  // Update buttons
   const pBtn = document.getElementById('phantomBtn');
   const sBtn = document.getElementById('solflareBtn');
 
@@ -7227,11 +6647,8 @@ function setConnected(name, address) {
     if (pBtn) { pBtn.disabled = true; pBtn.style.opacity = '0.3'; }
   }
 
-  // FIX v15 #3: Fetch and display USDC balance
   fetchTokenBalances(address);
-  // FIX v40 TIER-2: Fetch wallet cap status dari backend
   fetchWalletStatus(address);
-  // FIX v31 F: Update hint buttons sesuai tier aktif
   updateAmountHints();
 
   setTimeout(function() {
@@ -7239,14 +6656,12 @@ function setConnected(name, address) {
     if (bp2) bp2.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 300);
 
-  // FIX v39 MOB-BUY-4: Update sticky mobile bar state
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(name, address);
   }
 }
 
 async function disconnectWallet() {
-  // Disconnect from provider
   try {
     if (connectedWallet === 'Phantom') {
       const p = getPhantomProvider();
@@ -7257,29 +6672,19 @@ async function disconnectWallet() {
     }
   } catch(e) { /* ignore disconnect errors — wallet may already be gone */ }
 
-  // v46 BUG1 FIX: These MUST be OUTSIDE catch block — they always run on disconnect
-  // Reset sticky mobile bar
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(null, null);
   }
-  // Clear wallet status cache + hide cap bar
   window._exillionWalletStatus = null;
   const capBar = document.getElementById('walletCapBar');
   if (capBar) capBar.style.display = 'none';
 
-  // Reset state
   connectedWallet  = null;
   connectedAddress = null;
-  // FIX BUG-8: Reset both cached balances on disconnect
-  // FIX v58-CACHE: Reset to -1 (sentinel) on disconnect
   cachedUsdcBalance = -1;
   cachedUsdtBalance = -1;
-  // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
-  // is shown again for each new connection/transaction session. This ensures the user
-  // always re-acknowledges risks before a new transaction, not just once per page load.
   disclaimerAccepted = false;
 
-  // Reset buttons
   const pBtn = document.getElementById('phantomBtn');
   const sBtn = document.getElementById('solflareBtn');
   if (pBtn) {
@@ -7295,31 +6700,23 @@ async function disconnectWallet() {
     sBtn.innerHTML = '<span class="wallet-icon">☀️</span><span class="wallet-label"><span class="wallet-name">Connect Solflare</span><span class="wallet-sub">Solana Wallet — Supported</span></span>';
   }
 
-  // Hide status & buy panel
   const ws = document.getElementById('walletStatus');
   if (ws) ws.style.display = 'none';
   const bp = document.getElementById('buyPanel');
   if (bp) bp.style.display = 'none';
-  // FLOW FIX v58: also hide token selector bar
   const tsb = document.getElementById('tokenSelectBar');
   if (tsb) tsb.style.display = 'none';
-  // FIX v15: also hide balance bar
   const bb = document.getElementById('usdcBalanceBar');
   if (bb) bb.style.display = 'none';
-  // FIX v30 #2: Reset processingPanel & successPanel saat disconnect —
-  // mencegah spinner/success tetap tampil jika user disconnect di tengah transaksi
   const pp = document.getElementById('processingPanel');
   if (pp) pp.style.display = 'none';
   const sp = document.getElementById('successPanel');
   if (sp) sp.style.display = 'none';
-  // Reset _isBuying agar form tidak terkunci setelah disconnect paksa
   _isBuying = false;
 
-  // Reset form
   const inp = document.getElementById('usdcAmount');
   if (inp) {
     inp.value = '';
-    // FIX v27 #2: Reset placeholder ke Tier I USDC default saat disconnect
     const resetTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
     inp.placeholder = 'Min $' + resetTier.min.toFixed(2) + ' — Max $' + resetTier.max.toFixed(2) + ' USDC';
     inp.min  = String(resetTier.min);
@@ -7327,15 +6724,12 @@ async function disconnectWallet() {
   }
   const cb = document.getElementById('calcBox');
   if (cb) cb.style.display = 'none';
-  // fc1/fc2/fc3 are hidden pre-checked elements — no reset needed
-  // Reset modal checkboxes for next purchase session
   ['mc1','mc2','mc3','mc4','mc5','mc6'].forEach(function(id) {
     const el = document.getElementById(id);
     if (el) el.checked = false;
   });
   if (typeof updateModal === 'function') updateModal();
 
-  // Reset buy button + token selection
   CFG.SELECTED_TOKEN = 'USDC';
   const buyBtn = document.getElementById('buyBtn');
   if (buyBtn) {
@@ -7347,7 +6741,6 @@ async function disconnectWallet() {
   const tl2 = document.getElementById('tl2Token');
   if (tl1) tl1.textContent = 'USDC';
   if (tl2) tl2.textContent = 'USDC';
-  // v18 #2: null-guard — buttons may not exist if angel section not yet scrolled into view
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
   if (_bU) { _bU.classList.remove('token-active','token-inactive'); }
@@ -7364,20 +6757,15 @@ async function disconnectWallet() {
   if (wcb) wcb.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// --- Utility: detect mobile browser ---
 function isMobileBrowser() {
-  // FIX v33 #2: Tambah SamsungBrowser — Samsung Internet sangat populer di Android Asia
   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
 }
-// Expose ke window agar IIFE dan script terpisah bisa akses
 window.isMobileBrowser = isMobileBrowser;
 
-// Returns true if we are already running inside Phantom's in-app browser
 function isInsidePhantom() {
   return !!(window.phantom && window.phantom.solana);
 }
 
-// Returns true if we are already running inside Solflare's in-app browser
 function isInsideSolflare() {
   return !!(window.solflare && window.solflare.isSolflare);
 }
@@ -7387,20 +6775,16 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
   if (!isMobileBrowser()) return;
   if (connectedWallet && connectedAddress) return; // already fully connected
 
-  // Guard: only resume if this tab actually triggered a deep link redirect
   let didRedirect = false;
   try { didRedirect = sessionStorage.getItem('_exxe_did_redirect') === '1'; } catch(e) {}
   if (!didRedirect) return;
 
-  // Remove flag immediately — only resume ONCE per redirect cycle
   try { sessionStorage.removeItem('_exxe_did_redirect'); } catch(e) {}
 
   let intent = null;
   try { intent = sessionStorage.getItem('_exxe_wallet_intent'); } catch(e) {}
 
-  // Retry with delay — provider may not be injected immediately on return
   setTimeout(function() {
-    // Check Phantom
     if (!intent || intent === 'phantom') {
       const p = getPhantomProvider();
       if (p && p.publicKey) {
@@ -7410,7 +6794,6 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
         return;
       }
     }
-    // Check Solflare
     if (!intent || intent === 'solflare') {
       const s = getSolflareProvider();
       if (s && s.publicKey) {
@@ -7422,18 +6805,15 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
   }, 600); // 600ms delay gives wallet time to inject provider on return
 });
 
-// ── v45 WALLET FIX: connectPhantom — desktop & mobile ───────────────────────
 let _isConnectingPhantom  = false;
 let _isConnectingSolflare = false;
 
 async function connectPhantom() {
-  // Guard: prevent double-click race condition
   if (_isConnectingPhantom) return;
   _isConnectingPhantom = true;
 
   const pBtn = document.getElementById('phantomBtn');
 
-  // Helper: reset button to default state
   function resetPhantomBtn() {
     if (pBtn) {
       pBtn.disabled = false;
@@ -7445,7 +6825,6 @@ async function connectPhantom() {
   }
 
   try {
-    // Show connecting state
     if (pBtn) {
       pBtn.disabled = true;
       pBtn.style.opacity = '0.6';
@@ -7453,23 +6832,19 @@ async function connectPhantom() {
       if (nameEl) nameEl.textContent = 'Connecting…';
     }
 
-    // FIX v45: On mobile, give wallet injection time to complete
     if (isMobileBrowser()) {
       await new Promise(r => setTimeout(r, 400));
     }
 
     let provider = getPhantomProvider();
 
-    // ── CASE 1: Already connected ────────────────────────────────────────────
     if (provider && provider.isConnected && provider.publicKey) {
       setConnected('Phantom', provider.publicKey.toString());
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 2: Inside Phantom in-app browser ────────────────────────────────
     if (isMobileBrowser() && isInsidePhantom()) {
-      // Provider should already be injected — retry with extra delay if needed
       if (!provider) {
         await new Promise(r => setTimeout(r, 800));
         provider = getPhantomProvider();
@@ -7498,13 +6873,11 @@ async function connectPhantom() {
       return;
     }
 
-    // ── CASE 3: Mobile — no provider — deep link to Phantom app ─────────────
     if (isMobileBrowser() && !provider) {
       try {
         sessionStorage.setItem('_exxe_wallet_intent', 'phantom');
         sessionStorage.setItem('_exxe_did_redirect', '1');
       } catch(e) {}
-      // FIX v45: Use universal link format (more reliable than ul/v1/browse)
       const currentUrl = encodeURIComponent(window.location.href);
       const deepLink = 'https://phantom.app/ul/v1/browse/' + currentUrl
         + '?ref=' + encodeURIComponent(window.location.origin);
@@ -7513,21 +6886,18 @@ async function connectPhantom() {
       return;
     }
 
-    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
     if (window.location.protocol === 'file:') {
       showToast('Phantom requires https://. Please open via a web server.', 'warn');
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
     if (!provider) {
       showWalletHint('phantom');
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 6: Desktop — extension present, request connect ─────────────────
     const resp = await provider.connect();
     const address = (resp && resp.publicKey)
       ? resp.publicKey.toString()
@@ -7542,7 +6912,6 @@ async function connectPhantom() {
 
   } catch(e) {
     if (e.code !== 4001) {
-      // 4001 = user rejected — silent
       showToast('Phantom: ' + (e.message || 'Connection failed. Please try again.'), 'error');
     }
   } finally {
@@ -7573,7 +6942,6 @@ function _setupPhantomListeners(provider) {
   } catch(e) {}
 }
 
-// ── v45 WALLET FIX: connectSolflare — desktop & mobile ──────────────────────
 async function connectSolflare() {
   if (_isConnectingSolflare) return;
   _isConnectingSolflare = true;
@@ -7598,21 +6966,18 @@ async function connectSolflare() {
       if (nameEl) nameEl.textContent = 'Connecting…';
     }
 
-    // FIX v45: On mobile, give wallet injection time to complete
     if (isMobileBrowser()) {
       await new Promise(r => setTimeout(r, 400));
     }
 
     let provider = getSolflareProvider();
 
-    // ── CASE 1: Already connected ────────────────────────────────────────────
     if (provider && provider.isConnected && provider.publicKey) {
       setConnected('Solflare', provider.publicKey.toString());
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 2: Inside Solflare in-app browser ───────────────────────────────
     if (isMobileBrowser() && isInsideSolflare()) {
       if (!provider) {
         await new Promise(r => setTimeout(r, 800));
@@ -7640,7 +7005,6 @@ async function connectSolflare() {
       return;
     }
 
-    // ── CASE 3: Mobile — no provider — deep link to Solflare app ────────────
     if (isMobileBrowser() && !provider) {
       try {
         sessionStorage.setItem('_exxe_wallet_intent', 'solflare');
@@ -7654,21 +7018,18 @@ async function connectSolflare() {
       return;
     }
 
-    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
     if (window.location.protocol === 'file:') {
       showToast('Solflare requires https://. Please open via a web server.', 'warn');
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
     if (!provider) {
       showWalletHint('solflare');
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 6: Desktop — extension present, request connect ─────────────────
     await provider.connect();
     const address = provider.publicKey ? provider.publicKey.toString() : null;
 
@@ -7711,9 +7072,7 @@ function _setupSolflareListeners(provider) {
   } catch(e) {}
 }
 
-// ── Install wallet banner (replaces the browser's native confirm()) ──
 function showWalletHint(wallet) {
-  // Remove any existing hint banner
   const old = document.getElementById('walletHintBanner');
   if (old) old.remove();
 
@@ -7721,8 +7080,6 @@ function showWalletHint(wallet) {
   const name  = isPhantom ? 'Phantom' : 'Solflare';
   const emoji = isPhantom ? '👻' : '☀️';
 
-  // FIX v27 #5: Detect mobile platform — Chrome Web Store tidak berguna di mobile Safari/Firefox.
-  // Arahkan ke App Store (iOS) atau Play Store (Android) sesuai platform.
   const isIOS     = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isAndroid = /Android/i.test(navigator.userAgent);
   const isMobile  = isIOS || isAndroid;
@@ -7775,22 +7132,16 @@ function showWalletHint(wallet) {
   ].join('');
 
   document.body.appendChild(banner);
-  // Auto-dismiss after 10 seconds (sedikit lebih lama untuk mobile)
   setTimeout(function() { if (banner.parentNode) banner.remove(); }, isMobile ? 12000 : 8000);
 }
 
-// --- SCROLL HELPERS ------------------------------------------
-
-// "Join The Angel Investor" → scroll to Tier I, fully visible from the top
 function scrollToTierI() {
-  // FIX v39 MOB-BUY-1: Tutup mobile nav menu dulu jika sedang terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
   if (navLinks && navLinks.classList.contains('open')) {
     navLinks.classList.remove('open');
     if (hamburger) hamburger.classList.remove('open');
   }
-  // Scroll ke tier-grid (Tier I, Tier II, Tier III cards)
   var tierGrid = document.querySelector('#angel .tier-grid');
   var fallback = document.getElementById('angel');
   var el = tierGrid || fallback;
@@ -7798,7 +7149,6 @@ function scrollToTierI() {
   var navH = document.querySelector('nav') ? document.querySelector('nav').offsetHeight + 24 : 90;
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
-  // Highlight tier cards
   setTimeout(function() {
     var cards = document.querySelectorAll('#angel .tier-card-premium');
     cards.forEach(function(card) {
@@ -7812,7 +7162,6 @@ function scrollToTierI() {
 }
 
 function scrollToTierThenWallet() {
-  // Tutup nav menu jika terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
   if (navLinks && navLinks.classList.contains('open')) {
@@ -7820,7 +7169,6 @@ function scrollToTierThenWallet() {
     if (hamburger) hamburger.classList.remove('open');
   }
 
-  // Scroll ke tier grid
   var tierGrid = document.querySelector('#angel .tier-grid');
   var fallback = document.getElementById('angel');
   var el = tierGrid || fallback;
@@ -7829,7 +7177,6 @@ function scrollToTierThenWallet() {
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
 
-  // Highlight tier cards
   setTimeout(function() {
     var cards = document.querySelectorAll('#angel .tier-card-premium');
     cards.forEach(function(card) {
@@ -7841,7 +7188,6 @@ function scrollToTierThenWallet() {
     }, 1800);
   }, 400);
 
-  // Di mobile: lanjut scroll ke wallet setelah user sempat lihat harga
   if (isMobileBrowser()) {
     setTimeout(function() {
       scrollToWallet();
@@ -7850,7 +7196,6 @@ function scrollToTierThenWallet() {
 }
 
 async function scrollToWallet() {
-  // FIX v39 MOB-BUY-2: Tutup mobile nav menu jika terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
   if (navLinks && navLinks.classList.contains('open')) {
@@ -7865,16 +7210,12 @@ async function scrollToWallet() {
   var y = el.getBoundingClientRect().top + window.pageYOffset - navH;
   window.scrollTo({ top: y, behavior: 'smooth' });
 
-  // Highlight wallet box
   setTimeout(function() {
     el.style.transition = 'box-shadow 0.4s ease';
     el.style.boxShadow = '0 0 0 2px rgba(201,168,76,0.9), 0 0 50px rgba(201,168,76,0.3)';
     setTimeout(function() { el.style.boxShadow = ''; }, 2200);
   }, 650);
 
-  // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
-  // langsung auto-connect tanpa perlu user tap tombol lagi.
-  // Provider sudah inject — tidak perlu redirect keluar.
   if (!connectedWallet) {
     const attemptConnect = async () => {
       if (connectedWallet) return;
@@ -7899,8 +7240,6 @@ async function scrollToWallet() {
   }
 }
 
-// --- STEPS ---------------------------------------------------
-// FLOW FIX v58: Updated to 5 steps (Connect → Token → Balance → Amount → Done)
 function goStep(n){
   for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
@@ -7911,11 +7250,6 @@ function goStep(n){
   }
 }
 
-// FLOW FIX v58: Called when user selects token from the tokenSelectBar.
-// Shows balance, then reveals the buyPanel (tier + amount form).
-// FLOW FIX v58-BAL: If balance < 10, blocks progression and shows warning.
-// FIX v58-CACHE: Always fetch fresh balance on token click (never rely on stale cache).
-// FIX v58-THROW: fetchTokenBalance now throws on RPC failure so retry works.
 async function selectTokenAndProceed(token) {
   selectToken(token);
 
@@ -7983,13 +7317,10 @@ async function selectTokenAndProceed(token) {
   }, 200);
 }
 
-// --- CALCULATOR ----------------------------------------------
-// FIX v31 F: Update hint buttons dinamis sesuai tier aktif
 function updateAmountHints() {
   const t = tier();
   const hintsEl = document.getElementById('amountHints');
   if (!hintsEl) return;
-  // Tentukan 3 hint amount yang masuk akal untuk tier ini
   const min  = t.min;
   const max  = t.max;
   const mid1 = Math.round(max * 0.20);  // ~20% dari max
@@ -8010,53 +7341,40 @@ function setAmount(v){
 function calcTokens(){
   const t=tier();
   const token = getSelectedToken();
-  // v19: Allow up to 2 decimal places (e.g. $10.25, $33.33).
-  // Round to 2dp to avoid floating-point drift, then clamp to min/max.
   let usdc = Math.round(parseFloat(document.getElementById('usdcAmount').value || 0) * 100) / 100;
   if(isNaN(usdc)) usdc = 0;
   if(usdc > t.max){ usdc = t.max; document.getElementById('usdcAmount').value = t.max.toFixed(2); }
   if(usdc < 0)   { usdc = 0;     document.getElementById('usdcAmount').value = '0'; }
   const box=document.getElementById('calcBox');
   if(usdc >= t.min){
-    // Base EXXE = usdc / price, rounded to nearest whole token
     const baseExxe = Math.round(usdc / t.price);
-    // v41: Bonus EXXE calculation
     const bonusPct  = t.bonusPct || 0;
     const bonusExxe = Math.round(baseExxe * (bonusPct / 100));
     const totalExxe = baseExxe + bonusExxe;
-    // Value at listing uses totalExxe (including bonus)
     const atL  = Math.round(totalExxe * CFG.LISTING * 100) / 100;
     const currentToken = getSelectedToken();
     box.style.display='flex';
     document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
-    // FIX v48: calcReceive tampilkan baseExxe dulu (bukan totalExxe)
-    // Investor lihat: base → bonus → total — alur yang jelas dan tidak membingungkan
     document.getElementById('calcReceive').textContent = baseExxe.toLocaleString('en-US') + ' EXXE';
     document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD';
 
-
-    // v41: Show/hide bonus rows
     const bonusRow = document.getElementById('calcBonusRow');
     const totalRow = document.getElementById('calcTotalRow');
     const bonusLbl = document.getElementById('calcBonusLbl');
     const bonusEl  = document.getElementById('calcBonus');
     const totalEl  = document.getElementById('calcTotal');
     if(bonusPct > 0){
-      // Ada bonus: tampilkan bonus row dan total row
       if(bonusRow) bonusRow.style.display = 'flex';
       if(totalRow) totalRow.style.display = 'flex';
       if(bonusLbl) bonusLbl.textContent   = '🎁 Bonus EXXE (+' + bonusPct + '%)';
       if(bonusEl)  bonusEl.textContent    = '+' + bonusExxe.toLocaleString('en-US') + ' EXXE';
-      // Total row = base + bonus = yang dikirim ke wallet investor
       if(totalEl)  totalEl.textContent    = totalExxe.toLocaleString('en-US') + ' EXXE';
     } else {
-      // TIER I: tidak ada bonus, tampilkan total row dgn base amount
       if(bonusRow) bonusRow.style.display = 'none';
       if(totalRow) totalRow.style.display = 'flex';
       if(totalEl)  totalEl.textContent    = baseExxe.toLocaleString('en-US') + ' EXXE';
     }
 
-    // v48: Hanya Lock — vesting dihapus
     const lockEl = document.getElementById('calcLock');
     if(lockEl) lockEl.textContent = t.lock || '—';
 
@@ -8089,9 +7407,6 @@ function checkReady(){
   }
 }
 
-// FLOW FIX v58-BAL-2: Async version of checkReady — fetches fresh balance before validating.
-// Called by executeBuy before showing disclaimer and after acceptance.
-// FIX v58-CACHE: Check sentinel (-1) instead of 0 to detect "never loaded"
 async function checkReadyWithBalance(){
   if(!connectedAddress) return;
   const token = getSelectedToken();
@@ -8102,12 +7417,8 @@ async function checkReadyWithBalance(){
   checkReady();
 }
 
-// --- EXECUTE BUY — Cek disclaimer + USDC balance dulu --------
 let _isBuying = false;
 async function executeBuy(){
-  // FLOW FIX v58-BAL-2: Fetch fresh balance before checking .ready class.
-  // This fixes the race condition where cachedBal=0 because fetchTokenBalances()
-  // hasn't finished yet when user quickly clicks Pay after connecting wallet.
   await checkReadyWithBalance();
   const _bb = document.getElementById('buyBtn');
   if(!_bb || !_bb.classList.contains('ready')) {
@@ -8120,14 +7431,11 @@ async function executeBuy(){
   }
   _isBuying = true;
 
-  // BUG FIX: Disable button in DOM immediately to prevent double-tap on mobile
   const _buyBtn = document.getElementById('buyBtn');
   if (_buyBtn) _buyBtn.disabled = true;
 
-  // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
     _isBuying = false; // reset: kita belum mulai transaksi
-    // FIX v59 BUG-DISCLAIMER: Re-enable button agar bisa diklik lagi setelah modal ditutup
     if (_buyBtn) _buyBtn.disabled = false;
     ['mc1','mc2','mc3','mc4','mc5','mc6'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
@@ -8145,7 +7453,6 @@ async function executeBuy(){
     return;
   }
 
-  // FIX v15 #4 / v19: Check balance before building tx — allow decimal amounts
   const t = tier();
   const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   try {
@@ -8182,17 +7489,14 @@ await proceedBuy();
 async function proceedBuy(){
   const _pb = document.getElementById('buyBtn');
   
-  // FIX BUG-20: Reset _isBuying jika early return agar form tidak terkunci permanen
   if(!_pb || !_pb.classList.contains('ready')) {
     _isBuying = false;
     return;
   }
 
-  // FIX: Capture tier at transaction START — before any async operations
   const _capturedTier = CFG.TIER;
   const t = CFG.TIERS[_capturedTier];
 
-  // v24 FIX #2: Sanitasi ketat — tolak NaN, Infinity, negatif, non-finite
   const rawInput = parseFloat(document.getElementById('usdcAmount')?.value || 0);
   if (!isFinite(rawInput) || isNaN(rawInput) || rawInput <= 0) {
     showToast('Invalid amount entered.', 'warn');
@@ -8207,7 +7511,6 @@ async function proceedBuy(){
     return;
   }
 
-  // Validasi token whitelist sebelum kirim ke backend
   const token = getSelectedToken();
   if (token !== 'USDC' && token !== 'USDT') {
     showToast('Invalid payment token. Please select USDC or USDT.', 'error');
@@ -8219,13 +7522,11 @@ async function proceedBuy(){
     _isBuying = false; // FIX v32 #1
     return;
   }
-  // FIX v15 #2: Verify @solana/web3.js is loaded before proceeding
   if (typeof window.solanaWeb3 === 'undefined') {
     showToast('Solana library still loading. Please wait a moment and try again.', 'warn');
     _isBuying = false; // FIX v32 #1
     return;
   }
-  // FIX v27 #7: Validasi format alamat Solana di client (defense in depth)
   const _addrRx = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
   if (!_addrRx.test(connectedAddress)) {
     showToast('Invalid wallet address format. Please reconnect your wallet.', 'error');
@@ -8233,8 +7534,6 @@ async function proceedBuy(){
     return;
   }
 
-  // FIX v27 #1: _idempKey di scope proceedBuy (bukan dalam try) agar key
-  // tetap sama untuk semua 3 endpoint dan tidak out-of-scope di catch/log.
   const _idempKey = (typeof crypto !== 'undefined' && crypto.randomUUID)
     ? crypto.randomUUID()
     : Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -8245,11 +7544,8 @@ async function proceedBuy(){
   if (_procP) _procP.style.display = 'block';
 
   try {
-    // token sudah divalidasi whitelist di atas — langsung pakai variabel yang sama
-    // ── Step 1: Bangun transaksi split dari Railway backend ──────────
     await txStep(1, 'active', 'Building ' + token + ' split transaction...');
 
-    // FIX v33 #1: AbortController agar fetch benar-benar dibatalkan saat timeout
     const _buildCtrl  = new AbortController();
     const _buildTimer = setTimeout(() => _buildCtrl.abort(), 30000);
     let buildRes;
@@ -8274,13 +7570,8 @@ async function proceedBuy(){
       ? `Transaction prepared ✓ Preview ${_buildExxeTotal.toLocaleString('en-US')} EXXE`
       : 'Transaction prepared ✓');
 
-    // ── Step 2: Deserialise → VersionedTransaction → Wallet sign & send ──
     await txStep(2, 'active', 'Please approve in your wallet...');
 
-    // FIX v15 #2: Deserialise base64 bytes into real VersionedTransaction
-    // using @solana/web3.js — this is what Phantom & Solflare actually expect.
-    // FIX v25 BUG-7: Bungkus atob+deserialize — base64 invalid atau TX corrupt
-    // akan throw DOMException yang membingungkan jika tidak ditangkap di sini.
     let txBytes, versionedTx;
     try {
       txBytes     = Uint8Array.from(atob(transaction), c => c.charCodeAt(0));
@@ -8296,8 +7587,6 @@ async function proceedBuy(){
         if (!provider) throw new Error('Phantom not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          // FIX v29 MOB-5: Handle semua Phantom return format lintas versi:
-          // v0.9+: string langsung, v1.x: {signature:'...'}, v2+: {publicKey,signature}
           txSignature = (typeof result === 'string' ? result : null)
             || result?.signature
             || result?.tx
@@ -8305,12 +7594,10 @@ async function proceedBuy(){
             || null;
         }
         if (!txSignature) {
-          // Fallback: sign dulu, lalu broadcast manual via RPC
           if (typeof provider.signTransaction !== 'function') {
             throw new Error('Wallet does not support transaction signing. Please update Phantom.');
           }
          
-          // so user gets an actionable message instead of "signing failed: undefined".
           let signedTx;
           try {
             signedTx = await provider.signTransaction(versionedTx);
@@ -8327,8 +7614,6 @@ async function proceedBuy(){
         if (!provider) throw new Error('Solflare not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          // FIX v29 MOB-5: Handle semua Solflare return format lintas versi:
-          // Mobile v1: {signature:'...'}, Desktop v2: string, legacy: {tx:'...'}, {txid:'...'}
           txSignature = (typeof result === 'string' ? result : null)
             || result?.signature
             || result?.tx
@@ -8365,11 +7650,8 @@ async function proceedBuy(){
       );
     }
 
-    // FIX v63: Delay 3 detik sebelum /verify-payment agar TX propagasi ke semua RPC nodes
-    // dan Helius indexer. TX status "confirmed" belum berarti bisa di-fetch via getTransaction().
     await new Promise(r => setTimeout(r, 3000));
 
-    // FIX v29 MOB-12: AbortController agar fetch benar-benar dibatalkan saat timeout
     const _verifyCtrl   = new AbortController();
     const _verifyTimer  = setTimeout(() => _verifyCtrl.abort(), 45000);
     let verifyRes;
@@ -8385,27 +7667,20 @@ async function proceedBuy(){
       if (_ve.name === 'AbortError') throw new Error('Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature);
       throw _ve;
     } finally { clearTimeout(_verifyTimer); }
-    // FIX v25 BUG-4: Parse response SEKALI — ReadableStream hanya bisa dibaca satu kali.
-    // Dulu: json() dipanggil 2x (satu di error branch, satu lagi setelah).
     const verifyData = await verifyRes.json().catch(() => ({}));
     if (!verifyRes.ok) {
       throw new Error((verifyData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
     }
     const actualAmount = verifyData.usdcAmount  || usdc;
-    // v46 BUG2 FIX: Use exxeTotal from verify (includes bonus) if available,
-    // otherwise use the backend build preview fallback or calculate locally.
     const _baseExxe  = verifyData.exxeAmount || Math.round(usdc / t.price);
     const _bonusExxe = verifyData.exxeBonus  || _buildExxeBonus || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
     const actualExxe = verifyData.exxeTotal  || _buildExxeTotal || (_baseExxe + _bonusExxe);
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
-    // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
-    // v46 BUG5 FIX: Show correct total EXXE (base + bonus) in step 4 label
     const _step4Label = t.bonusPct > 0
       ? `Sending ${actualExxe.toLocaleString('en-US')} EXXE (incl. ${_bonusExxe.toLocaleString('en-US')} bonus)...`
       : `Sending ${actualExxe.toLocaleString('en-US')} EXXE to your wallet...`;
     await txStep(4, 'active', _step4Label);
-    // FIX v29 MOB-12: AbortController untuk /send-exxe
     const _sendCtrl  = new AbortController();
     const _sendTimer = setTimeout(() => _sendCtrl.abort(), 60000);
     let sendRes;
@@ -8423,10 +7698,7 @@ async function proceedBuy(){
     } finally { clearTimeout(_sendTimer); }
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
-    // FIX v25 BUG-6: Cek success flag di response body — HTTP 200 belum tentu berhasil
-    // FIX v47: Ganti === false dengan !sendData.success — cover kasus {error:'...'} tanpa field success
     if (!sendData.success) {
-      // FIX v30 #1: Reset panels sebelum throw — cegah spinner abadi saat EXXE delivery gagal
       const _pp = document.getElementById('processingPanel');
       const _bp = document.getElementById('buyPanel');
       if (_pp) _pp.style.display = 'none';
@@ -8434,7 +7706,6 @@ async function proceedBuy(){
       throw new Error((sendData.error || 'EXXE delivery failed — contact support') + '. TX: ' + txSignature);
     }
     const exxeTx   = sendData?.signature || sendData?.tx || '';
-    // v46 BUG2 FIX: Use backend-confirmed exxeTotal (includes bonus) for display
     const confirmedExxe = sendData.exxeTotal || actualExxe;
     const _doneLabel = tier().bonusPct > 0
       ? `${confirmedExxe.toLocaleString('en-US')} EXXE delivered ✓ (incl. bonus)`
@@ -8450,32 +7721,23 @@ async function proceedBuy(){
     const _buyP2  = document.getElementById('buyPanel');
     if (_procP2) _procP2.style.display = 'none';
     if (_buyP2)  _buyP2.style.display  = 'block';
-    // BUG FIX: Restore buy button state after error - use checkReady() for proper validation
     const _buyBtnErr = document.getElementById('buyBtn');
     if (_buyBtnErr) {
       _buyBtnErr.disabled = false;
-      // checkReady() properly validates amount/wallet/balance before setting ready state
       checkReady();
     }
     if (e.code !== 4001) {
       showToast('Transaction failed: ' + (e.message || 'Please try again.'), 'error', 10000);
     }
-    // FLOW FIX v58: After error, return to step 4 (Amount) if already past that point
     const currStep = document.querySelector('.bstep.active');
     const currStepNum = currStep ? parseInt(currStep.id.replace('step','')) : 0;
     if (currStepNum >= 4) goStep(4);
   } finally {
-    // FIX v29 MOB-3: ALWAYS reset _isBuying via finally.
-    // Tanpa ini, exception antara _isBuying=true dan try{} menyebabkan form terkunci permanen.
     _isBuying = false;
   }
 }
 
-// --- Send raw signed bytes to Solana RPC with fallback -------
 async function sendRawTransaction(signedBytes) {
-  // BUG FIX v16 #3: Spread operator (...signedBytes) ke String.fromCharCode
-  // bisa menyebabkan "Maximum call stack size exceeded" jika buffer besar (>65k bytes).
-  // Gunakan loop reduce yang aman untuk konversi Uint8Array → base64.
   let b64 = '';
   const CHUNK = 8192;
   for (let i = 0; i < signedBytes.length; i += CHUNK) {
@@ -8492,7 +7754,6 @@ async function sendRawTransaction(signedBytes) {
         body:    JSON.stringify({
           jsonrpc: '2.0', id: 1,
           method: 'sendTransaction',
-          // FIX v29 MOB-10: skipPreflight:true — preflight sering false-reject TX valid di Solana congested
           params: [b64, { encoding: 'base64', skipPreflight: true, maxRetries: 5 }]
         }),
         signal: ctrl.signal
@@ -8507,7 +7768,6 @@ async function sendRawTransaction(signedBytes) {
   throw new Error('All RPC endpoints failed to send transaction. Please try again.');
 }
 
-
 async function waitForConfirmation(signature) {
   const maxWait     = 90000; // FIX v37 MOB-3: 90s (dari 40s) — cukup untuk mobile lambat
   const interval    = 4000;  // FIX v37 MOB-3: 4000ms (dari 3500ms) — hemat baterai
@@ -8518,7 +7778,6 @@ async function waitForConfirmation(signature) {
   let slowMsgShown  = false;
 
   while (Date.now() < deadline) {
-    // FIX v37 MOB-3: Tampilkan pesan "Still confirming..." setelah 20 detik
     if (!slowMsgShown && (Date.now() - startTime) >= slowMsgAt) {
       slowMsgShown = true;
       const tl1 = document.getElementById('tl1');
@@ -8556,8 +7815,6 @@ async function waitForConfirmation(signature) {
     }
     await new Promise(r => setTimeout(r, interval));
   }
-  // FIX v25 BUG-3: Throw agar catch di proceedBuy bisa detect timeout
-  // Backend akan verifikasi langsung ke chain — investor tetap aman
   throw new Error('waitForConfirmation timeout');
 }
 
@@ -8566,30 +7823,21 @@ async function txStep(n,status,label){
   const lbl=document.getElementById('tl'+n);
   if(icon){ icon.className='tx-icon '+status; icon.textContent=status==='done'?'✓':status==='active'?'▶':'○'; }
   if(lbl) lbl.textContent=label;
-  // Yield ke event loop untuk memastikan DOM repaint terjadi sebelum async berikutnya.
-  // Tidak butuh setTimeout artificial — microtask yield via Promise.resolve() cukup.
   await Promise.resolve();
 }
 
-// FIX v32 #2: Reset ke buyPanel setelah sukses — investor bisa beli lagi tanpa reload
 function resetAfterBuy() {
-  // FIX v36 BUG-1: Reset _isBuying agar form tidak terkunci saat investor
-  // klik "← Increase My Allocation" setelah transaksi sukses.
   _isBuying = false;
   const sp = document.getElementById('successPanel');
   const bp = document.getElementById('buyPanel');
   if (sp) {
     sp.style.display = 'none';
-    // BUG FIX: Clear successDetails DOM to prevent stale data on second purchase
     const details = document.getElementById('successDetails');
     if (details) details.innerHTML = '';
   }
   if (bp) bp.style.display = 'block';
-  // FIX v52 BUG-11: Reset solscanLink href so stale TX from previous purchase
-  // is not shown if second transaction fails before showSuccess() is called.
   const _solLink = document.getElementById('solscanLink');
   if (_solLink) _solLink.href = '#';
-  // Reset input dan checkboxes
   const inp = document.getElementById('usdcAmount');
   if (inp) { inp.value = ''; }
   const cb = document.getElementById('calcBox');
@@ -8605,41 +7853,29 @@ function resetAfterBuy() {
     const bt = document.getElementById('buyBtnText');
     if (bt) bt.textContent = 'Pay with ' + getSelectedToken() + ' — Receive EXXE';
   }
-  // FLOW FIX v58: Wallet still connected, token still selected — go back to step 4 (Amount)
   goStep(4);
-  // Refresh balance untuk tampilkan saldo terkini
   if (connectedAddress) fetchTokenBalances(connectedAddress);
-  // FIX v58-CAP: Refresh wallet cap bar agar remaining cap akurat setelah purchase
   if (connectedAddress) fetchWalletStatus(connectedAddress);
-  // BUG FIX: Proper scroll calculation with bounds check
   const formEl = document.getElementById('angelWalletForm');
   if (formEl) {
     const rect = formEl.getBoundingClientRect();
     const targetY = rect.top + window.pageYOffset - 100;
-    // Only scroll if target is positive and within reasonable bounds
     const safeY = Math.max(0, Math.min(targetY, document.body.scrollHeight - window.innerHeight));
     window.scrollTo({ top: safeY, behavior: 'smooth' });
   }
 }
 
-// v49 FIX: Store last purchase data globally so "View My Certificate" button
-// can re-open with correct values (not 0,0) after auto-modal is closed.
 window._lastCertData = null;
-
 
 function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   tierNum = tierNum || CFG.TIER;
-  // v49+v51: Save to global for manual re-open — store tierNum captured at tx time
   window._lastCertData = { usdc, exxe, wallet, tx, token, bonusExxe, tier: tierNum };
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
-  // BUG FIX: Hide mob-invest-bar when processing/transactions are active
   const _mobBar = document.getElementById('mob-invest-bar');
   if (_mobBar) _mobBar.classList.remove('visible');
-  // FIX v52 BUG-2: Scroll to successPanel so mobile users see it without manual scroll
   const _spEl = document.getElementById('successPanel');
   if (_spEl) setTimeout(function(){ _spEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
-  // FLOW FIX v58: Mark all 5 steps as done, step 5 as active (Done)
   for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
     if(el){ el.classList.remove('active'); el.classList.add('done'); }
@@ -8650,14 +7886,12 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   const txFull  = tx || '';
   const tokenLabel = token || 'USDC';
 
-  // v41: Calculate bonus for success display
   const t = CFG.TIERS[tierNum] || CFG.TIERS[1];
   const totalExxe = Math.round(exxe);
   const bonusPct  = t.bonusPct || 0;
   if (typeof bonusExxe !== 'number') {
     bonusExxe = bonusPct > 0 ? Math.round(totalExxe - (totalExxe / (1 + bonusPct / 100))) : 0;
   }
-  // BUG FIX: Validate bonus doesn't exceed total - detect data corruption from backend
   if (bonusExxe > totalExxe) {
     showToast('Note: Bonus data discrepancy detected. Please contact support with your TX.', 'warn', 12000);
     bonusExxe = Math.floor(totalExxe * 0.1); // Safe fallback: cap at 10%
@@ -8667,13 +7901,10 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   const details = document.getElementById('successDetails');
   details.textContent = '';
 
-  // Purchase date — format: DD Month YYYY
   const _now = new Date();
   const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  // FIX v52 BUG-3b: Use UTC date methods for purchaseDate consistency with certificate
   const purchaseDate = _now.getUTCDate() + ' ' + _months[_now.getUTCMonth()] + ' ' + _now.getUTCFullYear();
 
-  // Lock Until — gentleman agreement, Orca DEX (Solana)
   const lockUntil = t.lock || '— months after listing on Orca DEX (Solana)';
 
   const lines = [
@@ -8707,7 +7938,6 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
     details.appendChild(row);
   });
 
-  // Lock banner — gentleman agreement
   const lockBanner = document.createElement('div');
   lockBanner.style.cssText = 'margin-top:12px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.22);border-radius:8px;padding:10px 14px;display:flex;gap:10px;align-items:flex-start;';
   const lockIconEl = document.createElement('span');
@@ -8725,18 +7955,9 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   const link = document.getElementById('solscanLink');
   if (link && txFull) link.href = 'https://solscan.io/tx/' + encodeURIComponent(txFull);
 
-  // Show Genesis Certificate modal after short delay (let success panel render first)
-  // FIX v51: pass tierNum (captured at tx time) instead of CFG.TIER global
-  // FLOW FIX v58-STAT: Immediately refresh live counters so investor count & EXXE remaining update right away
   if (typeof window._exxeRefreshInvestorCount === 'function') window._exxeRefreshInvestorCount();
   if (typeof window._exxeRefreshFunding === 'function') window._exxeRefreshFunding();
 
-  // FRONTEND INTEGRATION: Call /api/certificate untuk server-side proof + timestamp resmi.
-  // FIX v63-CERT: Tunggu response /api/certificate SEBELUM tampilkan modal
-  // agar certificateId & issuedAt dari server sudah tersedia saat modal render.
-  // FIX v63-CERT2: Jangan timpa _lastCertData dengan struktur server (field berbeda).
-  // _lastCertData selalu pakai struktur {usdc,exxe,wallet,tx,token,bonusExxe,tier}
-  // agar tombol "View My Certificate" bisa re-open dengan data benar.
   window._certServerData = null;
   (async function() {
     try {
@@ -8759,8 +7980,6 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
         clearTimeout(certTimer);
         if (certRes.ok) {
           window._certServerData = await certRes.json();
-          // FIX v63-CERT2: Update _lastCertData tanpa timpa struktur asli —
-          // tambahkan certServerData sebagai referensi terpisah saja.
           if (window._lastCertData) {
             window._lastCertData.certId    = window._certServerData.certificateId;
             window._lastCertData.issuedAt  = window._certServerData.issuedAt;
@@ -8770,17 +7989,14 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
     } catch(certErr) {
       console.warn('[CERT] Server certificate unavailable, using local data:', certErr.message);
     }
-    // Tampilkan modal SETELAH /api/certificate selesai (sukses atau gagal)
     if (typeof showCertificate === 'function') {
       showCertificate(usdc, exxe, wallet, tx, token, bonusExxe, tierNum);
     }
   })();
 }
 
-
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// --- HAMBURGER MENU ------------------------------------------
 function toggleMenu(){
   const nav = document.getElementById('navLinks');
   const btn = document.getElementById('hamburger');
@@ -8797,12 +8013,10 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     if (hb) hb.classList.remove('open');
   }
 
-  // Close menu when any nav link is clicked — attach once per link
   document.querySelectorAll('#navLinks a').forEach(function(a) {
     a.addEventListener('click', closeMenu);
   });
 
-  // Close menu on outside click
   document.addEventListener('click', function(e) {
     const nav = document.getElementById('navLinks');
     const hb  = document.getElementById('hamburger');
@@ -8812,7 +8026,6 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     }
   });
 
-  // BUG FIX v16 #8 / v18 #1: Update --nav-h CSS variable so scroll-margin-top is always accurate.
   function updateNavHeight() {
     const nav = document.getElementById('main-nav');
     if (nav) {
@@ -8833,12 +8046,10 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
   }
 
   window.addEventListener('resize', handleNavResize);
-  // v18 #1: orientationchange fires after rotate — update nav height for safe-area changes
   window.addEventListener('orientationchange', function() {
     setTimeout(updateNavHeight, 200);
   });
 
-  // FIX: Show sticky banner AFTER main-splash animation completes (not during)
   updateNavHeight();
 
   document.addEventListener('keydown', function(e) {
@@ -8882,17 +8093,12 @@ function createParticles() {
         c.appendChild(p);
     }
 }
-// ── Guard: ensure enterSite() is only called once ─────────
 var isEntering = false;
-// FIX CRITICAL #4: Expose splash progress rAF ID at module scope so it can be
-// cancelled if enterSite is somehow re-invoked. Prevents orphaned animation loops
-// on low-end devices where the rAF closure could otherwise leak indefinitely.
 var _splashProgressRafId = null;
 
 function enterSite() {
     if (isEntering) return;
     isEntering = true;
-    // Cancel any previous progress rAF loop that may have leaked
     if (_splashProgressRafId) { cancelAnimationFrame(_splashProgressRafId); _splashProgressRafId = null; }
 
     var splash     = document.getElementById('splash-page');
@@ -8901,10 +8107,8 @@ function enterSite() {
     var mainSplash = document.getElementById('main-splash');
     if (!splash || !mc || !mainSplash) return;
 
-    // ── Instant: sembunyikan splash 1, tampilkan main-splash langsung ──
     splash.style.display = 'none';
 
-    // Stop splash canvas — bebaskan memori
     var splashCanvas = document.getElementById('gold-network-splash');
     if (splashCanvas && splashCanvas._stopGoldNet) splashCanvas._stopGoldNet();
 
@@ -8916,17 +8120,14 @@ function enterSite() {
         mcInner.style.filter  = '';
     }
 
-    // Tampilkan main-splash langsung tanpa blur/scale/delay
     mainSplash.style.display   = 'flex';
     mainSplash.style.opacity   = '1';
     mainSplash.style.transform = 'none';
     mainSplash.style.filter    = 'none';
 
-    // Start canvas particles
     startMainSplashParticles();
     startGoldNetwork('gold-network-main', false);
 
-    // ── Progress bar ─────────────────────────────────────────
     var bar    = document.getElementById('main-splash-bar');
     var pct    = document.getElementById('main-splash-pct');
     var status = document.getElementById('main-splash-status');
@@ -8988,7 +8189,6 @@ function enterSite() {
         } else {
             setStatus(msgs[msgs.length - 1]);
 
-            // ── Exit main-splash → halaman utama (fade ringan) ──
             setTimeout(function () {
                 mainSplash.style.transition = 'opacity 0.4s ease';
                 mainSplash.style.opacity    = '0';
@@ -9007,7 +8207,6 @@ function enterSite() {
                     if (mcInner) {
                         mcInner.style.transition = 'opacity 0.6s ease';
                         mcInner.style.opacity    = '1';
-                        // Show sticky banner 4 detik setelah halaman utama visible
                         setTimeout(showStickyBanner, 4000);
                         setTimeout(function () {
                             mcInner.style.transition = '';
@@ -9021,7 +8220,6 @@ function enterSite() {
     _splashProgressRafId = requestAnimationFrame(tickProgress);
 }
 
-// Show sticky banner after main-splash exits
   function showStickyBanner() {
     var banner = document.getElementById('stickyBanner');
     if (!banner || banner.dataset.dismissed === '1') return;
@@ -9039,7 +8237,6 @@ function enterSite() {
   function startMainSplashParticles() {
     var canvas = document.getElementById('main-splash-canvas');
     if (!canvas) return;
-    // BUG FIX #11: guard against double-init (enterSite + old MutationObserver)
     if (canvas._splashRunning) return;
     canvas._splashRunning = true;
 
@@ -9051,7 +8248,6 @@ function enterSite() {
     }
     resizeCanvas();
 
-    // BUG FIX #11: handle orientation change / window resize
     var _resizeTimer;
     function onResize() {
         clearTimeout(_resizeTimer);
@@ -9061,7 +8257,6 @@ function enterSite() {
     window.addEventListener('orientationchange', onResize);
 
     var particles = [];
-    // v6: 30 particles (was 50), no shadowBlur
     for (var i = 0; i < 30; i++) {
         particles.push({
             x: Math.random() * canvas.width,
@@ -9078,14 +8273,12 @@ function enterSite() {
     function drawParticles() {
         if (!document.getElementById('main-splash') || document.getElementById('main-splash').style.display === 'none') {
             cancelAnimationFrame(animId);
-            // BUG FIX #11: remove resize listeners when canvas stops
             window.removeEventListener('resize', onResize);
             window.removeEventListener('orientationchange', onResize);
             canvas._splashRunning = false;
             return;
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // Batch same-color draws for fewer state changes
         particles.forEach(function(p) {
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -9111,39 +8304,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // -- GOLD NETWORK — SPLASH PAGE --------------------------
     startGoldNetwork('gold-network-splash', true);
 });
 
-// -- GOLD NETWORK ENGINE — v6: CPU/GPU optimised ------------------
 function startGoldNetwork(canvasId, isSplash) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) return;
-    // FIX WARNING #2: Guard against double-init. If startGoldNetwork is called twice
-    // for the same canvas, two resize listeners get registered but only one gets removed
-    // on cleanup because 'resize' is a closure — each call creates a new function instance.
-    // Stop any existing instance first before starting a new one.
     if (canvas._stopGoldNet) { canvas._stopGoldNet(); canvas._stopGoldNet = null; }
 
     var ctx = canvas.getContext('2d', { alpha: true });
 
-    // Resize canvas immediately then debounce — no blank frame on device rotate
     var _resizeTimer;
     var _firstResize = true;
     function resize() {
         if (_firstResize) {
-            // Instant on first call — canvas must be ready before first draw()
             _firstResize = false;
             canvas.width  = canvas.offsetWidth  || window.innerWidth;
             canvas.height = canvas.offsetHeight || window.innerHeight;
             return;
         }
-        // Subsequent calls (window resize / orientation change) — short debounce
         clearTimeout(_resizeTimer);
         _resizeTimer = setTimeout(function() {
             canvas.width  = canvas.offsetWidth  || window.innerWidth;
             canvas.height = canvas.offsetHeight || window.innerHeight;
-            // Re-scatter nodes into new viewport so none are off-screen
             for (var ri = 0; ri < nodes.length; ri++) {
                 if (nodes[ri].x > canvas.width)  nodes[ri].x = Math.random() * canvas.width;
                 if (nodes[ri].y > canvas.height) nodes[ri].y = Math.random() * canvas.height;
@@ -9153,7 +8336,6 @@ function startGoldNetwork(canvasId, isSplash) {
     resize();
     window.addEventListener('resize', resize);
 
-    // -- Gold colour palette ----------------------------------
     var GOLD_COLORS = [
         'rgba(204,125,7,',
         'rgba(232,201,122,',
@@ -9162,12 +8344,10 @@ function startGoldNetwork(canvasId, isSplash) {
         'rgba(240,210,100,'
     ];
 
-    // -- v6: Reduced node count — quality preserved, CPU halved --
     var NODE_COUNT = Math.min(Math.floor((canvas.width * canvas.height) / 22000), 36);
     var CONNECT_DIST = Math.min(canvas.width, canvas.height) * 0.26;
     var CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST; // avoid sqrt in inner loop
 
-    // -- Build nodes -----------------------------------------
     var nodes = [];
     for (var i = 0; i < NODE_COUNT; i++) {
         var speed = 0.14 + Math.random() * 0.18;
@@ -9185,7 +8365,6 @@ function startGoldNetwork(canvasId, isSplash) {
         });
     }
 
-    // -- v6: Fewer sparkles, no shadowBlur -------------------
     var sparks = [];
     for (var j = 0; j < 10; j++) {
         sparks.push({
@@ -9207,7 +8386,6 @@ function startGoldNetwork(canvasId, isSplash) {
         frameCount++;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // -- Move nodes --------------------------------------
         for (var i = 0; i < nodes.length; i++) {
             var n = nodes[i];
             n.x += n.vx;
@@ -9219,7 +8397,6 @@ function startGoldNetwork(canvasId, isSplash) {
             if (n.y > canvas.height) n.y = 0;
         }
 
-        // -- Draw connections — v6: no gradient per line, use solid alpha ---
         ctx.lineWidth = 0.8;
         for (var i = 0; i < nodes.length; i++) {
             for (var k = i + 1; k < nodes.length; k++) {
@@ -9238,14 +8415,12 @@ function startGoldNetwork(canvasId, isSplash) {
             }
         }
 
-        // -- Draw nodes — v6: single radial gradient, no shadowBlur --------
         for (var i = 0; i < nodes.length; i++) {
             var n = nodes[i];
             var sinP = Math.sin(n.pulse);
             var glowR = n.r * (1.5 + 0.5 * sinP);
             var nodeA  = n.alpha * (0.78 + 0.22 * sinP);
 
-            // outer glow — smaller radius = cheaper
             var g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, glowR * 2.8);
             g.addColorStop(0,   n.color + (nodeA * 0.55).toFixed(3) + ')');
             g.addColorStop(0.5, n.color + (nodeA * 0.18).toFixed(3) + ')');
@@ -9255,14 +8430,12 @@ function startGoldNetwork(canvasId, isSplash) {
             ctx.fillStyle = g;
             ctx.fill();
 
-            // core dot
             ctx.beginPath();
             ctx.arc(n.x, n.y, glowR, 0, Math.PI * 2);
             ctx.fillStyle = n.color + nodeA.toFixed(3) + ')';
             ctx.fill();
         }
 
-        // -- Draw sparkles — v6: no shadowBlur, simple arc ----------------
         for (var j = 0; j < sparks.length; j++) {
             var s = sparks[j];
             s.phase += s.speed;
@@ -9292,7 +8465,6 @@ function startGoldNetwork(canvasId, isSplash) {
   'use strict';
 
   const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  // FIX v36 SYNC-1: Default fallback — akan di-override dari /api/stats
   const ANGEL_DIST_WALLET_DEFAULT = '4Y9Zg3K8Ut8NboWf7BuVmhS6kXedaozjvK61uSNnXkNW';
 
   const REFRESH_MS   = 60000; // FIX v36 SYNC-3: selaras dengan backend TTL 60s
@@ -9301,7 +8473,6 @@ function startGoldNetwork(canvasId, isSplash) {
   const CACHE_TTL_MS = 300000; // 5 menit
 
   const RPC_ENDPOINTS = [
-    // ⚠ SECURITY: key premium hanya di backend. Frontend pakai public endpoints.
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
@@ -9427,7 +8598,6 @@ function startGoldNetwork(canvasId, isSplash) {
       ids.forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
-        // Animasi hanya jika nilai berubah
         if (parseInt(el.textContent.replace(/,/g,'')) !== count) {
           animateCount(el, lastCount, count, 1200);
         }
@@ -9439,8 +8609,6 @@ function startGoldNetwork(canvasId, isSplash) {
       sessionStorage.setItem(SESSION_KEY, String(count));
       sessionStorage.setItem(SESSION_TS,  String(Date.now()));
     } catch(e) {}
-    // FIX v64-COUNTER: Retry 3x untuk elemen splash2 yang mungkin
-    // belum render saat DOMContentLoaded (splash animasi belum selesai)
     [500, 1500, 3000].forEach(function(delay) {
       setTimeout(function() {
         ids.forEach(id => {
@@ -9474,17 +8642,13 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_isFetching) return;
     _isFetching = true;
     try {
-      // FIX v36 SYNC-4: Cek shared cache dulu — diisi oleh funding tracker di bawah.
-      // Jika sudah ada data dari fetch bersama, langsung pakai tanpa network call lagi.
       const shared = window._exillionStatsCache;
       if (shared && typeof shared.investorCount === 'number' && shared.ts && (Date.now() - shared.ts) < CACHE_TTL_MS) {
         updateInvestorUI(shared.investorCount);
-        // FIX v36 SYNC-1: Jika ada angelWallet dari backend, simpan ke window agar on-chain fallback pakai versi terbaru
         if (shared.angelWallet) window._exillionAngelWallet = shared.angelWallet;
         return;
       }
 
-      // FIX v36 SYNC-4: Jika shared cache belum ada, fetch /api/stats sendiri
       const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
         const ctrl       = new AbortController();
@@ -9494,15 +8658,12 @@ function startGoldNetwork(canvasId, isSplash) {
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
-            // FIX v36 SYNC-1: Simpan angelWallet dari backend ke window
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               setAngelWalletFromStats(data.angelWallet);
             }
             if (data.wallets && typeof data.wallets === 'object') {
               setSplitWalletsFromStats(data.wallets);
             }
-            // FIX v36 SYNC-4: Isi shared cache agar funding tracker tidak double-fetch
-            // FIX v63-COUNTER: Simpan semua field termasuk exxeSold & tiers
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
               exxeSold:      data.exxeSold,
@@ -9513,7 +8674,6 @@ function startGoldNetwork(canvasId, isSplash) {
               tiers:         data.tiers,
               ts:            Date.now(),
             };
-            // FIX v63-COUNTER: Update tier cards langsung dari sini juga
             if (data.tiers && typeof updateTierCards === 'function') {
               updateTierCards(data.tiers);
             }
@@ -9525,7 +8685,6 @@ function startGoldNetwork(canvasId, isSplash) {
         } finally { clearTimeout(abortTimer); }
       } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // FIX v36 SYNC-1: Gunakan angelWallet dari backend jika ada, fallback ke hardcode default
       const angelWallet = window._exillionAngelWallet || ANGEL_DIST_WALLET_DEFAULT;
       const allSigs     = await fetchAllSignatures(angelWallet);
       if (!allSigs.length) { updateInvestorUI(0); return; }
@@ -9542,16 +8701,12 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshInvestorCount = function() {
       _isFetching = false;
-      // FIX v64-REFRESH: bust shared stats cache timestamp so fetchInvestorCount
-      // does not short-circuit on the 5-min cache after a purchase
       if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
       try { sessionStorage.removeItem('exxe_investor_count_v16'); sessionStorage.removeItem('exxe_investor_ts_v16'); } catch(e) {}
       fetchInvestorCount();
     };
-    // Loading skeleton — tampilkan placeholder sebelum data backend siap
     ['1','2','3'].forEach(n => {
       const rem = document.getElementById('tier-rem-exxe-' + n);
       if (rem) rem.textContent = '—';
@@ -9562,8 +8717,6 @@ function startGoldNetwork(canvasId, isSplash) {
       const rtBar = document.getElementById('rt-t' + n + '-bar');
       if (rtBar) rtBar.style.width = '1%';
     });
-    // FIX v64-COUNTER: Hapus session cache yang lebih dari 2 menit
-    // agar counter tidak stuck di nilai lama setelah deploy/restart
     try {
       const cachedTs = parseInt(sessionStorage.getItem(SESSION_TS) || '0', 10);
       if (Date.now() - cachedTs > 120000) {
@@ -9583,32 +8736,21 @@ function startGoldNetwork(canvasId, isSplash) {
   const USDC_MINT  = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
   const USDT_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
 
-  // FIX v36 SYNC-2: Default wallet fallback — akan di-override dari /api/stats
   const WALLETS_DEFAULT = {
     liquidity:   '4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP',
     operational: 'GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN',
     development: 'BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx',
   };
-  // FIX v36 SYNC-2: Default split fallback — akan di-override dari /api/stats
   const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
 
   const RPC_ENDPOINTS = [
-    // ⚠ SECURITY: key premium hanya di backend. Frontend pakai public endpoints.
     'https://api.mainnet-beta.solana.com',
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
   ];
-  // FIX v37 SYNC-2: Default fallback values — akan di-override dari /api/stats tiers field.
-  // Backend mengembalikan tiers: { 1: { price, min, max }, 2: ..., 3: ... }
   let TIER1_PRICE  = 0.01;
   const EXXE_TARGET  = 330000000;
-  // v46 BUG4 FIX: USDC_TARGET updated to total raise potential across all 3 tiers
-  // Tier I: 188.8M × $0.01 = $1,888,000
-  // Tier II: 251.8M × $0.025 = $6,295,000
-  // Tier III: 388M × $0.05 = $19,400,000
-  // Total: $27,583,000
   const USDC_TARGET  = 27583000;
-  // FIX v36 SYNC-3: 60s — match backend STATS_TTL_MS agar setiap poll dapat data segar
   const REFRESH_MS   = 60000;
   const SESSION_KEY  = 'exxe_funding_total_v16';
   const SESSION_TS   = 'exxe_funding_ts_v16';
@@ -9728,17 +8870,14 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   function updateUI(totalUsdc, exxeSoldOnChain) {
-    // High watermark — prevents regression if backend returns stale lower value
     if (totalUsdc < _highWatermark) totalUsdc = _highWatermark;
     else _highWatermark = totalUsdc;
 
-    // Pulse live indicator dots
     document.querySelectorAll('.rt-live-dot').forEach(function(d) {
       d.style.background = '#14F195';
       setTimeout(function() { d.style.background = 'rgba(20,241,149,0.4)'; }, 600);
     });
 
-    // Persist to session storage (used by loadCachedFunding on page reload)
     try {
       sessionStorage.setItem(SESSION_KEY,  String(totalUsdc));
       sessionStorage.setItem(SESSION_TS,   String(Date.now()));
@@ -9755,7 +8894,6 @@ function startGoldNetwork(canvasId, isSplash) {
       const exxeVal = parseFloat(sessionStorage.getItem(SESSION_EXXE) || '0');
       if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS) {
         _highWatermark = val;
-        // FIX v37 SYNC-1: restore exxeSold from cache so counter shows correctly on reload
         updateUI(val, exxeVal > 0 ? exxeVal : undefined);
       }
     } catch(e) {}
@@ -9765,8 +8903,6 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
-      // FIX v36 SYNC-4: Fetch /api/stats SEKALI — isi shared cache untuk investor counter juga.
-      // Tidak ada double fetch ke backend dari dua script terpisah.
       const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
         const ctrl       = new AbortController();
@@ -9776,8 +8912,6 @@ function startGoldNetwork(canvasId, isSplash) {
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
-            // FIX v36 SYNC-4: Simpan ke shared cache (window._exillionStatsCache)
-            // agar investor counter script membaca dari sini — tanpa request tambahan.
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
               exxeSold:      data.exxeSold,
@@ -9788,22 +8922,18 @@ function startGoldNetwork(canvasId, isSplash) {
               tiers:         data.tiers,
               ts:            Date.now(),
             };
-            // FIX v40 TIER-1: Update tier cards + progress bars dengan data live
             if (data.tiers && typeof updateTierCards === 'function') {
               updateTierCards(data.tiers);
             }
-            // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               setAngelWalletFromStats(data.angelWallet);
             }
             if (data.wallets && typeof data.wallets === 'object') {
               setSplitWalletsFromStats(data.wallets);
             }
-            // FIX v37 SYNC-2: Override TIER1_PRICE dari backend jika tersedia
             if (data.tiers && data.tiers[1] && typeof data.tiers[1].price === 'number') {
               TIER1_PRICE = data.tiers[1].price;
             }
-            // FIX v48 SYNC-3: Sinkronkan lock + bonus dari backend
             if (data.tiers) {
               [1, 2, 3].forEach(function(n) {
                 if (!data.tiers[n] || !window.CFG || !window.CFG.TIERS || !window.CFG.TIERS[n]) return;
@@ -9822,7 +8952,6 @@ function startGoldNetwork(canvasId, isSplash) {
         } finally { clearTimeout(abortTimer); }
       } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // FIX v36 SYNC-2: Gunakan wallets & split dari shared cache jika ada, fallback ke default
       const cachedSplit   = window._exillionStatsCache?.split   || SPLIT_DEFAULT;
       const cachedWallets = window._exillionStatsCache?.wallets  || null;
       const walletList    = cachedWallets
@@ -9853,14 +8982,11 @@ function startGoldNetwork(canvasId, isSplash) {
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshFunding = function() {
       _fetchFundingActive = false;
-      // FIX v64-REFRESH: bust shared stats cache so fetchFunding hits /api/stats fresh
       if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
       fetchFunding();
     };
-    // Loading skeleton — tampilkan placeholder sebelum data backend siap
     ['1','2','3'].forEach(n => {
       const rtRem = document.getElementById('rt-t' + n + '-remaining');
       if (rtRem) rtRem.textContent = '—';
@@ -9869,7 +8995,6 @@ function startGoldNetwork(canvasId, isSplash) {
     });
     loadCachedFunding();
     fetchFunding();
-    // Pause polling saat tab tidak aktif — hemat bandwidth & baterai mobile.
     var fundingInterval = setInterval(fetchFunding, REFRESH_MS);
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
@@ -9887,18 +9012,14 @@ function startGoldNetwork(canvasId, isSplash) {
 </script>
 
 <script>
-// ── FIX v39 MOB-BUY-4/5/6: Mobile purchase system ─────────────────────────
 (function() {
   'use strict';
 
-  // FIX v43 ERR-1: Perbaiki recursive call bug — window._isMob() → window.isMobileBrowser()
-  // Bug asal: _isMob() memanggil window._isMob() lagi → TypeError infinite recursion.
   function _isMob() {
     if (typeof window.isMobileBrowser === 'function') return window.isMobileBrowser();
     return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
   }
 
-  // ── Sticky invest bar logic ──
   function initMobileInvestBar() {
     if (!_isMob()) return; // desktop: tidak perlu bar ini
 
@@ -9908,7 +9029,6 @@ function startGoldNetwork(canvasId, isSplash) {
 
     bar.style.display = 'block';
 
-    // Tampilkan bar setelah user scroll melewati hero
     var shown = false;
     function onScroll() {
       var heroBottom = heroEl.getBoundingClientRect().bottom;
@@ -9922,12 +9042,10 @@ function startGoldNetwork(canvasId, isSplash) {
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // Sembunyikan bar saat sudah di angel section (form visible)
     var angelEl = document.getElementById('angel');
     function onScrollAngel() {
       if (!angelEl) return;
       var rect = angelEl.getBoundingClientRect();
-      // Jika angel section sedang di viewport — sembunyikan bar
       if (rect.top < window.innerHeight && rect.bottom > 0) {
         bar.classList.remove('visible');
         shown = false;
@@ -9936,7 +9054,6 @@ function startGoldNetwork(canvasId, isSplash) {
     window.addEventListener('scroll', onScrollAngel, { passive: true });
   }
 
-  // ── Update sticky bar saat wallet connect/disconnect ──
   function updateMobileBar(walletName, address) {
     var bar        = document.getElementById('mob-invest-bar');
     if (!bar) return;
@@ -9945,22 +9062,18 @@ function startGoldNetwork(canvasId, isSplash) {
     var infoEl     = document.getElementById('mob-invest-bar-wallet-info');
 
     if (walletName && address) {
-      // Connected state
       var short = address.slice(0,4) + '...' + address.slice(-4);
       if (btnEl)    btnEl.style.display    = 'none';
       if (walletDiv) walletDiv.style.display = 'flex';
       if (infoEl)   infoEl.textContent     = walletName + ': ' + short;
     } else {
-      // Disconnected state
       if (btnEl)    btnEl.style.display    = 'block';
       if (walletDiv) walletDiv.style.display = 'none';
     }
   }
 
-  // Expose update function ke scope global agar setConnected / disconnectWallet bisa panggil
   window._updateMobileBar = updateMobileBar;
 
-  // Init saat DOM ready
   document.addEventListener('DOMContentLoaded', function() {
     initMobileInvestBar();
 
@@ -9995,7 +9108,6 @@ function startGoldNetwork(canvasId, isSplash) {
     <button id="mob-invest-bar-disconnect" onclick="disconnectWallet()">✕ Disconnect</button>
   </div>
 </div>
-
 
 <!-- ══════════════════════════════════════════
      GENESIS CERTIFICATE MODAL
@@ -10088,7 +9200,7 @@ function startGoldNetwork(canvasId, isSplash) {
         </div>
       </div>
 
-      <!-- Footer -->
+      
       <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:16px;padding-top:13px;border-top:1px solid rgba(204,125,7,0.2);">
         <div style="display:flex;align-items:center;gap:12px;">
           <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXXE" crossorigin="anonymous" style="width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 6px rgba(204,125,7,0.5));flex-shrink:0;"/>
@@ -10103,9 +9215,9 @@ function startGoldNetwork(canvasId, isSplash) {
           <div style="font-family:'Exo 2',sans-serif;font-size:9px;color:#00d4ff;letter-spacing:0.8px;">© 2026 All rights reserved</div>
         </div>
       </div>
-    </div><!-- end cert-doc -->
+    </div>
 
-    <!-- Action buttons -->
+    
     <div class="cert-actions">
       <button class="cert-btn cert-btn-save" onclick="downloadCertificate()">⬇ Save Certificate</button>
       <button class="cert-btn cert-btn-close" onclick="closeCertModal()">✕ Close</button>
@@ -10117,7 +9229,6 @@ function startGoldNetwork(canvasId, isSplash) {
   </div>
 </div>
 
-<!-- FIX v52 BUG-1 + BUG-8: html2canvas with robust fallback + global flag -->
 <script>
 window._html2canvasLoaded = false;
 function _loadHtml2canvasFallback(){
@@ -10132,9 +9243,6 @@ function _loadHtml2canvasFallback(){
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" onload="window._html2canvasLoaded=true" onerror="_loadHtml2canvasFallback()"></script>
 
 <script>
-// ══════════════════════════════════════════════
-// GENESIS CERTIFICATE SYSTEM
-// ══════════════════════════════════════════════
 const TIER_TITLES = {
   1: 'GENESIS ANGEL INVESTOR',
   2: 'PRIME ANGEL INVESTOR',
@@ -10178,7 +9286,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const walletEl = document.getElementById('certWalletAddr');
   if (walletEl) walletEl.textContent = wallet || '—';
 
-  // Use server timestamp from /api/certificate if available, otherwise local time
   const serverData = window._certServerData;
   let dateStr, timeStr;
   if (serverData && serverData.issuedAt) {
@@ -10214,7 +9321,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const txEl = document.getElementById('certTxSig');
   if (txEl) txEl.textContent = tx ? (tx.slice(0,32) + '...') : '—';
 
-  // Display certificate ID from server if available
   const certIdBox = document.getElementById('certIdBox');
   const certIdVal = document.getElementById('certIdVal');
   if (serverData && serverData.certificateId) {
@@ -10227,8 +9333,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const lockCyanEl = document.getElementById('certLockCyan');
   if (lockCyanEl) {
     const _art = tierNameFull.startsWith('Apex') ? 'an' : 'a';
-    // FIX v64-CERT: Only set the cyan acknowledgement sentence here.
-    // The gold "I agree not to sell..." sentence lives in the sibling <span> in HTML — do NOT duplicate it here.
     lockCyanEl.textContent = 'I acknowledge that as ' + _art + ' ' + tierNameFull + ', I voluntarily commit to holding my allocated EXXE SPL Tokens for ' + TIER_LOCK[tierNum] + ' following the official listing on Orca DEX (Solana Blockchain).';
   }
 
@@ -10239,7 +9343,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
 function closeCertModal() {
   const modal = document.getElementById('certModal');
   if (modal) modal.classList.remove('visible');
-  // BUG FIX: Check if other overlays are still active before unlocking scroll
   const discOverlay = document.getElementById('disclaimerOverlay');
   const hasActiveOverlay = (discOverlay && discOverlay.classList.contains('active'));
   if (!hasActiveOverlay) document.body.style.overflow = '';
@@ -10257,11 +9360,9 @@ async function downloadCertificate() {
     const link = document.createElement('a');
     link.download = 'EXXE_Certificate_Tier' + (window._lastCertData?.tier || CFG.TIER || 1) + '_' + Date.now() + '.png';
     link.href = canvas.toDataURL('image/png');
-    // BUG FIX: iOS Safari often ignores programmatic link.click() - use fallback
     try {
       link.click();
     } catch(clickErr) {
-      // Fallback: open in new window for manual save
       const win = window.open('', '_blank');
       if (win) {
         win.document.write('<html><head><title>Save Certificate</title></head><body style="margin:0;background:#0d0d1f;display:flex;justify-content:center;align-items:center;min-height:100vh;"><img src="' + link.href + '" style="max-width:90vw;max-height:90vh;border:2px solid #CC7D07;border-radius:8px;"/></body></html>');
@@ -10273,7 +9374,6 @@ async function downloadCertificate() {
   }
 }
 
-// Close modal on backdrop click
 document.addEventListener('click', function(e) {
   const modal = document.getElementById('certModal');
   if (modal && e.target === modal) closeCertModal();
