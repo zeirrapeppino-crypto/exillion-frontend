@@ -5643,60 +5643,55 @@ canvas { transform: translateZ(0); }
     </div>
 
     <div class="prog-items-grid">
+
     <!-- Tier I Progress -->
-    <div class="prog-item" style="margin-bottom:1.4rem;">
-      <div class="prog-meta">
-        <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
-          <strong>Tier I — Genesis Angel</strong> &nbsp;·&nbsp; $0.01/EXXE &nbsp;·&nbsp;
-          Sold: <span id="rt-t1-sold">0</span> EXXE
-        </span>
-        <span id="rt-t1-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
+    <div class="prog-item">
+      <div style="text-align:center;margin-bottom:10px;">
+        <span id="tier-status-dot-1" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00d4ff;box-shadow:0 0 8px rgba(0,212,255,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <span style="font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:3px;color:#00d4ff;">TIER I</span>
+        <div style="font-family:'Exo 2',sans-serif;font-size:0.5rem;letter-spacing:1.5px;color:var(--text-1);margin-top:4px;font-weight:500;">Genesis Angel</div>
       </div>
       <div class="prog-track">
         <div class="prog-fill" id="rt-t1-bar" style="width:1%;"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:#00d4ff;text-shadow:0 0 6px rgba(0,212,255,0.5);">🔒 3-month hold</span>
-        <span>Remaining: <span id="rt-t1-remaining" style="color:#14F195;">188,800,000</span> EXXE</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;margin-top:7px;">
+        <span style="color:var(--text-2);">SOLD&nbsp;<span id="rt-t1-sold" style="color:#00d4ff;font-weight:700;">0</span>&nbsp;EXXE</span>
+        <span id="rt-t1-status" style="font-size:0.42rem;letter-spacing:2px;color:#14F195;font-weight:700;text-shadow:0 0 8px rgba(20,241,149,0.5);">SOLD</span>
+        <span style="color:var(--text-2);">Remaining&nbsp;<span id="rt-t1-remaining" style="color:#14F195;font-weight:700;">188,800,000</span></span>
       </div>
     </div>
 
     <!-- Tier II Progress -->
-    <div class="prog-item" style="margin-bottom:1.4rem;">
-      <div class="prog-meta">
-        <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e8c97a;box-shadow:0 0 8px rgba(232,201,122,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
-          <strong>Tier II — Prime Angel</strong> &nbsp;·&nbsp; $0.025/EXXE &nbsp;·&nbsp; <span style="color:#e8c97a;">+5% Bonus</span> &nbsp;·&nbsp;
-          Sold: <span id="rt-t2-sold">0</span> EXXE
-        </span>
-        <span id="rt-t2-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
+    <div class="prog-item">
+      <div style="text-align:center;margin-bottom:10px;">
+        <span id="tier-status-dot-2" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e8c97a;box-shadow:0 0 8px rgba(232,201,122,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <span style="font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:3px;color:#e8c97a;">TIER II</span>
+        <div style="font-family:'Exo 2',sans-serif;font-size:0.5rem;letter-spacing:1.5px;color:var(--text-1);margin-top:4px;font-weight:500;">Prime Angel</div>
       </div>
       <div class="prog-track">
         <div class="prog-fill" id="rt-t2-bar" style="width:1%;background:linear-gradient(90deg,#e8c97a,#f5d060);"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:#e8c97a;text-shadow:0 0 6px rgba(232,201,122,0.5);">🔒 2-month hold</span>
-        <span>Remaining: <span id="rt-t2-remaining" style="color:#14F195;">251,800,000</span> EXXE</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;margin-top:7px;">
+        <span style="color:var(--text-2);">SOLD&nbsp;<span id="rt-t2-sold" style="color:#e8c97a;font-weight:700;">0</span>&nbsp;EXXE</span>
+        <span id="rt-t2-status" style="font-size:0.42rem;letter-spacing:2px;color:#14F195;font-weight:700;text-shadow:0 0 8px rgba(20,241,149,0.5);">SOLD</span>
+        <span style="color:var(--text-2);">Remaining&nbsp;<span id="rt-t2-remaining" style="color:#14F195;font-weight:700;">251,800,000</span></span>
       </div>
     </div>
 
     <!-- Tier III Progress -->
     <div class="prog-item">
-      <div class="prog-meta">
-        <span style="display:flex;align-items:center;gap:6px;">
-          <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9945FF;box-shadow:0 0 8px rgba(153,69,255,0.6);flex-shrink:0;animation:livePulse 1.6s ease-in-out infinite;"></span>
-          <strong>Tier III — Apex Angel</strong> &nbsp;·&nbsp; $0.05/EXXE &nbsp;·&nbsp; <span style="color:#c4a3ff;">+10% Bonus</span> &nbsp;·&nbsp;
-          Sold: <span id="rt-t3-sold">0</span> EXXE
-        </span>
-        <span id="rt-t3-status" style="font-family:'Orbitron',monospace;font-size:0.5rem;letter-spacing:1.5px;color:#14F195;">OPEN</span>
+      <div style="text-align:center;margin-bottom:10px;">
+        <span id="tier-status-dot-3" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#9945FF;box-shadow:0 0 8px rgba(153,69,255,0.6);vertical-align:middle;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>
+        <span style="font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:3px;color:#c4a3ff;">TIER III</span>
+        <div style="font-family:'Exo 2',sans-serif;font-size:0.5rem;letter-spacing:1.5px;color:var(--text-1);margin-top:4px;font-weight:500;">Apex Angel</div>
       </div>
       <div class="prog-track">
         <div class="prog-fill" id="rt-t3-bar" style="width:1%;background:linear-gradient(90deg,#9945FF,#c4a3ff);"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-family:'Orbitron',monospace;font-size:0.48rem;letter-spacing:1px;color:var(--text-2);margin-top:4px;">
-        <span style="color:#9945FF;text-shadow:0 0 6px rgba(153,69,255,0.5);">🔒 1-month hold</span>
-        <span>Remaining: <span id="rt-t3-remaining" style="color:#14F195;">388,000,000</span> EXXE</span>
+      <div style="display:flex;justify-content:space-between;align-items:center;font-family:'Orbitron',monospace;font-size:0.44rem;letter-spacing:1px;margin-top:7px;">
+        <span style="color:var(--text-2);">SOLD&nbsp;<span id="rt-t3-sold" style="color:#c4a3ff;font-weight:700;">0</span>&nbsp;EXXE</span>
+        <span id="rt-t3-status" style="font-size:0.42rem;letter-spacing:2px;color:#14F195;font-weight:700;text-shadow:0 0 8px rgba(20,241,149,0.5);">SOLD</span>
+        <span style="color:var(--text-2);">Remaining&nbsp;<span id="rt-t3-remaining" style="color:#14F195;font-weight:700;">388,000,000</span></span>
       </div>
     </div>
     </div><!-- end prog-items-grid -->
