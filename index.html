@@ -5484,7 +5484,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">NO BONUS</span></div>
         <div class="tier-prem-lock">🔒 3-month hold period</div>
-        <div class="tier-prem-open">● OPEN NOW</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
         <div class="tier-prem-corner" style="color:#00d4ff;"></div>
       </div>
     </div>
@@ -5504,7 +5504,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">+5% BONUS</span></div>
         <div class="tier-prem-lock">🔒 2-month hold period</div>
-        <div class="tier-prem-open">● OPEN NOW</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
         <div class="tier-prem-corner" style="color:#14F195;"></div>
       </div>
     </div>
@@ -5524,7 +5524,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">+10% BONUS</span></div>
         <div class="tier-prem-lock">🔒 1-month hold period</div>
-        <div class="tier-prem-open">● OPEN NOW</div>
+        <div class="tier-prem-open">● JOIN NOW</div>
         <div class="tier-prem-corner" style="color:#9945FF;"></div>
       </div>
     </div>
@@ -6044,12 +6044,59 @@ canvas { transform: translateZ(0); }
       </div>
 
       <!-- FLOW FIX v58: Token selector — appears after wallet connect, BEFORE buyPanel -->
-      <div id="tokenSelectBar" style="display:none;margin-bottom:1rem;">
+      <div id="tokenSelectBar" style="display:none;margin-bottom:1.2rem;">
         <div class="form-field" style="margin-bottom:0.6rem;">
-          <label class="field-label" style="margin-bottom:6px;">Select Your Token</label>
-          <div style="display:flex;gap:10px;">
-            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')" style="flex:1;padding:10px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;transition:all 0.2s;">USDC</button>
-            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')" style="flex:1;padding:10px;font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:2px;border:1px solid #fff;background:rgba(255,255,255,0.08);color:#fff;cursor:pointer;border-radius:4px;transition:all 0.2s;">USDT</button>
+          <label class="field-label" style="margin-bottom:10px;font-family:'Orbitron',monospace;font-size:0.55rem;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase;">Select Your Token</label>
+          <div style="display:flex;gap:12px;">
+
+            <!-- USDC Button -->
+            <button id="btnUSDC" onclick="selectTokenAndProceed('USDC')" style="
+              flex:1;
+              position:relative;
+              padding:14px 10px;
+              font-family:'Orbitron',monospace;
+              font-size:0.7rem;
+              font-weight:700;
+              letter-spacing:3px;
+              color:#ffffff;
+              cursor:pointer;
+              border-radius:8px;
+              border:1.5px solid rgba(41,182,246,0.6);
+              background:linear-gradient(135deg,rgba(21,101,192,0.85) 0%,rgba(2,136,209,0.7) 50%,rgba(0,176,255,0.5) 100%);
+              box-shadow:0 0 18px rgba(0,145,234,0.45),0 4px 15px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.15);
+              transition:all 0.25s ease;
+              overflow:hidden;
+            ">
+              <span style="position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span style="font-size:1rem;line-height:1;">💲</span>
+                USDC
+              </span>
+            </button>
+
+            <!-- USDT Button -->
+            <button id="btnUSDT" onclick="selectTokenAndProceed('USDT')" style="
+              flex:1;
+              position:relative;
+              padding:14px 10px;
+              font-family:'Orbitron',monospace;
+              font-size:0.7rem;
+              font-weight:700;
+              letter-spacing:3px;
+              color:#ffffff;
+              cursor:pointer;
+              border-radius:8px;
+              border:1.5px solid rgba(38,198,118,0.5);
+              background:linear-gradient(135deg,rgba(0,105,92,0.8) 0%,rgba(0,150,136,0.7) 50%,rgba(0,200,150,0.45) 100%);
+              box-shadow:0 0 16px rgba(0,168,107,0.35),0 4px 15px rgba(0,0,0,0.4),inset 0 1px 0 rgba(255,255,255,0.12);
+              transition:all 0.25s ease;
+              overflow:hidden;
+            ">
+              <span style="position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:6px;">
+                <span style="font-size:1rem;line-height:1;">₮</span>
+                USDT
+              </span>
+            </button>
+
           </div>
         </div>
       </div>
@@ -6647,14 +6694,34 @@ function selectToken(token) {
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
   if (_bU) {
-    _bU.style.borderColor = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
-    _bU.style.background  = t === 'USDC' ? 'rgba(0,212,255,0.08)' : 'transparent';
-    _bU.style.color       = t === 'USDC' ? 'var(--cyan)' : 'var(--text-2)';
+    if (t === 'USDC') {
+      _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.95) 0%,rgba(2,136,209,0.85) 50%,rgba(0,176,255,0.7) 100%)';
+      _bU.style.borderColor = 'rgba(41,182,246,0.9)';
+      _bU.style.boxShadow   = '0 0 28px rgba(0,145,234,0.7),0 0 60px rgba(0,145,234,0.25),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.25)';
+      _bU.style.color       = '#ffffff';
+      _bU.style.transform   = 'translateY(-1px)';
+    } else {
+      _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.35) 0%,rgba(2,136,209,0.25) 100%)';
+      _bU.style.borderColor = 'rgba(41,182,246,0.25)';
+      _bU.style.boxShadow   = '0 0 8px rgba(0,145,234,0.1),0 4px 15px rgba(0,0,0,0.3)';
+      _bU.style.color       = 'rgba(255,255,255,0.45)';
+      _bU.style.transform   = 'translateY(0)';
+    }
   }
   if (_bT) {
-    _bT.style.borderColor = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
-    _bT.style.background  = t === 'USDT' ? 'rgba(0,212,255,0.08)' : 'transparent';
-    _bT.style.color       = t === 'USDT' ? 'var(--cyan)' : 'var(--text-2)';
+    if (t === 'USDT') {
+      _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.95) 0%,rgba(0,150,136,0.85) 50%,rgba(0,200,150,0.7) 100%)';
+      _bT.style.borderColor = 'rgba(38,198,118,0.9)';
+      _bT.style.boxShadow   = '0 0 28px rgba(0,168,107,0.65),0 0 60px rgba(0,168,107,0.2),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.2)';
+      _bT.style.color       = '#ffffff';
+      _bT.style.transform   = 'translateY(-1px)';
+    } else {
+      _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.35) 0%,rgba(0,150,136,0.25) 100%)';
+      _bT.style.borderColor = 'rgba(38,198,118,0.25)';
+      _bT.style.boxShadow   = '0 0 8px rgba(0,168,107,0.1),0 4px 15px rgba(0,0,0,0.3)';
+      _bT.style.color       = 'rgba(255,255,255,0.45)';
+      _bT.style.transform   = 'translateY(0)';
+    }
   }
   if (connectedAddress) {
     const bal = t === 'USDT' ? cachedUsdtBalance : cachedUsdcBalance;
@@ -7046,8 +7113,20 @@ async function disconnectWallet() {
   // v18 #2: null-guard — buttons may not exist if angel section not yet scrolled into view
   const _bU = document.getElementById('btnUSDC');
   const _bT = document.getElementById('btnUSDT');
-  if (_bU) { _bU.style.borderColor = 'var(--cyan)'; _bU.style.background = 'rgba(0,212,255,0.08)'; _bU.style.color = 'var(--cyan)'; }
-  if (_bT) { _bT.style.borderColor = 'var(--text-2)'; _bT.style.background = 'transparent'; _bT.style.color = 'var(--text-2)'; }
+  if (_bU) {
+    _bU.style.background  = 'linear-gradient(135deg,rgba(21,101,192,0.95) 0%,rgba(2,136,209,0.85) 50%,rgba(0,176,255,0.7) 100%)';
+    _bU.style.borderColor = 'rgba(41,182,246,0.9)';
+    _bU.style.boxShadow   = '0 0 28px rgba(0,145,234,0.7),0 0 60px rgba(0,145,234,0.25),0 4px 15px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.25)';
+    _bU.style.color       = '#ffffff';
+    _bU.style.transform   = 'translateY(-1px)';
+  }
+  if (_bT) {
+    _bT.style.background  = 'linear-gradient(135deg,rgba(0,105,92,0.35) 0%,rgba(0,150,136,0.25) 100%)';
+    _bT.style.borderColor = 'rgba(38,198,118,0.25)';
+    _bT.style.boxShadow   = '0 0 8px rgba(0,168,107,0.1),0 4px 15px rgba(0,0,0,0.3)';
+    _bT.style.color       = 'rgba(255,255,255,0.45)';
+    _bT.style.transform   = 'translateY(0)';
+  }
   const lbl = document.getElementById('tokenLabel');
   const cur = document.getElementById('tokenCurrency');
   const balLbl = document.getElementById('tokenBalanceLabel');
