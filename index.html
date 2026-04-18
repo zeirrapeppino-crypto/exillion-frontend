@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v63 Frontend -->
+<!-- Exillion Capital Finecosystem — v64 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -6577,17 +6577,18 @@ function updateTierCards(tiersData) {
     const badge = document.getElementById('tier-badge-' + n);
     if (badge) {
       if (status === 'closed') {
-        badge.className      = 'tier-badge soon';
-        badge.innerHTML      = 'CLOSED';
+        badge.className      = 'tcp-join closed';
         badge.style.cursor   = 'not-allowed';
-        badge.onclick        = null;
+        badge.style.opacity  = '0.55';
+        badge.innerHTML      = 'CLOSED';
         // Dim the card
         const card = document.getElementById('tier-card-' + n);
         if (card) card.style.opacity = '0.5';
       } else {
-        badge.className    = 'tier-badge open';
-        badge.style.cursor = 'pointer';
-        badge.innerHTML    = '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#14F195;margin-right:5px;animation:livePulse 1.6s ease-in-out infinite;"></span>LIVE · JOIN NOW';
+        badge.className      = 'tcp-join';
+        badge.style.cursor   = 'pointer';
+        badge.style.opacity  = '';
+        badge.innerHTML      = '<span class="tcp-join-dot"></span>LIVE · JOIN NOW';
         const card = document.getElementById('tier-card-' + n);
         if (card) card.style.opacity = '1';
       }
@@ -9231,6 +9232,10 @@ function startGoldNetwork(canvasId, isSplash) {
     // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshInvestorCount = function() {
       _isFetching = false;
+      // FIX v64-REFRESH: bust shared stats cache timestamp so fetchInvestorCount
+      // does not short-circuit on the 5-min cache after a purchase
+      if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
+      try { sessionStorage.removeItem('exxe_investor_count_v16'); sessionStorage.removeItem('exxe_investor_ts_v16'); } catch(e) {}
       fetchInvestorCount();
     };
     // Loading skeleton — tampilkan placeholder sebelum data backend siap
@@ -9529,6 +9534,8 @@ function startGoldNetwork(canvasId, isSplash) {
     // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshFunding = function() {
       _fetchFundingActive = false;
+      // FIX v64-REFRESH: bust shared stats cache so fetchFunding hits /api/stats fresh
+      if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
       fetchFunding();
     };
     // Loading skeleton — tampilkan placeholder sebelum data backend siap
@@ -9898,7 +9905,9 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const lockCyanEl = document.getElementById('certLockCyan');
   if (lockCyanEl) {
     const _art = tierNameFull.startsWith('Apex') ? 'an' : 'a';
-    lockCyanEl.textContent = 'I acknowledge that as ' + _art + ' ' + tierNameFull + ', I voluntarily commit to holding my allocated EXXE SPL Tokens for ' + TIER_LOCK[tierNum] + ' following the official listing on Orca DEX (Solana Blockchain). I agree not to sell, transfer, or trade them during this period.';
+    // FIX v64-CERT: Only set the cyan acknowledgement sentence here.
+    // The gold "I agree not to sell..." sentence lives in the sibling <span> in HTML — do NOT duplicate it here.
+    lockCyanEl.textContent = 'I acknowledge that as ' + _art + ' ' + tierNameFull + ', I voluntarily commit to holding my allocated EXXE SPL Tokens for ' + TIER_LOCK[tierNum] + ' following the official listing on Orca DEX (Solana Blockchain).';
   }
 
   const modal = document.getElementById('certModal');
