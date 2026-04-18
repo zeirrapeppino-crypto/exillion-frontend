@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v64 Frontend -->
+<!-- Exillion Capital Finecosystem — v63 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -9120,26 +9120,36 @@ function startGoldNetwork(canvasId, isSplash) {
   let lastCount = 0;
   function updateInvestorUI(count) {
     const ids = ['splash2-investor-count', 'hero-investor-count'];
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      animateCount(el, lastCount, count, 1200);
-    });
+    function applyCount() {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        // Animasi hanya jika nilai berubah
+        if (parseInt(el.textContent.replace(/,/g,'')) !== count) {
+          animateCount(el, lastCount, count, 1200);
+        }
+      });
+    }
+    applyCount();
     lastCount = count;
     try {
       sessionStorage.setItem(SESSION_KEY, String(count));
       sessionStorage.setItem(SESSION_TS,  String(Date.now()));
     } catch(e) {}
-    // FIX v63-COUNTER: Re-apply setelah 1.5s untuk elemen yang mungkin
-    // belum ada di DOM saat pertama kali dipanggil (splash page animasi)
-    setTimeout(function() {
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && (el.textContent === '—' || el.textContent === '0')) {
-          el.textContent = count.toLocaleString('en-US');
-        }
-      });
-    }, 1500);
+    // FIX v64-COUNTER: Retry 3x untuk elemen splash2 yang mungkin
+    // belum render saat DOMContentLoaded (splash animasi belum selesai)
+    [500, 1500, 3000].forEach(function(delay) {
+      setTimeout(function() {
+        ids.forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const cur = el.textContent.trim();
+          if (cur === '—' || cur === '0' || cur === '') {
+            el.textContent = count.toLocaleString('en-US');
+          }
+        });
+      }, delay);
+    });
   }
 
   function loadCachedCount() {
@@ -9249,6 +9259,15 @@ function startGoldNetwork(canvasId, isSplash) {
       const rtBar = document.getElementById('rt-t' + n + '-bar');
       if (rtBar) rtBar.style.width = '1%';
     });
+    // FIX v64-COUNTER: Hapus session cache yang lebih dari 2 menit
+    // agar counter tidak stuck di nilai lama setelah deploy/restart
+    try {
+      const cachedTs = parseInt(sessionStorage.getItem(SESSION_TS) || '0', 10);
+      if (Date.now() - cachedTs > 120000) {
+        sessionStorage.removeItem(SESSION_KEY);
+        sessionStorage.removeItem(SESSION_TS);
+      }
+    } catch(e) {}
     loadCachedCount();
     fetchInvestorCount();
     setInterval(fetchInvestorCount, REFRESH_MS);
