@@ -8427,32 +8427,46 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   if (typeof window._exxeRefreshInvestorCount === 'function') window._exxeRefreshInvestorCount();
   if (typeof window._exxeRefreshFunding === 'function') window._exxeRefreshFunding();
 
-  // FRONTEND INTEGRATION: Call /api/certificate for server-side proof with timestamp
-  // Store certificate data globally for showCertificate to use
+  // FRONTEND INTEGRATION: Call /api/certificate untuk server-side proof + timestamp resmi.
+  // FIX v63-CERT: Tunggu response /api/certificate SEBELUM tampilkan modal
+  // agar certificateId & issuedAt dari server sudah tersedia saat modal render.
+  // FIX v63-CERT2: Jangan timpa _lastCertData dengan struktur server (field berbeda).
+  // _lastCertData selalu pakai struktur {usdc,exxe,wallet,tx,token,bonusExxe,tier}
+  // agar tombol "View My Certificate" bisa re-open dengan data benar.
   window._certServerData = null;
   (async function() {
     try {
-      const certRes = await fetch(CFG.API + '/api/certificate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          txSignature: tx,
-          investorWallet: wallet,
-          exxeTotal: totalExxe,
-          tier: tierNum,
-          usdcAmount: usdc,
-          token: tokenLabel
-        })
-      });
-      if (certRes.ok) {
-        window._certServerData = await certRes.json();
-        // Update _lastCertData with server certificate info
-        window._lastCertData = window._certServerData;
-      }
+      const certCtrl  = new AbortController();
+      const certTimer = setTimeout(() => certCtrl.abort(), 8000);
+      try {
+        const certRes = await fetch(CFG.API + '/api/certificate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            txSignature: tx,
+            investorWallet: wallet,
+            exxeTotal: totalExxe,
+            tier: tierNum,
+            usdcAmount: usdc,
+            token: tokenLabel
+          }),
+          signal: certCtrl.signal
+        });
+        clearTimeout(certTimer);
+        if (certRes.ok) {
+          window._certServerData = await certRes.json();
+          // FIX v63-CERT2: Update _lastCertData tanpa timpa struktur asli —
+          // tambahkan certServerData sebagai referensi terpisah saja.
+          if (window._lastCertData) {
+            window._lastCertData.certId    = window._certServerData.certificateId;
+            window._lastCertData.issuedAt  = window._certServerData.issuedAt;
+          }
+        }
+      } finally { clearTimeout(certTimer); }
     } catch(certErr) {
-      console.warn('[CERT] Server certificate unavailable, using local:', certErr.message);
+      console.warn('[CERT] Server certificate unavailable, using local data:', certErr.message);
     }
-    // Show certificate modal (with or without server data)
+    // Tampilkan modal SETELAH /api/certificate selesai (sukses atau gagal)
     if (typeof showCertificate === 'function') {
       showCertificate(usdc, exxe, wallet, tx, token, bonusExxe, tierNum);
     }
