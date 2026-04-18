@@ -9129,6 +9129,16 @@ function startGoldNetwork(canvasId, isSplash) {
       sessionStorage.setItem(SESSION_KEY, String(count));
       sessionStorage.setItem(SESSION_TS,  String(Date.now()));
     } catch(e) {}
+    // FIX v63-COUNTER: Re-apply setelah 1.5s untuk elemen yang mungkin
+    // belum ada di DOM saat pertama kali dipanggil (splash page animasi)
+    setTimeout(function() {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && (el.textContent === '—' || el.textContent === '0')) {
+          el.textContent = count.toLocaleString('en-US');
+        }
+      });
+    }, 1500);
   }
 
   function loadCachedCount() {
@@ -9178,14 +9188,21 @@ function startGoldNetwork(canvasId, isSplash) {
               setSplitWalletsFromStats(data.wallets);
             }
             // FIX v36 SYNC-4: Isi shared cache agar funding tracker tidak double-fetch
+            // FIX v63-COUNTER: Simpan semua field termasuk exxeSold & tiers
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
+              exxeSold:      data.exxeSold,
               investorCount: data.investorCount,
               angelWallet:   data.angelWallet,
               split:         data.split,
               wallets:       data.wallets,
+              tiers:         data.tiers,
               ts:            Date.now(),
             };
+            // FIX v63-COUNTER: Update tier cards langsung dari sini juga
+            if (data.tiers && typeof updateTierCards === 'function') {
+              updateTierCards(data.tiers);
+            }
             if (typeof data.investorCount === 'number') {
               updateInvestorUI(data.investorCount);
               return;
