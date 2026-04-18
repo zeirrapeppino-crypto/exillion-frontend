@@ -5095,7 +5095,6 @@ canvas { transform: translateZ(0); }
     <div class="tier-premium-card t1-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
-        <div class="tier-prem-icon">◈</div>
         <div class="tier-prem-label">TIER I</div>
         <div class="tier-prem-name">Genesis Angel Investor</div>
         <div class="tier-prem-price-wrap">
@@ -5106,7 +5105,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">NO BONUS</span></div>
         <div class="tier-prem-lock">🔒 3-month hold period</div>
-        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-open">● OPEN NOW</div>
         <div class="tier-prem-corner" style="color:#00d4ff;"></div>
       </div>
     </div>
@@ -5115,7 +5114,6 @@ canvas { transform: translateZ(0); }
     <div class="tier-premium-card t2-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
-        <div class="tier-prem-icon">◈</div>
         <div class="tier-prem-label">TIER II</div>
         <div class="tier-prem-name">Prime Angel Investor</div>
         <div class="tier-prem-price-wrap">
@@ -5126,7 +5124,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">+5% BONUS</span></div>
         <div class="tier-prem-lock">🔒 2-month hold period</div>
-        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-open">● OPEN NOW</div>
         <div class="tier-prem-corner" style="color:#14F195;"></div>
       </div>
     </div>
@@ -5135,7 +5133,6 @@ canvas { transform: translateZ(0); }
     <div class="tier-premium-card t3-card">
       <div class="tier-prem-top-bar"></div>
       <div class="tier-prem-body">
-        <div class="tier-prem-icon">◈</div>
         <div class="tier-prem-label">TIER III</div>
         <div class="tier-prem-name">Apex Angel Investor</div>
         <div class="tier-prem-price-wrap">
@@ -5146,7 +5143,7 @@ canvas { transform: translateZ(0); }
         <div class="tier-prem-divider"></div>
         <div><span class="tier-prem-badge">+10% BONUS</span></div>
         <div class="tier-prem-lock">🔒 1-month hold period</div>
-        <div class="tier-prem-open">● JOIN NOW</div>
+        <div class="tier-prem-open">● OPEN NOW</div>
         <div class="tier-prem-corner" style="color:#9945FF;"></div>
       </div>
     </div>
@@ -5248,8 +5245,14 @@ canvas { transform: translateZ(0); }
   /* Tier I — Cyan */
   .tier-card-premium.tc1 {
     background: linear-gradient(160deg, #010f1e 0%, #011a2e 50%, #010d1e 100%);
-    border: 1px solid rgba(0,212,255,0.3);
-    box-shadow: 0 0 24px rgba(0,212,255,0.07);
+    border-top: 1px solid rgba(0,212,255,0.3);
+    border-right: 1px solid rgba(0,212,255,0.45);
+    border-bottom: 1px solid rgba(0,212,255,0.45);
+    border-left: 1px solid rgba(0,212,255,0.45);
+    box-shadow: 0 0 24px rgba(0,212,255,0.07),
+                inset 1px 0 0 rgba(0,212,255,0.12),
+                inset -1px 0 0 rgba(0,212,255,0.12),
+                inset 0 -1px 0 rgba(0,212,255,0.12);
   }
   .tier-card-premium.tc1:hover,
   .tier-card-premium.tc1.active {
@@ -5267,6 +5270,20 @@ canvas { transform: translateZ(0); }
   .tier-card-premium.tc1 .tcp-join:hover { background: rgba(0,212,255,0.2); }
   .tier-card-premium.tc1 .tcp-corner { color: #00d4ff; }
   .tier-card-premium.tc1 .tcp-active-bar { background: linear-gradient(90deg, transparent, #00d4ff, transparent); }
+
+  /* TIER I — thin cyan inner lines on left, right, bottom */
+  .tier-card-premium.tc1::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-left: 1px solid rgba(0,212,255,0.18);
+    border-right: 1px solid rgba(0,212,255,0.18);
+    border-bottom: 1px solid rgba(0,212,255,0.18);
+    border-top: none;
+    border-radius: 4px;
+    z-index: 0;
+  }
 
   /* Tier II — Solana Green */
   .tier-card-premium.tc2 {
