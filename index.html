@@ -1955,12 +1955,6 @@ blockquote.centerquote {
   letter-spacing: 0.3px;
 }
 
-/* Footer copy */
-.footer-copy {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-}
-
 /* Price table tier label */
 .price-tier {
   font-family: var(--font-body);
@@ -2422,18 +2416,55 @@ blockquote.centerquote {
 }
 
 /* --- FOOTER ------------------------------- */
+/* ═══════════════════════════════════════════════
+   FOOTER — ECF Premium Professional v75
+   "Trust is built in the details."
+═══════════════════════════════════════════════ */
+
 footer {
-  padding: 40px 5% 30px;
-  border-top: 1px solid var(--border-dim);
   position: relative;
   z-index: 1;
+  overflow: hidden;
+}
+
+.footer-gradient-top {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(153,69,255,0.4) 15%,
+    rgba(0,212,255,0.8) 35%,
+    rgba(20,241,149,0.6) 50%,
+    rgba(0,212,255,0.8) 65%,
+    rgba(204,125,7,0.5) 85%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px rgba(0,212,255,0.2), 0 0 40px rgba(0,212,255,0.08);
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 320px;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 0%, rgba(0,212,255,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 0%, rgba(153,69,255,0.03) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 0%, rgba(204,125,7,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  padding: 60px 5% 0;
 }
 
 .footer-top {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
   gap: 3rem;
-  margin-bottom: 3rem;
+  margin-bottom: 48px;
 }
 
 .footer-logo-row {
@@ -2445,71 +2476,175 @@ footer {
 
 .footer-name {
   font-family: 'Orbitron', monospace;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  text-shadow: 0 0 16px rgba(204,125,7,0.4);
+  line-height: 1.2;
   font-size: 1rem;
-  font-weight: 600;
+}
+
+.footer-name span {
+  display: block;
+  font-size: 0.52rem;
   letter-spacing: 3px;
   color: var(--gold);
+  font-weight: 700;
+  margin-top: 4px;
+  opacity: 0.95;
+  text-shadow: 0 0 10px rgba(204,125,7,0.35);
 }
 
 .footer-brand p {
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 400;
-  color: var(--text-1);
-  line-height: 1.75;
-  max-width: 280px;
+  color: var(--text-2);
+  line-height: 1.85;
+  max-width: 290px;
+  margin-bottom: 1.4rem;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.6rem;
+}
+
+.footer-social-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-dim);
+  background: rgba(0,212,255,0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+  color: var(--text-2);
+}
+
+.footer-social-btn:hover {
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.08);
+  color: var(--cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,212,255,0.15);
 }
 
 .footer-col h5 {
   font-family: 'Orbitron', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 3px;
+  font-size: 0.6rem;
+  letter-spacing: 3.5px;
   color: var(--cyan);
+  text-transform: uppercase;
   text-shadow: 0 0 10px rgba(0,212,255,0.35);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--border-dim);
+  position: relative;
+}
+
+.footer-col h5::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 24px;
+  height: 1px;
+  background: var(--cyan);
+  box-shadow: 0 0 8px rgba(0,212,255,0.6);
 }
 
 .footer-col ul {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
+
+.footer-col ul li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.footer-col ul li::before {
+  content: '›';
+  color: var(--border);
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.footer-col ul li:hover::before { color: var(--cyan); }
 
 .footer-col ul a {
   font-family: var(--font-body);
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 400;
-  color: var(--text-1);
+  color: var(--text-2);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, letter-spacing 0.2s;
+  letter-spacing: 0.3px;
 }
 
-.footer-col ul a:hover { color: var(--cyan); }
+.footer-col ul a:hover {
+  color: var(--text-1);
+  letter-spacing: 0.6px;
+}
+
+.footer-col ul a.soon {
+  color: var(--text-3);
+  cursor: default;
+  pointer-events: none;
+}
+
+.footer-col ul a.soon::after {
+  content: ' SOON';
+  font-size: 0.48rem;
+  letter-spacing: 2px;
+  color: var(--gold-dim);
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+.footer-col ul a.external::after {
+  content: ' ↗';
+  font-size: 0.7rem;
+  opacity: 0.5;
+}
 
 .footer-bottom {
+  border-top: 1px solid var(--border-dim);
+  padding: 20px 0 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-dim);
-  flex-wrap: wrap;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .footer-copy {
+  font-family: var(--font-body);
   font-size: 0.78rem;
-  color: var(--text-1);
+  color: var(--gold);
+  letter-spacing: 0.3px;
 }
 
 .footer-chain {
   font-family: 'Orbitron', monospace;
-  font-size: 0.58rem;
+  font-size: 0.5rem;
   letter-spacing: 2px;
-  color: var(--text-1);
+  color: var(--cyan);
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  text-shadow: 0 0 10px rgba(0,212,255,0.3);
 }
 
 .chain-pulse {
@@ -2518,6 +2653,24 @@ footer {
   border-radius: 50%;
   background: var(--green);
   animation: pulse 2s infinite;
+  flex-shrink: 0;
+  box-shadow: 0 0 6px rgba(0,229,160,0.6);
+}
+
+/* ── RESPONSIVE FOOTER ───────────────────────── */
+@media (max-width: 1100px) {
+  .footer-top { grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-brand p { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .footer-inner { padding: 40px 5% 0; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 1.8rem; }
+  .footer-brand { grid-column: 1 / -1; }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 0.6rem; }
+  .footer-copy { font-size: 0.7rem; }
+  .footer-chain { font-size: 0.44rem; }
 }
 
 /* --- DISCLAIMER MODAL --------------------- */
@@ -3008,13 +3161,7 @@ footer {
     word-break: break-all;
   }
 
-  /* Footer */
-  .footer-top { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
-  .footer-brand { grid-column: 1 / -1; }
-  .footer-name { font-size: 0.85rem; }
-  .footer-copy { font-size: 0.7rem !important; }
-  .footer-chain { font-size: 0.52rem !important; }
-  .footer-bottom { flex-direction: column !important; text-align: center; }
+  /* Footer — responsive handled in footer CSS block */
 
   /* Modal */
   .modal-box { padding: 1.2rem 1rem !important; margin: 0 0.5rem !important; }
@@ -6545,50 +6692,91 @@ canvas { transform: translateZ(0); }
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="footer-logo-row">
-        <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXILLION" loading="lazy" width="32" height="32" style="height:32px;width:auto;filter:drop-shadow(0 0 6px rgba(204,125,7,0.5));"/>
-        <span class="footer-name">EXILLION Capital Finecosystem</span>
+
+  <!-- Premium gradient top separator -->
+  <div class="footer-gradient-top"></div>
+
+  <div class="footer-inner">
+
+    <!-- ── MAIN GRID ──────────────────────────────────────── -->
+    <div class="footer-top">
+
+      <!-- BRAND COLUMN -->
+      <div class="footer-brand">
+        <div class="footer-logo-row">
+          <img src="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20Logo.png" alt="EXXE" loading="lazy" width="36" height="36" style="height:36px;width:auto;filter:drop-shadow(0 0 8px rgba(204,125,7,0.6));flex-shrink:0;"/>
+          <div class="footer-name">EXILLION<span>Capital Finecosystem</span></div>
+        </div>
+        <p>Everybody Has A Second Chance — A transparent, on-chain financial system where Mobile Collateral Mining bridges everyday people to real DeFi capital. Built on Solana. Verified on-chain. Designed for integrity.</p>
+        <!-- Social Icons -->
+        <div class="footer-socials">
+          <a href="https://t.me/exillioncapital" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Telegram">✈</a>
+          <a href="https://twitter.com/exillioncapital" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Twitter / X" style="font-size:0.75rem;font-weight:700;font-family:'Orbitron',monospace;">𝕏</a>
+          <a href="https://discord.gg/exillion" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Discord" style="font-size:0.8rem;">⌨</a>
+          <a href="https://medium.com/@exillioncapital" target="_blank" rel="noopener noreferrer" class="footer-social-btn" title="Medium" style="font-size:0.8rem;font-family:serif;">M</a>
+        </div>
       </div>
-      <p>Everybody Has A Second Chance — An innovative financial system through Collateral Mobile Mining mEXXE (VCMT) as collateral for everyone who needs EXXE for The Capital.</p>
+
+      <!-- PROTOCOL COLUMN -->
+      <div class="footer-col">
+        <h5>Protocol</h5>
+        <ul>
+          <li><a href="#vision">Vision &amp; Mission</a></li>
+          <li><a href="#mining">mEXXE Mining App</a></li>
+          <li><a href="#tokenomics">Tokenomics</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#whitepaper">Whitepaper</a></li>
+          <li><a href="#transparency">Treasury Transparency</a></li>
+        </ul>
+      </div>
+
+      <!-- INVEST COLUMN -->
+      <div class="footer-col">
+        <h5>Invest</h5>
+        <ul>
+          <li><a href="#angel">Angel Investor Round</a></li>
+          <li><a href="#dashboard">Investor Dashboard</a></li>
+          <li><a href="#" class="soon">Orca DEX Listing</a></li>
+          <li><a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" rel="noopener noreferrer" class="external">Solscan Explorer</a></li>
+          <li><a href="https://solscan.io/account/4Y9Zg3K8Ut8NboWf7BuVmhS6kXedaozjvK61uSNnXkNW" target="_blank" rel="noopener noreferrer" class="external">Investor Wallet</a></li>
+        </ul>
+      </div>
+
+      <!-- COMMUNITY COLUMN -->
+      <div class="footer-col">
+        <h5>Community</h5>
+        <ul>
+          <li><a href="https://t.me/exillioncapital" target="_blank" rel="noopener noreferrer" class="external">Telegram</a></li>
+          <li><a href="https://twitter.com/exillioncapital" target="_blank" rel="noopener noreferrer" class="external">Twitter / X</a></li>
+          <li><a href="https://discord.gg/exillion" target="_blank" rel="noopener noreferrer" class="external">Discord</a></li>
+          <li><a href="https://medium.com/@exillioncapital" target="_blank" rel="noopener noreferrer" class="external">Medium — Blog</a></li>
+          <li><a href="#" class="soon">Whitepaper PDF</a></li>
+        </ul>
+      </div>
+
+      <!-- LEGAL COLUMN -->
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#" onclick="return false;">Terms of Use</a></li>
+          <li><a href="#" onclick="return false;">Privacy Policy</a></li>
+          <li><a href="#" onclick="return false;">Risk Disclosure</a></li>
+        </ul>
+      </div>
+
     </div>
-    <div class="footer-col">
-      <h5>Protocol</h5>
-      <ul>
-        <li><a href="#vision">About</a></li>
-        <li><a href="#mining">mEXXE Mining App</a></li>
-        <li><a href="#tokenomics">Tokenomics</a></li>
-        <li><a href="#roadmap">Roadmap</a></li>
-        <li><a href="#whitepaper">Whitepaper</a></li>
-        <li><a href="#transparency">Treasury</a></li>
-      </ul>
+
+    <!-- ── BOTTOM BAR ─────────────────────────────────────── -->
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        © 2026 Exillion Capital Finecosystem · www.exillioneer.com · All rights reserved.
+      </div>
+      <div class="footer-chain">
+        <div class="chain-pulse"></div>
+        Solana Mainnet &nbsp;·&nbsp; EXXE &nbsp;·&nbsp; SPL Token
+      </div>
     </div>
-    <div class="footer-col">
-      <h5>Invest</h5>
-      <ul>
-        <li><a href="#angel">The Angel Investor</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#">Orca DEX (Soon)</a></li>
-        <li><a href="https://solscan.io/token/2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u" target="_blank" rel="noopener noreferrer">Solscan Explorer</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h5>Community</h5>
-      <ul>
-        <li><a href="https://t.me/exillioncapital" target="_blank" rel="noopener noreferrer">Telegram — The Exillioneers</a></li>
-        <li><a href="https://twitter.com/exillioncapital" target="_blank" rel="noopener noreferrer">Twitter / X</a></li>
-        <li><a href="https://discord.gg/exillion" target="_blank" rel="noopener noreferrer">Discord</a></li>
-        <li><a href="https://medium.com/@exillioncapital" target="_blank" rel="noopener noreferrer">Medium</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Exillion Capital Finecosystem — www.exillioneer.com, All rights reserved.</div>
-    <div class="footer-chain">
-      <div class="chain-pulse"></div>
-      Solana Mainnet &nbsp;·&nbsp; SPL Token &nbsp;·&nbsp; EXILLION
-    </div>
+
   </div>
 </footer>
 
