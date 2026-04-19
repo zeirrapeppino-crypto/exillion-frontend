@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Exillion Capital Finecosystem — v63 Frontend -->
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -35,7 +34,7 @@
 <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin/>
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png" crossorigin="anonymous"/>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=block" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
 
 <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js" defer></script>
@@ -59,14 +58,26 @@
 #splash-page .splash-tagline,
 #splash-page .splash-collateral {
   visibility: hidden;
+  transition: visibility 0s;
 }
 
-/* Safety rule — if font never loads, force visible after 3s */
+/* Safety rule — if font never loads, force visible after 1s via CSS animation */
+#splash-page .splash-title,
+#splash-page .splash-subtitle,
+#splash-page .splash-tagline,
+#splash-page .splash-collateral {
+  animation: splashTextReveal 0s 1s forwards;
+}
+@keyframes splashTextReveal {
+  to { visibility: visible; }
+}
+
 #splash-page.fonts-ready .splash-title,
 #splash-page.fonts-ready .splash-subtitle,
 #splash-page.fonts-ready .splash-tagline,
 #splash-page.fonts-ready .splash-collateral {
   visibility: visible;
+  animation: none;
 }
 
 body {
@@ -374,7 +385,7 @@ body {
   .btn-gold, .nav-cta, .buy-btn.ready { animation: none !important; }
 }
 
-/* PERF FIX: Mobile — disable heavy animations */
+
 @media (max-width: 768px) {
   body::before { animation: none !important; opacity: 0.25; }
   body::after { animation: none !important; opacity: 0.7; }
@@ -3228,6 +3239,11 @@ canvas { transform: translateZ(0); }
   z-index: 9999; overflow: hidden;
   padding: clamp(28px, 5vh, 60px) 20px clamp(28px, 5vh, 60px);
   transform: translateZ(0); backface-visibility: hidden;
+  opacity: 0;
+  animation: splashPageFadeIn 0.35s ease 0.05s forwards;
+}
+@keyframes splashPageFadeIn {
+  to { opacity: 1; }
 }
 .network-grid {
   position: absolute; width: 100%; height: 100%;
@@ -3978,25 +3994,36 @@ canvas { transform: translateZ(0); }
 <!-- SPLASH LOADING ORCHESTRATOR: logo → loading bar → button, all synchronised -->
 <script>
 (function(){
+    // ── Reveal splash text (font-ready) ──────────────────────────────────
+    var _revealed = false;
     function revealSplashText() {
+        if (_revealed) return;
+        _revealed = true;
         var sp = document.getElementById('splash-page');
         if (sp) sp.classList.add('fonts-ready');
         var els = document.querySelectorAll('#splash-page .splash-title, #splash-page .splash-subtitle, #splash-page .splash-tagline, #splash-page .splash-collateral');
         els.forEach(function(el) { el.style.visibility = 'visible'; });
     }
-    setTimeout(revealSplashText, 3000);
+    // Reveal ASAP: whichever fires first wins (document.fonts.ready ~50-200ms on cached fonts)
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(revealSplashText);
+    }
+    // Hard fallback: 800ms — much faster than the old 1500ms/3000ms conflict
+    setTimeout(revealSplashText, 800);
 
+    // ── Loading bar — starts IMMEDIATELY on DOMContentLoaded ─────────────
+    // Does NOT wait for logo; logo preload runs in parallel
     function runLoadingBar(onComplete) {
         var bar = document.querySelector('.loading-progress');
         if (!bar) { onComplete && onComplete(); return; }
         var steps = [
-            [15, 0, 400],
-            [35, 420, 500],
-            [55, 940, 600],
-            [72, 1560, 500],
-            [85, 2080, 600],
-            [94, 2700, 500],
-            [100, 3220, 400],
+            [15,   0,  350],
+            [35,  370, 450],
+            [55,  840, 500],
+            [72, 1360, 450],
+            [85, 1830, 500],
+            [94, 2350, 450],
+            [100,2820, 380],
         ];
         steps.forEach(function(s) {
             var target = s[0], delay = s[1], dur = s[2];
@@ -4005,7 +4032,7 @@ canvas { transform: translateZ(0); }
                 bar.style.width = target + '%';
             }, delay);
         });
-        setTimeout(function() { onComplete && onComplete(); }, 3700);
+        setTimeout(function() { onComplete && onComplete(); }, 3200);
     }
 
     function showEnterBtn() {
@@ -4013,32 +4040,15 @@ canvas { transform: translateZ(0); }
         if (btn) btn.classList.add('visible');
     }
 
-    function preloadLogo(src, onReady) {
+    window.addEventListener('DOMContentLoaded', function() {
+        // Start bar immediately — no waiting for logo
+        runLoadingBar(function() {
+            showEnterBtn();
+        });
+        // Preload logo in parallel (for the img element already in the DOM)
         var img = new Image();
         img.crossOrigin = 'anonymous';
-        var done = false;
-        var timer = setTimeout(function() { if (!done) { done = true; onReady(); } }, 3000);
-        img.onload = img.onerror = function() { if (!done) { done = true; clearTimeout(timer); onReady(); } };
-        img.src = src;
-    }
-
-    var LOGO_SRC = 'https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png';
-
-    if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(revealSplashText);
-    } else {
-        window.addEventListener('load', function() { setTimeout(revealSplashText, 100); });
-    }
-    setTimeout(revealSplashText, 1500);
-
-    window.addEventListener('DOMContentLoaded', function() {
-        preloadLogo(LOGO_SRC, function() {
-            setTimeout(function() {
-                runLoadingBar(function() {
-                    showEnterBtn();
-                });
-            }, 200);
-        });
+        img.src = 'https://raw.githubusercontent.com/zeirrapeppino-crypto/exillion-frontend/main/EXXE%20NeonX8.png';
     });
 
 })();
@@ -6352,7 +6362,7 @@ canvas { transform: translateZ(0); }
         </div>
       </div>
 
-      <!-- FIX v15: Token Balance display — shown AFTER token is selected -->
+      
       <div id="usdcBalanceBar" style="display:none;align-items:center;justify-content:space-between;padding:8px 14px;margin-bottom:1rem;background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.15);font-family:'Orbitron',monospace;font-size:0.62rem;letter-spacing:2px;">
         <span style="color:var(--text-2);">YOUR <span id="tokenBalanceLabel">USDC</span> BALANCE</span>
         <span id="usdcBalanceAmt" style="color:var(--cyan);font-weight:600;">Loading...</span>
@@ -6891,7 +6901,6 @@ function updateTierCards(tiersData) {
       }
     }
 
-    // v43: Update progress bar section — sold/remaining/status only (no $ raised)
     const soldEl  = document.getElementById('rt-t' + n + '-sold');
     const barEl   = document.getElementById('rt-t' + n + '-bar');
     const remBar  = document.getElementById('rt-t' + n + '-remaining');
@@ -6992,8 +7001,6 @@ function selectToken(token) {
   calcTokens();
 }
 
-// FIX v47: Helius dedicated RPC sebagai primary endpoint untuk stabilitas production
-// FIX v48: Alchemy ditambah sebagai fallback ke-2 — antisipasi traffic spike 3 TIER bersamaan
 const RPC_LIST = [
   // ⚠ SECURITY v47-SEC: API key RPC premium (Helius/Alchemy) TIDAK boleh di-hardcode
   // di frontend — file ini publik dan bisa dilihat via View Source. Key premium hanya
@@ -7003,7 +7010,6 @@ const RPC_LIST = [
   'https://solana-rpc.publicnode.com',
 ];
 
-// FIX v26 BUG-8: Debounce calcTokens 150ms — cegah input lag di HP low-end
 // Setiap keystroke tidak langsung trigger DOM query + kalkulasi penuh
 let _calcDebounceTimer = null;
 function debouncedCalcTokens() {
@@ -7012,7 +7018,6 @@ function debouncedCalcTokens() {
 }
 
 // ── FIX v15 #1 / v24: Toast notification system — XSS-safe via DOM ──
-// v24 FIX: Ganti innerHTML dengan DOM construction — textContent tidak
 // parse HTML sehingga pesan error dari blockchain tidak bisa inject script.
 function showToast(message, type, duration) {
   type     = type     || 'info';   // 'info' | 'success' | 'error' | 'warn'
@@ -7086,7 +7091,6 @@ async function fetchTokenBalanceViaBackend(walletAddress, token) {
 }
 
 // ── Wallet provider helpers — single source of truth ──────────────
-// ── v45 WALLET FIX: Provider detection — robust multi-path ──────────────────
 function getPhantomProvider() {
   // Path 1: Standard Phantom injection (desktop extension + Phantom in-app browser)
   if (window.phantom && window.phantom.solana && window.phantom.solana.isPhantom) {
@@ -7154,7 +7158,6 @@ function acceptDisclaimer(){
   });
   if (!allChecked) return;
   disclaimerAccepted = true;
-  // FLOW FIX v58-BAL-2: Fetch fresh balance before proceeding so .ready class is set correctly
   checkReadyWithBalance();
   const overlay = document.getElementById('disclaimerOverlay');
   overlay.style.opacity='0';overlay.style.transition='opacity 0.3s';
@@ -7177,7 +7180,7 @@ function declineDisclaimer(){
       overlay.classList.remove('active');
       overlay.style.opacity='';
       overlay.style.transition='';
-      document.body.style.overflow=''; // FIX v26 BUG-5: restore scroll
+      document.body.style.overflow='';
     },300);
   }
 }
@@ -7199,7 +7202,6 @@ function setConnected(name, address) {
     if (txt) txt.textContent = name + ' Connected: ' + short;
   }
 
-  // FLOW FIX v58: Show token selector FIRST — BEFORE buyPanel
   const tsb = document.getElementById('tokenSelectBar');
   if (tsb) tsb.style.display = 'block';
   // Hide buyPanel until token is selected
@@ -7225,11 +7227,8 @@ function setConnected(name, address) {
     if (pBtn) { pBtn.disabled = true; pBtn.style.opacity = '0.3'; }
   }
 
-  // FIX v15 #3: Fetch and display USDC balance
   fetchTokenBalances(address);
-  // FIX v40 TIER-2: Fetch wallet cap status dari backend
   fetchWalletStatus(address);
-  // FIX v31 F: Update hint buttons sesuai tier aktif
   updateAmountHints();
 
   setTimeout(function() {
@@ -7237,7 +7236,6 @@ function setConnected(name, address) {
     if (bp2) bp2.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }, 300);
 
-  // FIX v39 MOB-BUY-4: Update sticky mobile bar state
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(name, address);
   }
@@ -7255,7 +7253,6 @@ async function disconnectWallet() {
     }
   } catch(e) { /* ignore disconnect errors — wallet may already be gone */ }
 
-  // v46 BUG1 FIX: These MUST be OUTSIDE catch block — they always run on disconnect
   // Reset sticky mobile bar
   if (typeof window._updateMobileBar === 'function') {
     window._updateMobileBar(null, null);
@@ -7269,7 +7266,6 @@ async function disconnectWallet() {
   connectedWallet  = null;
   connectedAddress = null;
   // FIX BUG-8: Reset both cached balances on disconnect
-  // FIX v58-CACHE: Reset to -1 (sentinel) on disconnect
   cachedUsdcBalance = -1;
   cachedUsdtBalance = -1;
   // FIX WARNING #1: Reset disclaimerAccepted on every disconnect so the disclaimer
@@ -7298,13 +7294,10 @@ async function disconnectWallet() {
   if (ws) ws.style.display = 'none';
   const bp = document.getElementById('buyPanel');
   if (bp) bp.style.display = 'none';
-  // FLOW FIX v58: also hide token selector bar
   const tsb = document.getElementById('tokenSelectBar');
   if (tsb) tsb.style.display = 'none';
-  // FIX v15: also hide balance bar
   const bb = document.getElementById('usdcBalanceBar');
   if (bb) bb.style.display = 'none';
-  // FIX v30 #2: Reset processingPanel & successPanel saat disconnect —
   // mencegah spinner/success tetap tampil jika user disconnect di tengah transaksi
   const pp = document.getElementById('processingPanel');
   if (pp) pp.style.display = 'none';
@@ -7317,7 +7310,6 @@ async function disconnectWallet() {
   const inp = document.getElementById('usdcAmount');
   if (inp) {
     inp.value = '';
-    // FIX v27 #2: Reset placeholder ke Tier I USDC default saat disconnect
     const resetTier = CFG.TIERS[CFG.TIER] || CFG.TIERS[1];
     inp.placeholder = 'Min $' + resetTier.min.toFixed(2) + ' — Max $' + resetTier.max.toFixed(2) + ' USDC';
     inp.min  = String(resetTier.min);
@@ -7364,7 +7356,6 @@ async function disconnectWallet() {
 
 // --- Utility: detect mobile browser ---
 function isMobileBrowser() {
-  // FIX v33 #2: Tambah SamsungBrowser — Samsung Internet sangat populer di Android Asia
   return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|SamsungBrowser/i.test(navigator.userAgent);
 }
 // Expose ke window agar IIFE dan script terpisah bisa akses
@@ -7420,7 +7411,6 @@ document.addEventListener('visibilitychange', function _mobileWalletResume() {
   }, 600); // 600ms delay gives wallet time to inject provider on return
 });
 
-// ── v45 WALLET FIX: connectPhantom — desktop & mobile ───────────────────────
 let _isConnectingPhantom  = false;
 let _isConnectingSolflare = false;
 
@@ -7451,22 +7441,19 @@ async function connectPhantom() {
       if (nameEl) nameEl.textContent = 'Connecting…';
     }
 
-    // FIX v45: On mobile, give wallet injection time to complete
     if (isMobileBrowser()) {
       await new Promise(r => setTimeout(r, 400));
     }
 
     let provider = getPhantomProvider();
 
-    // ── CASE 1: Already connected ────────────────────────────────────────────
-    if (provider && provider.isConnected && provider.publicKey) {
+        if (provider && provider.isConnected && provider.publicKey) {
       setConnected('Phantom', provider.publicKey.toString());
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 2: Inside Phantom in-app browser ────────────────────────────────
-    if (isMobileBrowser() && isInsidePhantom()) {
+        if (isMobileBrowser() && isInsidePhantom()) {
       // Provider should already be injected — retry with extra delay if needed
       if (!provider) {
         await new Promise(r => setTimeout(r, 800));
@@ -7496,13 +7483,11 @@ async function connectPhantom() {
       return;
     }
 
-    // ── CASE 3: Mobile — no provider — deep link to Phantom app ─────────────
-    if (isMobileBrowser() && !provider) {
+        if (isMobileBrowser() && !provider) {
       try {
         sessionStorage.setItem('_exxe_wallet_intent', 'phantom');
         sessionStorage.setItem('_exxe_did_redirect', '1');
       } catch(e) {}
-      // FIX v45: Use universal link format (more reliable than ul/v1/browse)
       const currentUrl = encodeURIComponent(window.location.href);
       const deepLink = 'https://phantom.app/ul/v1/browse/' + currentUrl
         + '?ref=' + encodeURIComponent(window.location.origin);
@@ -7511,22 +7496,19 @@ async function connectPhantom() {
       return;
     }
 
-    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
-    if (window.location.protocol === 'file:') {
+        if (window.location.protocol === 'file:') {
       showToast('Phantom requires https://. Please open via a web server.', 'warn');
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
-    if (!provider) {
+        if (!provider) {
       showWalletHint('phantom');
       resetPhantomBtn();
       return;
     }
 
-    // ── CASE 6: Desktop — extension present, request connect ─────────────────
-    const resp = await provider.connect();
+        const resp = await provider.connect();
     const address = (resp && resp.publicKey)
       ? resp.publicKey.toString()
       : provider.publicKey ? provider.publicKey.toString() : null;
@@ -7571,7 +7553,6 @@ function _setupPhantomListeners(provider) {
   } catch(e) {}
 }
 
-// ── v45 WALLET FIX: connectSolflare — desktop & mobile ──────────────────────
 async function connectSolflare() {
   if (_isConnectingSolflare) return;
   _isConnectingSolflare = true;
@@ -7596,22 +7577,19 @@ async function connectSolflare() {
       if (nameEl) nameEl.textContent = 'Connecting…';
     }
 
-    // FIX v45: On mobile, give wallet injection time to complete
     if (isMobileBrowser()) {
       await new Promise(r => setTimeout(r, 400));
     }
 
     let provider = getSolflareProvider();
 
-    // ── CASE 1: Already connected ────────────────────────────────────────────
-    if (provider && provider.isConnected && provider.publicKey) {
+        if (provider && provider.isConnected && provider.publicKey) {
       setConnected('Solflare', provider.publicKey.toString());
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 2: Inside Solflare in-app browser ───────────────────────────────
-    if (isMobileBrowser() && isInsideSolflare()) {
+        if (isMobileBrowser() && isInsideSolflare()) {
       if (!provider) {
         await new Promise(r => setTimeout(r, 800));
         provider = getSolflareProvider();
@@ -7638,8 +7616,7 @@ async function connectSolflare() {
       return;
     }
 
-    // ── CASE 3: Mobile — no provider — deep link to Solflare app ────────────
-    if (isMobileBrowser() && !provider) {
+        if (isMobileBrowser() && !provider) {
       try {
         sessionStorage.setItem('_exxe_wallet_intent', 'solflare');
         sessionStorage.setItem('_exxe_did_redirect', '1');
@@ -7652,22 +7629,19 @@ async function connectSolflare() {
       return;
     }
 
-    // ── CASE 4: Desktop — file:// protocol warning ───────────────────────────
-    if (window.location.protocol === 'file:') {
+        if (window.location.protocol === 'file:') {
       showToast('Solflare requires https://. Please open via a web server.', 'warn');
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 5: Desktop — no extension installed ─────────────────────────────
-    if (!provider) {
+        if (!provider) {
       showWalletHint('solflare');
       resetSolflareBtn();
       return;
     }
 
-    // ── CASE 6: Desktop — extension present, request connect ─────────────────
-    await provider.connect();
+        await provider.connect();
     const address = provider.publicKey ? provider.publicKey.toString() : null;
 
     if (!address) {
@@ -7719,7 +7693,6 @@ function showWalletHint(wallet) {
   const name  = isPhantom ? 'Phantom' : 'Solflare';
   const emoji = isPhantom ? '👻' : '☀️';
 
-  // FIX v27 #5: Detect mobile platform — Chrome Web Store tidak berguna di mobile Safari/Firefox.
   // Arahkan ke App Store (iOS) atau Play Store (Android) sesuai platform.
   const isIOS     = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const isAndroid = /Android/i.test(navigator.userAgent);
@@ -7781,7 +7754,6 @@ function showWalletHint(wallet) {
 
 // "Join The Angel Investor" → scroll to Tier I, fully visible from the top
 function scrollToTierI() {
-  // FIX v39 MOB-BUY-1: Tutup mobile nav menu dulu jika sedang terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
   if (navLinks && navLinks.classList.contains('open')) {
@@ -7848,7 +7820,6 @@ function scrollToTierThenWallet() {
 }
 
 async function scrollToWallet() {
-  // FIX v39 MOB-BUY-2: Tutup mobile nav menu jika terbuka
   var navLinks = document.getElementById('navLinks');
   var hamburger = document.getElementById('hamburger');
   if (navLinks && navLinks.classList.contains('open')) {
@@ -7870,7 +7841,6 @@ async function scrollToWallet() {
     setTimeout(function() { el.style.boxShadow = ''; }, 2200);
   }, 650);
 
-  // FIX v39 MOB-BUY-6: Jika sudah di dalam in-app browser Phantom atau Solflare,
   // langsung auto-connect tanpa perlu user tap tombol lagi.
   // Provider sudah inject — tidak perlu redirect keluar.
   if (!connectedWallet) {
@@ -7898,7 +7868,6 @@ async function scrollToWallet() {
 }
 
 // --- STEPS ---------------------------------------------------
-// FLOW FIX v58: Updated to 5 steps (Connect → Token → Balance → Amount → Done)
 function goStep(n){
   for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
@@ -7909,11 +7878,7 @@ function goStep(n){
   }
 }
 
-// FLOW FIX v58: Called when user selects token from the tokenSelectBar.
 // Shows balance, then reveals the buyPanel (tier + amount form).
-// FLOW FIX v58-BAL: If balance < 10, blocks progression and shows warning.
-// FIX v58-CACHE: Always fetch fresh balance on token click (never rely on stale cache).
-// FIX v58-THROW: fetchTokenBalance now throws on RPC failure so retry works.
 async function selectTokenAndProceed(token) {
   selectToken(token);
 
@@ -7982,7 +7947,6 @@ async function selectTokenAndProceed(token) {
 }
 
 // --- CALCULATOR ----------------------------------------------
-// FIX v31 F: Update hint buttons dinamis sesuai tier aktif
 function updateAmountHints() {
   const t = tier();
   const hintsEl = document.getElementById('amountHints');
@@ -8008,7 +7972,6 @@ function setAmount(v){
 function calcTokens(){
   const t=tier();
   const token = getSelectedToken();
-  // v19: Allow up to 2 decimal places (e.g. $10.25, $33.33).
   // Round to 2dp to avoid floating-point drift, then clamp to min/max.
   let usdc = Math.round(parseFloat(document.getElementById('usdcAmount').value || 0) * 100) / 100;
   if(isNaN(usdc)) usdc = 0;
@@ -8018,7 +7981,6 @@ function calcTokens(){
   if(usdc >= t.min){
     // Base EXXE = usdc / price, rounded to nearest whole token
     const baseExxe = Math.round(usdc / t.price);
-    // v41: Bonus EXXE calculation
     const bonusPct  = t.bonusPct || 0;
     const bonusExxe = Math.round(baseExxe * (bonusPct / 100));
     const totalExxe = baseExxe + bonusExxe;
@@ -8027,13 +7989,11 @@ function calcTokens(){
     const currentToken = getSelectedToken();
     box.style.display='flex';
     document.getElementById('calcPay').textContent     = '$' + usdc.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' ' + currentToken;
-    // FIX v48: calcReceive tampilkan baseExxe dulu (bukan totalExxe)
     // Investor lihat: base → bonus → total — alur yang jelas dan tidak membingungkan
     document.getElementById('calcReceive').textContent = baseExxe.toLocaleString('en-US') + ' EXXE';
     document.getElementById('calcListing').textContent = '$' + atL.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' USD';
 
 
-    // v41: Show/hide bonus rows
     const bonusRow = document.getElementById('calcBonusRow');
     const totalRow = document.getElementById('calcTotalRow');
     const bonusLbl = document.getElementById('calcBonusLbl');
@@ -8054,7 +8014,6 @@ function calcTokens(){
       if(totalEl)  totalEl.textContent    = baseExxe.toLocaleString('en-US') + ' EXXE';
     }
 
-    // v48: Hanya Lock — vesting dihapus
     const lockEl = document.getElementById('calcLock');
     if(lockEl) lockEl.textContent = t.lock || '—';
 
@@ -8087,9 +8046,7 @@ function checkReady(){
   }
 }
 
-// FLOW FIX v58-BAL-2: Async version of checkReady — fetches fresh balance before validating.
 // Called by executeBuy before showing disclaimer and after acceptance.
-// FIX v58-CACHE: Check sentinel (-1) instead of 0 to detect "never loaded"
 async function checkReadyWithBalance(){
   if(!connectedAddress) return;
   const token = getSelectedToken();
@@ -8103,7 +8060,6 @@ async function checkReadyWithBalance(){
 // --- EXECUTE BUY — Cek disclaimer + USDC balance dulu --------
 let _isBuying = false;
 async function executeBuy(){
-  // FLOW FIX v58-BAL-2: Fetch fresh balance before checking .ready class.
   // This fixes the race condition where cachedBal=0 because fetchTokenBalances()
   // hasn't finished yet when user quickly clicks Pay after connecting wallet.
   await checkReadyWithBalance();
@@ -8118,14 +8074,12 @@ async function executeBuy(){
   }
   _isBuying = true;
 
-  // BUG FIX: Disable button in DOM immediately to prevent double-tap on mobile
   const _buyBtn = document.getElementById('buyBtn');
   if (_buyBtn) _buyBtn.disabled = true;
 
   // If disclaimer not yet accepted, show modal first
   if(!disclaimerAccepted){
     _isBuying = false; // reset: kita belum mulai transaksi
-    // FIX v59 BUG-DISCLAIMER: Re-enable button agar bisa diklik lagi setelah modal ditutup
     if (_buyBtn) _buyBtn.disabled = false;
     ['mc1','mc2','mc3','mc4','mc5','mc6'].forEach(id=>{
       const _mc=document.getElementById(id); if(_mc) _mc.checked=false;
@@ -8138,12 +8092,11 @@ async function executeBuy(){
     if(_ov){
       _ov.classList.add('active');
       _ov.style.opacity='1';
-      document.body.style.overflow='hidden'; // FIX v26 BUG-5: lock scroll iOS
+      document.body.style.overflow='hidden';
     }
     return;
   }
 
-  // FIX v15 #4 / v19: Check balance before building tx — allow decimal amounts
   const t = tier();
   const usdc = Math.round(parseFloat(document.getElementById('usdcAmount')?.value || 0) * 100) / 100;
   try {
@@ -8190,11 +8143,10 @@ async function proceedBuy(){
   const _capturedTier = CFG.TIER;
   const t = CFG.TIERS[_capturedTier];
 
-  // v24 FIX #2: Sanitasi ketat — tolak NaN, Infinity, negatif, non-finite
   const rawInput = parseFloat(document.getElementById('usdcAmount')?.value || 0);
   if (!isFinite(rawInput) || isNaN(rawInput) || rawInput <= 0) {
     showToast('Invalid amount entered.', 'warn');
-    _isBuying = false; // FIX v32 #1: reset agar form tidak terkunci
+    _isBuying = false;
     return;
   }
   
@@ -8217,13 +8169,11 @@ async function proceedBuy(){
     _isBuying = false; // FIX v32 #1
     return;
   }
-  // FIX v15 #2: Verify @solana/web3.js is loaded before proceeding
   if (typeof window.solanaWeb3 === 'undefined') {
     showToast('Solana library still loading. Please wait a moment and try again.', 'warn');
     _isBuying = false; // FIX v32 #1
     return;
   }
-  // FIX v27 #7: Validasi format alamat Solana di client (defense in depth)
   const _addrRx = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
   if (!_addrRx.test(connectedAddress)) {
     showToast('Invalid wallet address format. Please reconnect your wallet.', 'error');
@@ -8231,7 +8181,6 @@ async function proceedBuy(){
     return;
   }
 
-  // FIX v27 #1: _idempKey di scope proceedBuy (bukan dalam try) agar key
   // tetap sama untuk semua 3 endpoint dan tidak out-of-scope di catch/log.
   const _idempKey = (typeof crypto !== 'undefined' && crypto.randomUUID)
     ? crypto.randomUUID()
@@ -8247,7 +8196,6 @@ async function proceedBuy(){
     // ── Step 1: Bangun transaksi split dari Railway backend ──────────
     await txStep(1, 'active', 'Building ' + token + ' split transaction...');
 
-    // FIX v33 #1: AbortController agar fetch benar-benar dibatalkan saat timeout
     const _buildCtrl  = new AbortController();
     const _buildTimer = setTimeout(() => _buildCtrl.abort(), 30000);
     let buildRes;
@@ -8275,9 +8223,7 @@ async function proceedBuy(){
     // ── Step 2: Deserialise → VersionedTransaction → Wallet sign & send ──
     await txStep(2, 'active', 'Please approve in your wallet...');
 
-    // FIX v15 #2: Deserialise base64 bytes into real VersionedTransaction
     // using @solana/web3.js — this is what Phantom & Solflare actually expect.
-    // FIX v25 BUG-7: Bungkus atob+deserialize — base64 invalid atau TX corrupt
     // akan throw DOMException yang membingungkan jika tidak ditangkap di sini.
     let txBytes, versionedTx;
     try {
@@ -8294,7 +8240,6 @@ async function proceedBuy(){
         if (!provider) throw new Error('Phantom not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          // FIX v29 MOB-5: Handle semua Phantom return format lintas versi:
           // v0.9+: string langsung, v1.x: {signature:'...'}, v2+: {publicKey,signature}
           txSignature = (typeof result === 'string' ? result : null)
             || result?.signature
@@ -8325,7 +8270,6 @@ async function proceedBuy(){
         if (!provider) throw new Error('Solflare not available');
         if (typeof provider.signAndSendTransaction === 'function') {
           const result = await provider.signAndSendTransaction(versionedTx);
-          // FIX v29 MOB-5: Handle semua Solflare return format lintas versi:
           // Mobile v1: {signature:'...'}, Desktop v2: string, legacy: {tx:'...'}, {txid:'...'}
           txSignature = (typeof result === 'string' ? result : null)
             || result?.signature
@@ -8363,11 +8307,9 @@ async function proceedBuy(){
       );
     }
 
-    // FIX v63: Delay 3 detik sebelum /verify-payment agar TX propagasi ke semua RPC nodes
     // dan Helius indexer. TX status "confirmed" belum berarti bisa di-fetch via getTransaction().
     await new Promise(r => setTimeout(r, 3000));
 
-    // FIX v29 MOB-12: AbortController agar fetch benar-benar dibatalkan saat timeout
     const _verifyCtrl   = new AbortController();
     const _verifyTimer  = setTimeout(() => _verifyCtrl.abort(), 45000);
     let verifyRes;
@@ -8383,14 +8325,12 @@ async function proceedBuy(){
       if (_ve.name === 'AbortError') throw new Error('Verification timeout. Your payment may still be processing. Please contact support with TX: ' + txSignature);
       throw _ve;
     } finally { clearTimeout(_verifyTimer); }
-    // FIX v25 BUG-4: Parse response SEKALI — ReadableStream hanya bisa dibaca satu kali.
     // Dulu: json() dipanggil 2x (satu di error branch, satu lagi setelah).
     const verifyData = await verifyRes.json().catch(() => ({}));
     if (!verifyRes.ok) {
       throw new Error((verifyData.error || 'Payment verification failed') + ' — TX: ' + txSignature);
     }
     const actualAmount = verifyData.usdcAmount  || usdc;
-    // v46 BUG2 FIX: Use exxeTotal from verify (includes bonus) if available,
     // otherwise use the backend build preview fallback or calculate locally.
     const _baseExxe  = verifyData.exxeAmount || Math.round(usdc / t.price);
     const _bonusExxe = verifyData.exxeBonus  || _buildExxeBonus || Math.round(_baseExxe * (t.bonusPct || 0) / 100);
@@ -8398,12 +8338,10 @@ async function proceedBuy(){
     await txStep(3, 'done', 'Payment verified on-chain ✓');
 
     // ── Step 4: Backend sends EXXE to investor wallet ─────────────────
-    // v46 BUG5 FIX: Show correct total EXXE (base + bonus) in step 4 label
     const _step4Label = t.bonusPct > 0
       ? `Sending ${actualExxe.toLocaleString('en-US')} EXXE (incl. ${_bonusExxe.toLocaleString('en-US')} bonus)...`
       : `Sending ${actualExxe.toLocaleString('en-US')} EXXE to your wallet...`;
     await txStep(4, 'active', _step4Label);
-    // FIX v29 MOB-12: AbortController untuk /send-exxe
     const _sendCtrl  = new AbortController();
     const _sendTimer = setTimeout(() => _sendCtrl.abort(), 60000);
     let sendRes;
@@ -8421,10 +8359,7 @@ async function proceedBuy(){
     } finally { clearTimeout(_sendTimer); }
     if (!sendRes.ok) throw new Error('Failed to send EXXE (server ' + sendRes.status + '). TX: ' + txSignature);
     const sendData = await sendRes.json();
-    // FIX v25 BUG-6: Cek success flag di response body — HTTP 200 belum tentu berhasil
-    // FIX v47: Ganti === false dengan !sendData.success — cover kasus {error:'...'} tanpa field success
     if (!sendData.success) {
-      // FIX v30 #1: Reset panels sebelum throw — cegah spinner abadi saat EXXE delivery gagal
       const _pp = document.getElementById('processingPanel');
       const _bp = document.getElementById('buyPanel');
       if (_pp) _pp.style.display = 'none';
@@ -8432,7 +8367,6 @@ async function proceedBuy(){
       throw new Error((sendData.error || 'EXXE delivery failed — contact support') + '. TX: ' + txSignature);
     }
     const exxeTx   = sendData?.signature || sendData?.tx || '';
-    // v46 BUG2 FIX: Use backend-confirmed exxeTotal (includes bonus) for display
     const confirmedExxe = sendData.exxeTotal || actualExxe;
     const _doneLabel = tier().bonusPct > 0
       ? `${confirmedExxe.toLocaleString('en-US')} EXXE delivered ✓ (incl. bonus)`
@@ -8440,7 +8374,7 @@ async function proceedBuy(){
     await txStep(4, 'done', _doneLabel);
 
     const confirmedBonus = typeof sendData.exxeBonus === 'number' ? sendData.exxeBonus : _bonusExxe;
-    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token, confirmedBonus, _capturedTier); // FLOW FIX v58: use _capturedTier for consistency
+    showSuccess(actualAmount, confirmedExxe, connectedAddress, exxeTx || txSignature, token, confirmedBonus, _capturedTier);
     _isBuying = false;
 
   } catch(e) {
@@ -8448,7 +8382,6 @@ async function proceedBuy(){
     const _buyP2  = document.getElementById('buyPanel');
     if (_procP2) _procP2.style.display = 'none';
     if (_buyP2)  _buyP2.style.display  = 'block';
-    // BUG FIX: Restore buy button state after error - use checkReady() for proper validation
     const _buyBtnErr = document.getElementById('buyBtn');
     if (_buyBtnErr) {
       _buyBtnErr.disabled = false;
@@ -8458,12 +8391,10 @@ async function proceedBuy(){
     if (e.code !== 4001) {
       showToast('Transaction failed: ' + (e.message || 'Please try again.'), 'error', 10000);
     }
-    // FLOW FIX v58: After error, return to step 4 (Amount) if already past that point
     const currStep = document.querySelector('.bstep.active');
     const currStepNum = currStep ? parseInt(currStep.id.replace('step','')) : 0;
     if (currStepNum >= 4) goStep(4);
   } finally {
-    // FIX v29 MOB-3: ALWAYS reset _isBuying via finally.
     // Tanpa ini, exception antara _isBuying=true dan try{} menyebabkan form terkunci permanen.
     _isBuying = false;
   }
@@ -8471,7 +8402,6 @@ async function proceedBuy(){
 
 // --- Send raw signed bytes to Solana RPC with fallback -------
 async function sendRawTransaction(signedBytes) {
-  // BUG FIX v16 #3: Spread operator (...signedBytes) ke String.fromCharCode
   // bisa menyebabkan "Maximum call stack size exceeded" jika buffer besar (>65k bytes).
   // Gunakan loop reduce yang aman untuk konversi Uint8Array → base64.
   let b64 = '';
@@ -8490,7 +8420,6 @@ async function sendRawTransaction(signedBytes) {
         body:    JSON.stringify({
           jsonrpc: '2.0', id: 1,
           method: 'sendTransaction',
-          // FIX v29 MOB-10: skipPreflight:true — preflight sering false-reject TX valid di Solana congested
           params: [b64, { encoding: 'base64', skipPreflight: true, maxRetries: 5 }]
         }),
         signal: ctrl.signal
@@ -8507,8 +8436,8 @@ async function sendRawTransaction(signedBytes) {
 
 
 async function waitForConfirmation(signature) {
-  const maxWait     = 90000; // FIX v37 MOB-3: 90s (dari 40s) — cukup untuk mobile lambat
-  const interval    = 4000;  // FIX v37 MOB-3: 4000ms (dari 3500ms) — hemat baterai
+  const maxWait     = 90000;
+  const interval    = 4000;
   const slowMsgAt   = 20000; // Tampilkan "Still confirming..." setelah 20 detik
   const deadline    = Date.now() + maxWait;
   const startTime   = Date.now();
@@ -8516,7 +8445,6 @@ async function waitForConfirmation(signature) {
   let slowMsgShown  = false;
 
   while (Date.now() < deadline) {
-    // FIX v37 MOB-3: Tampilkan pesan "Still confirming..." setelah 20 detik
     if (!slowMsgShown && (Date.now() - startTime) >= slowMsgAt) {
       slowMsgShown = true;
       const tl1 = document.getElementById('tl1');
@@ -8554,7 +8482,6 @@ async function waitForConfirmation(signature) {
     }
     await new Promise(r => setTimeout(r, interval));
   }
-  // FIX v25 BUG-3: Throw agar catch di proceedBuy bisa detect timeout
   // Backend akan verifikasi langsung ke chain — investor tetap aman
   throw new Error('waitForConfirmation timeout');
 }
@@ -8569,21 +8496,17 @@ async function txStep(n,status,label){
   await Promise.resolve();
 }
 
-// FIX v32 #2: Reset ke buyPanel setelah sukses — investor bisa beli lagi tanpa reload
 function resetAfterBuy() {
-  // FIX v36 BUG-1: Reset _isBuying agar form tidak terkunci saat investor
   // klik "← Increase My Allocation" setelah transaksi sukses.
   _isBuying = false;
   const sp = document.getElementById('successPanel');
   const bp = document.getElementById('buyPanel');
   if (sp) {
     sp.style.display = 'none';
-    // BUG FIX: Clear successDetails DOM to prevent stale data on second purchase
     const details = document.getElementById('successDetails');
     if (details) details.innerHTML = '';
   }
   if (bp) bp.style.display = 'block';
-  // FIX v52 BUG-11: Reset solscanLink href so stale TX from previous purchase
   // is not shown if second transaction fails before showSuccess() is called.
   const _solLink = document.getElementById('solscanLink');
   if (_solLink) _solLink.href = '#';
@@ -8599,17 +8522,14 @@ function resetAfterBuy() {
   const buyBtn = document.getElementById('buyBtn');
   if (buyBtn) {
     buyBtn.classList.remove('ready');
-    buyBtn.disabled = false; // BUG FIX: Re-enable button after transaction
+    buyBtn.disabled = false;
     const bt = document.getElementById('buyBtnText');
     if (bt) bt.textContent = 'Pay with ' + getSelectedToken() + ' — Receive EXXE';
   }
-  // FLOW FIX v58: Wallet still connected, token still selected — go back to step 4 (Amount)
   goStep(4);
   // Refresh balance untuk tampilkan saldo terkini
   if (connectedAddress) fetchTokenBalances(connectedAddress);
-  // FIX v58-CAP: Refresh wallet cap bar agar remaining cap akurat setelah purchase
   if (connectedAddress) fetchWalletStatus(connectedAddress);
-  // BUG FIX: Proper scroll calculation with bounds check
   const formEl = document.getElementById('angelWalletForm');
   if (formEl) {
     const rect = formEl.getBoundingClientRect();
@@ -8620,7 +8540,6 @@ function resetAfterBuy() {
   }
 }
 
-// v49 FIX: Store last purchase data globally so "View My Certificate" button
 // can re-open with correct values (not 0,0) after auto-modal is closed.
 window._lastCertData = null;
 
@@ -8631,13 +8550,10 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   window._lastCertData = { usdc, exxe, wallet, tx, token, bonusExxe, tier: tierNum };
   document.getElementById('processingPanel').style.display='none';
   document.getElementById('successPanel').style.display='block';
-  // BUG FIX: Hide mob-invest-bar when processing/transactions are active
   const _mobBar = document.getElementById('mob-invest-bar');
   if (_mobBar) _mobBar.classList.remove('visible');
-  // FIX v52 BUG-2: Scroll to successPanel so mobile users see it without manual scroll
   const _spEl = document.getElementById('successPanel');
   if (_spEl) setTimeout(function(){ _spEl.scrollIntoView({ behavior:'smooth', block:'start' }); }, 80);
-  // FLOW FIX v58: Mark all 5 steps as done, step 5 as active (Done)
   for(let i=1;i<=5;i++){
     const el=document.getElementById('step'+i);
     if(el){ el.classList.remove('active'); el.classList.add('done'); }
@@ -8648,14 +8564,12 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   const txFull  = tx || '';
   const tokenLabel = token || 'USDC';
 
-  // v41: Calculate bonus for success display
   const t = CFG.TIERS[tierNum] || CFG.TIERS[1];
   const totalExxe = Math.round(exxe);
   const bonusPct  = t.bonusPct || 0;
   if (typeof bonusExxe !== 'number') {
     bonusExxe = bonusPct > 0 ? Math.round(totalExxe - (totalExxe / (1 + bonusPct / 100))) : 0;
   }
-  // BUG FIX: Validate bonus doesn't exceed total - detect data corruption from backend
   if (bonusExxe > totalExxe) {
     showToast('Note: Bonus data discrepancy detected. Please contact support with your TX.', 'warn', 12000);
     bonusExxe = Math.floor(totalExxe * 0.1); // Safe fallback: cap at 10%
@@ -8668,7 +8582,6 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   // Purchase date — format: DD Month YYYY
   const _now = new Date();
   const _months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  // FIX v52 BUG-3b: Use UTC date methods for purchaseDate consistency with certificate
   const purchaseDate = _now.getUTCDate() + ' ' + _months[_now.getUTCMonth()] + ' ' + _now.getUTCFullYear();
 
   // Lock Until — gentleman agreement, Orca DEX (Solana)
@@ -8724,15 +8637,11 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
   if (link && txFull) link.href = 'https://solscan.io/tx/' + encodeURIComponent(txFull);
 
   // Show Genesis Certificate modal after short delay (let success panel render first)
-  // FIX v51: pass tierNum (captured at tx time) instead of CFG.TIER global
-  // FLOW FIX v58-STAT: Immediately refresh live counters so investor count & EXXE remaining update right away
   if (typeof window._exxeRefreshInvestorCount === 'function') window._exxeRefreshInvestorCount();
   if (typeof window._exxeRefreshFunding === 'function') window._exxeRefreshFunding();
 
   // FRONTEND INTEGRATION: Call /api/certificate untuk server-side proof + timestamp resmi.
-  // FIX v63-CERT: Tunggu response /api/certificate SEBELUM tampilkan modal
   // agar certificateId & issuedAt dari server sudah tersedia saat modal render.
-  // FIX v63-CERT2: Jangan timpa _lastCertData dengan struktur server (field berbeda).
   // _lastCertData selalu pakai struktur {usdc,exxe,wallet,tx,token,bonusExxe,tier}
   // agar tombol "View My Certificate" bisa re-open dengan data benar.
   window._certServerData = null;
@@ -8757,7 +8666,6 @@ function showSuccess(usdc,exxe,wallet,tx,token,bonusExxe,tierNum){
         clearTimeout(certTimer);
         if (certRes.ok) {
           window._certServerData = await certRes.json();
-          // FIX v63-CERT2: Update _lastCertData tanpa timpa struktur asli —
           // tambahkan certServerData sebagai referensi terpisah saja.
           if (window._lastCertData) {
             window._lastCertData.certId    = window._certServerData.certificateId;
@@ -8810,7 +8718,6 @@ document.addEventListener('DOMContentLoaded', function initMenuListeners() {
     }
   });
 
-  // BUG FIX v16 #8 / v18 #1: Update --nav-h CSS variable so scroll-margin-top is always accurate.
   function updateNavHeight() {
     const nav = document.getElementById('main-nav');
     if (nav) {
@@ -9037,7 +8944,6 @@ function enterSite() {
   function startMainSplashParticles() {
     var canvas = document.getElementById('main-splash-canvas');
     if (!canvas) return;
-    // BUG FIX #11: guard against double-init (enterSite + old MutationObserver)
     if (canvas._splashRunning) return;
     canvas._splashRunning = true;
 
@@ -9049,7 +8955,6 @@ function enterSite() {
     }
     resizeCanvas();
 
-    // BUG FIX #11: handle orientation change / window resize
     var _resizeTimer;
     function onResize() {
         clearTimeout(_resizeTimer);
@@ -9059,7 +8964,6 @@ function enterSite() {
     window.addEventListener('orientationchange', onResize);
 
     var particles = [];
-    // v6: 30 particles (was 50), no shadowBlur
     for (var i = 0; i < 30; i++) {
         particles.push({
             x: Math.random() * canvas.width,
@@ -9076,7 +8980,6 @@ function enterSite() {
     function drawParticles() {
         if (!document.getElementById('main-splash') || document.getElementById('main-splash').style.display === 'none') {
             cancelAnimationFrame(animId);
-            // BUG FIX #11: remove resize listeners when canvas stops
             window.removeEventListener('resize', onResize);
             window.removeEventListener('orientationchange', onResize);
             canvas._splashRunning = false;
@@ -9290,10 +9193,9 @@ function startGoldNetwork(canvasId, isSplash) {
   'use strict';
 
   const EXXE_MINT = '2a42TiuA2hh8jN94VxpN2NUbfrrUqLTKePXasQH63q1u';
-  // FIX v36 SYNC-1: Default fallback — akan di-override dari /api/stats
   const ANGEL_DIST_WALLET_DEFAULT = '4Y9Zg3K8Ut8NboWf7BuVmhS6kXedaozjvK61uSNnXkNW';
 
-  const REFRESH_MS   = 60000; // FIX v36 SYNC-3: selaras dengan backend TTL 60s
+  const REFRESH_MS   = 60000;
   const SESSION_KEY  = 'exxe_investor_count_v16';
   const SESSION_TS   = 'exxe_investor_ts_v16';
   const CACHE_TTL_MS = 300000; // 5 menit
@@ -9437,7 +9339,6 @@ function startGoldNetwork(canvasId, isSplash) {
       sessionStorage.setItem(SESSION_KEY, String(count));
       sessionStorage.setItem(SESSION_TS,  String(Date.now()));
     } catch(e) {}
-    // FIX v64-COUNTER: Retry 3x untuk elemen splash2 yang mungkin
     // belum render saat DOMContentLoaded (splash animasi belum selesai)
     [500, 1500, 3000].forEach(function(delay) {
       setTimeout(function() {
@@ -9472,17 +9373,14 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_isFetching) return;
     _isFetching = true;
     try {
-      // FIX v36 SYNC-4: Cek shared cache dulu — diisi oleh funding tracker di bawah.
       // Jika sudah ada data dari fetch bersama, langsung pakai tanpa network call lagi.
       const shared = window._exillionStatsCache;
       if (shared && typeof shared.investorCount === 'number' && shared.ts && (Date.now() - shared.ts) < CACHE_TTL_MS) {
         updateInvestorUI(shared.investorCount);
-        // FIX v36 SYNC-1: Jika ada angelWallet dari backend, simpan ke window agar on-chain fallback pakai versi terbaru
         if (shared.angelWallet) window._exillionAngelWallet = shared.angelWallet;
         return;
       }
 
-      // FIX v36 SYNC-4: Jika shared cache belum ada, fetch /api/stats sendiri
       const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
         const ctrl       = new AbortController();
@@ -9492,15 +9390,12 @@ function startGoldNetwork(canvasId, isSplash) {
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
-            // FIX v36 SYNC-1: Simpan angelWallet dari backend ke window
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               setAngelWalletFromStats(data.angelWallet);
             }
             if (data.wallets && typeof data.wallets === 'object') {
               setSplitWalletsFromStats(data.wallets);
             }
-            // FIX v36 SYNC-4: Isi shared cache agar funding tracker tidak double-fetch
-            // FIX v63-COUNTER: Simpan semua field termasuk exxeSold & tiers
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
               exxeSold:      data.exxeSold,
@@ -9511,7 +9406,6 @@ function startGoldNetwork(canvasId, isSplash) {
               tiers:         data.tiers,
               ts:            Date.now(),
             };
-            // FIX v63-COUNTER: Update tier cards langsung dari sini juga
             if (data.tiers && typeof updateTierCards === 'function') {
               updateTierCards(data.tiers);
             }
@@ -9523,7 +9417,6 @@ function startGoldNetwork(canvasId, isSplash) {
         } finally { clearTimeout(abortTimer); }
       } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // FIX v36 SYNC-1: Gunakan angelWallet dari backend jika ada, fallback ke hardcode default
       const angelWallet = window._exillionAngelWallet || ANGEL_DIST_WALLET_DEFAULT;
       const allSigs     = await fetchAllSignatures(angelWallet);
       if (!allSigs.length) { updateInvestorUI(0); return; }
@@ -9543,7 +9436,6 @@ function startGoldNetwork(canvasId, isSplash) {
     // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshInvestorCount = function() {
       _isFetching = false;
-      // FIX v64-REFRESH: bust shared stats cache timestamp so fetchInvestorCount
       // does not short-circuit on the 5-min cache after a purchase
       if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
       try { sessionStorage.removeItem('exxe_investor_count_v16'); sessionStorage.removeItem('exxe_investor_ts_v16'); } catch(e) {}
@@ -9560,7 +9452,6 @@ function startGoldNetwork(canvasId, isSplash) {
       const rtBar = document.getElementById('rt-t' + n + '-bar');
       if (rtBar) rtBar.style.width = '1%';
     });
-    // FIX v64-COUNTER: Hapus session cache yang lebih dari 2 menit
     // agar counter tidak stuck di nilai lama setelah deploy/restart
     try {
       const cachedTs = parseInt(sessionStorage.getItem(SESSION_TS) || '0', 10);
@@ -9581,13 +9472,11 @@ function startGoldNetwork(canvasId, isSplash) {
   const USDC_MINT  = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v';
   const USDT_MINT  = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB';
 
-  // FIX v36 SYNC-2: Default wallet fallback — akan di-override dari /api/stats
   const WALLETS_DEFAULT = {
     liquidity:   '4iTbrZGCrWoTuJiGfYUnrW4ursbm7JKbscSXdNuGhkEP',
     operational: 'GrxpdSJdjUXeRcVjHoSrvpZ3PCDi8C4P3ZasWULYwpVN',
     development: 'BqAVYXi5oumEXuacNkquRjSNbd6X51YHcEHbeJLFswVx',
   };
-  // FIX v36 SYNC-2: Default split fallback — akan di-override dari /api/stats
   const SPLIT_DEFAULT = { liquidity: 0.75, operational: 0.15, development: 0.10 };
 
   const RPC_ENDPOINTS = [
@@ -9596,21 +9485,18 @@ function startGoldNetwork(canvasId, isSplash) {
     'https://rpc.ankr.com/solana',
     'https://solana-rpc.publicnode.com',
   ];
-  // FIX v37 SYNC-2: Default fallback values — akan di-override dari /api/stats tiers field.
   // Backend mengembalikan tiers: { 1: { price, min, max }, 2: ..., 3: ... }
   let TIER1_PRICE  = 0.01;
   const EXXE_TARGET  = 330000000;
-  // v46 BUG4 FIX: USDC_TARGET updated to total raise potential across all 3 tiers
   // Tier I: 188.8M × $0.01 = $1,888,000
   // Tier II: 251.8M × $0.025 = $6,295,000
   // Tier III: 388M × $0.05 = $19,400,000
   // Total: $27,583,000
   const USDC_TARGET  = 27583000;
-  // FIX v36 SYNC-3: 60s — match backend STATS_TTL_MS agar setiap poll dapat data segar
   const REFRESH_MS   = 60000;
   const SESSION_KEY  = 'exxe_funding_total_v16';
   const SESSION_TS   = 'exxe_funding_ts_v16';
-  const SESSION_EXXE = 'exxe_funding_exxe_v16'; // FIX v37 SYNC-1: cache exxeSold on-chain value
+  const SESSION_EXXE = 'exxe_funding_exxe_v16';
   const CACHE_TTL_MS = 300000; // 5 menit
 
   let rpcIndex = 0;
@@ -9753,7 +9639,6 @@ function startGoldNetwork(canvasId, isSplash) {
       const exxeVal = parseFloat(sessionStorage.getItem(SESSION_EXXE) || '0');
       if (val > 0 && (Date.now() - ts) < CACHE_TTL_MS) {
         _highWatermark = val;
-        // FIX v37 SYNC-1: restore exxeSold from cache so counter shows correctly on reload
         updateUI(val, exxeVal > 0 ? exxeVal : undefined);
       }
     } catch(e) {}
@@ -9763,7 +9648,6 @@ function startGoldNetwork(canvasId, isSplash) {
     if (_fetchFundingActive) return;
     _fetchFundingActive = true;
     try {
-      // FIX v36 SYNC-4: Fetch /api/stats SEKALI — isi shared cache untuk investor counter juga.
       // Tidak ada double fetch ke backend dari dua script terpisah.
       const statsUrl = (window._exillionCfg && window._exillionCfg.apiBase ? window._exillionCfg.apiBase : 'https://exillion-backend-production.up.railway.app') + '/api/stats';
       try {
@@ -9774,7 +9658,6 @@ function startGoldNetwork(canvasId, isSplash) {
           clearTimeout(abortTimer);
           if (res.ok) {
             const data = await res.json();
-            // FIX v36 SYNC-4: Simpan ke shared cache (window._exillionStatsCache)
             // agar investor counter script membaca dari sini — tanpa request tambahan.
             window._exillionStatsCache = {
               totalUsdc:     data.totalUsdc,
@@ -9786,22 +9669,18 @@ function startGoldNetwork(canvasId, isSplash) {
               tiers:         data.tiers,
               ts:            Date.now(),
             };
-            // FIX v40 TIER-1: Update tier cards + progress bars dengan data live
             if (data.tiers && typeof updateTierCards === 'function') {
               updateTierCards(data.tiers);
             }
-            // FIX v36 SYNC-1: Simpan angelWallet ke window untuk fallback on-chain investor count
             if (data.angelWallet && typeof data.angelWallet === 'string') {
               setAngelWalletFromStats(data.angelWallet);
             }
             if (data.wallets && typeof data.wallets === 'object') {
               setSplitWalletsFromStats(data.wallets);
             }
-            // FIX v37 SYNC-2: Override TIER1_PRICE dari backend jika tersedia
             if (data.tiers && data.tiers[1] && typeof data.tiers[1].price === 'number') {
               TIER1_PRICE = data.tiers[1].price;
             }
-            // FIX v48 SYNC-3: Sinkronkan lock + bonus dari backend
             if (data.tiers) {
               [1, 2, 3].forEach(function(n) {
                 if (!data.tiers[n] || !window.CFG || !window.CFG.TIERS || !window.CFG.TIERS[n]) return;
@@ -9820,7 +9699,6 @@ function startGoldNetwork(canvasId, isSplash) {
         } finally { clearTimeout(abortTimer); }
       } catch(e) { /* backend belum siap, fallback ke on-chain */ }
 
-      // FIX v36 SYNC-2: Gunakan wallets & split dari shared cache jika ada, fallback ke default
       const cachedSplit   = window._exillionStatsCache?.split   || SPLIT_DEFAULT;
       const cachedWallets = window._exillionStatsCache?.wallets  || null;
       const walletList    = cachedWallets
@@ -9854,7 +9732,6 @@ function startGoldNetwork(canvasId, isSplash) {
     // Expose refresh function so showSuccess() can trigger immediate update
     window._exxeRefreshFunding = function() {
       _fetchFundingActive = false;
-      // FIX v64-REFRESH: bust shared stats cache so fetchFunding hits /api/stats fresh
       if (window._exillionStatsCache) window._exillionStatsCache.ts = 0;
       fetchFunding();
     };
@@ -9889,7 +9766,6 @@ function startGoldNetwork(canvasId, isSplash) {
 (function() {
   'use strict';
 
-  // FIX v43 ERR-1: Perbaiki recursive call bug — window._isMob() → window.isMobileBrowser()
   // Bug asal: _isMob() memanggil window._isMob() lagi → TypeError infinite recursion.
   function _isMob() {
     if (typeof window.isMobileBrowser === 'function') return window.isMobileBrowser();
@@ -10225,7 +10101,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
   const lockCyanEl = document.getElementById('certLockCyan');
   if (lockCyanEl) {
     const _art = tierNameFull.startsWith('Apex') ? 'an' : 'a';
-    // FIX v64-CERT: Only set the cyan acknowledgement sentence here.
     // The gold "I agree not to sell..." sentence lives in the sibling <span> in HTML — do NOT duplicate it here.
     lockCyanEl.textContent = 'I acknowledge that as ' + _art + ' ' + tierNameFull + ', I voluntarily commit to holding my allocated EXXE SPL Tokens for ' + TIER_LOCK[tierNum] + ' following the official listing on Orca DEX (Solana Blockchain).';
   }
@@ -10237,7 +10112,6 @@ function showCertificate(usdc, exxeTotal, wallet, tx, token, bonusExxe, tierNum)
 function closeCertModal() {
   const modal = document.getElementById('certModal');
   if (modal) modal.classList.remove('visible');
-  // BUG FIX: Check if other overlays are still active before unlocking scroll
   const discOverlay = document.getElementById('disclaimerOverlay');
   const hasActiveOverlay = (discOverlay && discOverlay.classList.contains('active'));
   if (!hasActiveOverlay) document.body.style.overflow = '';
@@ -10255,7 +10129,6 @@ async function downloadCertificate() {
     const link = document.createElement('a');
     link.download = 'EXXE_Certificate_Tier' + (window._lastCertData?.tier || CFG.TIER || 1) + '_' + Date.now() + '.png';
     link.href = canvas.toDataURL('image/png');
-    // BUG FIX: iOS Safari often ignores programmatic link.click() - use fallback
     try {
       link.click();
     } catch(clickErr) {
