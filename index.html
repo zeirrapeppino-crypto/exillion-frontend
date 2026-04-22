@@ -323,6 +323,19 @@ body {
   --font-body:   'Exo 2', 'Orbitron', sans-serif;
 }
 
+/* ═══ NEURAL NETWORK BG — non-intrusive ═══ */
+#neural-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  background: transparent;
+}
+#neural-bg.active { opacity: 1; }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
@@ -4202,6 +4215,9 @@ canvas { transform: translateZ(0); }
 </script>
 </head>
 <body>
+
+<!-- NEURAL NETWORK BG — fixed behind everything, activated only on main page -->
+<canvas id="neural-bg"></canvas>
 
 <!-- ========== SPLASH / GREETING PAGE ========== -->
 <div id="splash-page">
@@ -9100,6 +9116,9 @@ function enterSite() {
                     if (mcInner) {
                         mcInner.style.transition = 'opacity 0.6s ease';
                         mcInner.style.opacity    = '1';
+                        // Activate neural background
+                        var nb = document.getElementById('neural-bg');
+                        if (nb) { nb.classList.add('active'); }
                         // Show sticky banner 4 detik setelah halaman utama visible
                         setTimeout(showStickyBanner, 4000);
                         setTimeout(function () {
@@ -10337,6 +10356,115 @@ document.addEventListener('click', function(e) {
   const modal = document.getElementById('certModal');
   if (modal && e.target === modal) closeCertModal();
 });
+</script>
+
+<!-- ========== NEURAL NETWORK BACKGROUND — MINIMAL FUTURISTIC ========== -->
+<script>
+(function(){
+  var c = document.getElementById('neural-bg');
+  if (!c) return;
+  var cx = c.getContext('2d');
+  var W, H, nodes = [], sparks = [];
+  var CYAN = '0,212,255';
+  var GOLD = '204,160,30';
+
+  function resize(){
+    W = c.width = window.innerWidth;
+    H = c.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Node — slow drifting points
+  function mkNode(){
+    return {
+      x: Math.random()*W, y: Math.random()*H,
+      vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35
+    };
+  }
+  // Spark — tiny light travelling between nodes
+  function mkSpark(){
+    var a = nodes[Math.floor(Math.random()*nodes.length)];
+    var b = nodes[Math.floor(Math.random()*nodes.length)];
+    return { x:a.x, y:a.y, tx:b.x, ty:b.y, spd:0.9+Math.random()*0.7 };
+  }
+
+  for(var i=0;i<55;i++) nodes.push(mkNode());
+  for(var j=0;j<30;j++) sparks.push(mkSpark());
+
+  var raf;
+  function draw(){
+    cx.clearRect(0,0,W,H);
+
+    // Update nodes
+    nodes.forEach(function(n){
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    });
+
+    // Draw connecting lines — only close pairs, very faint
+    cx.lineWidth = 0.4;
+    for(var i=0;i<nodes.length;i++){
+      for(var k=i+1;k<nodes.length;k++){
+        var dx=nodes[i].x-nodes[k].x, dy=nodes[i].y-nodes[k].y;
+        var d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){
+          var alpha=(1-d/130)*0.22;
+          cx.strokeStyle='rgba('+CYAN+','+alpha+')';
+          cx.beginPath();
+          cx.moveTo(nodes[i].x,nodes[i].y);
+          cx.lineTo(nodes[k].x,nodes[k].y);
+          cx.stroke();
+        }
+      }
+    }
+
+    // Draw node dots — tiny, minimal
+    nodes.forEach(function(n){
+      cx.beginPath();
+      cx.arc(n.x,n.y,1,0,Math.PI*2);
+      cx.fillStyle='rgba('+CYAN+',0.18)';
+      cx.fill();
+    });
+
+    // Update & draw sparks
+    sparks.forEach(function(s,idx){
+      var dx=s.tx-s.x, dy=s.ty-s.y;
+      var d=Math.sqrt(dx*dx+dy*dy);
+      if(d>2){
+        s.x+=dx/d*s.spd;
+        s.y+=dy/d*s.spd;
+      } else {
+        sparks[idx]=mkSpark();
+        return;
+      }
+      // Spark glow
+      cx.beginPath();
+      cx.arc(s.x,s.y,1.4,0,Math.PI*2);
+      cx.fillStyle='rgba('+CYAN+',0.7)';
+      cx.shadowBlur=6;
+      cx.shadowColor='rgba('+CYAN+',0.6)';
+      cx.fill();
+      cx.shadowBlur=0;
+    });
+
+    raf = requestAnimationFrame(draw);
+  }
+
+  // Auto-start when canvas gets .active class (observe classList)
+  var obs = new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      if(c.classList.contains('active') && !raf){
+        draw();
+      } else if(!c.classList.contains('active') && raf){
+        cancelAnimationFrame(raf); raf=null;
+        cx.clearRect(0,0,W,H);
+      }
+    });
+  });
+  obs.observe(c, {attributes:true, attributeFilter:['class']});
+})();
 </script>
 
 </body>
